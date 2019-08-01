@@ -1,0 +1,5 @@
+.idea/*
+*.pyc
+TAF/testArtifacts/logs/*
+TAF/testArtifacts/robot/*
+TAF-Common/*
