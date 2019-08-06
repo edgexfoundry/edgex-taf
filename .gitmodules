@@ -1,0 +1,3 @@
+[submodule "edgex-taf-common"]
+	path = edgex-taf-common
+	url = https://github.com/edgexfoundry-holding/edgex-taf-common.git
