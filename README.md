@@ -22,12 +22,12 @@ TAF contains the Test code for the demo. It references edgex-taf-Common->TUC(Tes
 
 ## Clone the repo
 ```bash
-git clone --recurse-submodules https://github.impcloud.net/IVS/TAF-Demo.git
+git clone --recurse-submodules https://github.com/edgexfoundry-holding/edgex-taf.git
 ```
 
 ## Install Pre-requisites
 ```bash
-cd TAF-Demo
+cd edgex-taf
 sudo ./updateme.sh
 ```
 

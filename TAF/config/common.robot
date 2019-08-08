@@ -11,7 +11,7 @@ Library    ${TUC_DIR}/setup/setup_python.py
 *** Variables ***
 ${PLATFORMDIR}      ../..
 ${TAF_DIR}         ${PLATFORMDIR}
-${TUC_DIR}         ${PLATFORMDIR}/edgex-taf-Common/TUC
+${TUC_DIR}         ${PLATFORMDIR}/edgex-taf-common/TUC
 ${UTIL_DIR}         ${TAF_DIR}/utils/src
 ${LIB_DIR}          ${UTIL_DIR}/lib
 
