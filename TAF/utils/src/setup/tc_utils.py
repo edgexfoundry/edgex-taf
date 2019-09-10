@@ -22,7 +22,7 @@ def config_sections():
      Return list of sections that must be present in the config file.
      @retval    List of sections to validate in config file.
     """
-    return ['Demo']
+    return ['Suite']
 
 
 def config_items(section_name):
