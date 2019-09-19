@@ -59,7 +59,7 @@ def check_service_startup(d):
     wait_time = int(SettingsInfo().constant.SERVICE_STARTUP_WAIT_TIME)
     for i in range(recheck_times):
         SettingsInfo().TestLog.info(
-            "Ping service with port {} and request url {} ... ".format(str(d["port"]), d["pingUrl"]))
+            "Ping service with port {} and request url {} {} ... ".format(str(d["port"]),SettingsInfo().constant.BASE_URL, d["pingUrl"]))
         conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"])
         conn.request(method="GET", url=d["pingUrl"])
         try:
