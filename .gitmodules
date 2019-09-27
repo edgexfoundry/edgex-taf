@@ -1,3 +1,4 @@
 [submodule "edgex-taf-common"]
 	path = edgex-taf-common
-	url = https://github.com/edgexfoundry-holding/edgex-taf-common.git
+	url = https://github.com/IOTechSystems/edgex-taf-common.git
+    branch = v1.5-branch
