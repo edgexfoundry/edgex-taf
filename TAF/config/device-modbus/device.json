@@ -6,16 +6,14 @@
    "operatingState":"ENABLED",
    "protocols":{
       "modbus-tcp":{
-         "Address"  : "192.168.0.3",
-         "Port" : "501",
+         "Address"  : "172.17.0.1",
+         "Port" : "502",
          "UnitID": "1"
       }
    },
    "labels":[
       "device-example"
    ],
-   "location":"{lat:45.45,long:47.80}",
-   "responseDelay":0,
    "service":{
       "name":"edgex-device-modbus"
    },
