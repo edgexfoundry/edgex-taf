@@ -352,25 +352,31 @@ services:
   #     - data
   #     - command
   #
-  # device-modbus:
-  #   image: edgexfoundry/docker-device-modbus-go:1.0.0
-  #   ports:
-  #     - "49991:49991"
-  #   container_name: edgex-device-modbus
-  #   hostname: edgex-device-modbus
-  #   networks:
-  #     edgex-network:
-  #       aliases:
-  #           - edgex-device-modbus
-  #   volumes:
-  #     - db-data:/data/db
-  #     - log-data:/edgex/logs
-  #     - consul-config:/consul/config
-  #     - consul-data:/consul/data
-  #   depends_on:
-  #     - data
-  #     - command
-  #
+  device-modbus:
+    image: edgexfoundry/docker-device-modbus-go:1.0.0
+    ports:
+     - "49991:49991"
+    container_name: edgex-device-modbus
+    hostname: edgex-device-modbus
+    networks:
+     edgex-network:
+       aliases:
+           - edgex-device-modbus
+    volumes:
+     - db-data:/data/db
+     - log-data:/edgex/logs
+     - consul-config:/consul/config
+     - consul-data:/consul/data
+    depends_on:
+     - data
+     - command
+     - modbus-simulator
+
+  modbus-simulator:
+    image: panterdsd/diagslave
+    ports:
+     - "502:502"
+
   # device-snmp:
   #   image: edgexfoundry/docker-device-snmp-go:1.0.0
   #   ports:
