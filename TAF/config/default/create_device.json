@@ -5,17 +5,18 @@
    "adminState":"UNLOCKED",
    "operatingState":"ENABLED",
    "protocols":{
-      "modbus-tcp":{
-         "Address"  : "172.17.0.1",
-         "Port" : "502",
-         "UnitID": "1"
+      "other":{
+         "Address"  : "simple01",
+          "Port" : "300"
       }
    },
    "labels":[
       "device-example"
    ],
+   "location":"{lat:45.45,long:47.80}",
+   "responseDelay":0,
    "service":{
-      "name":"edgex-device-modbus"
+      "name":"%DeviceServiceName%"
    },
    "profile":{
       "name":"Sample-Profile"
