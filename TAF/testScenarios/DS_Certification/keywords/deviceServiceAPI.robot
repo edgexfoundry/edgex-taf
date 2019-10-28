@@ -57,7 +57,7 @@ Invoke Put command by device name "${deviceName}" and command name "${commandNam
 
 Invoke Post callback for the device "${callback_id}" with action type "${action_type}"
     Create Session  Device Service  url=${deviceServiceUrl}
-    ${data}=    Create Dictionary   'id'=${callback_id}   'actionType'=${action_type}
+    ${data}=    Create Dictionary   id=${callback_id}   type=${action_type}
     ${headers}=  Create Dictionary  Content-Type=application/json
     ${resp}=  Post Request  Device Service    ${dsCallBack}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
@@ -66,7 +66,7 @@ Invoke Post callback for the device "${callback_id}" with action type "${action_
 
 Invoke Delete callback for the device "${device_id}" with action type "${action_type}"
     Create Session  Device Service  url=${deviceServiceUrl}
-    ${data}=    Create Dictionary   'id'=${device_id}   'actionType'=${action_type}
+    ${data}=    Create Dictionary   id=${device_id}   type=${action_type}
     ${headers}=  Create Dictionary  Content-Type=application/json
     ${resp}=  Delete Request  Device Service    ${dsCallBack}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
