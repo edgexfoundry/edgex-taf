@@ -3,6 +3,7 @@ Library  RequestsLibrary
 Library  OperatingSystem
 Library  TAF.utils.src.setup.setup_teardown
 Library  String
+Resource  ./commonKeywords.robot
 
 *** Variables ***
 ${coreMetadataUrl}  http://${BASE_URL}:${CORE_METADATA_PORT}
@@ -53,7 +54,7 @@ Create device
     [Arguments]  ${device_file}
     Create Session  Core Metadata  url=${coreMetadataUrl}
     ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/${device_file}  encoding=UTF-8
-    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${DEVICE_SERVICE_NAME}
+    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
     ${headers}=  Create Dictionary  Content-Type=application/json
     ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
@@ -81,13 +82,10 @@ Delete device by name
 
 Delete device profile and device
     Delete device by name
-    Delete device profile by name
+#    Delete device profile by name
 
 Create device profile and device
     ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
     Should Be True  ${status}  Failed Demo Suite Setup
-    Create device profile
+#    Create device profile
     Create device   create_device.json
-
-
-

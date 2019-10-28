@@ -91,7 +91,3 @@ Retrieve all devices data and the data is sent to Core Data
     \     run keyword if  ${readings_length} == 0   log to console  "No readings found:"+ ${response}[device]
     \     run keyword if  ${readings_length} == 0   fatal error
     \     Device reading "${reading_name}" should be sent to Core Data
-
-
-
-

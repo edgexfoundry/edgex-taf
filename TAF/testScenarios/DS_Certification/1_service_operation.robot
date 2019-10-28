@@ -6,7 +6,7 @@ Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.startup_checker
 Library          TAF.utils.src.setup.edgex
 Library          TAF.utils.src.setup.consul
-Resource         ./keywords/common.robot
+Resource         ./keywords/commonKeywords.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 
