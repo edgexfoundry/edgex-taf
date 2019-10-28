@@ -2,6 +2,7 @@
 Library  RequestsLibrary
 Library  OperatingSystem
 Library  TAF.utils.src.setup.setup_teardown
+Library  String
 
 *** Variables ***
 ${coreMetadataUrl}  http://${BASE_URL}:${CORE_METADATA_PORT}
@@ -22,7 +23,6 @@ Create device profile
     set suite variable  ${deviceProfileId}  ${resp.content}
 
 Query device profile by id and return by device profile name
-    #${deviceProfileId}=  get environment variable  deviceProfileId
     Create Session  Core Metadata  url=${coreMetadataUrl}
     ${resp}=   get request  Core Metadata    ${deviceProfileUri}/${deviceProfileId}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -30,8 +30,16 @@ Query device profile by id and return by device profile name
     run keyword if  ${resp_length} == 3   log to console  "No device profile found"
     run keyword if  ${resp_length} == 3   fatal error
     ${deviceProfileBody}=  evaluate  json.loads('''${resp.content}''')  json
-    #${deviceProfileName}=  get  ${deviceProfileBody}[name]
     [Return]    ${deviceProfileBody}[name]
+
+Query device profile by name
+    [Arguments]   ${device_profile_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${resp}=   get request  Core Metadata    ${deviceProfileUri}/name/${device_profile_name}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp_length}=  get length  ${resp.content}
+    run keyword if  ${resp_length} == 3   log to console  "The device profile ${device_profile_name} is not found"
+    run keyword if  ${resp_length} == 3   fatal error
 
 Delete device profile by name
     ${deviceProfileName}=   Query device profile by id and return by device profile name
@@ -42,10 +50,12 @@ Delete device profile by name
 
 # Device
 Create device
+    [Arguments]  ${device_file}
     Create Session  Core Metadata  url=${coreMetadataUrl}
-    ${data}=  Get Binary File  ${WORK_DIR}/TAF/config/${PROFILE}/device.json
+    ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/${device_file}  encoding=UTF-8
+    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${DEVICE_SERVICE_NAME}
     ${headers}=  Create Dictionary  Content-Type=application/json
-    ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${data}  headers=${headers}
+    ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     set environment variable  deviceId   ${resp.content}
@@ -62,7 +72,6 @@ Query device by id and return device name
     ${deviceResponseBody}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]    ${deviceResponseBody}[name]
 
-
 Delete device by name
     ${deviceName}=    Query device by id and return device name
     Create Session  Core Metadata  url=${coreMetadataUrl}
@@ -78,7 +87,7 @@ Create device profile and device
     ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
     Should Be True  ${status}  Failed Demo Suite Setup
     Create device profile
-    Create device
+    Create device   create_device.json
 
 
 

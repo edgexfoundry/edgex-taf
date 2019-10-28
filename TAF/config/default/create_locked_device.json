@@ -1,8 +1,8 @@
 {
    "origin":1471806386919,
-   "name" :"Test-Device",
-   "description":"Test-Device",
-   "adminState":"UNLOCKED",
+   "name" :"Locked-Device",
+   "description":"Adminstate parameter of device set to locked",
+   "adminState":"LOCKED",
    "operatingState":"ENABLED",
    "protocols":{
       "other":{
@@ -16,7 +16,7 @@
    "location":"{lat:45.45,long:47.80}",
    "responseDelay":0,
    "service":{
-      "name":"device-random"
+      "name":"%DeviceServiceName%"
    },
    "profile":{
       "name":"Sample-Profile"

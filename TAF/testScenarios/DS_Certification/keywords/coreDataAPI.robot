@@ -13,6 +13,9 @@ Device reading "${validReadingName}" should be sent to Core Data
     Query device reading "${validReadingName}" by device id
 
 
+Device reading "${validReadingName}" for all device should be sent to Core Data
+    Query device reading "${validReadingName}" for all device
+
 Query device reading "${validReadingName}" by device id
     ${deviceName}=    Query device by id and return device name
     Create Session  Core Data  url=${coreDataUrl}
@@ -22,10 +25,10 @@ Query device reading "${validReadingName}" by device id
     Should Be Equal As Strings  ${resp.status_code}  200
     log  ${resp.content}
 
-Query device reading for all device
+Query device reading "${validReadingName}" for all device
     ${deviceId}=    get environment variable  deviceId
     Create Session  Core Data  url=${coreDataUrl}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/device/${deviceId}/5
+    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     log  ${resp.content}
