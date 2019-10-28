@@ -22,7 +22,7 @@ def deploy_services(*args):
 
 
 def shutdown_services():
-    SettingsInfo().TestLog.info("Shutdown all service")
+    SettingsInfo().TestLog.info("Shutdown all services")
     script_path = "{}/TAF/utils/scripts/{}/shutdown.sh".format(
         SettingsInfo().workDir,
         SettingsInfo().constant.DEPLOY_TYPE)
@@ -31,7 +31,7 @@ def shutdown_services():
 
 
 def stop_services(*args):
-    SettingsInfo().TestLog.info("Stop service {}".format(args))
+    SettingsInfo().TestLog.info("Stop services {}".format(args))
     script_path = "{}/TAF/utils/scripts/{}/stop-services.sh".format(
         SettingsInfo().workDir,
         SettingsInfo().constant.DEPLOY_TYPE)
@@ -40,12 +40,29 @@ def stop_services(*args):
 
 
 def restart_services(*args):
-    SettingsInfo().TestLog.info("Restart service {}".format(args))
+    SettingsInfo().TestLog.info("Restart services {}".format(args))
     script_path = "{}/TAF/utils/scripts/{}/restart-services.sh".format(
             SettingsInfo().workDir,
             SettingsInfo().constant.DEPLOY_TYPE)
     cmd = ["sh", script_path, *args]
     run_command(cmd)
+
+
+def remove_services(*args):
+    SettingsInfo().TestLog.info("Remove services {}".format(args))
+    script_path = "{}/TAF/utils/scripts/{}/remove-services.sh".format(
+            SettingsInfo().workDir,
+            SettingsInfo().constant.DEPLOY_TYPE)
+    cmd = ["sh", script_path, *args]
+    run_command(cmd)
+
+
+def deploy_device_service_with_registry_url(device_service, registry_url):
+    SettingsInfo().TestLog.info('Deploy device service {} with registry url {}'.format(device_service, registry_url))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/startup-device-service-with-registry-url.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), device_service, registry_url]
+    run_command(cmd)
+
+    checker.check_services_startup([device_service, registry_url])
 
 
 def run_command(cmd):

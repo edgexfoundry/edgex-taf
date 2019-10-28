@@ -311,7 +311,7 @@ services:
     entrypoint:
       - /device-virtual
       - --profile=docker
-      - --registry=consul://edgex-core-consul:8500
+      - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
       - --confdir=/res
 
   # device-random:
@@ -367,10 +367,15 @@ services:
      - log-data:/edgex/logs
      - consul-config:/consul/config
      - consul-data:/consul/data
+     - ${WORK_DIR}/TAF/config/${PROFILE}:/custom-config
     depends_on:
      - data
      - command
      - modbus-simulator
+    entrypoint:
+      - /device-modbus
+      - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
+      - --confdir=/custom-config
 
   modbus-simulator:
     image: panterdsd/diagslave
