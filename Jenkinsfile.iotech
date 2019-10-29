@@ -5,7 +5,7 @@ pipeline {
         stage('Run test') {
             steps {
                 sh "docker pull iotech-releases.jfrog.io/edgex-taf_x86_64:1.0.0"
-                sh "docker run --rm --network host -v ${env.WORKSPACE}:${env.WORKSPACE} -w ${env.WORKSPACE} -v /var/run/docker.sock:/var/run/docker.sock iotech-releases.jfrog.io/edgex-taf_x86_64:1.0.0 --exclude Skipped -u ."
+                sh "docker run --rm --network host -v ${env.WORKSPACE}:${env.WORKSPACE} -w ${env.WORKSPACE} -v /var/run/docker.sock:/var/run/docker.sock iotech-releases.jfrog.io/edgex-taf_x86_64:1.0.0 --exclude Skipped -u . -p ${params.PROFILE}"
             }
         }
 
@@ -18,7 +18,7 @@ pipeline {
                         allowMissing: false,
                         keepAll: false,
                         reportDir: 'TAF/testArtifacts/reports/edgex',
-                        reportFiles: 'report.html',
+                        reportFiles: 'log.html',
                         reportName: 'EdgeX Taf Report']
                 )
             }
