@@ -80,21 +80,6 @@ Device resource should be updated to "${value}"
     ${deviceResourceValue}=  get environment variable  deviceResourceValue
     should be equal  ${value}   ${deviceResourceValue}
 
-DS should return status code "200"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 200
-
-DS should return status code "400"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 400
-
-DS should return status code "404"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 404
-
-DS should return status code "423"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 423
 
 Value should be "${dataType}"
     ${returnValue}=     get environment variable  readingValue

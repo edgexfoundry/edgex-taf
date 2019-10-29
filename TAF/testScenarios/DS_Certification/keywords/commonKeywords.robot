@@ -42,3 +42,19 @@ Get reading value with data type "${data_type}"
     run keyword and return if  '${data_type}' == 'UINT32'  evaluate  random.randint(0, 4294967295)  modules=random
     run keyword and return if  '${data_type}' == 'UINT64'  evaluate  random.randint(0, 18446744073709551615)  modules=random
 
+
+Should return status code "200"
+    ${resp}=  get environment variable  response
+    Should be true    ${resp} == 200
+
+Should return status code "400"
+    ${resp}=  get environment variable  response
+    Should be true    ${resp} == 400
+
+Should return status code "404"
+    ${resp}=  get environment variable  response
+    Should be true    ${resp} == 404
+
+Should return status code "423"
+    ${resp}=  get environment variable  response
+    Should be true    ${resp} == 423

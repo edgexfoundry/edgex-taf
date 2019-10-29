@@ -82,10 +82,10 @@ Delete device by name
 
 Delete device profile and device
     Delete device by name
-#    Delete device profile by name
+    Delete device profile by name
 
 Create device profile and device
     ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
     Should Be True  ${status}  Failed Demo Suite Setup
-#    Create device profile
+    Create device profile
     Create device   create_device.json
