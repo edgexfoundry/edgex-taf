@@ -88,7 +88,7 @@ DS instance is found in Core Metadata
     Remove services  ${DEVICE_SERVICE_NAME}
 
 DS should load the DS instance from Core Metadata
-    DS should log "Device Service edgex-device-modbus exists"
+    DS should log "Device Service ${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]} exists"
 
 #TC004
 DS is configured to use the registry
