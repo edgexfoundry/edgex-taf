@@ -14,9 +14,6 @@ import time
 from TUC.data.SettingsInfo import SettingsInfo
 
 services = {
-        "device-virtual": {"composeName": "device-virtual",
-                           "port": SettingsInfo().constant.DEVICE_SERVICE_PORT,
-                           "pingUrl": "/api/v1/ping"},
         "data": {"composeName": "data",
                  "port": SettingsInfo().constant.CORE_DATA_PORT,
                  "pingUrl": "/api/v1/ping"},

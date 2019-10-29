@@ -54,246 +54,246 @@ deviceResources:
       { type: "STRING", size: "0", readWrite: "W" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device message" }
--  ### Float32 ###
-  name: "DeviceValue_Float32_RW"
-  description: "Generate device float32 value"
+-  ### FLOAT32 ###
+  name: "DeviceValue_FLOAT32_RW"
+  description: "Generate device FLOAT32 value"
   properties:
     value:
       { type: "FLOAT32", readWrite: "RW"}
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device float32 value"}
+      { type: "STRING", readWrite: "R", defaultValue: "device FLOAT32 value"}
 -
-  name: "DeviceValue_Float32_R"
-  description: "Generate device float32 value"
+  name: "DeviceValue_FLOAT32_R"
+  description: "Generate device FLOAT32 value"
   properties:
     value:
       { type: "FLOAT32", readWrite: "R"}
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device float32 value"}
+      { type: "STRING", readWrite: "R", defaultValue: "device FLOAT32 value"}
 -
-  name: "DeviceValue_Float32_W"
-  description: "Generate device float32 value"
+  name: "DeviceValue_FLOAT32_W"
+  description: "Generate device FLOAT32 value"
   properties:
     value:
       { type: "FLOAT32", readWrite: "W"}
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device float32 value"}
--  ### Float64 ###
-  name: "DeviceValue_Float64_RW"
-  description: "Generate device float64 value"
+      { type: "STRING", readWrite: "R", defaultValue: "device FLOAT32 value"}
+-  ### FLOAT64 ###
+  name: "DeviceValue_FLOAT64_RW"
+  description: "Generate device FLOAT64 value"
   properties:
     value:
       { type: "FLOAT64", readWrite: "RW"}
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device float64 value"}
+      { type: "STRING", readWrite: "R", defaultValue: "device FLOAT64 value"}
 -
-  name: "DeviceValue_Float64_R"
-  description: "Generate device float64 value"
+  name: "DeviceValue_FLOAT64_R"
+  description: "Generate device FLOAT64 value"
   properties:
     value:
       { type: "FLOAT64", readWrite: "R"}
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device float64 value"}
+      { type: "STRING", readWrite: "R", defaultValue: "device FLOAT64 value"}
 -
-  name: "DeviceValue_Float64_W"
-  description: "Generate device float64 value"
+  name: "DeviceValue_FLOAT64_W"
+  description: "Generate device FLOAT64 value"
   properties:
     value:
       { type: "FLOAT64", readWrite: "W"}
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device float64 value"}
--  ### UInt8 ###
+      { type: "STRING", readWrite: "R", defaultValue: "device FLOAT64 value"}
+-  ### UINT8 ###
   name: "DeviceValue_INT8_RW"
-  description: "Generate device int8 value"
+  description: "Generate device INT8 value"
   properties:
     value:
       { type: "INT8", readWrite: "RW", minimum: "-128", maximum: "127", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int8 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT8 value" }
 -
   name: "DeviceValue_INT8_R"
-  description: "Generate device int8 value"
+  description: "Generate device INT8 value"
   properties:
     value:
       { type: "INT8", readWrite: "R", minimum: "-128", maximum: "127", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int8 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT8 value" }
 -
   name: "DeviceValue_INT8_W"
-  description: "Generate device int8 value"
+  description: "Generate device INT8 value"
   properties:
     value:
       { type: "INT8", readWrite: "W", minimum: "-128", maximum: "127", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int8 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT8 value" }
 -  ### INT16 ###
   name: "DeviceValue_INT16_RW"
-  description: "Generate device int16 value"
+  description: "Generate device INT16 value"
   properties:
     value:
       { type: "INT16", readWrite: "RW", minimum: "-32768", maximum: "32767", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int16 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT16 value" }
 -
   name: "DeviceValue_INT16_R"
-  description: "Generate device int16 value"
+  description: "Generate device INT16 value"
   properties:
     value:
       { type: "INT16", readWrite: "R", minimum: "-32768", maximum: "32767", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int16 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT16 value" }
 -
   name: "DeviceValue_INT16_W"
-  description: "Generate device int16 value"
+  description: "Generate device INT16 value"
   properties:
     value:
       { type: "INT16", readWrite: "W", minimum: "-32768", maximum: "32767", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int16 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT16 value" }
 -  ### INT32 ###
   name: "DeviceValue_INT32_RW"
-  description: "Generate device int32 value"
+  description: "Generate device INT32 value"
   properties:
     value:
       { type: "INT32", readWrite: "RW", minimum: "-2147483648", maximum: "2147483647", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int32 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT32 value" }
 -
   name: "DeviceValue_INT32_R"
-  description: "Generate device int32 value"
+  description: "Generate device INT32 value"
   properties:
     value:
       { type: "INT32", readWrite: "R", minimum: "-2147483648", maximum: "2147483647", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int32 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT32 value" }
 -
   name: "DeviceValue_INT32_W"
-  description: "Generate device int32 value"
+  description: "Generate device INT32 value"
   properties:
     value:
       { type: "INT32", readWrite: "W", minimum: "-2147483648", maximum: "2147483647", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int32 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT32 value" }
 -  ### INT64 ###
   name: "DeviceValue_INT64_RW"
-  description: "Generate device int64 value"
+  description: "Generate device INT64 value"
   properties:
     value:
       { type: "INT64", readWrite: "RW", minimum: "-9223372036854775808", maximum: "9223372036854775807", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int64 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT64 value" }
 -
   name: "DeviceValue_INT64_R"
-  description: "Generate device int64 value"
+  description: "Generate device INT64 value"
   properties:
     value:
       { type: "INT64", readWrite: "R", minimum: "-9223372036854775808", maximum: "9223372036854775807", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int64 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT64 value" }
 -
   name: "DeviceValue_INT64_W"
-  description: "Generate device int64 value"
+  description: "Generate device INT64 value"
   properties:
     value:
       { type: "INT64", readWrite: "W", minimum: "-9223372036854775808", maximum: "9223372036854775807", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device int64 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device INT64 value" }
 -  ### UINT8 ###
-  name: "DeviceValue_UnsignedINT8_RW"
-  description: "Generate device uint8 value"
+  name: "DeviceValue_UINT8_RW"
+  description: "Generate device UINT8 value"
   properties:
     value:
       { type: "UINT8", readWrite: "RW", minimum: "0", maximum: "255", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint8 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT8 value" }
 -
-  name: "DeviceValue_UnsignedINT8_R"
-  description: "Generate device uint8 value"
+  name: "DeviceValue_UINT8_R"
+  description: "Generate device UINT8 value"
   properties:
     value:
       { type: "UINT8", readWrite: "R", minimum: "0", maximum: "255", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint8 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT8 value" }
 -
-  name: "DeviceValue_UnsignedINT8_W"
-  description: "Generate device uint8 value"
+  name: "DeviceValue_UINT8_W"
+  description: "Generate device UINT8 value"
   properties:
     value:
       { type: "UINT8", readWrite: "W", minimum: "0", maximum: "255", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint8 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT8 value" }
 -  ### UINT16 ###
-  name: "DeviceValue_UnsignedINT16_RW"
-  description: "Generate device uint16 value"
+  name: "DeviceValue_UINT16_RW"
+  description: "Generate device UINT16 value"
   properties:
     value:
       { type: "UINT16", readWrite: "RW", minimum: "0", maximum: "65535", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint16 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT16 value" }
 -
-  name: "DeviceValue_UnsignedINT16_R"
-  description: "Generate device uint16 value"
+  name: "DeviceValue_UINT16_R"
+  description: "Generate device UINT16 value"
   properties:
     value:
       { type: "UINT16", readWrite: "R", minimum: "0", maximum: "65535", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint16 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT16 value" }
 -
-  name: "DeviceValue_UnsignedINT16_W"
-  description: "Generate device uint16 value"
+  name: "DeviceValue_UINT16_W"
+  description: "Generate device UINT16 value"
   properties:
     value:
       { type: "UINT16", readWrite: "W", minimum: "0", maximum: "65535", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint16 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT16 value" }
 -  ### UINT32 ###
-  name: "DeviceValue_UnsignedINT32_RW"
-  description: "Generate device uint32 value"
+  name: "DeviceValue_UINT32_RW"
+  description: "Generate device UINT32 value"
   properties:
     value:
       { type: "UINT32", readWrite: "RW", minimum: "0", maximum: "4294967295", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint32 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT32 value" }
 -
-  name: "DeviceValue_UnsignedINT32_R"
-  description: "Generate device uint32 value"
+  name: "DeviceValue_UINT32_R"
+  description: "Generate device UINT32 value"
   properties:
     value:
       { type: "UINT32", readWrite: "R", minimum: "0", maximum: "4294967295", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint32 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT32 value" }
 -
-  name: "DeviceValue_UnsignedINT32_W"
-  description: "Generate device uint32 value"
+  name: "DeviceValue_UINT32_W"
+  description: "Generate device UINT32 value"
   properties:
     value:
       { type: "UINT32", readWrite: "W", minimum: "0", maximum: "4294967295", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint32 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT32 value" }
 -  ### UINT64 ###
-  name: "DeviceValue_UnsignedINT64_RW"
-  description: "Generate device uint64 value"
+  name: "DeviceValue_UINT64_RW"
+  description: "Generate device UINT64 value"
   properties:
     value:
       { type: "UINT64", readWrite: "RW", minimum: "0", maximum: "18446744073709551615", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint64 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT64 value" }
 -
-  name: "DeviceValue_UnsignedINT64_R"
-  description: "Generate device uint64 value"
+  name: "DeviceValue_UINT64_R"
+  description: "Generate device UINT64 value"
   properties:
     value:
       { type: "UINT64", readWrite: "R", minimum: "0", maximum: "18446744073709551615", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint64 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT64 value" }
 -
-  name: "DeviceValue_UnsignedINT64_W"
-  description: "Generate device uint64 value"
+  name: "DeviceValue_UINT64_W"
+  description: "Generate device UINT64 value"
   properties:
     value:
       { type: "UINT64", readWrite: "W", minimum: "0", maximum: "18446744073709551615", defaultValue: "0" }
     units:
-      { type: "STRING", readWrite: "R", defaultValue: "device uint64 value" }
+      { type: "STRING", readWrite: "R", defaultValue: "device UINT64 value" }
 
 deviceCommands:
 -  ### Boolean ###
@@ -322,34 +322,34 @@ deviceCommands:
   name: "GenerateDeviceValue_String_W"
   set:
   - { operation: "set", object: "DeviceValue_String_W", parameter: "test message" }
--  ### Float32 ###
-  name: "GenerateDeviceValue_Float32_RW"
+-  ### FLOAT32 ###
+  name: "GenerateDeviceValue_FLOAT32_RW"
   get:
-  - { operation: "get", object: "DeviceValue_Float32_RW" }
+  - { operation: "get", object: "DeviceValue_FLOAT32_RW" }
   set:
-  - { operation: "set", object: "DeviceValue_Float32_RW", parameter: "0" }
+  - { operation: "set", object: "DeviceValue_FLOAT32_RW", parameter: "0" }
 -
-  name: "GenerateDeviceValue_Float32_R"
+  name: "GenerateDeviceValue_FLOAT32_R"
   get:
-  - { operation: "get", object: "DeviceValue_Float32_R" }
+  - { operation: "get", object: "DeviceValue_FLOAT32_R" }
 -
-  name: "GenerateDeviceValue_Float32_W"
+  name: "GenerateDeviceValue_FLOAT32_W"
   set:
-  - { operation: "set", object: "DeviceValue_Float32_W", parameter: "0" }
--  ### Float64 ###
-  name: "GenerateDeviceValue_Float64_RW"
+  - { operation: "set", object: "DeviceValue_FLOAT32_W", parameter: "0" }
+-  ### FLOAT64 ###
+  name: "GenerateDeviceValue_FLOAT64_RW"
   get:
-  - { operation: "get", object: "DeviceValue_Float64_RW" }
+  - { operation: "get", object: "DeviceValue_FLOAT64_RW" }
   set:
-  - { operation: "set", object: "DeviceValue_Float64_RW", parameter: "0" }
+  - { operation: "set", object: "DeviceValue_FLOAT64_RW", parameter: "0" }
 -
-  name: "GenerateDeviceValue_Float64_R"
+  name: "GenerateDeviceValue_FLOAT64_R"
   get:
-  - { operation: "get", object: "DeviceValue_Float64_R" }
+  - { operation: "get", object: "DeviceValue_FLOAT64_R" }
 -
-  name: "GenerateDeviceValue_Float64_W"
+  name: "GenerateDeviceValue_FLOAT64_W"
   set:
-  - { operation: "set", object: "DeviceValue_Float64_W", parameter: "0" }
+  - { operation: "set", object: "DeviceValue_FLOAT64_W", parameter: "0" }
 -  ### INT8 ###
   name: "GenerateDeviceValue_INT8_RW"
   get:
@@ -561,22 +561,22 @@ coreCommands:
     -
       code: "500"
       description: "service unavailable"
--  ### Float32 ###
-  name: "GenerateDeviceValue_Float32_RW"
+-  ### FLOAT32 ###
+  name: "GenerateDeviceValue_FLOAT32_RW"
   get:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float32_RW"
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT32_RW"
     responses:
     -
       code: "200"
       description: ""
-      expectedValues: ["DeviceValue_Float32_RW"]
+      expectedValues: ["DeviceValue_FLOAT32_RW"]
     -
       code: "500"
       description: "service unavailable"
       expectedValues: []
   put:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float32_RW"
-    parameterNames: ["DeviceValue_Float32_RW"]
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT32_RW"
+    parameterNames: ["DeviceValue_FLOAT32_RW"]
     responses:
     -
       code: "200"
@@ -585,23 +585,23 @@ coreCommands:
       code: "500"
       description: "service unavailable"
 -
-  name: "GenerateDeviceValue_Float32_R"
+  name: "GenerateDeviceValue_FLOAT32_R"
   get:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float32_R"
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT32_R"
     responses:
     -
       code: "200"
       description: ""
-      expectedValues: ["DeviceValue_Float32_R"]
+      expectedValues: ["DeviceValue_FLOAT32_R"]
     -
       code: "500"
       description: "service unavailable"
       expectedValues: []
 -
-  name: "GenerateDeviceValue_Float32_W"
+  name: "GenerateDeviceValue_FLOAT32_W"
   put:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float32_W"
-    parameterNames: ["DeviceValue_Float32_W"]
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT32_W"
+    parameterNames: ["DeviceValue_FLOAT32_W"]
     responses:
     -
       code: "200"
@@ -609,22 +609,22 @@ coreCommands:
     -
       code: "500"
       description: "service unavailable"
--  ### Float64 ###
-  name: "GenerateDeviceValue_Float64_RW"
+-  ### FLOAT64 ###
+  name: "GenerateDeviceValue_FLOAT64_RW"
   get:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float64_RW"
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT64_RW"
     responses:
     -
       code: "200"
       description: ""
-      expectedValues: ["DeviceValue_Float64_RW"]
+      expectedValues: ["DeviceValue_FLOAT64_RW"]
     -
       code: "500"
       description: "service unavailable"
       expectedValues: []
   put:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float64_RW"
-    parameterNames: ["DeviceValue_Float64_RW"]
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT64_RW"
+    parameterNames: ["DeviceValue_FLOAT64_RW"]
     responses:
     -
       code: "200"
@@ -633,23 +633,23 @@ coreCommands:
       code: "500"
       description: "service unavailable"
 -
-  name: "GenerateDeviceValue_Float64_R"
+  name: "GenerateDeviceValue_FLOAT64_R"
   get:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float64_R"
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT64_R"
     responses:
     -
       code: "200"
       description: ""
-      expectedValues: ["DeviceValue_Float64_R"]
+      expectedValues: ["DeviceValue_FLOAT64_R"]
     -
       code: "500"
       description: "service unavailable"
       expectedValues: []
 -
-  name: "GenerateDeviceValue_Float64_W"
+  name: "GenerateDeviceValue_FLOAT64_W"
   put:
-    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_Float64_W"
-    parameterNames: ["DeviceValue_Float64_W"]
+    path: "/api/v1/device/{deviceId}/GenerateDeviceValue_FLOAT64_W"
+    parameterNames: ["DeviceValue_FLOAT64_W"]
     responses:
     -
       code: "200"

@@ -305,14 +305,14 @@ services:
     - log-data:/edgex/logs
     - consul-config:/consul/config
     - consul-data:/consul/data
+    - ${WORK_DIR}/TAF/config/${PROFILE}:/custom-config
     depends_on:
     - data
     - command
     entrypoint:
       - /device-virtual
-      - --profile=docker
       - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
-      - --confdir=/res
+      - --confdir=/custom-config
 
   device-random:
     image: edgexfoundry/docker-device-random-go:1.0.0
@@ -329,14 +329,14 @@ services:
      - log-data:/edgex/logs
      - consul-config:/consul/config
      - consul-data:/consul/data
+     - ${WORK_DIR}/TAF/config/${PROFILE}:/custom-config
     depends_on:
      - data
      - command
     entrypoint:
       - /device-random
-      - --profile=docker
       - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
-      - --confdir=/res
+      - --confdir=/custom-config
 
   # device-mqtt:
   #   image: edgexfoundry/docker-device-mqtt-go:1.0.0
