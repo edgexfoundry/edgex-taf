@@ -85,7 +85,9 @@ Retrieve device reading by name but the device does not exist
 # Get commands by all devices /device/all/{command}
 Retrieve all devices data and the data is sent to Core Data
     [Arguments]  ${dataType}    ${command_name}    ${reading_name}
-    @{responseBody}=  Invoke Get command name "${command_name}" for all devices
+    ${responseBody}=  Invoke Get command name "${command_name}" for all devices
+    ${response_length}=  get length  ${responseBody}
+    run keyword if  ${response_length} >=5  fail  "No device reading found"
     :FOR    ${response}    IN    @{responseBody}
     \     ${readings_length}=  get length  ${response}[readings]
     \     run keyword if  ${readings_length} == 0   log to console  "No readings found:"+ ${response}[device]

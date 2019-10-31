@@ -8,6 +8,7 @@ Documentation  Device Readings - Query commands
 Library   OperatingSystem
 Library   Collections
 Library   String
+Library  DateTime
 
 
 *** Keywords ***
@@ -60,3 +61,10 @@ Should return status code "404"
 Should return status code "423"
     ${resp}=  get environment variable  response
     Should be true    ${resp} == 423
+
+Get milliseconds epoch time
+    ${data}=  get current date
+    ${current_epoch_time}=  convert date    ${data}  epoch
+    ${millisec_epoch_time}=    evaluate   int(${current_epoch_time}*1000)
+    [Return]  ${millisec_epoch_time}
+
