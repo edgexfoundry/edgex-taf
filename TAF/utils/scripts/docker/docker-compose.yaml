@@ -311,7 +311,7 @@ services:
     - command
     entrypoint:
       - /device-virtual
-      - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
+      - --registry=${REGISTRY_URL}
       - --confdir=/custom-config
 
   device-random:
@@ -335,7 +335,7 @@ services:
      - command
     entrypoint:
       - /device-random
-      - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
+      - --registry=${REGISTRY_URL}
       - --confdir=/custom-config
 
   # device-mqtt:
@@ -372,15 +372,16 @@ services:
      - log-data:/edgex/logs
      - consul-config:/consul/config
      - consul-data:/consul/data
-     - ${WORK_DIR}/TAF/config/${PROFILE}:/custom-config
+     - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}/${DS_PROFILE}
     depends_on:
      - data
      - command
      - modbus-simulator
     entrypoint:
       - /device-modbus
-      - --registry=${REGISTRY_URL:-consul://edgex-core-consul:8500}
-      - --confdir=/custom-config
+      - --profile=${DS_PROFILE}
+      - --registry=${REGISTRY_URL}
+      - --confdir=${CONF_DIR}
 
   modbus-simulator:
     image: panterdsd/diagslave

@@ -65,6 +65,22 @@ def deploy_device_service_with_registry_url(device_service, registry_url):
     checker.check_services_startup([device_service, registry_url])
 
 
+def deploy_device_service_with_the_confdir_option(device_service, confdir):
+    SettingsInfo().TestLog.info('Deploy device service {} with confdir option {}'.format(device_service, confdir))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/startup-device-service-with-confdir-option.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), device_service, confdir]
+    run_command(cmd)
+
+    checker.check_services_startup([device_service, confdir])
+
+
+def deploy_device_service_with_the_profile_option(device_service, profile):
+    SettingsInfo().TestLog.info('Deploy device service {} with confdir option {}'.format(device_service, profile))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/startup-device-service-with-profile-option.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), device_service, profile]
+    run_command(cmd)
+
+    checker.check_services_startup([device_service, profile])
+
+
 def run_command(cmd):
     p = subprocess.Popen(cmd, stderr=subprocess.PIPE)
     for line in p.stderr:
