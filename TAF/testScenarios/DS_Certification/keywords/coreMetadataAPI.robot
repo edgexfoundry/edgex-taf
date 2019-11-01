@@ -61,6 +61,20 @@ Create device
     Should Be Equal As Strings  ${resp.status_code}  200
     set environment variable  deviceId   ${resp.content}
 
+Creat device with autoEvents parameter
+    [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/create_autoevent_device.json  encoding=UTF-8
+    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    ${newdata}=  replace string  ${newdata}   %frequency%    ${frequency_time}
+    ${newdata}=  replace string  ${newdata}   %onChangeValue%   ${onChange_value}
+    ${newdata}=  replace string  ${newdata}   %ReadingName%    ${reading_name}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    set environment variable  deviceId   ${resp.content}
+
 Query device by id and return device name
     # output device name
     ${deviceId}=  get environment variable  deviceId
