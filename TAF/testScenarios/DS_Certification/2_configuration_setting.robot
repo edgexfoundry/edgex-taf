@@ -6,6 +6,7 @@ Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.startup_checker
 Library          TAF.utils.src.setup.edgex
 Library          TAF.utils.src.setup.consul
+Resource         ./keywords/loggingAPI.robot
 Resource         ./keywords/commonKeywords.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
@@ -72,6 +73,7 @@ DS initialize with the profile option
 
 #TC005
 LogLevel Configuration changes on registry
+    Remove device service logs
     Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/Writable/LogLevel  TRACE
     sleep  3
 
