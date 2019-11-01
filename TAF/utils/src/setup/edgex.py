@@ -13,6 +13,12 @@ from TUC.data.SettingsInfo import SettingsInfo
 import TAF.utils.src.setup.startup_checker as checker
 
 
+def update_services(*args):
+    SettingsInfo().TestLog.info('Update services {}'.format(args))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/update-services.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), *args]
+    run_command(cmd)
+
+
 def deploy_services(*args):
     SettingsInfo().TestLog.info('Deploy services {}'.format(args))
     cmd = ["sh", "{}/TAF/utils/scripts/{}/startup.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), *args]
@@ -84,7 +90,7 @@ def deploy_device_service_with_the_profile_option(device_service, profile):
 def run_command(cmd):
     p = subprocess.Popen(cmd, stderr=subprocess.PIPE)
     for line in p.stderr:
-        SettingsInfo().TestLog.info(line)
+        SettingsInfo().TestLog.info(line.decode("utf-8"))
 
     p.wait()
     SettingsInfo().TestLog.info("exit " + str(p.returncode))
