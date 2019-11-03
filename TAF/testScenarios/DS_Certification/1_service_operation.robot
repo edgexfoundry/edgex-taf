@@ -122,7 +122,7 @@ Validate "${content}" contains DS configuration
     Should contain      ${result}  "Device"
     Should contain      ${result}  "Logging"
 
-#TC000i9
+#TC0009
 Validate "${content}" contains DS metrics
     ${result} =  convert to string   ${content}
     Should contain     ${result}  "Alloc"
@@ -131,6 +131,24 @@ Validate "${content}" contains DS metrics
     Should contain     ${result}  "Mallocs"
     Should contain     ${result}  "Frees"
     Should contain     ${result}  "LiveObjects"
+
+#TC0010
+Start EdgeX with Registry DS to consul
+    Remove services  ${DEVICE_SERVICE_NAME}
+    Deploy device service with registry url   ${DEVICE_SERVICE_NAME}   consul://edgex-core-consul:8500
+    sleep  3
+    DS should register as a service to the registry
+    sleep  3
+
+Shutdown DS
+    Remove services  ${DEVICE_SERVICE_NAME}
+    sleep  3
+
+DS should be unregistered to consul
+    Create Session   Registry   url=${REGISTRY_URL}
+    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    Should contain      ${resp.json()[0]["Status"]}  critical
+    Remove services  ${DEVICE_SERVICE_NAME}
 
 *** Test Cases ***
 ServiceOperation_TC0001a - Startup failed (Core Metadata Service is unavailable)
@@ -185,3 +203,8 @@ ServiceOperation_TC0008 - Configuration check
 ServiceOperation_TC0009 - Metrics
     When Send GET request "/api/v1/metrics" to "${DEVICE_SERVICE_URL}"
     Then Validate "${REST_RES.content}" contains DS metrics
+
+ServiceOperation_TC0010 - Unregistered to registry
+    Given Start EdgeX with Registry DS to consul
+    When Shutdown DS
+    Then DS should be unregistered to consul
