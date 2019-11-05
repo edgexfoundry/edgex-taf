@@ -2,8 +2,10 @@
 Resource  ./keywords/coreMetadataAPI.robot
 Resource  ./keywords/coreDataAPI.robot
 Resource  ./keywords/commonKeywords.robot
-#Suite Setup     Deploy EdgeX
-#Suite Teardown  Shutdown EdgeX
+Suite Setup     Setup Suite
+
+*** Variables ***
+${SUITE}              Device
 
 *** Test Cases ***
 DeviceProfile_TC0001 - ValueDescriptor is created after initializing device service
