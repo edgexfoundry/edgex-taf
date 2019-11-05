@@ -20,7 +20,6 @@ Create device profile
     ${resp}=  Post Request  Core Metadata  ${deviceProfileUri}/uploadfile  files=${files}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    #set environment variable  deviceProfileId   ${resp.content}
     set suite variable  ${deviceProfileId}  ${resp.content}
 
 Query device profile by id and return by device profile name
@@ -28,8 +27,7 @@ Query device profile by id and return by device profile name
     ${resp}=   get request  Core Metadata    ${deviceProfileUri}/${deviceProfileId}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp_length}=  get length  ${resp.content}
-    run keyword if  ${resp_length} == 3   log to console  "No device profile found"
-    run keyword if  ${resp_length} == 3   fatal error
+    run keyword if  ${resp_length} == 3   fail  "No device profile found"
     ${deviceProfileBody}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]    ${deviceProfileBody}[name]
 
@@ -39,8 +37,9 @@ Query device profile by name
     ${resp}=   get request  Core Metadata    ${deviceProfileUri}/name/${device_profile_name}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp_length}=  get length  ${resp.content}
-    run keyword if  ${resp_length} == 3   log to console  "The device profile ${device_profile_name} is not found"
-    run keyword if  ${resp_length} == 3   fatal error
+    run keyword if  ${resp_length} == 3   fail  "The device profile ${device_profile_name} is not found"
+    run keyword if  ${resp.status_code} == 200  set environment variable  response  ${resp.status_code}
+    [Return]  ${resp.content}
 
 Delete device profile by name
     ${deviceProfileName}=   Query device profile by id and return by device profile name
@@ -82,8 +81,7 @@ Query device by id and return device name
     ${resp}=  Get Request  Core Metadata    ${deviceUri}/${deviceId}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp_length}=    get length  ${resp.content}
-    run keyword if  ${resp_length} == 3   log to console  "No device found"
-    run keyword if  ${resp_length} == 3   fatal error
+    run keyword if  ${resp_length} == 3   fail  "No device found"
     ${deviceResponseBody}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]    ${deviceResponseBody}[name]
 
@@ -103,3 +101,7 @@ Create device profile and device
     Should Be True  ${status}  Failed Demo Suite Setup
     Create device profile
     Create device   create_device.json
+
+
+
+

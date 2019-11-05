@@ -14,7 +14,7 @@ ${dsCallBack}    /api/v1/callback
 Invoke Get command by device id "${deviceId}" and command name "${commandName}"
     Create Session  Device Service  url=${deviceServiceUrl}
     ${resp}=  Get Request  Device Service    ${dsDeviceUri}/${deviceId}/${commandName}
-    run keyword if  ${resp.status_code}!=200  log   ${resp.content}
+    run keyword if  ${resp.status_code}!=200  set environment variable  error_response   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Get command failed"
     ${responseBody}=  run keyword if  ${resp.status_code}==200   evaluate  json.loads('''${resp.content}''')  json
     run keyword if  ${resp.status_code}==200  set environment variable   readingValue  ${responseBody}[readings][0][value]
@@ -80,7 +80,6 @@ Device resource should be updated to "${value}"
     ${deviceResourceValue}=  get environment variable  deviceResourceValue
     should be equal  ${value}   ${deviceResourceValue}
 
-
 Value should be "${dataType}"
     ${returnValue}=     get environment variable  readingValue
     ${status}=  check value range   ${returnValue}  ${dataType}
@@ -92,4 +91,7 @@ DS should receive a Device Post callback
     log  ${resp.content}
     set environment variable  response  ${resp.status_code}
 
+Reading value should be "${random_value}"
+    ${reading_value}=  get environment variable  readingValue
+    should be equal  ${reading_value}  ${random_value}
 

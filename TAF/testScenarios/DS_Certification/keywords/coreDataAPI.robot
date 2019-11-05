@@ -7,7 +7,7 @@ Resource  ./commonKeywords.robot
 *** Variables ***
 ${coreDataUrl}  http://${BASE_URL}:${CORE_DATA_PORT}
 ${coreDataReadingUri}   /api/v1/reading
-
+${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
 
 *** Keywords ***
 Device reading "${validReadingName}" should be sent to Core Data
@@ -60,5 +60,9 @@ Device autoEvents with "${reading_name}" send by frequency setting "${frequency_
     \  ${device_reading_count}=  get length  ${device_reading_data}
     \  run keyword and continue on failure  should be equal as integers  ${INDEX}  ${device_reading_count}
 
-
-
+Query value descriptor for name "${value_descriptor_name}"
+    Create Session  Core Data  url=${coreDataUrl}
+    ${resp}=  Get Request  Core Data    ${coreDataValueDescriptorUri}/name/${value_descriptor_name}
+    run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
+    run keyword if  ${resp.status_code}==200  log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200

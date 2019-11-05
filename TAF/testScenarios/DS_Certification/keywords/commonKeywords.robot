@@ -26,6 +26,20 @@ Skip read only commands
     \     Append To List    ${data_types_skip_read_only}    ${item}
     [Return]  ${data_types_skip_read_only}
 
+Skip data types BOOL and STRING only commands "${SUPPORTED_DATA}"
+    @{data_types_skip_bool_string}=    Create List
+    :FOR    ${item}    IN    @{SUPPORTED_DATA}
+    \     Continue For Loop If   '${item["dataType"]}' == 'BOOL' or '${item["dataType"]}' == 'STRING'
+    \     Append To List    ${data_types_skip_bool_string}    ${item}
+    [Return]  ${data_types_skip_bool_string}
+
+Skip read only and write only commands "${SUPPORTED_DATA}"
+    @{data_types_get_rw}=    Create List
+    :FOR    ${item}    IN    @{SUPPORTED_DATA}
+    \     Continue For Loop If   '${item["readWrite"]}' == 'R' or '${item["readWrite"]}' == 'W'
+    \     Append To List    ${data_types_get_rw}    ${item}
+    [Return]  ${data_types_get_rw}
+
 Get reading value with data type "${data_type}"
     # Boolean
     run keyword and return if  '${data_type}' == 'BOOL'  evaluate  random.choice(['True', 'False'])  modules=random
@@ -61,6 +75,10 @@ Should return status code "404"
 Should return status code "423"
     ${resp}=  get environment variable  response
     Should be true    ${resp} == 423
+
+Should return status code "500"
+    ${resp}=  get environment variable  response
+    Should be true    ${resp} == 500
 
 Get milliseconds epoch time
     ${data}=  get current date
