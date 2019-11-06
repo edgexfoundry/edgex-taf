@@ -5,6 +5,7 @@ Library   Collections
 Resource  ./keywords/coreMetadataAPI.robot
 Resource  ./keywords/coreDataAPI.robot
 Resource  ./keywords/commonKeywords.robot
+Suite Setup  Setup Suite
 
 
 *** Variables ***

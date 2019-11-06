@@ -10,23 +10,27 @@ ${coreDataReadingUri}   /api/v1/reading
 ${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
 
 *** Keywords ***
-Device reading "${validReadingName}" should be sent to Core Data
-    Query device reading "${validReadingName}" by device id
+Device reading should be sent to Core Data
+    [Arguments]  ${reading_name}    ${reading_value}
+    ${device_reading_data}=  Query device reading "${reading_name}" by device id
+    ${device_reading_json}=    evaluate  json.loads('''${device_reading_data}''')  json
+    should be equal  ${reading_value}   ${device_reading_json}[0][value]
 
 
 Device reading "${validReadingName}" for all device should be sent to Core Data
     Query device reading "${validReadingName}" for all device
 
 Query device reading "${validReadingName}" by device id
-    ${deviceName}=    Query device by id and return device name
+    ${device_name}=    Query device by id and return device name
+    #${device_id}=    get environment variable  deviceId
     Create Session  Core Data  url=${coreDataUrl}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/name/${validReadingName}/device/${deviceName}/5
+    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/name/${validReadingName}/device/${device_name}/1
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
     ${get_reading_result_length}=  get length  ${resp.content}
     run keyword if  ${get_reading_result_length} <=3    fail  "No device reading found"
     Should Be Equal As Strings  ${resp.status_code}  200
-    log  ${resp.content}
+    [Return]  ${resp.content}
 
 Query device reading by start/end time
     [Arguments]  ${start_time}   ${end_time}

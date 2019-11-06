@@ -4,11 +4,11 @@ Library   Collections
 Resource  ./keywords/coreMetadataAPI.robot
 Resource  ./keywords/deviceServiceAPI.robot
 Resource  ./keywords/commonKeywords.robot
+Suite Setup     Setup Suite
 
 
 *** Variables ***
-${SUITE}        Actuation Commands
-${int8Value}    5
+${SUITE}        Metadata Update
 
 
 *** Test Cases ***

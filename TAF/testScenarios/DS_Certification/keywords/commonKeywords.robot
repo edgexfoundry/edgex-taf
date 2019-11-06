@@ -4,14 +4,17 @@
 ...     device-virtual=device-virtual   device-random=edgex-device-random     device-modbus=edgex-device-modbus
 
 *** Settings ***
-Documentation  Device Readings - Query commands
 Library   OperatingSystem
 Library   Collections
 Library   String
-Library  DateTime
+Library   DateTime
 
 
 *** Keywords ***
+Setup Suite
+   ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
+   Should Be True  ${status}  Failed Demo Suite Setup
+
 Skip write only commands
     @{data_types_skip_write_only}=    Create List
     :FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}

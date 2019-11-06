@@ -5,7 +5,7 @@ Resource  ./keywords/coreMetadataAPI.robot
 Resource  ./keywords/deviceServiceAPI.robot
 Resource  ./keywords/coreDataAPI.robot
 Resource  ./keywords/commonKeywords.robot
-Suite Setup  Create device  create_device.json
+Suite Setup  Run Keywords  Setup Suite  AND  Create device  create_device.json
 Suite Teardown  Delete device by name
 
 *** Variables ***
@@ -15,10 +15,9 @@ ${SUITE}        Actuation Commands
 *** Test Cases ***
 # Actuation commands by id /device/{id}/{command}
 PUT001 - Test DS actuates commands to device/sensor by id on multiple data type
-    @{data_types_skip_read_only}=  Skip read only commands
-    : FOR    ${item}    IN    @{data_types_skip_read_only}
+    @{data_types_get_rw}=  Skip read only and write only commands "${SUPPORTED_DATA_TYPES}"
+    : FOR    ${item}    IN    @{data_types_get_rw}
     \   run keyword and continue on failure   DS actuates commands to device/sensor by id  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}
-    sleep  10s
 
 PUT002 - Test DS actuates commands to device/sensor by id with invalid request body
     @{data_types_skip_read_only}=  Skip read only commands
@@ -41,8 +40,8 @@ PUT004 - Test DS actuates commands to device/sensor by id with invalid command
 
 # Actuation commands by name /device/name/{name}/{command}
 PUT005 - Test DS actuates commands to device/sensor by name on multiple data type
-    @{data_types_skip_read_only}=  Skip read only commands
-    : FOR    ${item}    IN    @{data_types_skip_read_only}
+    @{data_types_get_rw}=  Skip read only and write only commands "${SUPPORTED_DATA_TYPES}"
+    : FOR    ${item}    IN    @{data_types_get_rw}
     \   run keyword and continue on failure   DS actuates commands to device/sensor by name  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}
 
 PUT006 - Test DS actuates commands to device/sensor by name with invalid request body
@@ -73,8 +72,8 @@ DS actuates commands to device/sensor by id
     ${random_value}=    Get reading value with data type "${data_type}"
     ${reading_value}=   convert to string  ${random_value}
     When Invoke Put command by device id "${device_id}" and command name "${command_name}" with request body "${reading_name}":"${reading_value}"
-    Then Should return status code "200"
-    And Device reading "${readingName}" should be sent to Core Data
+    Then Invoke Get command by device id "${deviceId}" and command name "${commandName}"
+    And Device reading should be sent to Core Data  ${reading_name}  ${reading_value}
 
 DS actuates commands to device/sensor by id with invalid request body
     [Arguments]      ${command_name}    ${reading_name}
@@ -104,8 +103,8 @@ DS actuates commands to device/sensor by name
     ${random_value}=    Get reading value with data type "${data_type}"
     ${reading_value}=   convert to string  ${random_value}
     When Invoke Put command by device name "${device_name}" and command name "${command_name}" with request body "${reading_name}":"${reading_value}"
-    Then Should return status code "200"
-    And Device reading "${reading_name}" should be sent to Core Data
+    Then Invoke Get command by device name "${deviceName}" and command name "${commandName}"
+    And Device reading should be sent to Core Data  ${reading_name}  ${reading_value}
 
 DS actuates commands to device/sensor by name with invalid request body
     [Arguments]    ${command_name}    ${reading_name}
@@ -127,5 +126,3 @@ DS actuates commands to device/sensor by name with invalid command
     ${reading_value}=   convert to string  ${random_value}
     When Invoke Put command by device name "${device_name}" and command name "invalid_command_name" with request body "${reading_name}":"${reading_value}"
     Then Should return status code "404"
-
-
