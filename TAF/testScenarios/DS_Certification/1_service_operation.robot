@@ -39,7 +39,7 @@ Status code "${status_code}" should be "${expect}"
     Should Be Equal    ${result}   ${expect}
 
 DS should log "${msg}"
-    Send GET request "/api/v1/logs/originServices/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/0/0/100" to "${LOGGING_SERVICE_URL}"
+    Send GET request "/api/v1/logs/originServices/${DEVICE_SERVICE_EDGEX_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
     ${result} =  convert to string   ${REST_RES.content}
     Should contain      ${result}  ${msg}
 
@@ -48,13 +48,13 @@ DS should log "${msg}"
     Stop services  ${service_name}
 
 DS try to startup
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/Service/ConnectRetries  1
+    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  1
     Restart services  ${DEVICE_SERVICE_NAME}
     Sleep	20
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/Service/ConnectRetries  3
+    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  3
 
 DS should log "${error_msg}" after timeout
-    Send GET request "/api/v1/logs/originServices/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/0/0/100" to "${LOGGING_SERVICE_URL}"
+    Send GET request "/api/v1/logs/originServices/${DEVICE_SERVICE_EDGEX_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
     ${result} =  convert to string   ${REST_RES.content}
     Should contain      ${result}  ${error_msg}
 
@@ -72,15 +72,15 @@ DS finishes with initialization
 
 Delete device service instance
     Create Session   Core Metadata   url=${METADATA_SERVICE_URL}
-    ${resp}=   Delete Request   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    ${resp}=   Delete Request   Core Metadata    /api/v1/deviceservice/name/${DEVICE_SERVICE_EDGEX_NAME}
     Should Be Equal As Strings  ${resp.status_code}  200
     log  ${resp.content}
 
 DS should create a new DS instance in Core Metadata
     Create Session   Core Metadata   url=${METADATA_SERVICE_URL}
-    ${resp}=   Get Request   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    ${resp}=   Get Request   Core Metadata    /api/v1/deviceservice/name/${DEVICE_SERVICE_EDGEX_NAME}
     ${result} =  convert to string   ${resp.content}
-    Should contain      ${result}  ${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    Should contain      ${result}  ${DEVICE_SERVICE_EDGEX_NAME}
 
 #TC003
 DS instance is found in Core Metadata
@@ -88,7 +88,7 @@ DS instance is found in Core Metadata
     Remove services  ${DEVICE_SERVICE_NAME}
 
 DS should load the DS instance from Core Metadata
-    DS should log "Device Service ${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]} exists"
+    DS should log "Device Service ${DEVICE_SERVICE_EDGEX_NAME} exists"
 
 #TC004
 DS is configured to use the registry
@@ -98,7 +98,7 @@ DS is configured to use the registry
 
 DS should register as a service to the registry
     Create Session   Registry   url=${REGISTRY_URL}
-    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    ${resp}=   Get Request   Registry    /v1/health/checks/${DEVICE_SERVICE_EDGEX_NAME}
     Should contain      ${resp.json()[0]["Status"]}  passing
     Remove services  ${DEVICE_SERVICE_NAME}
 
@@ -146,7 +146,7 @@ Shutdown DS
 
 DS should be unregistered to consul
     Create Session   Registry   url=${REGISTRY_URL}
-    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}
+    ${resp}=   Get Request   Registry    /v1/health/checks/${DEVICE_SERVICE_EDGEX_NAME}
     Should contain      ${resp.json()[0]["Status"]}  critical
     Remove services  ${DEVICE_SERVICE_NAME}
 

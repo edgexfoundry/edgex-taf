@@ -34,7 +34,7 @@ Bootstrap option "--registry" is set to "${registry_url}"
     Set Test Variable  ${REGISTRY_URL}  ${registry_url}
 
 DS initialize with the registry url
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/Writable/LogLevel  DEBUG
+    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Writable/LogLevel  DEBUG
     Remove services  ${DEVICE_SERVICE_NAME}
     Deploy device service with registry url   ${DEVICE_SERVICE_NAME}   ${REGISTRY_URL}
 
@@ -74,12 +74,12 @@ DS initialize with the profile option
 #TC005
 LogLevel Configuration changes on registry
     Remove device service logs
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/Writable/LogLevel  TRACE
+    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Writable/LogLevel  TRACE
     sleep  3
 
 DS dynamically apply the logLevel changed settings
     Create Session   Logging Service   url=${LOGGING_SERVICE_URL}
-    ${resp}=   get request   Logging Service    /api/v1/logs/originServices/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/0/0/100
+    ${resp}=   get request   Logging Service    /api/v1/logs/originServices/${DEVICE_SERVICE_EDGEX_NAME}/0/0/100
     ${result} =  convert to string   ${resp.content}
     Should contain      ${result}  "Writeable configuration has been updated. Setting log level to TRACE"
 
@@ -90,7 +90,7 @@ Corresponding logLevel setting should be updated by DS
 
 #TC006
 Service ConnectRetries Configuration changes
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/${SERVICE_NAME_MAPPING["${DEVICE_SERVICE_NAME}"]}/Service/ConnectRetries  10
+    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  10
     sleep  3
 
 Restart DS because DS cannot dynamically apply changed settings
