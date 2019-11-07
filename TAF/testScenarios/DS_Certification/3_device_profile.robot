@@ -21,7 +21,7 @@ DeviceProfile "${device_profile_name}" should be created in Core Metadata
 DS should create ValueDescriptors in Core Data according to DeviceProfile "${device_profile_name}"
     @{resources}=  Retrieve all resource names for the device profile "${device_profile_name}"
     :For    ${resource_name}   IN    @{resources}
-    \   Query value descriptor for name "${resource_name}"
+    \   run keyword and continue on failure  Query value descriptor for name "${resource_name}"
 
 Retrieve all resource names for the device profile "${device_profile_name}"
     ${device_profile_content}=  Query device profile by name    ${device_profile_name}
