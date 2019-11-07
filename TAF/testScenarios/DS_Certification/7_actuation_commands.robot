@@ -72,7 +72,8 @@ DS actuates commands to device/sensor by id
     ${random_value}=    Get reading value with data type "${data_type}"
     ${reading_value}=   convert to string  ${random_value}
     When Invoke Put command by device id "${device_id}" and command name "${command_name}" with request body "${reading_name}":"${reading_value}"
-    Then Invoke Get command by device id "${deviceId}" and command name "${commandName}"
+    Then Should return status code "200"
+    And Invoke Get command by device id "${deviceId}" and command name "${commandName}"
     And Device reading should be sent to Core Data  ${reading_name}  ${reading_value}
 
 DS actuates commands to device/sensor by id with invalid request body
@@ -103,7 +104,8 @@ DS actuates commands to device/sensor by name
     ${random_value}=    Get reading value with data type "${data_type}"
     ${reading_value}=   convert to string  ${random_value}
     When Invoke Put command by device name "${device_name}" and command name "${command_name}" with request body "${reading_name}":"${reading_value}"
-    Then Invoke Get command by device name "${deviceName}" and command name "${commandName}"
+    Then Should return status code "200"
+    And Invoke Get command by device name "${deviceName}" and command name "${commandName}"
     And Device reading should be sent to Core Data  ${reading_name}  ${reading_value}
 
 DS actuates commands to device/sensor by name with invalid request body

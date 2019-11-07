@@ -291,7 +291,8 @@ services:
 #################################################################
 
   device-virtual:
-    image: edgexfoundry/docker-device-virtual-go:1.0.0
+    #image: edgexfoundry/docker-device-virtual-go:1.0.0
+    image: nexus3.edgexfoundry.org:10004/docker-device-virtual-go:1.1.0
     ports:
     - "49990:49990"
     container_name: edgex-device-virtual

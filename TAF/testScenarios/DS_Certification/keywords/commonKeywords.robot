@@ -45,7 +45,7 @@ Skip read only and write only commands "${SUPPORTED_DATA}"
 
 Get reading value with data type "${data_type}"
     # Boolean
-    run keyword and return if  '${data_type}' == 'BOOL'  evaluate  random.choice(['True', 'False'])  modules=random
+    run keyword and return if  '${data_type}' == 'BOOL'  evaluate  random.choice(['true', 'false'])  modules=random
     # STRING
     run keyword and return if  '${data_type}' == 'STRING'  Generate Random String  10  [LETTERS]
     # FLOAT
