@@ -494,7 +494,7 @@ deviceCommands:
   - { operation: "get", object: "DeviceValue_Boolean_RW" }
   set:
   - { operation: "set", object: "DeviceValue_Boolean_RW" }
-  - { operation: "set", object: "EnableRandomization_DeviceValue_Boolean_RW", parameter: "true" }
+  - { operation: "set", object: "EnableRandomization_DeviceValue_Boolean_RW", parameter: "false" }
 - name: "GenerateDeviceValue_Boolean_R"
   get:
     - { operation: "get", object: "DeviceValue_Boolean_R" }

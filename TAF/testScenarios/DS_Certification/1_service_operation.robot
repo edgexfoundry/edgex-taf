@@ -113,7 +113,7 @@ DS is configured to use the invalid registry url and initialization
 #TC0006
 Validate ${content} contains version element "${expect}"
     ${result} =  convert to string   ${content}
-    Should Be Equal    ${result}   ${expect}
+    Should contain    ${result}   ${expect}
 
 #TC0008
 Validate "${content}" contains DS configuration
@@ -189,14 +189,14 @@ ServiceOperation_TC0005 - Register as a service failed
 
 ServiceOperation_TC0006 - Version identification
     When Send GET request "/api/version" to "${DEVICE_SERVICE_URL}"
-    Then Status code "${REST_RES}" should be "200"
-    And Validate ${REST_RES.content} contains version element "1.0.0"
+    Then Status code "${REST_RES.status_code}" should be "200"
+    And Validate ${REST_RES.content} contains version element "version"
 
 ServiceOperation_TC0007 - Health check
     # In Geneva and subsequent releases the response will be the string "pong"
     When Send GET request "/api/v1/ping" to "${DEVICE_SERVICE_URL}"
     Then Status code "${REST_RES.status_code}" should be "200"
-    And Validate ${REST_RES.content} contains version element "1.0.0"
+    And Validate ${REST_RES.content} contains version element "1.1.0"
 
 ServiceOperation_TC0008 - Configuration check
     When Send GET request "/api/v1/config" to "${DEVICE_SERVICE_URL}"

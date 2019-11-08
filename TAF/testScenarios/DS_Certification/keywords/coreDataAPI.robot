@@ -1,6 +1,7 @@
 *** Settings ***
 Library  RequestsLibrary
 Library  OperatingSystem
+Library  TAF.utils.src.data.value_checker
 Resource  ./coreMetadataAPI.robot
 Resource  ./commonKeywords.robot
 
@@ -11,10 +12,11 @@ ${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
 
 *** Keywords ***
 Device reading should be sent to Core Data
-    [Arguments]  ${reading_name}    ${reading_value}
+    [Arguments]     ${data_type}    ${reading_name}    ${reading_value}
     ${device_reading_data}=  Query device reading "${reading_name}" by device id
     ${device_reading_json}=    evaluate  json.loads('''${device_reading_data}''')  json
-    should be equal  ${reading_value}   ${device_reading_json}[0][value]
+    ${result}=  check value equal  ${data_type}  ${reading_value}   ${device_reading_json}[0][value]
+    should be true  ${result}
 
 
 Device reading "${validReadingName}" for all device should be sent to Core Data
