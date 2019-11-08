@@ -18,6 +18,7 @@ Test Callback API Post method is available
     #Given Create device profile
     When Create device  create_device.json
     ${device_id}=  get environment variable  deviceId
+    sleep  500ms
     Then Invoke Get command by device id "${device_id}" and command name "${commandName}"
     And Should return status code "200"
     [Teardown]  Delete device by name
@@ -32,7 +33,9 @@ Test Callback API Delete method is available
     #Given Create device profile
     Given Create device  create_device.json
     ${device_id}=    get environment variable  deviceId
+    sleep  500ms
     When Invoke Delete callback for the device "${device_id}" with action type "DEVICE"
+    sleep  500ms
     Then Invoke Get command by device id "${device_id}" and command name "${commandName}"
     And Should return status code "404"
     [Teardown]  Delete device by name
