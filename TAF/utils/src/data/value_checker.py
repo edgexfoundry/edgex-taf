@@ -1,5 +1,7 @@
 from TUC.data.SettingsInfo import SettingsInfo
 import numpy as np
+import struct
+import binascii
 
 STRING = "STRING"
 BOOL = "BOOL"
@@ -21,7 +23,7 @@ def check_value_range(val, value_type):
     if value_type == STRING:
         return True
     elif value_type == BOOL:
-        if value_type == '0' or value_type == '1':
+        if bool(val) == True or bool(val) == False:
             return True
         else:
             return False
@@ -66,12 +68,18 @@ def check_value_range(val, value_type):
         else:
             return False
     elif value_type == FLOAT32:
-        if np.finfo(np.float32).min <= int(val) <= np.finfo(np.float32).max:
+        # Decode base64 to bytes
+        byte_val = binascii.a2b_base64(val)
+        # Convert bytes to float, 'f' can refer to https://docs.python.org/2/library/struct.html#format-characters
+        decode_val = struct.unpack('f', byte_val)[0]
+        if np.finfo(np.float32).min <= int(decode_val) <= np.finfo(np.float32).max:
             return True
         else:
             return False
     elif value_type == FLOAT64:
-        if np.finfo(np.float64).min <= int(val) <= np.finfo(np.float64).max:
+        byte_val = binascii.a2b_base64(val)
+        decode_val = struct.unpack('d', byte_val)[0]
+        if np.finfo(np.float64).min <= int(decode_val) <= np.finfo(np.float64).max:
             return True
         else:
             return False

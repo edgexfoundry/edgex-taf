@@ -7,6 +7,7 @@ Library          TAF.utils.src.setup.startup_checker
 Library          TAF.utils.src.setup.edgex
 Library          TAF.utils.src.setup.consul
 Resource         ./keywords/commonKeywords.robot
+Resource         ./keywords/loggingAPI.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 
@@ -49,6 +50,8 @@ DS should log "${msg}"
 
 DS try to startup
     Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  1
+    Remove device service logs
+    # Device service should restart failed because matadata service is unavailable
     Restart services  ${DEVICE_SERVICE_NAME}
     Sleep	20
     Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  3
@@ -148,7 +151,6 @@ DS should be unregistered to consul
     Create Session   Registry   url=${REGISTRY_URL}
     ${resp}=   Get Request   Registry    /v1/health/checks/${DEVICE_SERVICE_EDGEX_NAME}
     Should contain      ${resp.json()[0]["Status"]}  critical
-    Remove services  ${DEVICE_SERVICE_NAME}
 
 *** Test Cases ***
 ServiceOperation_TC0001a - Startup failed (Core Metadata Service is unavailable)
@@ -208,3 +210,4 @@ ServiceOperation_TC0010 - Unregistered to registry
     Given Start EdgeX with Registry DS to consul
     When Shutdown DS
     Then DS should be unregistered to consul
+    [Teardown]  Restart EdgeX

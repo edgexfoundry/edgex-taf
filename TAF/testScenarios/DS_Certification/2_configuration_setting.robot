@@ -120,7 +120,7 @@ ConfigurationSetting_TC0003 - Bootstrap option "--confdir" is set
     Then DS configuration settings should be provided by confdir
 
 ConfigurationSetting_TC0004 - Bootstrap option "--profile" is set
-    Given Bootstrap option "--profile" is set to "custom"
+    Given Bootstrap option "--profile" is set to "docker"
     When DS initialize with the profile option
     Then DS configuration settings should be provided by confdir
 
