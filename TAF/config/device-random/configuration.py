@@ -10,6 +10,7 @@ BASE_URL = "localhost"
 
 # Device service for testing
 DEVICE_SERVICE_NAME = "device-random"
+DEVICE_SERVICE_EDGEX_NAME= "edgex-device-random"
 DEVICE_SERVICE_PORT = 49988
 
 # Service port

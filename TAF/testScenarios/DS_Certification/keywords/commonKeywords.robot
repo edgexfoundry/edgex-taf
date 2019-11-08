@@ -1,7 +1,6 @@
 *** Variables ***
 &{SERVICE_NAME_MAPPING}
 ...     consul=edgex-core-consul    data=edgex-core-data    metadata=edgex-core-metadata
-...     device-virtual=device-virtual   device-random=edgex-device-random     device-modbus=edgex-device-modbus
 
 *** Settings ***
 Library   OperatingSystem

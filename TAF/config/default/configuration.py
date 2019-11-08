@@ -10,6 +10,7 @@ BASE_URL = "localhost"
 
 # Device service for testing
 DEVICE_SERVICE_NAME = "device-virtual"
+DEVICE_SERVICE_EDGEX_NAME= "device-virtual"
 DEVICE_SERVICE_PORT = 49990
 
 # Service port
