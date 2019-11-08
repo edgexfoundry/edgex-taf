@@ -104,7 +104,6 @@ Corresponding Service ConnectRetries setting should be updated by DS
 
 *** Test Cases ***
 ConfigurationSetting_TC0001 - Bootstrap option "--registry" is set
-    [Tags]  wip
     Given Bootstrap option "--registry" is set to "consul://edgex-core-consul:8500"
     When DS initialize with the registry url
     Then DS configuration settings should be provided by the registry
