@@ -425,7 +425,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device boolean value"
       expectedValues: ["DeviceValue_Boolean_RW"]
     -
       code: "500"
@@ -437,7 +437,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device boolean value"
     -
       code: "500"
       description: "service unavailable"
@@ -448,7 +448,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device boolean value"
       expectedValues: ["DeviceValue_Boolean_R"]
     -
       code: "500"
@@ -462,7 +462,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device boolean value"
     -
       code: "500"
       description: "service unavailable"
@@ -473,7 +473,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device float32 value"
       expectedValues: ["DeviceValue_Float32_RW"]
     -
       code: "500"
@@ -485,7 +485,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device float32 value"
     -
       code: "500"
       description: "service unavailable"
@@ -496,7 +496,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device float32 value"
       expectedValues: ["DeviceValue_Float32_R"]
     -
       code: "500"
@@ -510,7 +510,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device float32 value"
     -
       code: "500"
       description: "service unavailable"
@@ -521,7 +521,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device float64 value"
       expectedValues: ["DeviceValue_Float64_RW"]
     -
       code: "500"
@@ -533,7 +533,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device float64 value"
     -
       code: "500"
       description: "service unavailable"
@@ -544,7 +544,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device float64 value"
       expectedValues: ["DeviceValue_Float64_R"]
     -
       code: "500"
@@ -558,7 +558,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device float64 value"
     -
       code: "500"
       description: "service unavailable"
@@ -569,7 +569,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device INT16 value"
       expectedValues: ["DeviceValue_INT16_RW"]
     -
       code: "500"
@@ -581,7 +581,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device INT16 value"
     -
       code: "500"
       description: "service unavailable"
@@ -592,7 +592,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device INT16 value"
       expectedValues: ["DeviceValue_INT16_R"]
     -
       code: "500"
@@ -606,7 +606,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device INT16 value"
     -
       code: "500"
       description: "service unavailable"
@@ -617,7 +617,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device INT32 value"
       expectedValues: ["DeviceValue_INT32_RW"]
     -
       code: "500"
@@ -629,7 +629,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device INT32 value"
       -
         code: "500"
         description: "service unavailable"
@@ -640,7 +640,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device INT32 value"
       expectedValues: ["DeviceValue_INT32_R"]
     -
       code: "500"
@@ -654,7 +654,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device INT32 value"
       -
         code: "500"
         description: "service unavailable"
@@ -665,7 +665,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device INT64 value"
       expectedValues: ["DeviceValue_INT64_RW"]
     -
       code: "500"
@@ -677,7 +677,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device INT64 value"
       -
         code: "500"
         description: "service unavailable"
@@ -688,7 +688,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device INT64 value"
       expectedValues: ["DeviceValue_INT64_R"]
     -
       code: "500"
@@ -702,7 +702,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device INT64 value"
       -
         code: "500"
         description: "service unavailable"
@@ -713,7 +713,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device UINT16 value"
       expectedValues: ["DeviceValue_UINT16_RW"]
     -
       code: "500"
@@ -725,7 +725,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device UINT16 value"
     -
       code: "500"
       description: "service unavailable"
@@ -736,7 +736,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device UINT16 value"
       expectedValues: ["DeviceValue_UINT16_R"]
     -
       code: "500"
@@ -750,7 +750,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Set the device UINT16 value"
     -
       code: "500"
       description: "service unavailable"
@@ -761,7 +761,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device UINT32 value"
       expectedValues: ["DeviceValue_UINT32_RW"]
     -
       code: "500"
@@ -773,7 +773,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device UINT32 value"
       -
         code: "500"
         description: "service unavailable"
@@ -784,7 +784,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device UINT32 value"
       expectedValues: ["DeviceValue_UINT32_R"]
     -
       code: "500"
@@ -798,7 +798,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device UINT32 value"
       -
         code: "500"
         description: "service unavailable"
@@ -809,7 +809,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device UINT64 value"
       expectedValues: ["DeviceValue_UINT64_RW"]
     -
       code: "500"
@@ -821,7 +821,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device UINT64 value"
       -
         code: "500"
         description: "service unavailable"
@@ -832,7 +832,7 @@ coreCommands:
     responses:
     -
       code: "200"
-      description: ""
+      description: "Get the device UINT64 value"
       expectedValues: ["DeviceValue_UINT64_R"]
     -
       code: "500"
@@ -846,7 +846,7 @@ coreCommands:
     responses:
       -
         code: "200"
-        description: ""
+        description: "Set the device UINT64 value"
       -
         code: "500"
         description: "service unavailable"
