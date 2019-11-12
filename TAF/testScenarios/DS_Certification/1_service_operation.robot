@@ -103,7 +103,6 @@ DS should register as a service to the registry
     Create Session   Registry   url=${REGISTRY_URL}
     ${resp}=   Get Request   Registry    /v1/health/checks/${DEVICE_SERVICE_EDGEX_NAME}
     Should contain      ${resp.json()[0]["Status"]}  passing
-    Remove services  ${DEVICE_SERVICE_NAME}
 
 #TC005
 DS is configured to use the invalid registry url and initialization
@@ -139,13 +138,12 @@ Validate "${content}" contains DS metrics
 Start EdgeX with Registry DS to consul
     Remove services  ${DEVICE_SERVICE_NAME}
     Deploy device service with registry url   ${DEVICE_SERVICE_NAME}   consul://edgex-core-consul:8500
-    sleep  3
+    sleep  10
     DS should register as a service to the registry
-    sleep  3
 
 Shutdown DS
     Remove services  ${DEVICE_SERVICE_NAME}
-    sleep  3
+    sleep  10
 
 DS should be unregistered to consul
     Create Session   Registry   url=${REGISTRY_URL}
