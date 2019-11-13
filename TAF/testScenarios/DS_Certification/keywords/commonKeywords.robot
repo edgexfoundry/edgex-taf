@@ -1,7 +1,3 @@
-*** Variables ***
-&{SERVICE_NAME_MAPPING}
-...     consul=edgex-core-consul    data=edgex-core-data    metadata=edgex-core-metadata
-
 *** Settings ***
 Library   OperatingSystem
 Library   Collections
