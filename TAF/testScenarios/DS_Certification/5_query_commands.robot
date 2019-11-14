@@ -58,11 +58,11 @@ Retrieve reading by device id and the data is sent to Core Data
     [Arguments]      ${dataType}    ${command_name}    ${reading_name}
     ${device_id}=    get environment variable  deviceId
     ${start_time}=  Get milliseconds epoch time
-    ${end_time}=  evaluate  ${start_time}+2000
-    sleep  1s
     When Invoke Get command by device id "${device_id}" and command name "${command_name}"
     Then Should return status code "200"
     And Value should be "${dataType}"
+    sleep  500ms
+    ${end_time}=  Get milliseconds epoch time
     And Query device reading by start/end time  ${start_time}  ${end_time}
 
 Retrieve reading by device id but the device does not exist
@@ -75,11 +75,11 @@ Retrieve reading by device name and the data is sent to Core Data
     [Arguments]      ${dataType}    ${command_name}    ${reading_name}
     ${device_name}=    Query device by id and return device name
     ${start_time}=  Get milliseconds epoch time
-    ${end_time}=  evaluate  ${start_time}+2000
-    sleep  1s
     When Invoke Get command by device name "${device_name}" and command name "${command_name}"
     Then Should return status code "200"
     And Value should be "${dataType}"
+    sleep  500ms
+    ${end_time}=  Get milliseconds epoch time
     And Query device reading by start/end time  ${start_time}  ${end_time}
 
 Retrieve reading by device name but the device does not exist
@@ -92,12 +92,12 @@ Retrieve reading by device name but the device does not exist
 Retrieve all devices data and the data is sent to Core Data
     [Arguments]  ${dataType}    ${command_name}    ${reading_name}
     ${start_time}=  Get milliseconds epoch time
-    ${end_time}=  evaluate  ${start_time}+2000
-    sleep  1s
     ${responseBody}=  Invoke Get command name "${command_name}" for all devices
     ${response_length}=  get length  ${responseBody}
     run keyword if  ${response_length} >=5  fail  "No device reading found"
     :FOR    ${response}    IN    @{responseBody}
     \     ${readings_length}=  get length  ${response}[readings]
+    \     sleep  500ms
+    \     ${end_time}=  Get milliseconds epoch time
     \     run keyword if  ${readings_length} == 0   fail  "No readings found:"+ ${response}[device]
     \     Query device reading by start/end time  ${start_time}  ${end_time}
