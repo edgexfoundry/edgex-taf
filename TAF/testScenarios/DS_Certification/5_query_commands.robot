@@ -2,10 +2,10 @@
 Documentation  Device Readings - Query commands
 Library   OperatingSystem
 Library   Collections
-Resource  ./keywords/coreMetadataAPI.robot
-Resource  ./keywords/deviceServiceAPI.robot
-Resource  ./keywords/coreDataAPI.robot
-Resource  ./keywords/commonKeywords.robot
+Resource  TAF/testCaseApps/keywords/coreMetadataAPI.robot
+Resource  TAF/testCaseApps/keywords/deviceServiceAPI.robot
+Resource  TAF/testCaseApps/keywords/coreDataAPI.robot
+Resource  TAF/testCaseApps/keywords/commonKeywords.robot
 Suite Setup  Run Keywords  Setup Suite  AND  Create device  create_device.json
 Suite Teardown  Delete device by name
 
