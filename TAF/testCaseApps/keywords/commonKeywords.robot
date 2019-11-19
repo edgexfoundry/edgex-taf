@@ -44,7 +44,7 @@ Get reading value with data type "${data_type}"
     # STRING
     run keyword and return if  '${data_type}' == 'STRING'  Generate Random String  10  [LETTERS]
     # FLOAT
-    run keyword and return if  '${data_type}' == 'FLOAT32'  evaluate  random.uniform(1.1, 1.9)  modules=random
+    run keyword and return if  '${data_type}' == 'FLOAT32'  evaluate  round(random.uniform(1.1, 1.9), 2)  modules=random
     run keyword and return if  '${data_type}' == 'FLOAT64'  evaluate  random.uniform(1.1, 1.9)  modules=random
     # INT
     run keyword and return if  '${data_type}' == 'INT8'  evaluate  random.randint(-128, 127)  modules=random
