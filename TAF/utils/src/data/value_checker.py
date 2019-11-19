@@ -95,6 +95,7 @@ def check_value_equal(value_type, expect,  val):
         byte_val = binascii.a2b_base64(str(val))
         # Convert bytes to float, 'f' can refer to https://docs.python.org/2/library/struct.html#format-characters
         decode_val = struct.unpack('>f', byte_val)[0]
+        decode_val = round(decode_val, 2)
         SettingsInfo().TestLog.info('Decode {} to {}'.format(val, decode_val))
         res = decode_val == float(expect)
         return res
