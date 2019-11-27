@@ -2,3 +2,6 @@ numpy
 robotbackgroundlogger
 robotframework
 configparser
+requests
+robotframework-requests
+RESTinstance

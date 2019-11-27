@@ -2,14 +2,15 @@ LOG_LEVEL = "INFO"
 
 # Deploy type: docker, manual
 DEPLOY_TYPE = "docker"
-SERVICE_STARTUP_RECHECK_TIMES = 10
-SERVICE_STARTUP_WAIT_TIME = 5
+SERVICE_STARTUP_RECHECK_TIMES = 5
+SERVICE_STARTUP_WAIT_TIME = 3
 
 # EdgeX host
 BASE_URL = "localhost"
 
 # Device service for testing
 DEVICE_SERVICE_NAME = "device-modbus"
+DEVICE_SERVICE_EDGEX_NAME= "edgex-device-modbus"
 DEVICE_SERVICE_PORT = 49991
 
 # Service port
@@ -22,7 +23,7 @@ SUPPORT_SCHEDULER_PORT = 48085
 SUPPORT_RULESENGINE_PORT = 48075
 EXPORT_CLIENT_PORT = 48071
 EXPORT_DISTRO_PORT = 48070
-
+REGISTRY_PORT = 8500
 
 SUPPORTED_DATA_TYPES = [
     #     Boolean
@@ -37,23 +38,23 @@ SUPPORTED_DATA_TYPES = [
     {"dataType": "FLOAT64", "commandName": "GenerateDeviceValue_Float64_R", "readingName": "DeviceValue_Float64_R", "readWrite": "R"},
     {"dataType": "FLOAT64", "commandName": "GenerateDeviceValue_Float64_W", "readingName": "DeviceValue_Float64_W", "readWrite": "W"},
     #     Integer
-    {"dataType": "INT16", "commandName": "GenerateDeviceValue_Int16_RW", "readingName": "DeviceValue_Int16_RW", "readWrite": "RW"},
-    {"dataType": "INT16", "commandName": "GenerateDeviceValue_Int16_R", "readingName": "DeviceValue_Int16_R", "readWrite": "R"},
-    {"dataType": "INT16", "commandName": "GenerateDeviceValue_Int16_W", "readingName": "DeviceValue_Int16_W", "readWrite": "W"},
-    {"dataType": "INT32", "commandName": "GenerateDeviceValue_Int32_RW", "readingName": "DeviceValue_Int32_RW", "readWrite": "RW"},
-    {"dataType": "INT32", "commandName": "GenerateDeviceValue_Int32_R", "readingName": "DeviceValue_Int32_R", "readWrite": "R"},
-    {"dataType": "INT32", "commandName": "GenerateDeviceValue_Int32_W", "readingName": "DeviceValue_Int32_W", "readWrite": "W"},
-    {"dataType": "INT64", "commandName": "GenerateDeviceValue_Int64_RW", "readingName": "DeviceValue_Int64_RW", "readWrite": "RW"},
-    {"dataType": "INT64", "commandName": "GenerateDeviceValue_Int64_R", "readingName": "DeviceValue_Int64_R", "readWrite": "R"},
-    {"dataType": "INT64", "commandName": "GenerateDeviceValue_Int64_W", "readingName": "DeviceValue_Int64_W", "readWrite": "W"},
+    {"dataType": "INT16", "commandName": "GenerateDeviceValue_INT16_RW", "readingName": "DeviceValue_INT16_RW", "readWrite": "RW"},
+    {"dataType": "INT16", "commandName": "GenerateDeviceValue_INT16_R", "readingName": "DeviceValue_INT16_R", "readWrite": "R"},
+    {"dataType": "INT16", "commandName": "GenerateDeviceValue_INT16_W", "readingName": "DeviceValue_INT16_W", "readWrite": "W"},
+    {"dataType": "INT32", "commandName": "GenerateDeviceValue_INT32_RW", "readingName": "DeviceValue_INT32_RW", "readWrite": "RW"},
+    {"dataType": "INT32", "commandName": "GenerateDeviceValue_INT32_R", "readingName": "DeviceValue_INT32_R", "readWrite": "R"},
+    {"dataType": "INT32", "commandName": "GenerateDeviceValue_INT32_W", "readingName": "DeviceValue_INT32_W", "readWrite": "W"},
+    {"dataType": "INT64", "commandName": "GenerateDeviceValue_INT64_RW", "readingName": "DeviceValue_INT64_RW", "readWrite": "RW"},
+    {"dataType": "INT64", "commandName": "GenerateDeviceValue_INT64_R", "readingName": "DeviceValue_INT64_R", "readWrite": "R"},
+    {"dataType": "INT64", "commandName": "GenerateDeviceValue_INT64_W", "readingName": "DeviceValue_INT64_W", "readWrite": "W"},
     #     Unsigned Integer
-    {"dataType": "UINT16", "commandName": "GenerateDeviceValue_UInt16_RW", "readingName": "DeviceValue_UInt16_RW", "readWrite": "RW"},
-    {"dataType": "UINT16", "commandName": "GenerateDeviceValue_UInt16_R", "readingName": "DeviceValue_UInt16_R", "readWrite": "R"},
-    {"dataType": "UINT16", "commandName": "GenerateDeviceValue_UInt16_W", "readingName": "DeviceValue_UInt16_W", "readWrite": "W"},
-    {"dataType": "UINT32", "commandName": "GenerateDeviceValue_UInt32_RW", "readingName": "DeviceValue_UInt32_RW", "readWrite": "RW"},
-    {"dataType": "UINT32", "commandName": "GenerateDeviceValue_UInt32_R", "readingName": "DeviceValue_UInt32_R", "readWrite": "R"},
-    {"dataType": "UINT32", "commandName": "GenerateDeviceValue_UInt32_W", "readingName": "DeviceValue_UInt32_W", "readWrite": "W"},
-    {"dataType": "UINT64", "commandName": "GenerateDeviceValue_UInt64_RW", "readingName": "DeviceValue_UInt64_RW", "readWrite": "RW"},
-    {"dataType": "UINT64", "commandName": "GenerateDeviceValue_UInt64_R", "readingName": "DeviceValue_UInt64_R", "readWrite": "R"},
-    {"dataType": "UINT64", "commandName": "GenerateDeviceValue_UInt64_W", "readingName": "DeviceValue_UInt64_W", "readWrite": "W"},
+    {"dataType": "UINT16", "commandName": "GenerateDeviceValue_UINT16_RW", "readingName": "DeviceValue_UINT16_RW", "readWrite": "RW"},
+    {"dataType": "UINT16", "commandName": "GenerateDeviceValue_UINT16_R", "readingName": "DeviceValue_UINT16_R", "readWrite": "R"},
+    {"dataType": "UINT16", "commandName": "GenerateDeviceValue_UINT16_W", "readingName": "DeviceValue_UINT16_W", "readWrite": "W"},
+    {"dataType": "UINT32", "commandName": "GenerateDeviceValue_UINT32_RW", "readingName": "DeviceValue_UINT32_RW", "readWrite": "RW"},
+    {"dataType": "UINT32", "commandName": "GenerateDeviceValue_UINT32_R", "readingName": "DeviceValue_UINT32_R", "readWrite": "R"},
+    {"dataType": "UINT32", "commandName": "GenerateDeviceValue_UINT32_W", "readingName": "DeviceValue_UINT32_W", "readWrite": "W"},
+    {"dataType": "UINT64", "commandName": "GenerateDeviceValue_UINT64_RW", "readingName": "DeviceValue_UINT64_RW", "readWrite": "RW"},
+    {"dataType": "UINT64", "commandName": "GenerateDeviceValue_UINT64_R", "readingName": "DeviceValue_UINT64_R", "readWrite": "R"},
+    {"dataType": "UINT64", "commandName": "GenerateDeviceValue_UINT64_W", "readingName": "DeviceValue_UINT64_W", "readWrite": "W"},
 ]
