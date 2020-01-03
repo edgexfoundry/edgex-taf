@@ -43,6 +43,7 @@ services = {
                           "pingUrl": "/api/v1/ping"},
     }
 
+httpConnTimeout = 5
 
 def check_services_startup(check_list):
     for item in check_list:
@@ -57,7 +58,7 @@ def check_service_startup(d):
     for i in range(recheck_times):
         SettingsInfo().TestLog.info(
             "Ping service with port {} and request url {} {} ... ".format(str(d["port"]),SettingsInfo().constant.BASE_URL, d["pingUrl"]))
-        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"])
+        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"], timeout=httpConnTimeout)
         conn.request(method="GET", url=d["pingUrl"])
         try:
             r1 = conn.getresponse()
@@ -80,8 +81,8 @@ def check_service_is_available(port, ping_url):
     wait_time = int(SettingsInfo().constant.SERVICE_STARTUP_WAIT_TIME)
     for i in range(recheck_times):
         SettingsInfo().TestLog.info(
-            "Ping service with port {} and request url {} {} ... ".format(port, SettingsInfo().constant.BASE_URL, ping_url))
-        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=port)
+            "Ping service is available with port {} and request url {} {} ... ".format(port, SettingsInfo().constant.BASE_URL, ping_url))
+        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=port, timeout=httpConnTimeout)
         try:
             conn.request(method="GET", url=ping_url)
             r1 = conn.getresponse()
