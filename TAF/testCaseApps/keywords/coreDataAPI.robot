@@ -12,10 +12,10 @@ ${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
 
 *** Keywords ***
 Device reading should be sent to Core Data
-    [Arguments]     ${data_type}    ${reading_name}    ${reading_value}
+    [Arguments]     ${data_type}    ${reading_name}    ${set_reading_value}
     ${device_reading_data}=  Query device reading "${reading_name}" by device id
     ${device_reading_json}=    evaluate  json.loads('''${device_reading_data}''')  json
-    ${result}=  check value equal  ${data_type}  ${reading_value}   ${device_reading_json}[0][value]
+    ${result}=  check value equal  ${data_type}  ${set_reading_value}   ${device_reading_json}[0][value]
     should be true  ${result}
 
 
@@ -24,7 +24,6 @@ Device reading "${validReadingName}" for all device should be sent to Core Data
 
 Query device reading "${validReadingName}" by device id
     ${device_name}=    Query device by id and return device name
-    #${device_id}=    get environment variable  deviceId
     Create Session  Core Data  url=${coreDataUrl}
     ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/name/${validReadingName}/device/${device_name}/1
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
@@ -46,7 +45,6 @@ Query device reading by start/end time
     [Return]   ${resp.content}
 
 Query device reading "${validReadingName}" for all device
-    ${deviceId}=    get environment variable  deviceId
     Create Session  Core Data  url=${coreDataUrl}
     ${resp}=  Get Request  Core Data    ${coreDataReadingUri}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}

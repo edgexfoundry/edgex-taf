@@ -13,42 +13,41 @@ Suite Teardown  Delete device by name
 ${SUITE}              Query Commands
 
 *** Test Cases ***
-Test Retrieve device reading by id and the data is sent to Core Data with multiple data type
+Get001 - Test Retrieve device reading by id and the data is sent to Core Data with multiple data type
     @{data_types_skip_write_only}=  Skip write only commands
     : FOR    ${item}    IN    @{data_types_skip_write_only}
     \  run keyword and continue on failure  Retrieve reading by device id and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
 
-Test Retrieve device reading by id but the device does not exist
+Get002 - Test Retrieve device reading by id but the device does not exist
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
     Retrieve reading by device id but the device does not exist  ${command_name}
 
-Test Retrieve device reading by id but the command does not exist
-    ${device_id}=    get environment variable  deviceId
+Get003 - Test Retrieve device reading by id but the command does not exist
     When Invoke Get command by device id "${device_id}" and command name "invalid_command_name"
     Then Should return status code "404"
 
-Test Retrieve device reading by name and the data is sent to Core Data with multiple data type
+Get004 - Test Retrieve device reading by name and the data is sent to Core Data with multiple data type
      @{data_types_skip_write_only}=  Skip write only commands
     : FOR    ${item}    IN    @{data_types_skip_write_only}
     \  run keyword and continue on failure  Retrieve reading by device name and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
 
-Test Retrieve device reading by name but the device does not exist
+Get005 - Test Retrieve device reading by name but the device does not exist
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
     Retrieve reading by device name but the device does not exist  ${command_name}
 
-Test Retrieve device reading by name but the command does not exist
+Get006 - Test Retrieve device reading by name but the command does not exist
     ${device_name}=    Query device by id and return device name
     When Invoke Get command by device name "${device_name}" and command name "Invalid command Name"
     Then Should return status code "404"
 
-Test Retrieve all devices data and the data is sent to Core Data
+Get007 - Test Retrieve all devices data and the data is sent to Core Data
     @{data_types_skip_write_only}=  Skip write only commands
     : FOR    ${item}    IN    @{data_types_skip_write_only}
     \  run keyword and continue on failure  Retrieve all devices data and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
 
-Test Retrieve all devices data but the command does not exist
+Get008 - Test Retrieve all devices data but the command does not exist
     When Invoke Get command name "invalid_command_name" for all devices
     Then Should return status code "404"
 
@@ -56,7 +55,6 @@ Test Retrieve all devices data but the command does not exist
 # Get commands by id /device/{id}/{command}
 Retrieve reading by device id and the data is sent to Core Data
     [Arguments]      ${dataType}    ${command_name}    ${reading_name}
-    ${device_id}=    get environment variable  deviceId
     ${start_time}=  Get milliseconds epoch time
     When Invoke Get command by device id "${device_id}" and command name "${command_name}"
     Then Should return status code "200"
