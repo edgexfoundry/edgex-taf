@@ -38,7 +38,7 @@ Query device profile by name
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp_length}=  get length  ${resp.content}
     run keyword if  ${resp_length} == 3   fail  "The device profile ${device_profile_name} is not found"
-    run keyword if  ${resp.status_code} == 200  set environment variable  response  ${resp.status_code}
+    run keyword if  ${resp.status_code} == 200  set test variable  ${response}  ${resp.status_code}
     [Return]  ${resp.content}
 
 Delete device profile by name
@@ -58,7 +58,7 @@ Create device
     ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    set environment variable  deviceId   ${resp.content}
+    set suite variable  ${device_id}   ${resp.content}
 
 Creat device with autoEvents parameter
     [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
@@ -72,13 +72,12 @@ Creat device with autoEvents parameter
     ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    set environment variable  deviceId   ${resp.content}
+    set test variable  ${device_id}   ${resp.content}
 
 Query device by id and return device name
     # output device name
-    ${deviceId}=  get environment variable  deviceId
     Create Session  Core Metadata  url=${coreMetadataUrl}
-    ${resp}=  Get Request  Core Metadata    ${deviceUri}/${deviceId}
+    ${resp}=  Get Request  Core Metadata    ${deviceUri}/${device_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp_length}=    get length  ${resp.content}
     run keyword if  ${resp_length} == 3   fail  "No device found"

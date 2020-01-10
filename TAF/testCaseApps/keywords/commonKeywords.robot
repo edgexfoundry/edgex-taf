@@ -59,24 +59,19 @@ Get reading value with data type "${data_type}"
 
 
 Should return status code "200"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 200
+    Should be true    ${response} == 200
 
 Should return status code "400"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 400
+    Should be true    ${response} == 400
 
 Should return status code "404"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 404
+    Should be true    ${response} == 404
 
 Should return status code "423"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 423
+    Should be true    ${response} == 423
 
 Should return status code "500"
-    ${resp}=  get environment variable  response
-    Should be true    ${resp} == 500
+    Should be true    ${response} == 500
 
 Get milliseconds epoch time
     ${data}=  get current date
