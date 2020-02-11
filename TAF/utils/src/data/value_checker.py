@@ -1,5 +1,7 @@
 from TUC.data.SettingsInfo import SettingsInfo
 import numpy as np
+import struct
+import binascii
 
 STRING = "STRING"
 BOOL = "BOOL"
@@ -21,7 +23,7 @@ def check_value_range(val, value_type):
     if value_type == STRING:
         return True
     elif value_type == BOOL:
-        if value_type == '0' or value_type == '1':
+        if bool(val) == True or bool(val) == False:
             return True
         else:
             return False
@@ -66,14 +68,46 @@ def check_value_range(val, value_type):
         else:
             return False
     elif value_type == FLOAT32:
-        if np.finfo(np.float32).min <= int(val) <= np.finfo(np.float32).max:
+        # Decode base64 to bytes
+        byte_val = binascii.a2b_base64(val)
+        # Convert bytes to float, 'f' can refer to https://docs.python.org/2/library/struct.html#format-characters
+        decode_val = struct.unpack('>f', byte_val)[0]
+        if np.finfo(np.float32).min <= int(decode_val) <= np.finfo(np.float32).max:
             return True
         else:
             return False
     elif value_type == FLOAT64:
-        if np.finfo(np.float64).min <= int(val) <= np.finfo(np.float64).max:
+        byte_val = binascii.a2b_base64(val)
+        decode_val = struct.unpack('>d', byte_val)[0]
+        if np.finfo(np.float64).min <= int(decode_val) <= np.finfo(np.float64).max:
             return True
         else:
             return False
+    SettingsInfo().TestLog.info("Unsupported data type {}".format(value_type))
+    return False
+
+
+def check_value_equal(value_type, expect,  val):
+    SettingsInfo().TestLog.info('Check the {} value {} equal to {}'.format(value_type, expect, val))
+
+    if value_type == FLOAT32:
+        # Decode base64 to bytes
+        byte_val = binascii.a2b_base64(str(val))
+        # Convert bytes to float, 'f' can refer to https://docs.python.org/2/library/struct.html#format-characters
+        decode_val = struct.unpack('>f', byte_val)[0]
+        decode_val = round(decode_val, 2)
+        SettingsInfo().TestLog.info('Decode {} to {}'.format(val, decode_val))
+        res = decode_val == float(expect)
+        return res
+    elif value_type == FLOAT64:
+        byte_val = binascii.a2b_base64(val)
+        decode_val = struct.unpack('>d', byte_val)[0]
+        SettingsInfo().TestLog.info('Decode {} to {}'.format(val, decode_val))
+        res = decode_val == float(expect)
+        return res
+    # elif value_type == BOOL:
+    #     return bool(val) == expect
+    else:
+        return val == expect
     SettingsInfo().TestLog.info("Unsupported data type {}".format(value_type))
     return False

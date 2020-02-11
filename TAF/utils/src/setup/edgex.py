@@ -13,6 +13,12 @@ from TUC.data.SettingsInfo import SettingsInfo
 import TAF.utils.src.setup.startup_checker as checker
 
 
+def update_services(*args):
+    SettingsInfo().TestLog.info('Update services {}'.format(args))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/update-services.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), *args]
+    run_command(cmd)
+
+
 def deploy_services(*args):
     SettingsInfo().TestLog.info('Deploy services {}'.format(args))
     cmd = ["sh", "{}/TAF/utils/scripts/{}/startup.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), *args]
@@ -22,7 +28,7 @@ def deploy_services(*args):
 
 
 def shutdown_services():
-    SettingsInfo().TestLog.info("Shutdown all service")
+    SettingsInfo().TestLog.info("Shutdown all services")
     script_path = "{}/TAF/utils/scripts/{}/shutdown.sh".format(
         SettingsInfo().workDir,
         SettingsInfo().constant.DEPLOY_TYPE)
@@ -31,7 +37,7 @@ def shutdown_services():
 
 
 def stop_services(*args):
-    SettingsInfo().TestLog.info("Stop service {}".format(args))
+    SettingsInfo().TestLog.info("Stop services {}".format(args))
     script_path = "{}/TAF/utils/scripts/{}/stop-services.sh".format(
         SettingsInfo().workDir,
         SettingsInfo().constant.DEPLOY_TYPE)
@@ -40,7 +46,7 @@ def stop_services(*args):
 
 
 def restart_services(*args):
-    SettingsInfo().TestLog.info("Restart service {}".format(args))
+    SettingsInfo().TestLog.info("Restart services {}".format(args))
     script_path = "{}/TAF/utils/scripts/{}/restart-services.sh".format(
             SettingsInfo().workDir,
             SettingsInfo().constant.DEPLOY_TYPE)
@@ -48,10 +54,43 @@ def restart_services(*args):
     run_command(cmd)
 
 
+def remove_services(*args):
+    SettingsInfo().TestLog.info("Remove services {}".format(args))
+    script_path = "{}/TAF/utils/scripts/{}/remove-services.sh".format(
+            SettingsInfo().workDir,
+            SettingsInfo().constant.DEPLOY_TYPE)
+    cmd = ["sh", script_path, *args]
+    run_command(cmd)
+
+
+def deploy_device_service_with_registry_url(device_service, registry_url):
+    SettingsInfo().TestLog.info('Deploy device service {} with registry url {}'.format(device_service, registry_url))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/startup-device-service-with-registry-url.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), device_service, registry_url]
+    run_command(cmd)
+
+    checker.check_services_startup([device_service, registry_url])
+
+
+def deploy_device_service_with_the_confdir_option(device_service, confdir):
+    SettingsInfo().TestLog.info('Deploy device service {} with confdir option {}'.format(device_service, confdir))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/startup-device-service-with-confdir-option.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), device_service, confdir]
+    run_command(cmd)
+
+    checker.check_services_startup([device_service, confdir])
+
+
+def deploy_device_service_with_the_profile_option(device_service, profile):
+    SettingsInfo().TestLog.info('Deploy device service {} with confdir option {}'.format(device_service, profile))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/startup-device-service-with-profile-option.sh".format(SettingsInfo().workDir, SettingsInfo().constant.DEPLOY_TYPE), device_service, profile]
+    run_command(cmd)
+
+    checker.check_services_startup([device_service, profile])
+
+
 def run_command(cmd):
     p = subprocess.Popen(cmd, stderr=subprocess.PIPE)
     for line in p.stderr:
-        SettingsInfo().TestLog.info(line)
+        SettingsInfo().TestLog.info(line.decode("utf-8"))
 
     p.wait()
     SettingsInfo().TestLog.info("exit " + str(p.returncode))

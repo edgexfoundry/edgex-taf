@@ -14,9 +14,6 @@ import time
 from TUC.data.SettingsInfo import SettingsInfo
 
 services = {
-        "device-virtual": {"composeName": "device-virtual",
-                           "port": SettingsInfo().constant.DEVICE_SERVICE_PORT,
-                           "pingUrl": "/api/v1/ping"},
         "data": {"composeName": "data",
                  "port": SettingsInfo().constant.CORE_DATA_PORT,
                  "pingUrl": "/api/v1/ping"},
@@ -46,6 +43,7 @@ services = {
                           "pingUrl": "/api/v1/ping"},
     }
 
+httpConnTimeout = 5
 
 def check_services_startup(check_list):
     for item in check_list:
@@ -60,9 +58,33 @@ def check_service_startup(d):
     for i in range(recheck_times):
         SettingsInfo().TestLog.info(
             "Ping service with port {} and request url {} {} ... ".format(str(d["port"]),SettingsInfo().constant.BASE_URL, d["pingUrl"]))
-        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"])
+        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"], timeout=httpConnTimeout)
         conn.request(method="GET", url=d["pingUrl"])
         try:
+            r1 = conn.getresponse()
+        except:
+            time.sleep(wait_time)
+            continue
+
+        SettingsInfo().TestLog.info(r1.status)
+        if int(r1.status) == 200:
+            SettingsInfo().TestLog.info("Service is startup.")
+            return True
+        else:
+            time.sleep(wait_time)
+            continue
+    return False
+
+
+def check_service_is_available(port, ping_url):
+    recheck_times = int(SettingsInfo().constant.SERVICE_STARTUP_RECHECK_TIMES)
+    wait_time = int(SettingsInfo().constant.SERVICE_STARTUP_WAIT_TIME)
+    for i in range(recheck_times):
+        SettingsInfo().TestLog.info(
+            "Ping service is available with port {} and request url {} {} ... ".format(port, SettingsInfo().constant.BASE_URL, ping_url))
+        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=port, timeout=httpConnTimeout)
+        try:
+            conn.request(method="GET", url=ping_url)
             r1 = conn.getresponse()
         except:
             time.sleep(wait_time)

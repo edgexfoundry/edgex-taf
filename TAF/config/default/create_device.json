@@ -1,0 +1,24 @@
+{
+   "origin":1471806386919,
+   "name" :"Test-Device",
+   "description":"Test-Device",
+   "adminState":"UNLOCKED",
+   "operatingState":"ENABLED",
+   "protocols":{
+      "other":{
+         "Address"  : "simple01",
+          "Port" : "300"
+      }
+   },
+   "labels":[
+      "device-example"
+   ],
+   "location":"{lat:45.45,long:47.80}",
+   "responseDelay":0,
+   "service":{
+      "name":"%DeviceServiceName%"
+   },
+   "profile":{
+      "name":"Sample-Profile"
+   }
+}

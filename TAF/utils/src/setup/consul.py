@@ -13,7 +13,7 @@ from TUC.data.SettingsInfo import SettingsInfo
 
 
 def modify_consul_config(path,value):
-    conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=8500)
+    conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=8500, timeout=5)
     conn.request(method="PUT", url=path, body=value)
     try:
         r1 = conn.getresponse()
