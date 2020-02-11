@@ -5,7 +5,7 @@ Library  TAF.utils.src.data.value_checker
 Resource  ./coreMetadataAPI.robot
 
 *** Variables ***
-${deviceServiceUrl}  http://${BASE_URL}:${DEVICE_SERVICE_PORT}
+${deviceServiceUrl}  http://${BASE_URL}:${SERVICE_PORT}
 ${dsDeviceUri}   /api/v1/device
 ${dsCallBack}    /api/v1/callback
 

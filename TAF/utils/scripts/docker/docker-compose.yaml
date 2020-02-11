@@ -360,16 +360,16 @@ services:
   #     - data
   #     - command
   #
-  device-modbus:
+  edgex-device-modbus:
     image: edgexfoundry/docker-device-modbus-go:1.0.0
     ports:
-     - "49991:49991"
+      - "49991:49991"
     container_name: edgex-device-modbus
     hostname: edgex-device-modbus
     networks:
-     edgex-network:
-       aliases:
-           - edgex-device-modbus
+      edgex-network:
+        aliases:
+          - edgex-device-modbus
     volumes:
      - db-data:/data/db
      - log-data:/edgex/logs

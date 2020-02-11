@@ -6,8 +6,8 @@ Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.startup_checker
 Library          TAF.utils.src.setup.edgex
 Library          TAF.utils.src.setup.consul
-Resource         TAF/testCaseApps/keywords/commonKeywords.robot
-Resource         TAF/testCaseApps/keywords/loggingAPI.robot
+Resource         TAF/testCaseModules/keywords/commonKeywords.robot
+Resource         TAF/testCaseModules/keywords/loggingAPI.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 
@@ -15,7 +15,7 @@ Suite Teardown   Suite Teardown
 ${SUITE}                service_operation
 ${WORK_DIR}             ${WORK_DIR}
 ${LOG_FILE_PATH}        ${WORK_DIR}/TAF/testArtifacts/logs/service_operation.log
-${DEVICE_SERVICE_URL}   http://localhost:${DEVICE_SERVICE_PORT}
+${DEVICE_SERVICE_URL}   http://localhost:${SERVICE_PORT}
 ${LOGGING_SERVICE_URL}   http://localhost:${SUPPORT_LOGGING_PORT}
 ${METADATA_SERVICE_URL}   http://localhost:${CORE_METADATA_PORT}
 ${REGISTRY_URL}   http://localhost:${REGISTRY_PORT}
@@ -28,7 +28,7 @@ Setup Suite
    Should Be True  ${status}  Failed Demo Suite Setup
 
 Restart EdgeX
-    Deploy services  data  metadata  command  ${DEVICE_SERVICE_NAME}
+    Deploy services  data  metadata  command  ${SERVICE_NAME}
 
 Send GET request "${request_path}" to "${url}"
     Create Session   Edgex Service   url=${url}
@@ -40,7 +40,7 @@ Status code "${status_code}" should be "${expect}"
     Should Be Equal    ${result}   ${expect}
 
 DS should log "${msg}"
-    Send GET request "/api/v1/logs/originServices/${DEVICE_SERVICE_EDGEX_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
+    Send GET request "/api/v1/logs/originServices/${SERVICE_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
     ${result} =  convert to string   ${REST_RES.content}
     Should contain      ${result}  ${msg}
 
@@ -49,49 +49,49 @@ DS should log "${msg}"
     Stop services  ${service_name}
 
 DS try to startup
-    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  1
+    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/${SERVICE_NAME}/Service/ConnectRetries  1
     Remove device service logs
     # Device service should restart failed because matadata service is unavailable
-    Restart services  ${DEVICE_SERVICE_NAME}
+    Restart services  ${SERVICE_NAME}
     Sleep	20
-    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  3
+    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/${SERVICE_NAME}/Service/ConnectRetries  3
 
 DS should log "${error_msg}" after timeout
-    Send GET request "/api/v1/logs/originServices/${DEVICE_SERVICE_EDGEX_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
+    Send GET request "/api/v1/logs/originServices/${SERVICE_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
     ${result} =  convert to string   ${REST_RES.content}
     Should contain      ${result}  ${error_msg}
 
 DS should exit
-    ${result} =  Check service is available   ${DEVICE_SERVICE_PORT}  "/api/v1/ping"
+    ${result} =  Check service is available   ${SERVICE_PORT}  "/api/v1/ping"
     should not be true    ${result}
 
 #TC0002
 DS instance is not found in Core Metadata
-    Stop services  ${DEVICE_SERVICE_NAME}
+    Stop services  ${SERVICE_NAME}
     Delete device service instance
 
 DS finishes with initialization
-    Deploy services  ${DEVICE_SERVICE_NAME}
+    Deploy services  ${SERVICE_NAME}
 
 Delete device service instance
     Create Session   Core Metadata   url=${METADATA_SERVICE_URL}
-    ${resp}=   Delete Request   Core Metadata    /api/v1/deviceservice/name/${DEVICE_SERVICE_EDGEX_NAME}
+    ${resp}=   Delete Request   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME}
     Should Be Equal As Strings  ${resp.status_code}  200
     log  ${resp.content}
 
 DS should create a new DS instance in Core Metadata
     Create Session   Core Metadata   url=${METADATA_SERVICE_URL}
-    ${resp}=   Get Request   Core Metadata    /api/v1/deviceservice/name/${DEVICE_SERVICE_EDGEX_NAME}
+    ${resp}=   Get Request   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME}
     ${result} =  convert to string   ${resp.content}
-    Should contain      ${result}  ${DEVICE_SERVICE_EDGEX_NAME}
+    Should contain      ${result}  ${SERVICE_NAME}
 
 #TC003
 DS instance is found in Core Metadata
     DS should create a new DS instance in Core Metadata
-    Remove services  ${DEVICE_SERVICE_NAME}
+    Remove services  ${SERVICE_NAME}
 
 DS should load the DS instance from Core Metadata
-    DS should log "Device Service ${DEVICE_SERVICE_EDGEX_NAME} exists"
+    DS should log "Device Service ${SERVICE_NAME} exists"
 
 #TC004
 DS is configured to use the registry
@@ -101,13 +101,13 @@ DS is configured to use the registry
 
 DS should register as a service to the registry
     Create Session   Registry   url=${REGISTRY_URL}
-    ${resp}=   Get Request   Registry    /v1/health/checks/${DEVICE_SERVICE_EDGEX_NAME}
+    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME}
     Should contain      ${resp.json()[0]["Status"]}  passing
 
 #TC005
 DS is configured to use the invalid registry url and initialization
-    Remove services  ${DEVICE_SERVICE_NAME}
-    Deploy device service with registry url   ${DEVICE_SERVICE_NAME}   consul://invalid_url:1234
+    Remove services  ${SERVICE_NAME}
+    Deploy device service with registry url   ${SERVICE_NAME}   consul://invalid_url:1234
 
 #TC0006
 Validate ${content} contains version element "${expect}"
@@ -136,18 +136,18 @@ Validate "${content}" contains DS metrics
 
 #TC0010
 Start EdgeX with Registry DS to consul
-    Remove services  ${DEVICE_SERVICE_NAME}
-    Deploy device service with registry url   ${DEVICE_SERVICE_NAME}   consul://edgex-core-consul:8500
+    Remove services  ${SERVICE_NAME}
+    Deploy device service with registry url   ${SERVICE_NAME}   consul://edgex-core-consul:8500
     sleep  10
     DS should register as a service to the registry
 
 Shutdown DS
-    Remove services  ${DEVICE_SERVICE_NAME}
+    Remove services  ${SERVICE_NAME}
     sleep  10
 
 DS should be unregistered to consul
     Create Session   Registry   url=${REGISTRY_URL}
-    ${resp}=   Get Request   Registry    /v1/health/checks/${DEVICE_SERVICE_EDGEX_NAME}
+    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME}
     Should contain      ${resp.json()[0]["Status"]}  critical
 
 *** Test Cases ***

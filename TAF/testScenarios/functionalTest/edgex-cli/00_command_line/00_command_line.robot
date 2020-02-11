@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    EdgeX Cli
 Library          TAF.utils.src.setup.setup_teardown
-Library          TAF/testCaseApps/edgex_cli/Cli.py
+Library          TAF/testCaseModules/edgex_cli/Cli.py
 Library          Collections
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown

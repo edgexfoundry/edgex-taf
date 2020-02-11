@@ -1,10 +1,10 @@
 *** Settings ***
 Documentation  Device Readings - Actuation commands
 Library   Collections
-Resource  TAF/testCaseApps/keywords/coreMetadataAPI.robot
-Resource  TAF/testCaseApps/keywords/deviceServiceAPI.robot
-Resource  TAF/testCaseApps/keywords/coreDataAPI.robot
-Resource  TAF/testCaseApps/keywords/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/deviceServiceAPI.robot
+Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
+Resource  TAF/testCaseModules/keywords/commonKeywords.robot
 Suite Setup  Run Keywords  Setup Suite  AND  Create device  create_device.json
 Suite Teardown  Delete device by name
 

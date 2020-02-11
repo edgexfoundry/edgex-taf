@@ -18,5 +18,5 @@ Setup Suite
 
 *** Test Cases ***
 Deploy EdgeX
-    Update services  data  metadata  command  ${DEVICE_SERVICE_NAME}
-    Deploy services  data  metadata  command  ${DEVICE_SERVICE_NAME}
+    Update services  data  metadata  command  ${SERVICE_NAME}
+    Deploy services  data  metadata  command  ${SERVICE_NAME}
