@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/edgex_cli.log
 # Setup called once before all test cases.
 Setup Suite
    ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
-   Should Be True  ${status}  Failed Demo Suite Setup
+   Should Be True  ${status}  Failed Suite Setup
 
 *** Test Cases ***
 TC0001 - Profiles List Positive

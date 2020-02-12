@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/edgex_deployment.lo
 # Setup called once before all test cases.
 Setup Suite
    ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
-   Should Be True  ${status}  Failed Demo Suite Setup
+   Should Be True  ${status}  Failed Suite Setup
 
 *** Test Cases ***
 Deploy EdgeX
