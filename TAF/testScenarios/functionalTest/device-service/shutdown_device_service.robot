@@ -1,21 +1,22 @@
 *** Settings ***
-Documentation    Deploy EdgeX
+Documentation    Shutdown EdgeX
 Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.edgex
-Library          TAF.utils.src.setup.consul
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 
 *** Variables ***
-${SUITE}         EdgeX deployment
-${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/edgex_deployment.log
+${SUITE}              EdgeX shutdown
+${WORK_DIR}           %{WORK_DIR}
+${PROFILE}            %{PROFILE}
+${LOG_FILE}           ${WORK_DIR}/TAF/testArtifacts/logs/edgex_shutdown.log
 
 *** Keywords ***
 # Setup called once before all test cases.
 Setup Suite
-   ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
+   ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE}  ${LOG_LEVEL}
    Should Be True  ${status}  Failed Demo Suite Setup
 
 *** Test Cases ***
-Deploy EdgeX
-    Deploy edgex
+Shutdown Device Service
+    Remove services  ${SERVICE_NAME}

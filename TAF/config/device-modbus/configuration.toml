@@ -9,12 +9,12 @@ EnableAsyncReadings = true
 AsyncBufferSize = 16
 
 [Registry]
+Type = "consul"
 Host = "edgex-core-consul"
 Port = 8500
 CheckInterval = "10s"
 FailLimit = 3
 FailWaitTime = 10
-Type = "consul"
 
 [Logging]
 EnableRemote = true
