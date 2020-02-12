@@ -25,7 +25,7 @@ ${REST_RES}
 # Setup called once before all test cases.
 Setup Suite
    ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
-   Should Be True  ${status}  Failed Demo Suite Setup
+   Should Be True  ${status}  Failed Suite Setup
 
 Restart EdgeX
     Deploy services  data  metadata  command  ${SERVICE_NAME}

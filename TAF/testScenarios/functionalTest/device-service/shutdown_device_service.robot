@@ -15,7 +15,7 @@ ${LOG_FILE}           ${WORK_DIR}/TAF/testArtifacts/logs/edgex_shutdown.log
 # Setup called once before all test cases.
 Setup Suite
    ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE}  ${LOG_LEVEL}
-   Should Be True  ${status}  Failed Demo Suite Setup
+   Should Be True  ${status}  Failed Suite Setup
 
 *** Test Cases ***
 Shutdown Device Service
