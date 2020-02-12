@@ -58,7 +58,7 @@ To write the automation testing with edgex-taf framework, complete the following
        :scale: 50%
        :alt: Edgex-taf Robot Test application
 
-6. Put the test case code in the TAF/testCaseApps folder
+6. Put the test case code in the TAF/testCaseModules folder
 
 7. Navigate to the edgex-taf root path and Run the tests using the following commands::
 

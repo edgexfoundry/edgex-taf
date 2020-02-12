@@ -53,7 +53,7 @@ Create device
     [Arguments]  ${device_file}
     Create Session  Core Metadata  url=${coreMetadataUrl}
     ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/${device_file}  encoding=UTF-8
-    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${DEVICE_SERVICE_EDGEX_NAME}
+    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${SERVICE_NAME}
     ${headers}=  Create Dictionary  Content-Type=application/json
     ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
@@ -64,7 +64,7 @@ Creat device with autoEvents parameter
     [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}
     ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/create_autoevent_device.json  encoding=UTF-8
-    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${DEVICE_SERVICE_EDGEX_NAME}
+    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${SERVICE_NAME}
     ${newdata}=  replace string  ${newdata}   %frequency%    ${frequency_time}
     ${newdata}=  replace string  ${newdata}   %onChangeValue%   ${onChange_value}
     ${newdata}=  replace string  ${newdata}   %ReadingName%    ${reading_name}

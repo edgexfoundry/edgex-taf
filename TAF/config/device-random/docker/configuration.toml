@@ -53,26 +53,3 @@ LogLevel = "INFO"
   RemoveCmd = ""
   RemoveCmdArgs = ""
   ProfilesDir = "/custom-config"
-
-# Pre-define Devices
-[[DeviceList]]
-  Name = "Random-Integer-Generator01"
-  Profile = "Random-Integer-Generator"
-  Description = "Example of Device Random"
-  Labels = [ "device-random-example" ]
-  [DeviceList.Protocols]
-    [DeviceList.Protocols.other]
-    Address = "simple01"
-    Port = "300"
-  [[DeviceList.AutoEvents]]
-    Frequency = "20s"
-    OnChange = false
-    Resource = "GenerateRandomValue_Int8"
-  [[DeviceList.AutoEvents]]
-    Frequency = "20s"
-    OnChange = false
-    Resource = "GenerateRandomValue_Int16"
-  [[DeviceList.AutoEvents]]
-    Frequency = "20s"
-    OnChange = false
-    Resource = "GenerateRandomValue_Int32"

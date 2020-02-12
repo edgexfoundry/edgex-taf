@@ -8,10 +8,9 @@ SERVICE_STARTUP_WAIT_TIME = 3
 # EdgeX host
 BASE_URL = "localhost"
 
-# Device service for testing
-DEVICE_SERVICE_NAME = "device-virtual"
-DEVICE_SERVICE_EDGEX_NAME= "device-virtual"
-DEVICE_SERVICE_PORT = 49990
+# Service for testing
+SERVICE_NAME = "device-virtual"
+SERVICE_PORT = 49990
 
 # Service port
 CORE_DATA_PORT = 48080

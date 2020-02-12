@@ -1,9 +1,9 @@
 *** Settings ***
 Documentation  Device Readings - Actuation commands
 Library   Collections
-Resource  TAF/testCaseApps/keywords/coreMetadataAPI.robot
-Resource  TAF/testCaseApps/keywords/deviceServiceAPI.robot
-Resource  TAF/testCaseApps/keywords/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/deviceServiceAPI.robot
+Resource  TAF/testCaseModules/keywords/commonKeywords.robot
 Suite Setup     Setup Suite
 
 

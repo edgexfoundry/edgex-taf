@@ -2,9 +2,9 @@
 Documentation  Device Readings - Scheduling
 Library   OperatingSystem
 Library   Collections
-Resource  TAF/testCaseApps/keywords/coreMetadataAPI.robot
-Resource  TAF/testCaseApps/keywords/coreDataAPI.robot
-Resource  TAF/testCaseApps/keywords/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
+Resource  TAF/testCaseModules/keywords/commonKeywords.robot
 Suite Setup  Setup Suite
 
 

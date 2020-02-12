@@ -6,8 +6,8 @@ Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.startup_checker
 Library          TAF.utils.src.setup.edgex
 Library          TAF.utils.src.setup.consul
-Resource         TAF/testCaseApps/keywords/loggingAPI.robot
-Resource         TAF/testCaseApps/keywords/commonKeywords.robot
+Resource         TAF/testCaseModules/keywords/loggingAPI.robot
+Resource         TAF/testCaseModules/keywords/commonKeywords.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 
@@ -15,7 +15,7 @@ Suite Teardown   Suite Teardown
 ${SUITE}                service_operation
 ${WORK_DIR}             ${WORK_DIR}
 ${LOG_FILE_PATH}        ${WORK_DIR}/TAF/testArtifacts/logs/service_operation.log
-${DEVICE_SERVICE_URL}   http://localhost:${DEVICE_SERVICE_PORT}
+${DEVICE_SERVICE_URL}   http://localhost:${SERVICE_PORT}
 ${LOGGING_SERVICE_URL}   http://localhost:${SUPPORT_LOGGING_PORT}
 ${METADATA_SERVICE_URL}   http://localhost:${CORE_METADATA_PORT}
 ${REGISTRY_URL}
@@ -34,9 +34,9 @@ Bootstrap option "--registry" is set to "${registry_url}"
     Set Test Variable  ${REGISTRY_URL}  ${registry_url}
 
 DS initialize with the registry url
-    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/Writable/LogLevel  DEBUG
-    Remove services  ${DEVICE_SERVICE_NAME}
-    Deploy device service with registry url   ${DEVICE_SERVICE_NAME}   ${REGISTRY_URL}
+    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/Writable/LogLevel  DEBUG
+    Remove services  ${SERVICE_NAME}
+    Deploy device service with registry url   ${SERVICE_NAME}   ${REGISTRY_URL}
 
 DS configuration settings should be provided by the registry
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
@@ -54,8 +54,8 @@ Bootstrap option "--confdir" is set to "${confdir_path}"
     Set Test Variable  ${CONF_FIR}  ${confdir_path}
 
 DS initialize with the confdir option
-    Remove services  ${DEVICE_SERVICE_NAME}
-    Deploy device service with the confdir option   ${DEVICE_SERVICE_NAME}   ${CONF_FIR}
+    Remove services  ${SERVICE_NAME}
+    Deploy device service with the confdir option   ${SERVICE_NAME}   ${CONF_FIR}
 
 DS configuration settings should be provided by confdir
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
@@ -68,18 +68,18 @@ Bootstrap option "--profile" is set to "${config_profile_name}"
     Set Test Variable  ${DS_PROFILE}  ${config_profile_name}
 
 DS initialize with the profile option
-    Remove services  ${DEVICE_SERVICE_NAME}
-    Deploy device service with the profile option   ${DEVICE_SERVICE_NAME}   ${DS_PROFILE}
+    Remove services  ${SERVICE_NAME}
+    Deploy device service with the profile option   ${SERVICE_NAME}   ${DS_PROFILE}
 
 #TC005
 LogLevel Configuration changes on registry
     Remove device service logs
-    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/Writable/LogLevel  TRACE
+    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/Writable/LogLevel  TRACE
     sleep  3
 
 DS dynamically apply the logLevel changed settings
     Create Session   Logging Service   url=${LOGGING_SERVICE_URL}
-    ${resp}=   get request   Logging Service    /api/v1/logs/originServices/${DEVICE_SERVICE_EDGEX_NAME}/0/0/100
+    ${resp}=   get request   Logging Service    /api/v1/logs/originServices/${SERVICE_NAME}/0/0/100
     ${result} =  convert to string   ${resp.content}
     Should contain      ${result}  "Writeable configuration has been updated. Setting log level to TRACE"
 
@@ -90,11 +90,11 @@ Corresponding logLevel setting should be updated by DS
 
 #TC006
 Service ConnectRetries Configuration changes
-    Modify consul config  /v1/kv/edgex/devices/1.0/${DEVICE_SERVICE_EDGEX_NAME}/Service/ConnectRetries  10
+    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/Service/ConnectRetries  10
     sleep  3
 
 Restart DS because DS cannot dynamically apply changed settings
-    Restart services  ${DEVICE_SERVICE_NAME}
+    Restart services  ${SERVICE_NAME}
 
 Corresponding Service ConnectRetries setting should be updated by DS
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}

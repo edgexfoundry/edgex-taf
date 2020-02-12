@@ -199,23 +199,21 @@ deviceResources:
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device int64 value" }
 -  ### UINT8 ###
-  name: "DeviceValue_UnsignedINT8_RW"
+  name: "DeviceValue_UINT8_RW"
   description: "Generate device uint8 value"
   properties:
     value:
       { type: "UINT8", readWrite: "RW", minimum: "0", maximum: "255", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint8 value" }
--
-  name: "DeviceValue_UnsignedINT8_R"
+- name: "DeviceValue_UINT8_R"
   description: "Generate device uint8 value"
   properties:
     value:
       { type: "UINT8", readWrite: "R", minimum: "0", maximum: "255", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint8 value" }
--
-  name: "DeviceValue_UnsignedINT8_W"
+- name: "DeviceValue_UINT8_W"
   description: "Generate device uint8 value"
   properties:
     value:
@@ -223,23 +221,21 @@ deviceResources:
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint8 value" }
 -  ### UINT16 ###
-  name: "DeviceValue_UnsignedINT16_RW"
+  name: "DeviceValue_UINT16_RW"
   description: "Generate device uint16 value"
   properties:
     value:
       { type: "UINT16", readWrite: "RW", minimum: "0", maximum: "65535", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint16 value" }
--
-  name: "DeviceValue_UnsignedINT16_R"
+- name: "DeviceValue_UINT16_R"
   description: "Generate device uint16 value"
   properties:
     value:
       { type: "UINT16", readWrite: "R", minimum: "0", maximum: "65535", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint16 value" }
--
-  name: "DeviceValue_UnsignedINT16_W"
+- name: "DeviceValue_UINT16_W"
   description: "Generate device uint16 value"
   properties:
     value:
@@ -247,23 +243,21 @@ deviceResources:
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint16 value" }
 -  ### UINT32 ###
-  name: "DeviceValue_UnsignedINT32_RW"
+  name: "DeviceValue_UINT32_RW"
   description: "Generate device uint32 value"
   properties:
     value:
       { type: "UINT32", readWrite: "RW", minimum: "0", maximum: "4294967295", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint32 value" }
--
-  name: "DeviceValue_UnsignedINT32_R"
+- name: "DeviceValue_UINT32_R"
   description: "Generate device uint32 value"
   properties:
     value:
       { type: "UINT32", readWrite: "R", minimum: "0", maximum: "4294967295", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint32 value" }
--
-  name: "DeviceValue_UnsignedINT32_W"
+- name: "DeviceValue_UINT32_W"
   description: "Generate device uint32 value"
   properties:
     value:
@@ -271,23 +265,21 @@ deviceResources:
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint32 value" }
 -  ### UINT64 ###
-  name: "DeviceValue_UnsignedINT64_RW"
+  name: "DeviceValue_UINT64_RW"
   description: "Generate device uint64 value"
   properties:
     value:
       { type: "UINT64", readWrite: "RW", minimum: "0", maximum: "18446744073709551615", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint64 value" }
--
-  name: "DeviceValue_UnsignedINT64_R"
+- name: "DeviceValue_UINT64_R"
   description: "Generate device uint64 value"
   properties:
     value:
       { type: "UINT64", readWrite: "R", minimum: "0", maximum: "18446744073709551615", defaultValue: "0" }
     units:
       { type: "STRING", readWrite: "R", defaultValue: "device uint64 value" }
--
-  name: "DeviceValue_UnsignedINT64_W"
+- name: "DeviceValue_UINT64_W"
   description: "Generate device uint64 value"
   properties:
     value:
