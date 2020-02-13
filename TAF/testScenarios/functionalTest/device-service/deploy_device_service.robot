@@ -17,5 +17,5 @@ Setup Suite
    Should Be True  ${status}  Failed Demo Suite Setup
 
 *** Test Cases ***
-Deploy EdgeX
-    Deploy edgex
+Deploy Device Service
+    Deploy device service  ${SERVICE_NAME}
