@@ -42,9 +42,9 @@ Query device profile by name
     [Return]  ${resp.content}
 
 Delete device profile by name
-    ${deviceProfileName}=   Query device profile by id and return by device profile name
+    [Arguments]   ${device_profile_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}
-    ${resp}=  Delete Request  Core Metadata  ${deviceProfileUri}/name/${deviceProfileName}
+    ${resp}=  Delete Request  Core Metadata  ${deviceProfileUri}/name/${device_profile_name}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -90,10 +90,6 @@ Delete device by name
     ${resp}=  Delete Request  Core Metadata  ${deviceUri}/name/${deviceName}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-Delete device profile and device
-    Delete device by name
-    Delete device profile by name
 
 Create device profile and device
     ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}

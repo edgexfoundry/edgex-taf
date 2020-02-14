@@ -2,6 +2,7 @@
 Documentation    Shutdown EdgeX
 Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.edgex
+Resource         TAF/testCaseModules/keywords/coreMetadataAPI.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 
@@ -20,3 +21,4 @@ Setup Suite
 *** Test Cases ***
 Shutdown Device Service
     Remove services  ${SERVICE_NAME}
+    Delete device profile by name  Sample-Profile
