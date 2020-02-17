@@ -53,16 +53,29 @@ Query device reading "${validReadingName}" for all device
     Should Be Equal As Strings  ${resp.status_code}  200
     log  ${resp.content}
 
+Query device reading by device name "${deviceName}"
+    Create Session  Core Data  url=${coreDataUrl}
+    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/device/${deviceName}/0
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    ${get_reading_result_length}=  get length  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${readings}=  evaluate  json.loads('''${resp.content}''')  json
+    [Return]   ${readings}
+
 Device autoEvents with "${reading_name}" send by frequency setting "${frequency_value}"s
-    ${sleep_time}=  evaluate  ${frequency_value}+1
+    ${sleep_time}=  evaluate  ${frequency_value}
     ${start_time}=   Get milliseconds epoch time
+    # Sleep 2 seconds for first auto event of C DS because it will execute auto event after creating the device without schedule time
+    sleep  2
+    ${init_device_reading_data}=  run keyword and continue on failure  Query device reading by device name "AutoEvent-Device"
+    ${init_device_reading_count}=  get length  ${init_device_reading_data}
     :FOR    ${INDEX}    IN RANGE  1  4
     \  sleep  ${sleep_time}s
     \  ${end_time}=   Get milliseconds epoch time
-    \  ${device_reading_data}=  run keyword and continue on failure  Query device reading by start/end time  ${start_time}   ${end_time}
-    \  @{device_reading_data}=  evaluate  json.loads('''${device_reading_data}''')  json
+    \  ${expected_device_reading_count}=  evaluate  ${init_device_reading_count} + ${INDEX}
+    \  ${device_reading_data}=  run keyword and continue on failure  Query device reading by device name "AutoEvent-Device"
     \  ${device_reading_count}=  get length  ${device_reading_data}
-    \  run keyword and continue on failure  should be equal as integers  ${INDEX}  ${device_reading_count}
+    \  run keyword and continue on failure  should be equal as integers  ${expected_device_reading_count}  ${device_reading_count}
 
 Query value descriptor for name "${value_descriptor_name}"
     Create Session  Core Data  url=${coreDataUrl}
