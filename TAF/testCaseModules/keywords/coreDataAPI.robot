@@ -55,7 +55,7 @@ Query device reading "${validReadingName}" for all device
 
 Query device reading by device name "${deviceName}"
     Create Session  Core Data  url=${coreDataUrl}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/device/${deviceName}/0
+    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/device/${deviceName}/100
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ${get_reading_result_length}=  get length  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
