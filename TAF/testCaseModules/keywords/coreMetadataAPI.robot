@@ -97,7 +97,7 @@ Delete device profile and device
 
 Create device profile and device
     ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
-    Should Be True  ${status}  Failed Demo Suite Setup
+    Should Be True  ${status}  Failed Suite Setup
     Create device profile
     Create device   create_device.json
 
