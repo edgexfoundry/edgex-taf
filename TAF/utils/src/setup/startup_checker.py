@@ -35,12 +35,12 @@ services = {
         "support-rulesengine": {"composeName": "rulesengine",
                                 "port": SettingsInfo().constant.SUPPORT_RULESENGINE_PORT,
                                 "pingUrl": "/api/v1/ping"},
-        "export-client": {"composeName": "export-client",
-                          "port": SettingsInfo().constant.EXPORT_CLIENT_PORT,
-                          "pingUrl": "/api/v1/ping"},
-        "export-distro": {"composeName": "export-distro",
-                          "port": SettingsInfo().constant.EXPORT_DISTRO_PORT,
-                          "pingUrl": "/api/v1/ping"},
+        # "export-client": {"composeName": "export-client",
+        #                   "port": SettingsInfo().constant.EXPORT_CLIENT_PORT,
+        #                   "pingUrl": "/api/v1/ping"},
+        # "export-distro": {"composeName": "export-distro",
+        #                   "port": SettingsInfo().constant.EXPORT_DISTRO_PORT,
+        #                   "pingUrl": "/api/v1/ping"},
     }
 
 httpConnTimeout = 5
