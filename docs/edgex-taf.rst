@@ -150,6 +150,8 @@ Modify the protocol properties of xxx_device.json, the property key and value ar
 
 In this document, we deploy all services using docker, so we must add the docker images to the docker-compose file, as illustrated below::
 
+  # TAF/utils/scripts/docker/device-service.yaml
+
   device-virtual:
     image: edgexfoundry/docker-device-virtual-go:1.0.0
     ports:
@@ -178,25 +180,36 @@ In this document, we deploy all services using docker, so we must add the docker
 5. Run testing
 ---------------
 Navigate to the edgex-taf root path and Run the tests using the following commands::
-1.Deploy edgex::
+
+1.Prepare test environment::
+
+        # Fetch the latest docker-compose file
+        cd path/to/edgex-taf/TAF/utils/scripts/docker/
+        ./get-compose-file.sh
+
+        # export the environment variable which depend on your machine
+        cd path/to/edgex-taf
+        export ARCH=x86_64
+
+2.Deploy edgex::
 
         python3 -m TUC -p device-virtual -t functionalTest/deploy-edgex.robot
 
-2.Deploy DS::
+3.Deploy DS::
 
         python3 -m TUC -p device-virtual -t functionalTest/device-service/deploy_device_service.robot
 
-3.Run DS testing::
+4.Run DS testing::
 
         python3 -m TUC -p device-virtual -u functionalTest/device-service/common
 
-4. Open the Test Reports
+5. Open the Test Reports
 
 Open the test reports in the browser. For example, to open the virtual DS testing report, enter the following URL in the browser::
 
     path/to/edgex-taf/TAF/testArtifacts/reports/edgex/report.html
 
-5.Shutdown edgex::
+6.Shutdown edgex::
 
     python3 -m TUC -p device-virtual -t functionalTest/shutdown.robot
 

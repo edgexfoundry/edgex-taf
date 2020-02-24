@@ -13,9 +13,9 @@ ${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
 *** Keywords ***
 Device reading should be sent to Core Data
     [Arguments]     ${data_type}    ${reading_name}    ${set_reading_value}
-    ${device_reading_data}=  Query device reading "${reading_name}" by device id
-    ${device_reading_json}=    evaluate  json.loads('''${device_reading_data}''')  json
-    ${result}=  check value equal  ${data_type}  ${set_reading_value}   ${device_reading_json}[0][value]
+    ${device_name}=  Query device by id and return device name
+    ${device_reading_data}=  Query device reading by device name "${deviceName}"
+    ${result}=  check value equal  ${data_type}  ${set_reading_value}   ${device_reading_data}[0][value]
     should be true  ${result}
 
 
