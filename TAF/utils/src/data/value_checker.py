@@ -98,6 +98,7 @@ def check_value_range(val, value_type):
 def check_value_equal(value_type, expect,  val):
     SettingsInfo().TestLog.info('Check the {} value {} equal to {}'.format(value_type, expect, val))
 
+    offset = 0.001
     if value_type == FLOAT32:
         try:
             decode_val = float(val)
@@ -109,8 +110,12 @@ def check_value_equal(value_type, expect,  val):
             decode_val = round(decode_val, 2)
 
         SettingsInfo().TestLog.info('Decode {} to {}'.format(val, decode_val))
-        res = decode_val == float(expect)
-        return res
+
+        if abs(decode_val - float(expect)) < offset:
+            return True
+        else:
+            return False
+
     elif value_type == FLOAT64:
         try:
             decode_val = float(val)
@@ -119,8 +124,10 @@ def check_value_equal(value_type, expect,  val):
             decode_val = struct.unpack('>d', byte_val)[0]
             SettingsInfo().TestLog.info('Decode {} to {}'.format(val, decode_val))
 
-        res = decode_val == float(expect)
-        return res
+        if abs(decode_val - float(expect)) < offset:
+            return True
+        else:
+            return False
     # elif value_type == BOOL:
     #     return bool(val) == expect
     else:
