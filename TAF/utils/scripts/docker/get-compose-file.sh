@@ -1,17 +1,15 @@
 #!/bin/bash
-  
-# x86_64 or arm64
-[ "$(uname -m)" != "x86_64" ] && USE_ARM64="-arm64"
 
-# security or no security
-[ "$SECURITY_SERVICE_NEEDED" != true ] && USE_NO_SECURITY="-no-secty"
+USE_DB=$1
+USE_ARCH=$2
+USE_SECURITY=$3
 
-# redis or mongo
-if [ "$FOR_REDIS" = true ]; then
-        USE_DB="-redis"
-else
-        USE_DB="-mongo"
-fi
+
+# # x86_64 or arm64
+[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
+
+# # security or no security
+[ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
 # nightly or other release
 USE_RELEASE=${RELEASE:-nightly-build}
