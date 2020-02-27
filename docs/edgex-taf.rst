@@ -190,6 +190,7 @@ Navigate to the edgex-taf root path and Run the tests using the following comman
         # export the environment variable which depend on your machine
         cd path/to/edgex-taf
         export ARCH=x86_64
+        export COMPOSE_IMAGE=docker/compose:1.24.0
 
 2.Deploy edgex::
 

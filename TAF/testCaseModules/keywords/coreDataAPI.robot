@@ -83,3 +83,20 @@ Query value descriptor for name "${value_descriptor_name}"
     run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
     run keyword if  ${resp.status_code}==200  log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+Query readings by value descriptor ${valueDescriptor} and device id "${deviceId}"
+    Create Session  Core Data  url=${coreDataUrl}
+    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/name/${valueDescriptor}/device/${deviceId}/100
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    @{readings}=  evaluate  json.loads('''${resp.content}''')  json
+    [Return]   @{readings}
+
+Add reading with value ${value} by value descriptor ${valueDescriptor} and device id "${deviceId}"
+    Create Session  Core Data  url=${coreDataUrl}
+    ${data}=    Create Dictionary   device=${deviceId}   name=${valueDescriptor}    value=${value}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${resp}=  Post Request  Core Data    ${coreDataReadingUri}  json=${data}   headers=${headers}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
