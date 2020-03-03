@@ -93,7 +93,7 @@ Query readings by value descriptor ${valueDescriptor} and device id "${deviceId}
     @{readings}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]   @{readings}
 
-Add reading with value ${value} by value descriptor ${valueDescriptor} and device id "${deviceId}"
+Add reading with value ${value} by value descriptor ${valueDescriptor} and device id ${deviceId}
     Create Session  Core Data  url=${coreDataUrl}
     ${data}=    Create Dictionary   device=${deviceId}   name=${valueDescriptor}    value=${value}
     ${headers}=  Create Dictionary  Content-Type=application/json

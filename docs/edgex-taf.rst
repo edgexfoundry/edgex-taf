@@ -336,3 +336,16 @@ Run DS testing as follows
         -v /var/run/docker.sock:/var/run/docker.sock \
         docker-edgex-taf-common \
         -p device-virtual -t functionalTest/shutdown.robot
+
+
+Run CoreData Testing
+====================
+
+1.Deploy edgex::
+
+        python3 -m TUC -p core-data -t functionalTest/deploy-edgex.robot
+
+2.Run testing::
+
+        python3 -m TUC -p core-data -u functionalTest/core-data
+
