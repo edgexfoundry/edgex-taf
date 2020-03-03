@@ -4,7 +4,7 @@ Library   OperatingSystem
 Library   Collections
 Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
 Resource  TAF/testCaseModules/keywords/commonKeywords.robot
-
+Suite Setup  Setup Suite
 
 *** Variables ***
 ${SUITE}                                  Query Readings

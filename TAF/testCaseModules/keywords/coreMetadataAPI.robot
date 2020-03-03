@@ -22,6 +22,13 @@ Create device profile
     Should Be Equal As Strings  ${resp.status_code}  200
     set suite variable  ${deviceProfileId}  ${resp.content}
 
+Create device profile ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${resp}=  Post Request  Core Metadata    /api/v1/deviceprofile  json=${entity}   headers=${headers}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set test variable  ${response}  ${resp.status_code}
+
 Query device profile by id and return by device profile name
     Create Session  Core Metadata  url=${coreMetadataUrl}
     ${resp}=   get request  Core Metadata    ${deviceProfileUri}/${deviceProfileId}
@@ -48,6 +55,12 @@ Delete device profile by name
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+Delete device profile by name ${device_profile_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${resp}=  Delete Request  Core Metadata  ${deviceProfileUri}/name/${device_profile_name}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 # Device
 Create device
     [Arguments]  ${device_file}
@@ -59,6 +72,13 @@ Create device
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     set suite variable  ${device_id}   ${resp.content}
+
+Create device with ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${resp}=  Post Request  Core Metadata    ${deviceUri}  json=${entity}   headers=${headers}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set test variable  ${response}  ${resp.status_code}
 
 Creat device with autoEvents parameter
     [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
@@ -91,6 +111,12 @@ Delete device by name
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+Delete device by name ${deviceName}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${resp}=  Delete Request  Core Metadata  ${deviceUri}/name/${deviceName}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 Create device profile and device
     ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
     Should Be True  ${status}  Failed Suite Setup
@@ -98,5 +124,30 @@ Create device profile and device
     Create device   create_device.json
 
 
+# Addressable
+Create addressable ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${resp}=  Post Request  Core Metadata    /api/v1/addressable  json=${entity}   headers=${headers}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set test variable  ${response}  ${resp.status_code}
 
+Delete addressable by name ${addressableName}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${resp}=  Delete Request  Core Metadata  api/v1/addressable/name/${addressableName}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
+# Device service
+Create device service ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${resp}=  Post Request  Core Metadata    /api/v1/deviceservice  json=${entity}   headers=${headers}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set test variable  ${response}  ${resp.status_code}
+
+Delete device service by name ${deviceServiceName}
+    Create Session  Core Metadata  url=${coreMetadataUrl}
+    ${resp}=  Delete Request  Core Metadata  api/v1/deviceservice/name/${deviceServiceName}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200

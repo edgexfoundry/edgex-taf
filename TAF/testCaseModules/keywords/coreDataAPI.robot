@@ -99,4 +99,4 @@ Add reading with value ${value} by value descriptor ${valueDescriptor} and devic
     ${headers}=  Create Dictionary  Content-Type=application/json
     ${resp}=  Post Request  Core Data    ${coreDataReadingUri}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Set test variable  ${response}  ${resp.status_code}
