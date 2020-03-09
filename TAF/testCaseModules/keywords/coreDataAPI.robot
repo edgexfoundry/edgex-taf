@@ -93,10 +93,10 @@ Query readings by value descriptor ${valueDescriptor} and device id "${deviceId}
     @{readings}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]   @{readings}
 
-Add reading with value ${value} by value descriptor ${valueDescriptor} and device id "${deviceId}"
+Add reading with value ${value} by value descriptor ${valueDescriptor} and device id ${deviceId}
     Create Session  Core Data  url=${coreDataUrl}
     ${data}=    Create Dictionary   device=${deviceId}   name=${valueDescriptor}    value=${value}
     ${headers}=  Create Dictionary  Content-Type=application/json
     ${resp}=  Post Request  Core Data    ${coreDataReadingUri}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Set test variable  ${response}  ${resp.status_code}
