@@ -14,11 +14,13 @@ ${SUITE}              Query Commands
 
 *** Test Cases ***
 Get001 - Test Retrieve device reading by id and the data is sent to Core Data with multiple data type
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     : FOR    ${item}    IN    @{data_types_skip_write_only}
     \  run keyword and continue on failure  Retrieve reading by device id and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
 
 Get002 - Test Retrieve device reading by id but the device does not exist
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
     Retrieve reading by device id but the device does not exist  ${command_name}
@@ -28,7 +30,8 @@ Get003 - Test Retrieve device reading by id but the command does not exist
     Then Should return status code "404"
 
 Get004 - Test Retrieve device reading by name and the data is sent to Core Data with multiple data type
-     @{data_types_skip_write_only}=  Skip write only commands
+    [Tags]  Backward
+    @{data_types_skip_write_only}=  Skip write only commands
     : FOR    ${item}    IN    @{data_types_skip_write_only}
     \  run keyword and continue on failure  Retrieve reading by device name and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
 

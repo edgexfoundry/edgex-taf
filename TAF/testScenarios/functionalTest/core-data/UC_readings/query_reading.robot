@@ -38,7 +38,7 @@ Readings should contain the value descriptor and device id
     \  Should contain      ${reading}[device]  ${deviceId}
 
 *** Test Cases ***
-Query readings by devcie name and value descriptor
+Query readings by device name and value descriptor
     Given core-data has 2 readings with value descriptor ${VALUE_DESCRIPTOR_TEST_DEVICE_1_VAL1} and device id ${DEVICE_ID_TEST_DEVICE_1}
     When Query readings by value descriptor and device id   ${VALUE_DESCRIPTOR_TEST_DEVICE_1_VAL1}  ${DEVICE_ID_TEST_DEVICE_1}
     Then Readings should order by created in descending order
