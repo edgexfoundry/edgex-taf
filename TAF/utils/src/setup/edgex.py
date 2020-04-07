@@ -13,21 +13,22 @@ from TUC.data.SettingsInfo import SettingsInfo
 import TAF.utils.src.setup.startup_checker as checker
 
 
-def deploy_edgex():
+def deploy_edgex(*args):
     SettingsInfo().TestLog.info('Deploy EdgeX')
     cmd = ["sh", "{}/TAF/utils/scripts/{}/deploy-edgex.sh".format(SettingsInfo().workDir,
-                                                                  SettingsInfo().constant.DEPLOY_TYPE)]
+                                                                  SettingsInfo().constant.DEPLOY_TYPE),
+           *args]
     run_command(cmd)
 
     checker.check_services_startup(["data", "metadata", "command", "support-logging", "support-notifications"])
 
 
-def shutdown_services():
+def shutdown_services(*args):
     SettingsInfo().TestLog.info("Shutdown all services")
     script_path = "{}/TAF/utils/scripts/{}/shutdown.sh".format(
         SettingsInfo().workDir,
         SettingsInfo().constant.DEPLOY_TYPE)
-    cmd = ["sh", script_path]
+    cmd = ["sh", script_path, *args]
     run_command(cmd)
 
 
@@ -58,11 +59,11 @@ def remove_services(*args):
     run_command(cmd)
 
 
-def deploy_device_service(device_service):
+def deploy_device_service(device_service, *args):
     SettingsInfo().TestLog.info('Deploy device service {}'.format(device_service))
     cmd = ["sh", "{}/TAF/utils/scripts/{}/deploy-device-service.sh".format(SettingsInfo().workDir,
                                                                            SettingsInfo().constant.DEPLOY_TYPE),
-           device_service]
+           device_service, *args]
     run_command(cmd)
 
 
@@ -114,3 +115,5 @@ def run_command(cmd):
 
 def echo(obj):
     SettingsInfo().TestLog.info("Test echo: {}".format(obj))
+
+

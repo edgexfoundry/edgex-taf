@@ -1,5 +1,8 @@
 .idea/*
 *.pyc
 TAF/testArtifacts/logs/*
-TAF/testArtifacts/robot/*
+TAF/testArtifacts/reports/*
 TAF-Common/*
+TAF/utils/scripts/docker/*.yml*
+TAF/utils/scripts/docker/docker-compose.yaml
+TAF/utils/scripts/docker/docker-compose-backward.yaml

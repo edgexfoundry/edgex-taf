@@ -13,6 +13,7 @@ ${SUITE}              Scheduling
 
 *** Test Cases ***
 Scheduling001 - Test Resource and Frequency for autoEvent
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${last_reading}=  Get last support reading
     ${reading_name}=     set variable  ${data_types_skip_write_only}[${last_reading}][readingName]

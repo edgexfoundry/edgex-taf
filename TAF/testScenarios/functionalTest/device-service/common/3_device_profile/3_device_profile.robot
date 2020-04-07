@@ -9,6 +9,7 @@ ${SUITE}              Device
 
 *** Test Cases ***
 DeviceProfile_TC0001 - ValueDescriptor is created after initializing device service
+    [Tags]  Backward
     ${device_profile_name}=  set variable  Sample-Profile
     Then DeviceProfile "${device_profile_name}" should be created in Core Metadata
     And DS should create ValueDescriptors in Core Data according to DeviceProfile "${device_profile_name}"

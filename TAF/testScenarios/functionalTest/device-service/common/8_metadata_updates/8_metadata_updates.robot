@@ -13,6 +13,7 @@ ${SUITE}        Metadata Update
 
 *** Test Cases ***
 Callback001 - Test Callback API Post method is available
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
     #Given Create device profile
@@ -27,6 +28,7 @@ Callback002 - Test Callback API Post method with invalid action type
     Then Should return status code "400"
 
 Callback003 - Test Callback API Delete method is available
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
     #Given Create device profile

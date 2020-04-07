@@ -19,6 +19,7 @@ Device_TC0001a - Invoke GET command when device adminState is LOCKED
     [Teardown]  Delete device by name
 
 Device_TC0001b - Invoke PUT command when device adminState is LOCKED
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${data_type}=     set variable  ${data_types_skip_write_only}[0][dataType]
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
@@ -32,6 +33,7 @@ Device_TC0001b - Invoke PUT command when device adminState is LOCKED
     [Teardown]  Delete device by name
 
 Device_TC0002a - Invoke GET command when device operatingState is DISABLED
+    [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
     Given Create device  create_disabled_device.json
