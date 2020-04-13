@@ -4,5 +4,4 @@ TAF/testArtifacts/logs/*
 TAF/testArtifacts/reports/*
 TAF-Common/*
 TAF/utils/scripts/docker/*.yml*
-TAF/utils/scripts/docker/docker-compose.yaml
-TAF/utils/scripts/docker/docker-compose-backward.yaml
+TAF/utils/scripts/docker/docker-compose*yaml*
