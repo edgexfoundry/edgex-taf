@@ -7,6 +7,7 @@ Resource  ./commonKeywords.robot
 
 *** Variables ***
 ${coreDataUrl}  http://${BASE_URL}:${CORE_DATA_PORT}
+${coreDataEventUri}     /api/v1/event
 ${coreDataReadingUri}   /api/v1/reading
 ${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
 
@@ -100,3 +101,8 @@ Add reading with value ${value} by value descriptor ${valueDescriptor} and devic
     ${resp}=  Post Request  Core Data    ${coreDataReadingUri}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set test variable  ${response}  ${resp.status_code}
+
+Query event by event id "${event_id}"
+    Create Session  Core Data  url=${coreDataUrl}
+    ${resp}=  Get Request  Core Data    ${coreDataEventUri}/${event_id}
+    [Return]  ${resp.status_code}  ${resp.content}

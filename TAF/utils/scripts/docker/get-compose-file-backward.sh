@@ -23,7 +23,7 @@ wget -O temp/fuji-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/d
 # replace fuji core services with nightly-build core services
 sed -n '/x-common-env-variables/,/^volumes:/{//!p;}' temp/nb-compose.yaml > temp/env-variables.yaml
 sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml
-sed -n '/- edgex-device-virtual/,/device-random:/{//!p;}' device-service.yaml > temp/device-virtual.yaml
+sed -n '/- edgex-device-virtual/,/device-random:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
 sed -n \
     -e '1,/x-common-env-variables/ p' \
     -e '/x-common-env-variables/ r temp/env-variables.yaml' \

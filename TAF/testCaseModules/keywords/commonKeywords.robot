@@ -74,8 +74,11 @@ Should return status code "500"
     Should be true    ${response} == 500
 
 Get milliseconds epoch time
-    ${data}=  get current date
-    ${current_epoch_time}=  convert date    ${data}  epoch
+    ${current_epoch_time}=  Get current epoch time
     ${millisec_epoch_time}=    evaluate   int(${current_epoch_time}*1000)
     [Return]  ${millisec_epoch_time}
 
+Get current epoch time
+    ${data}=  get current date
+    ${current_epoch_time}=  convert date    ${data}  epoch
+    [Return]  ${current_epoch_time}

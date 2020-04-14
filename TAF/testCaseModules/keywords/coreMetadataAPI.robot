@@ -72,6 +72,7 @@ Create device
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     set suite variable  ${device_id}   ${resp.content}
+    sleep  500ms
 
 Create device with ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}

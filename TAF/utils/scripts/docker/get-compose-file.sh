@@ -4,8 +4,10 @@ USE_DB=$1
 USE_ARCH=$2
 USE_SECURITY=$3
 
-# # default redis DB
+# # set default values
 USE_DB=${USE_DB:--redis}
+USE_ARCH=${USE_ARCH:--x86_64}
+USE_SECURITY=${USE_SECURITY:--}
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
@@ -35,5 +37,8 @@ fi
 # Delete device-virtual service from the compose file
 sed -i -r '/device-virtual:/,/- command/ {/ / d;}' ${COMPOSE_FILE}
 
-# Add device services into the docker-compose.yaml
-sed '/# device-random:/ r device-service.yaml' ${COMPOSE_FILE} > docker-compose.yaml
+# Insert device services into the compose file
+sed -e '/# device-random:/r docker-compose-device-service.yaml' -e //N ${COMPOSE_FILE} > docker-compose-temp.yaml
+
+# Insert required services for end to end tests
+sed -e '/portainer:/r docker-compose-end-to-end.yaml' -e //N docker-compose-temp.yaml > docker-compose.yaml
