@@ -96,6 +96,8 @@
 
   modbus-simulator:
     image: ${modbusSimulator}
+    container_name: edgex-modbus-simulator
+    hostname: edgex-modbus-simulator
     ports:
-     - "502:502"
+     - "1502:1502"
 
