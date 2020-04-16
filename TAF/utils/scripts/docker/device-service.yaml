@@ -100,4 +100,6 @@
     hostname: edgex-modbus-simulator
     ports:
      - "1502:1502"
+    networks:
+      - edgex-network
 
