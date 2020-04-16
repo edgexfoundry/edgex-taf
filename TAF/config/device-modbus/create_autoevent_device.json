@@ -6,8 +6,8 @@
    "operatingState":"ENABLED",
    "protocols":{
       "modbus-tcp":{
-         "Address"  : "172.17.0.1",
-         "Port" : "502",
+         "Address"  : "edgex-modbus-simulator",
+         "Port" : "1502",
          "UnitID": "1"
       }
    },
