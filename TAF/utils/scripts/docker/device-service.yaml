@@ -97,5 +97,5 @@
   modbus-simulator:
     image: ${modbusSimulator}
     ports:
-     - "502:502"
+     - "502:1502"
 
