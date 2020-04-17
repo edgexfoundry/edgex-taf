@@ -117,3 +117,17 @@ def echo(obj):
     SettingsInfo().TestLog.info("Test echo: {}".format(obj))
 
 
+def deploy_services(*args):
+    SettingsInfo().TestLog.info("Deploy services {}".format(args))
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/deploy-services.sh".format(SettingsInfo().workDir,
+                                                                    SettingsInfo().constant.DEPLOY_TYPE),
+           *args]
+    run_command(cmd)
+    checker.check_services_startup([*args])
+
+
+def get_service_logs_since_timestamp(service, timestamp):
+    SettingsInfo().TestLog.info("Get services {} logs".format(service))
+    logs = subprocess.check_output("docker logs {} --since {}".format(service, timestamp), shell=True)
+    return logs
+

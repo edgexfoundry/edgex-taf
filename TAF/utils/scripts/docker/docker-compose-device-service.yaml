@@ -49,25 +49,6 @@
       - --registry=${REGISTRY_URL}
       - --confdir=${CONF_DIR}
 
-  # device-mqtt:
-  #   image: ${mqtt}
-  #   ports:
-  #     - "49982:49982"
-  #   container_name: edgex-device-mqtt
-  #   hostname: edgex-device-mqtt
-  #   networks:
-  #     edgex-network:
-  #       aliases:
-  #           - edgex-device-mqtt
-  #   volumes:
-  #     - db-data:/data/db
-  #     - log-data:/edgex/logs
-  #     - consul-config:/consul/config
-  #     - consul-data:/consul/data
-  #   depends_on:
-  #     - data
-  #     - command
-  #
   edgex-device-modbus:
     image: ${modbus}
     ports:
