@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Reference : https://gist.github.com/mdonkers/63e115cc0c79b4f6b8b3a6b797e485c7
+Origin : https://gist.github.com/mdonkers/63e115cc0c79b4f6b8b3a6b797e485c7
 Very simple HTTP server in python for logging requests
 Usage::
     ./server.py [<port>]

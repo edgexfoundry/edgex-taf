@@ -3,6 +3,7 @@ Library   OperatingSystem
 Library   Collections
 Library   String
 Library   DateTime
+Library   TAF.utils.src.setup.edgex
 
 
 *** Keywords ***
@@ -73,7 +74,7 @@ Should return status code "423"
 Should return status code "500"
     Should be true    ${response} == 500
 
-Get milliseconds epoch time
+Get current milliseconds epoch time
     ${current_epoch_time}=  Get current epoch time
     ${millisec_epoch_time}=    evaluate   int(${current_epoch_time}*1000)
     [Return]  ${millisec_epoch_time}
@@ -82,3 +83,15 @@ Get current epoch time
     ${data}=  get current date
     ${current_epoch_time}=  convert date    ${data}  epoch
     [Return]  ${current_epoch_time}
+
+Catch logs for service "${service_name}" with keyword "${keyword}"
+    ${current_timestamp}=  Get current epoch time
+    ${log_timestamp}=  evaluate   int(${current_timestamp}-1)
+    ${service_log}=  Get service logs since timestamp  ${service_name}  ${log_timestamp}
+    log  ${service_log}
+    ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
+    [Return]  ${return_log}
+
+Found "${keyword}" in service "${service_name}" log
+    ${return_log}=  Catch logs for service "${service_name}" with keyword "${keyword}"
+    Should Not Be Empty  ${return_log}
