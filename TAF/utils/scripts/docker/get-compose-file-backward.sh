@@ -1,11 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-USE_DB=$1
-ARCH=$2
-USE_SECURITY=$3
-
-# # default redis DB
-USE_DB=${USE_DB:--redis}
+# # set default values
+USE_DB=${1:--redis}
+USE_ARCH=${2:--x86_64}
+USE_SECURITY=${3:--}
+USE_RELEASE=${4:-fuji}
 
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
@@ -24,6 +23,7 @@ wget -O temp/fuji-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/d
 sed -n '/x-common-env-variables/,/^volumes:/{//!p;}' temp/nb-compose.yaml > temp/env-variables.yaml
 sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml
 sed -n '/- edgex-device-virtual/,/device-random:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
+sed -i -r 's/kong:1.3.0$/kong:1.3.0-centos/' temp/fuji-compose.yaml
 sed -n \
     -e '1,/x-common-env-variables/ p' \
     -e '/x-common-env-variables/ r temp/env-variables.yaml' \
