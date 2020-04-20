@@ -1,53 +1,23 @@
-  
   device-virtual:
     image: ${virtual}
     ports:
     - "49990:49990"
     container_name: edgex-device-virtual
     hostname: edgex-device-virtual
+    entrypoint: ["/device-virtual"]
+    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-device-virtual
     networks:
       edgex-network:
         aliases:
         - edgex-device-virtual
     volumes:
-    - db-data:/data/db
-    - log-data:/edgex/logs
-    - consul-config:/consul/config
-    - consul-data:/consul/data
-    - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
+      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
     depends_on:
-    - data
-    - command
-    entrypoint:
-      - /device-virtual
-      - --profile=${DS_PROFILE}
-      - --registry=${REGISTRY_URL}
-      - --confdir=${CONF_DIR}
-
-  device-random:
-    image: ${random}
-    ports:
-     - "49988:49988"
-    container_name: edgex-device-random
-    hostname: edgex-device-random
-    networks:
-     edgex-network:
-       aliases:
-           - edgex-device-random
-    volumes:
-     - db-data:/data/db
-     - log-data:/edgex/logs
-     - consul-config:/consul/config
-     - consul-data:/consul/data
-     - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
-    depends_on:
-     - data
-     - command
-    entrypoint:
-      - /device-random
-      - --profile=${DS_PROFILE}
-      - --registry=${REGISTRY_URL}
-      - --confdir=${CONF_DIR}
+      - data
+      - command
 
   edgex-device-modbus:
     image: ${modbus}
@@ -55,25 +25,21 @@
       - "49991:49991"
     container_name: edgex-device-modbus
     hostname: edgex-device-modbus
+    entrypoint: ["/device-modbus"]
+    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-device-modbus
     networks:
       edgex-network:
         aliases:
           - edgex-device-modbus
     volumes:
-     - db-data:/data/db
-     - log-data:/edgex/logs
-     - consul-config:/consul/config
-     - consul-data:/consul/data
      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
     depends_on:
      - data
      - command
      - modbus-simulator
-    entrypoint:
-      - /device-modbus
-      - --profile=${DS_PROFILE}
-      - --registry=${REGISTRY_URL}
-      - --confdir=${CONF_DIR}
 
   modbus-simulator:
     image: ${modbusSimulator}
