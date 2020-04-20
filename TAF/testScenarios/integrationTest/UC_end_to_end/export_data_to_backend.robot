@@ -1,18 +1,16 @@
 *** Settings ***
 Library          BuiltIn
+Library          Process
 Library          TAF.utils.src.setup.setup_teardown
 Library          TAF.utils.src.setup.edgex
-Library          TAF.utils.src.setup.external_service
 Resource         TAF/testCaseModules/keywords/commonKeywords.robot
 Resource         TAF/testCaseModules/keywords/coreMetadataAPI.robot
 Resource         TAF/testCaseModules/keywords/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/deviceServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
-...                             AND
-...                             Deploy device service  device-virtual
+...                             AND  Deploy device service  device-virtual
 Suite Teardown   Run keywords   Remove services  device-virtual
-...                             AND
-...                             Delete device profile by name Sample-Profile
+...                             AND  Delete device profile by name Sample-Profile
 
 *** Variables ***
 ${SUITE}         Export data to backend
@@ -20,53 +18,57 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 
 *** Test Cases ***
 Export001 - Export events/readings to HTTP Server
-    Given Start http server
-    And Deploy services  app-service-http-export
+    ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
+    Given Deploy services  app-service-http-export
     And Create device  create_device.json
     When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT8_RW"
     Then HTTP Server received event is the same with exported from service "app-service-http-export"
     And Exported events/readings from "app-service-http-export" has marked as PUSHED
     [Teardown]  Run keywords  Delete device by name Test-Device
-                ...           AND
-                ...           remove services  app-service-http-export
+                ...           AND  Remove all events
+                ...           AND  remove services  app-service-http-export
+                ...           AND  Terminate Process  ${handle}  kill=True
 
 Export002 - Export events/readings to MQTT Server
-    [Tags]  skipped
-    Given Deploy device service
-    And Start MQTT Server
-    And Deploy configurable application service with mqtt-export profile
-    And Create device
-    When Retrieve device data by get command from the device
-    Then Reading have exported to MQTT Server
-    And The exported reading existed on core-data and mark as Pushed
-    And Related log found on core-data
-    And Related log found on configurable application service
+    Given Deploy services  mqtt-broker
+    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py &   # Process for MQTT Subscriber
+    ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
+    And Deploy services  app-service-mqtt-export
+    And Create device  create_device.json
+    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT16_RW"
+    Then Device data has recevied by mqtt subscriber
+    And Found "Sent data to MQTT Broker" in service "app-service-mqtt-export" log
+    And Exported events/readings from "app-service-mqtt-export" has marked as PUSHED
+    [Teardown]  Run keywords  Delete device by name Test-Device
+                ...           AND  Remove all events
+                ...           AND  remove services  app-service-mqtt-export  mqtt-broker
 
 ExportErr001 - Export events/readings to unreachable HTTP backend
-    [Tags]  skipped
-    Given Deploy device service
-    And Deploy configurable application service with unreachable http backend
-    And Create device
-    When Retrieve device data by get command from the device
-    Then The exported data existed on core-data and doesn't mark as Pushed
-    And Related logs found on core-data
-    And Related logs found on configurable application service
+    Given Deploy services  app-service-http-export
+    And Create device  create_device.json
+    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT32_RW"
+    Then Created event did not mark as PUSHED
+    And No exported logs found on configurable application service  app-service-http-export
+    [Teardown]  Run keywords  Delete device by name Test-Device
+                ...           AND  Remove all events
+                ...           AND  remove services  app-service-http-export
 
 ExportErr002 - Export events/readings to unreachable MQTT backend
-    [Tags]  skipped
-    Given Deploy device service
-    And Deploy configurable application service with unreachable mqtt backend
-    And Create device
-    When Retrieve device data by get command from the device
-    Then The exported data existed on core-data and doesn't mark as Pushed
-    And Related logs found on core-data
-    And Related logs found on configurable application service
+    Given Deploy services  app-service-mqtt-export
+    And Create device  create_device.json
+    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT64_RW"
+    Then Created event did not mark as PUSHED
+    And No exported logs found on configurable application service  app-service-mqtt-export
+    [Teardown]  Run keywords  Delete device by name Test-Device
+                ...           AND  Remove all events
+                ...           AND  remove services  app-service-mqtt-export
 
 
 *** Keywords ***
-Exported events/readings from "${app_service}" has marked as PUSHED
-    ${export_data_app_service}=  Get exported data from "${app_service}" service log
-    ${export_data_json}=  evaluate  json.loads('''${export_data_app_service}''')  json
+Exported events/readings from "${app_service_name}" has marked as PUSHED
+    ${export_data}=  Run keyword if  '${app_service_name}'=='app-service-http-export'  Get exported data from "${app_service_name}" service log
+    ...              ELSE IF         '${app_service_name}'=='app-service-mqtt-export'  Device data has recevied by mqtt subscriber
+    ${export_data_json}=  evaluate  json.loads('''${export_data}''')  json
     ${event_statuscode}  ${event_response}  Query event by event id "${export_data_json}[id]"
     run keyword if  ${event_statuscode} != 200  fail  no event found
     ${event_json}=  evaluate  json.loads('''${event_response}''')  json
@@ -81,12 +83,22 @@ HTTP Server received event is the same with exported from service "${app_service
     run keyword if  '${http_server_received}' == '${EMPTY}'  fail  No export log found on http-server
     should contain  ${export_data_app_service}  ${http_server_received}  HTTP Server received data matched exported data
 
-Catch logs for service "${service_name}" with keyword "${keyword}"
-    ${current_timestamp}=  Get current epoch time
-    ${log_timestamp}=  evaluate   int(${current_timestamp}-1)
-    ${service_log}=  Get service logs since timestamp  ${service_name}  ${log_timestamp}
-    ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
-    [Return]  ${return_log}
+MQTT broker received event is the same with exported from service "${app_service}"
+    ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log  origin
+    run keyword if  '${mqtt_broker_received}' == '${EMPTY}' or '${mqtt_broker_received}' == 'None'
+    ...             fail  No export log found on mqtt subscriber
+    ${export_data_app_service}=  Get exported data from "${app_service}" service log
+    run keyword if  '${export_data_app_service}' == '${EMPTY}'  fail  No export log found on MQTT application service
+    should contain  ${export_data_app_service}  ${mqtt_broker_received}  MQTT broker received data matched exported data
+
+Created event did not mark as PUSHED
+    ${current_time}=  Get current milliseconds epoch time
+    ${start_time}=  evaluate  ${current_time}-1000
+    ${end_time}=  set variable  ${current_time}
+    ${event_status_code}  ${event_content}  Query device event by start/end time  ${start_time}  ${end_time}
+    run keyword if  ${event_statuscode} != 200  fail  no event found
+    ${event_content_str}=  convert to string  ${event_content}
+    should not contain  ${event_content_str}  pushed
 
 Get exported data from "${app_service}" service log
     ${app_service_log}=  Catch logs for service "${app_service}" with keyword "origin"
@@ -100,4 +112,21 @@ Get device data by device "${device_name}" and command "${command_name}"
     Should return status code "200"
     sleep  500ms
 
+Device data has recevied by mqtt subscriber
+    ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log  origin
+    run keyword if  '${mqtt_broker_received}' == '${EMPTY}' or '${mqtt_broker_received}' == 'None'
+    ...             fail  No export log found on mqtt subscriber
+    [Return]    ${mqtt_broker_received}
+
+No exported logs found on configurable application service
+    [Arguments]  ${app_service_name}
+    ${current_timestamp}=  get current epoch time
+    ${log_timestamp}=  evaluate  ${current_timestamp}-1
+    ${app_service_log}=  run keyword if  '${app_service_name}'=='app-service-http-export'
+                         ...             Get service logs since timestamp  ${app_service_name}  ${log_timestamp}
+                         ...   ELSE IF   '${app_service_name}'=='app-service-mqtt-export'
+                         ...             Get service logs since timestamp  ${app_service_name}  ${log_timestamp}
+    log  ${app_service_log}
+    ${app_service_str}=  convert to string  ${app_service_log}
+    should not contain  ${app_service_str}  Sent data
 
