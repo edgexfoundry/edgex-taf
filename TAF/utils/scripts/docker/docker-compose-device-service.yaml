@@ -4,8 +4,6 @@
     - "49990:49990"
     container_name: edgex-device-virtual
     hostname: edgex-device-virtual
-    entrypoint: ["/device-virtual"]
-    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
     environment:
       <<: *common-variables
       Service_Host: edgex-device-virtual
@@ -18,6 +16,11 @@
     depends_on:
       - data
       - command
+    entrypoint:
+      - /device-virtual
+      - --registry
+      - --confdir=${CONF_DIR}
+      - --profile=${DS_PROFILE}
 
   edgex-device-modbus:
     image: ${modbus}
