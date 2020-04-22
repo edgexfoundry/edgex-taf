@@ -26,7 +26,7 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
     sed -e '/# device-random:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
 
     # Insert required services for end to end tests
-    sed -e '/portainer:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
+    sed -e '/device-virtual:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
 
 else
      [ "$USE_DB" = "-mongo" ] && USE_DB=""
