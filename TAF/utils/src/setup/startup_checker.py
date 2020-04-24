@@ -35,15 +35,16 @@ services = {
         "support-rulesengine": {"composeName": "rulesengine",
                                 "port": SettingsInfo().constant.SUPPORT_RULESENGINE_PORT,
                                 "pingUrl": "/api/v1/ping"},
-        # "export-client": {"composeName": "export-client",
-        #                   "port": SettingsInfo().constant.EXPORT_CLIENT_PORT,
-        #                   "pingUrl": "/api/v1/ping"},
-        # "export-distro": {"composeName": "export-distro",
-        #                   "port": SettingsInfo().constant.EXPORT_DISTRO_PORT,
-        #                   "pingUrl": "/api/v1/ping"},
+        "app-service-http-export": {"composeName": "app-service-http-export",
+                                    "port": SettingsInfo().constant.APP_SERVICE_HTTP_EXPORT_PORT,
+                                    "pingUrl": "/api/v1/ping"},
+        "app-service-mqtt-export": {"composeName": "app-service-mqtt-export",
+                                    "port": SettingsInfo().constant.APP_SERVICE_MQTT_EXPORT_PORT,
+                                    "pingUrl": "/api/v1/ping"},
     }
 
 httpConnTimeout = 5
+
 
 def check_services_startup(check_list):
     for item in check_list:
