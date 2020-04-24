@@ -1,5 +1,6 @@
 *** Settings ***
 Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Default Tags  skipped
 
 *** Variables ***
 ${SUITE}         Multiple Device Service
