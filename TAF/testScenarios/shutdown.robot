@@ -19,10 +19,22 @@ Setup Suite
    Should Be True  ${status}  Failed Suite Setup
 
 *** Test Cases ***
+Shutdown EdgeX
+    [Tags]  shutdown-edgex
+    Shutdown services
+
+Shutdown Device Service
+    [Tags]  shutdown-device-service
+    Remove services  ${SERVICE_NAME}
+    Delete device profile by name  Sample-Profile
+
 Shutdown Device Virtual for backward compatibility testing
+    [Tags]  backward
     Remove services  -backward  ${SERVICE_NAME}
     Delete device profile by name  Sample-Profile
 
 Shutdown EdgeX for backward compatibility testing
+    [Tags]  edgex-base-service
     Shutdown services  -backward
+
 
