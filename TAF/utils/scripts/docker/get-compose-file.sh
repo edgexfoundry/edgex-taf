@@ -23,10 +23,10 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
      sed -i -r '/device-virtual:/,/- command/ {/ / d;}' temp/docker-compose-temp.yaml
 
     # Insert device services into the compose file
-    sed -e '/# device-random:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
+    sed -e '/ui:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
 
     # Insert required services for end to end tests
-    sed -e '/device-virtual:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
+    sed -e '/ui:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
 
 else
      [ "$USE_DB" = "-mongo" ] && USE_DB=""
