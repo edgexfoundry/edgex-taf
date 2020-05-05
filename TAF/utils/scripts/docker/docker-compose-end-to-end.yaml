@@ -2,22 +2,20 @@
     image: ${appService}
     ports:
       - "48096:48096"
-    entrypoint: ["/app-service-configurable"]
-    command: ["--registry","--confdir=/res", "--skipVersionCheck=true", "--overwrite"]
     container_name: app-service-http-export
     hostname: app-service-http-export
     environment:
-      edgex_registry: consul://edgex-core-consul:8500
-      edgex_service: http://app-service-http-export:48096
       edgex_profile: http-export
       Service_Host: app-service-http-export
       Clients_CoreData_Host: edgex-core-data
       Clients_Logging_Host: edgex-support-logging
+      Registry_Host: edgex-core-consul
+      Service_Port: 48096
       MessageBus_SubscribeHost_Host: edgex-core-data
       Database_Host: edgex-mongo
       Database_Username: appservice
       Database_Password: password
-      EDGEX_SECURITY_SECRET_STORE: "${SECURITY_ENABLED}"
+      EDGEX_SECURITY_SECRET_STORE: "false"
       Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
       Writable_LogLevel: DEBUG
     networks:
@@ -29,22 +27,20 @@
     image: ${appService}
     ports:
       - "48097:48097"
-    entrypoint: ["/app-service-configurable"]
-    command: ["--registry","--confdir=/res", "--skipVersionCheck=true", "--overwrite"]
     container_name: app-service-mqtt-export
     hostname: app-service-mqtt-export
     environment:
-      edgex_registry: consul://edgex-core-consul:8500
-      edgex_service: http://app-service-mqtt-export:48097
       edgex_profile: mqtt-export
       Service_Host: app-service-mqtt-export
       Clients_CoreData_Host: edgex-core-data
       Clients_Logging_Host: edgex-support-logging
+      Registry_Host: edgex-core-consul
+      Service_Port: 48097
       MessageBus_SubscribeHost_Host: edgex-core-data
       Database_Host: edgex-mongo
       Database_Username: appservice
       Database_Password: password
-      EDGEX_SECURITY_SECRET_STORE: "${SECURITY_ENABLED}"
+      EDGEX_SECURITY_SECRET_STORE: "false"
       Writable_Pipeline_Functions_MQTTSend_Addressable_Address: mqtt-broker
       Writable_LogLevel: DEBUG
     networks:
