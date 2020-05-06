@@ -20,7 +20,7 @@ def deploy_edgex(*args):
            *args]
     run_command(cmd)
 
-    checker.check_services_startup(["data", "metadata", "command", "support-logging", "support-notifications"])
+    checker.check_services_startup(["data", "metadata", "command", "support-notifications"])
 
 
 def shutdown_services(*args):
