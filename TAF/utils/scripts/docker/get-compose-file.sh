@@ -4,7 +4,7 @@
 USE_DB=${1:--redis}
 USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
-USE_RELEASE=${4:-nightly-build}
+USE_RELEASE=${4:-geneva}
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
@@ -14,9 +14,9 @@ USE_RELEASE=${4:-nightly-build}
 
 # # nightly or other release
 mkdir temp
-if [ "$USE_RELEASE" = "nightly-build" ]; then
-     COMPOSE_FILE="docker-compose-nexus${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
-     wget -O ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/${COMPOSE_FILE}"
+if [ "$USE_RELEASE" = "geneva" ]; then
+     COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
+     wget -O ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/${COMPOSE_FILE}"
 
      cp ${COMPOSE_FILE} temp/docker-compose-temp.yaml
      # Delete device-virtual service from the compose file
