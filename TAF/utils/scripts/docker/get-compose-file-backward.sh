@@ -14,12 +14,12 @@ USE_RELEASE=${4:-fuji}
 
 # # get night-build and fuji compose files
 mkdir temp
-wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/docker-compose-nexus${USE_DB}${USE_NO_SECURITY}.yml"
+wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
 # "mongo" is not specified in the fuji compose filenames
 [ "$USE_DB" = "-mongo" ] && USE_DB=""
 wget -O temp/fuji-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/fuji/compose-files/docker-compose${USE_DB}-fuji${USE_NO_SECURITY}.yml"
 
-# replace fuji core services with nightly-build core services
+# replace fuji core services with geneva core services
 sed -n '/x-common-env-variables/,/^volumes:/{//!p;}' temp/nb-compose.yaml > temp/env-variables.yaml
 sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml
 sed -n '/- edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
