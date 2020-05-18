@@ -4,7 +4,7 @@
 USE_DB=${1:--redis}
 USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
-USE_RELEASE=${4:-fuji}
+USE_RELEASE=${4:-geneva}
 
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
@@ -12,25 +12,24 @@ USE_RELEASE=${4:-fuji}
 # workaround: no security-enabled redis compose files
 [ "$USE_DB" = "-redis" ] && USE_NO_SECURITY="-no-secty"
 
-# # get night-build and fuji compose files
+# # get night-build and geneva compose files
 mkdir temp
-wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
-# "mongo" is not specified in the fuji compose filenames
+wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
+# "mongo" is not specified in the geneva compose filenames
 [ "$USE_DB" = "-mongo" ] && USE_DB=""
-wget -O temp/fuji-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/fuji/compose-files/docker-compose${USE_DB}-fuji${USE_NO_SECURITY}.yml"
+wget -O temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
 
-# replace fuji core services with geneva core services
+# replace geneva core services with geneva core services
 sed -n '/x-common-env-variables/,/^volumes:/{//!p;}' temp/nb-compose.yaml > temp/env-variables.yaml
 sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml
 sed -n '/- edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
 
-# Replace the parameter when using fuji device-virtual
-if [ "$USE_RELEASE" = "fuji" ]; then
+# Replace the parameter when using geneva device-virtual
+if [ "$USE_RELEASE" = "geneva" ]; then
     sed -i.bak 's/--registry/--registry=consul:\/\/edgex-core-consul:8500/' temp/device-virtual.yaml
     sed -i.bak "s/\${DS_PROFILE}/${USE_RELEASE}/" temp/device-virtual.yaml
 fi
 
-sed -i -r 's/kong:1.3.0$/kong:1.3.0-centos/' temp/fuji-compose.yaml
 sed -n \
     -e '1,/x-common-env-variables/ p' \
     -e '/x-common-env-variables/ r temp/env-variables.yaml' \
@@ -39,7 +38,7 @@ sed -n \
     -e '/scheduler:/,/- edgex-device-virtual/ p' \
     -e '/- edgex-device-virtual/ r temp/device-virtual.yaml' \
     -e '/# device-random:/,$ p' \
-    temp/fuji-compose.yaml > docker-compose-backward.yaml
+    temp/geneva-compose.yaml > docker-compose-backward.yaml
 
 rm -rf temp
 
