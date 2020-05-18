@@ -118,3 +118,7 @@ Remove all events
     Create Session  Core Data  url=${coreDataUrl}
     ${resp}=  Delete Request  Core Data    ${coreDataEventUri}/removeold/age/0
 
+Query events
+    Create Session  Core Data  url=${coreDataUrl}
+    ${resp}=  Get Request  Core Data    ${coreDataEventUri}
+    [Return]  ${resp.status_code}  ${resp.content}
