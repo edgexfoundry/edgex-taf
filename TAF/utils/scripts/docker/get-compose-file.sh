@@ -16,17 +16,17 @@ USE_RELEASE=${4:-geneva}
 mkdir temp
 if [ "$USE_RELEASE" = "geneva" ]; then
      COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
-     wget -O ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/${COMPOSE_FILE}"
+     wget -O ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"
 
      cp ${COMPOSE_FILE} temp/docker-compose-temp.yaml
      # Delete device-virtual service from the compose file
      sed -i -r '/device-virtual:/,/- command/ {/ / d;}' temp/docker-compose-temp.yaml
 
     # Insert device services into the compose file
-    sed -e '/ui:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
+    sed -e '/metadata:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
 
     # Insert required services for end to end tests
-    sed -e '/ui:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
+    sed -e '/metadata:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
 
 else
      [ "$USE_DB" = "-mongo" ] && USE_DB=""
