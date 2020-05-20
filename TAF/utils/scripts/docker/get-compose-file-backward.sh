@@ -14,7 +14,7 @@ USE_RELEASE=${4:-fuji}
 
 # # get night-build and fuji compose files
 mkdir temp
-wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
+wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
 # "mongo" is not specified in the fuji compose filenames
 [ "$USE_DB" = "-mongo" ] && USE_DB=""
 wget -O temp/fuji-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/fuji/compose-files/docker-compose${USE_DB}-fuji${USE_NO_SECURITY}.yml"
