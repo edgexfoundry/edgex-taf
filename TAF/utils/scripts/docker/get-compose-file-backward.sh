@@ -19,17 +19,14 @@ wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/dev
 wget -O temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
 
 # replace geneva core services with nightly-build core services
-sed -n '/x-common-env-variables/,/^volumes:/{//!p;}' temp/nb-compose.yaml > temp/env-variables.yaml
 sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml
-sed -n '/- edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
+sed -n '/Service_Host: edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
 
 sed -n \
-    -e '1,/x-common-env-variables/ p' \
-    -e '/x-common-env-variables/ r temp/env-variables.yaml' \
-    -e '/^volumes:/,/metadata:/ p' \
+    -e '/^version:/,/metadata:/ p' \
     -e '/metadata:/ r temp/core-services.yaml' \
-    -e '/scheduler:/,/- edgex-device-virtual/ p' \
-    -e '/- edgex-device-virtual/ r temp/device-virtual.yaml' \
+    -e '/scheduler:/,/Service_Host: edgex-device-virtual/ p' \
+    -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
     -e '/# device-random:/,$ p' \
     temp/geneva-compose.yaml > docker-compose-backward.yaml
 

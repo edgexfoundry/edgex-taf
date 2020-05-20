@@ -4,16 +4,17 @@
     - "49990:49990"
     container_name: edgex-device-virtual
     hostname: edgex-device-virtual
-    environment:
-      <<: *common-variables
-      Service_Host: edgex-device-virtual
     networks:
       edgex-network:
         aliases:
         - edgex-device-virtual
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-device-virtual
     volumes:
       - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
     depends_on:
+      - consul
       - data
       - command
     entrypoint:
@@ -30,19 +31,20 @@
     hostname: edgex-device-modbus
     entrypoint: ["/device-modbus"]
     command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
-    environment:
-      <<: *common-variables
-      Service_Host: edgex-device-modbus
     networks:
       edgex-network:
         aliases:
           - edgex-device-modbus
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-device-modbus
     volumes:
-     - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
+      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
     depends_on:
-     - data
-     - command
-     - modbus-simulator
+      - consul
+      - data
+      - command
+      - modbus-simulator
 
   modbus-simulator:
     image: ${modbusSimulator}
