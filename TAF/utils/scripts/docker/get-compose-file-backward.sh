@@ -6,6 +6,9 @@ USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
 USE_RELEASE=${4:-geneva}
 
+# # x86_64 or arm64
+[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
+
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
@@ -14,9 +17,9 @@ USE_RELEASE=${4:-geneva}
 
 # # get night-build and geneva compose files
 mkdir temp
-wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/docker-compose-nexus${USE_DB}${USE_NO_SECURITY}.yml"
+wget -O temp/nb-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/docker-compose-nexus${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
 
-wget -O temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}.yml"
+wget -O temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
 
 # replace geneva core services with nightly-build core services
 sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml

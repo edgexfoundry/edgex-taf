@@ -11,17 +11,14 @@
     environment:
       <<: *common-variables
       Service_Host: edgex-device-virtual
+    entrypoint: ["/device-virtual"]
+    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
     volumes:
       - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
     depends_on:
       - consul
       - data
       - command
-    entrypoint:
-      - /device-virtual
-      - --registry
-      - --confdir=${CONF_DIR}
-      - --profile=${DS_PROFILE}
 
   edgex-device-modbus:
     image: ${modbus}
