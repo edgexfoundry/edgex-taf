@@ -34,11 +34,11 @@ else
 
      cp ${COMPOSE_FILE} temp/docker-compose-temp.yaml
 
-     sed -n '/- edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
+     sed -n '/Service_Host: edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
 
      sed -n \
-         -e '1,/- edgex-device-virtual/ p' \
-         -e '/- edgex-device-virtual/ r temp/device-virtual.yaml' \
+         -e '1,/Service_Host: edgex-device-virtual/ p' \
+         -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
          -e '/# device-random:/,$ p' \
          temp/docker-compose-temp.yaml > docker-compose.yaml
 fi
