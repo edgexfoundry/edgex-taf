@@ -10,6 +10,7 @@
 """
 import http.client
 import time
+import subprocess
 
 from TUC.data.SettingsInfo import SettingsInfo
 
@@ -99,3 +100,29 @@ def check_service_is_available(port, ping_url):
             time.sleep(wait_time)
             continue
     return False
+
+
+def check_service_startup_by_log(service):
+    recheck_times = int(SettingsInfo().constant.SERVICE_STARTUP_RECHECK_TIMES)
+    wait_time = int(SettingsInfo().constant.SERVICE_STARTUP_WAIT_TIME)
+    if 'modbus' not in service:
+        service = "edgex-{}".format(service)
+
+    for i in range(recheck_times):
+        SettingsInfo().TestLog.info("Check {} is startup or not.".format(service))
+        try:
+            logs = subprocess.check_output("docker logs {}".format(service), shell=True)
+            keyword = "Service started in:".encode('utf-8')
+        except:
+            time.sleep(wait_time)
+            continue
+
+        if keyword in logs:
+            SettingsInfo().TestLog.info("{} is started.".format(service))
+            return True
+        else:
+            SettingsInfo().TestLog.info("Fail to start {}...".format(service))
+            time.sleep(wait_time)
+            continue
+    raise Exception("Start {} failed.".format(service))
+
