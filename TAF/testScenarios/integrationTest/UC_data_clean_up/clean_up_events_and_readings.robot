@@ -8,8 +8,8 @@ Suite Setup      Run keywords   Setup Suite
 ...                             AND  Deploy device service  device-virtual
 ...                             AND  Create device  create_device.json
 Suite Teardown   Run keywords   Remove services  device-virtual
-...                             AND  Delete device profile by name Sample-Profile
 ...                             AND  Delete device by name Test-Device
+...                             AND  Delete device profile by name Sample-Profile
 
 *** Variables ***
 ${SUITE}         Clean Up Events By Scheduler
