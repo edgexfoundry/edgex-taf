@@ -58,6 +58,10 @@ Get reading value with data type "${data_type}"
     run keyword and return if  '${data_type}' == 'UINT32'  evaluate  random.randint(0, 4294967295)  modules=random
     run keyword and return if  '${data_type}' == 'UINT64'  evaluate  random.randint(0, 18446744073709551615)  modules=random
 
+Get random "${value}" from "${list}"
+    ${random}=  Evaluate  random.choice(@{list})  random
+    ${random_value}=  convert to string  ${random}[${value}]
+    [Return]  ${random_value}
 
 Should return status code "200"
     Should be true    ${response} == 200
