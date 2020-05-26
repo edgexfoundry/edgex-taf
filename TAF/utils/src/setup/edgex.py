@@ -65,6 +65,7 @@ def deploy_device_service(device_service, *args):
                                                                            SettingsInfo().constant.DEPLOY_TYPE),
            device_service, *args]
     run_command(cmd)
+    checker.check_service_startup_by_log(device_service)
 
 
 def deploy_device_service_with_registry_url(device_service, registry_url):
