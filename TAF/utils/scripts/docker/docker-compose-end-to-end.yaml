@@ -19,9 +19,7 @@
       Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
       Writable_LogLevel: DEBUG
     networks:
-      edgex-network:
-        aliases:
-          - app-service-http-export
+      - edgex-network
 
   app-service-mqtt-export:
     image: ${appService}
@@ -44,9 +42,7 @@
       Writable_Pipeline_Functions_MQTTSend_Addressable_Address: mqtt-broker
       Writable_LogLevel: DEBUG
     networks:
-      edgex-network:
-        aliases:
-          - app-service-mqtt-export
+      - edgex-network
 
   mqtt-broker:
     image: eclipse-mosquitto
@@ -55,7 +51,5 @@
     ports:
       - "1883:1883"
     networks:
-      edgex-network:
-        aliases:
-          - mqtt-broker
+      - edgex-network
 
