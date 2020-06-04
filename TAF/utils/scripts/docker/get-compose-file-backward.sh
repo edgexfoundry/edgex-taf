@@ -21,24 +21,28 @@ USE_RELEASE=${4:-geneva}
 # # get night-build and geneva compose files
 mkdir temp
 
-./sync-nightly-build.sh temp/nb-compose.yaml ${ARM64_OPTION} ${NO_SECTY_OPTION}
+# Use base compose file from nightly-build for core services
+wget ${WINDOWS_WGET_OPTION} -O temp/nb-compose.yaml "https://raw.githubusercontent.com/lenny-intel/developer-scripts/multi2/releases/nightly-build/compose-files/docker-compose-nexus-base.yml"
 
-wget ${WINDOWS_WGET_OPTION}  -O temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
-
-
-sed -n '/Service_Host: edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
+wget ${WINDOWS_WGET_OPTION} -O temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
 
 # replace geneva core services with nightly-build core services
-sed -i 's/docker-core-metadata-go:1.2.0/docker-core-metadata-go:master/' temp/geneva-compose.yaml
-sed -i 's/docker-core-data-go:1.2.0/docker-core-data-go:master/' temp/geneva-compose.yaml
-sed -i 's/docker-core-command-go:1.2.0/docker-core-command-go:master/' temp/geneva-compose.yaml
+sed -n '/metadata:/,/scheduler:/{//!p;}' temp/nb-compose.yaml > temp/core-services.yaml
+sed -n '/Service_Host: edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
 
 sed -n \
     -e '/^version:/,/metadata:/ p' \
+    -e '/metadata:/ r temp/core-services.yaml' \
     -e '/scheduler:/,/Service_Host: edgex-device-virtual/ p' \
     -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
-    -e '/# device-random:/,$ p' \
+    -e '/ device-rest:/,$ p' \
     temp/geneva-compose.yaml > docker-compose-backward.yaml
 
-rm -rf temp
+# nightly build compose has ARCH variable for the image that geneva doesn't have
+if [ "$USE_ARCH" = "arm64" ]; then
+  sed -i 's/\${ARCH}/-amr64/g' docker-compose-backward.yaml
+else
+  sed -i 's/\${ARCH}//g' docker-compose-backward.yaml
+fi
 
+rm -rf temp
