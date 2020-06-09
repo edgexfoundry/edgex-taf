@@ -1,21 +1,33 @@
 #!/bin/bash
 
-NIGHT_BUILD_URL="https://raw.githubusercontent.com/lenny-intel/developer-scripts/multi2/releases/nightly-build/compose-files"
+# TODO: Change URl and file spec to use edgexfoundry master once developer-scripts PR is merged
+NIGHT_BUILD_URL="https://codeload.github.com/lenny-intel/developer-scripts/zip/multi2"
+FILE_SPEC="developer-scripts-multi2/releases/nightly-build/compose-files/*"
 
-# so wget on windows can pull files
-[ "$(uname -o)" = "Msys" ] && WINDOWS_WGET_OPTION="--no-check-certificate"
+# x86_64 or arm64 for make run option
+[ "$(uname -m)" != "x86_64" ] && USE_ARM64="arm64"
 
-  # Download all the files, even if may not be used, so 'down' target works.
-  wget -q ${WINDOWS_WGET_OPTION} -O Makefile \
-    "${NIGHT_BUILD_URL}/Makefile"
-  wget -q ${WINDOWS_WGET_OPTION} -O docker-compose-nexus-base.yml \
-    "${NIGHT_BUILD_URL}/docker-compose-nexus-base.yml"
-  wget -q ${WINDOWS_WGET_OPTION} -O docker-compose-nexus-add-security.yml \
-    "${NIGHT_BUILD_URL}/docker-compose-nexus-add-security.yml"
-  wget -q ${WINDOWS_WGET_OPTION} -O docker-compose-nexus-add-device-services.yml \
-    "${NIGHT_BUILD_URL}/docker-compose-nexus-add-device-services.yml"
+# security or no security for make run option
+[ "$SECURITY_SERVICE_NEEDED" != true ] && USE_NO_SECURITY="no-secty"
+
+IS_ALPINE=`uname -a | grep linuxkit`
+# make sure curl is installed if running from apline image
+if [ "$IS_ALPINE" != ""] ; then
+  apk add curl
+fi
+# Download and extract all the docker compose files
+wget -o compose-files.zip ${NIGHT_BUILD_URL}
+unzip -o -j compose-files.zip ${FILE_SPEC} -d compose-files
+
+(
+  cd compose-files
 
   # generate single file docker-compose.yml for target configuration
   make gen $2 $3 $4
-  mv docker-compose.yml $1
-  rm -f docker-compose-nexus* Makefile
+
+  mv docker-compose.yml ../
+)
+
+mv docker-compose.yml $1
+rm compose-files.zip
+rm -rf compose-files

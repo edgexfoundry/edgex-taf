@@ -40,7 +40,7 @@ sed -n \
 
 # nightly build compose has ARCH variable for the image that geneva doesn't have
 if [ "$USE_ARCH" = "arm64" ]; then
-  sed -i 's/\${ARCH}/-amr64/g' docker-compose-backward.yaml
+  sed -i 's/\${ARCH}/-arm64/g' docker-compose-backward.yaml
 else
   sed -i 's/\${ARCH}//g' docker-compose-backward.yaml
 fi
