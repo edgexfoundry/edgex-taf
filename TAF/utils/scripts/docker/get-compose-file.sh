@@ -39,7 +39,7 @@ else
      sed -n \
          -e '1,/Service_Host: edgex-device-virtual/ p' \
          -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
-         -e '/# device-random:/,$ p' \
+         -e '/#  device-random:/,$ p' \
          temp/docker-compose-temp.yaml > docker-compose.yaml
 fi
 rm -rf temp
