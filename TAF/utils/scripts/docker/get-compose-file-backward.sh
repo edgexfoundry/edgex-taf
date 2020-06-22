@@ -45,4 +45,9 @@ else
   sed -i 's/\${ARCH}//g' docker-compose-backward.yaml
 fi
 
+sed -i 's/\${CORE_EDGEX_REPOSITORY}/nexus3.edgexfoundry.org:10004/g' docker-compose-backward.yaml
+sed -i 's/\${CORE_EDGEX_VERSION}/master/g' docker-compose-backward.yaml
+sed -i 's/\${DEV}//g' docker-compose-backward.yaml
+sed -i 's/\- database/- redis/g' docker-compose-backward.yaml
+
 rm -rf temp

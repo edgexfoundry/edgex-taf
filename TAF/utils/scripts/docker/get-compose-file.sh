@@ -17,7 +17,8 @@ mkdir temp
 if [ "$USE_RELEASE" = "nightly-build" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
-  ./sync-nightly-build.sh temp/docker-compose-temp.yaml no-ds ${ARM64_OPTION} ${NO_SECTY_OPTION}
+  ./sync-nightly-build.sh no-ds ${ARM64_OPTION} ${NO_SECTY_OPTION}
+  mv docker-compose.yml temp/docker-compose-temp.yaml
 
   # Insert device services into the compose file
   sed -e '/app-service-rules:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
@@ -34,9 +35,9 @@ else
   sed -n '/Service_Host: edgex-device-virtual/,/edgex-device-modbus:/{//!p;}' docker-compose-device-service.yaml > temp/device-virtual.yaml
 
   sed -n \
-    -e '1,/Service_Host: edgex-device-virtual/ p' \
-    -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
-    -e '/#  device-random:/,$ p' \
-    temp/docker-compose-temp.yaml > docker-compose.yaml
+     -e '1,/Service_Host: edgex-device-virtual/ p' \
+     -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
+     -e '/#  device-random:/,$ p' \
+     temp/docker-compose-temp.yaml > docker-compose.yaml
 fi
 rm -rf temp
