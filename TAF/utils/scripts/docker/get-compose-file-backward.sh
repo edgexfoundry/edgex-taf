@@ -30,7 +30,7 @@ sed -n \
     -e '/metadata:/ r temp/core-services.yaml' \
     -e '/scheduler:/,/Service_Host: edgex-device-virtual/ p' \
     -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
-    -e '/# device-random:/,$ p' \
+    -e '/#  device-random:/,$ p' \
     temp/geneva-compose.yaml > docker-compose-backward.yaml
 
 rm -rf temp
