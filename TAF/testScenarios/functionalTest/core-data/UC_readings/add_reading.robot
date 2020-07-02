@@ -6,8 +6,10 @@ Library   TAF.utils.src.setup.consul
 Resource  TAF/testCaseModules/keywords/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
 Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
-Suite Setup  Setup Suite
-
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keywords  Suite Teardown
+...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 *** Variables ***
 ${SUITE}                        Add Reading

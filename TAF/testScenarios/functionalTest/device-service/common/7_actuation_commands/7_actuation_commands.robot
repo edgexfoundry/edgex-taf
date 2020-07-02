@@ -5,8 +5,11 @@ Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
 Resource  TAF/testCaseModules/keywords/deviceServiceAPI.robot
 Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
 Resource  TAF/testCaseModules/keywords/commonKeywords.robot
-Suite Setup  Run Keywords  Setup Suite  AND  Create device  create_device.json
-Suite Teardown  Delete device by name
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+...                        AND  Create device  create_device.json
+Suite Teardown  Run Keywords  Delete device by name
+...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 *** Variables ***
 ${SUITE}        Actuation Commands

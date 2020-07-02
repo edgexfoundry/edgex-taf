@@ -5,14 +5,16 @@ Resource         TAF/testCaseModules/keywords/deviceServiceAPI.robot
 Resource         TAF/testCaseModules/keywords/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/supportSchedulerAPI.robot
 Suite Setup      Run keywords   Setup Suite
+...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Deploy device service  device-virtual
 ...                             AND  Create device  create_device.json
 Suite Teardown   Run keywords   Remove services  device-virtual
 ...                             AND  Delete device by name Test-Device
 ...                             AND  Delete device profile by name Sample-Profile
+...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 *** Variables ***
-${SUITE}         Clean Up Events By Scheduler
+${SUITE}         Clean Up Events/Readings By Scheduler
 ${interval_frequency}
 ...  {
 ...    "name" : "frequency_%interval_time%s", "start": "20200101T000000", "frequency": "PT%interval_time%S"
@@ -24,10 +26,6 @@ ${delete_events}
 ...    "protocol": "http", "httpMethod": "DELETE", "address": "edgex-core-data",
 ...    "path":"/api/v1/event/removeold/age/0", "port": ${CORE_DATA_PORT}
 ...  }
-
-
-*** Variables ***
-${SUITE}         Clean Up Events/Readings By Scheduler
 
 
 *** Test Cases ***
@@ -58,6 +56,11 @@ Create Interval and set frequency to "${interval_time}"s
 
 Create interval action with interval "${interval_time}"s delete events for core-data
     ${delete_events}=  replace string  ${delete_events}  %interval_time%  ${interval_time}
+    log to console  1++++:${delete_events}
+    ${delete_events}=  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'
+    ...                                replace string  ${delete_events}  ${CORE_DATA_PORT}  48080
+    ...                                ELSE  Set Variable  ${delete_events}
+    log to console  2++++:${delete_events}
     Create intervalAction  ${delete_events}
     Should return status code "200"
 

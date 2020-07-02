@@ -4,7 +4,10 @@ Library   OperatingSystem
 Library   Collections
 Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
 Resource  TAF/testCaseModules/keywords/commonKeywords.robot
-Suite Setup  Setup Suite
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keywords  Suite Teardown
+...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 *** Variables ***
 ${SUITE}                                  Query Readings
@@ -17,7 +20,7 @@ ${VALUE_DESCRIPTOR_TEST_DEVICE_1_VAL1}    test-device-1-val
 *** Keywords ***
 core-data has ${amount} readings with value descriptor ${valueDescriptor} and device id ${deviceId}
     :FOR    ${INDEX}    IN RANGE  ${amount}
-    \  run keyword and continue on failure  add reading with value ${INDEX} by value descriptor ${valueDescriptor} and device id "${deviceId}"
+    \  run keyword and continue on failure  add reading with value ${INDEX} by value descriptor ${valueDescriptor} and device id ${deviceId}
 
 Query readings by value descriptor and device id
     [Arguments]    ${valueDescriptor}   ${deviceId}

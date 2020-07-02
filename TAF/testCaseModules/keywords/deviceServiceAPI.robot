@@ -5,15 +5,16 @@ Library  TAF.utils.src.data.value_checker
 Resource  ./coreMetadataAPI.robot
 
 *** Variables ***
-${deviceServiceUrl}  http://${BASE_URL}:${SERVICE_PORT}
+${deviceServiceUrl}  ${URI_SCHEME}://${BASE_URL}:${SERVICE_PORT}
 ${dsDeviceUri}   /api/v1/device
 ${dsCallBack}    /api/v1/callback
 
 
 *** Keywords ***
 Invoke Get command by device id "${deviceId}" and command name "${commandName}"
-    Create Session  Device Service  url=${deviceServiceUrl}
-    ${resp}=  Get Request  Device Service    ${dsDeviceUri}/${deviceId}/${commandName}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Device Service    ${dsDeviceUri}/${deviceId}/${commandName}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  set test variable  ${error_response}   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Get command failed"
     ${responseBody}=  run keyword if  ${resp.status_code}==200   evaluate  json.loads('''${resp.content}''')  json
@@ -21,8 +22,9 @@ Invoke Get command by device id "${deviceId}" and command name "${commandName}"
     set test variable  ${response}  ${resp.status_code}
 
 Invoke Get command by device name "${deviceName}" and command name "${commandName}"
-    Create Session  Device Service  url=${deviceServiceUrl}
-    ${resp}=  Get Request  Device Service    ${dsDeviceUri}/name/${deviceName}/${commandName}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Device Service    ${dsDeviceUri}/name/${deviceName}/${commandName}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Get command failed"
     ${responseBody}=  run keyword if  ${resp.status_code}==200   evaluate  json.loads('''${resp.content}''')  json
@@ -30,44 +32,45 @@ Invoke Get command by device name "${deviceName}" and command name "${commandNam
     set test variable  ${response}  ${resp.status_code}
 
 Invoke Get command name "${commandName}" for all devices
-    Create Session  Device Service  url=${deviceServiceUrl}
-    ${resp}=  Get Request  Device Service    ${dsDeviceUri}/all/${commandName}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Device Service    ${dsDeviceUri}/all/${commandName}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Get command failed"
     ${deviceCommandBody}=  run keyword if  ${resp.status_code}==200  evaluate  json.loads('''${resp.content}''')  json
     return from keyword if  ${resp.status_code}==200    ${deviceCommandBody}
     set test variable  ${response}  ${resp.status_code}
 
 Invoke Put command by device id "${deviceId}" and command name "${commandName}" with request body "${Resource}":"${value}"
-    Create Session  Device Service  url=${deviceServiceUrl}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${data}=    Create Dictionary   ${Resource}=${value}
-    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  Put Request  Device Service    ${dsDeviceUri}/${deviceId}/${commandName}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Put command failed"
     set test variable  ${response}  ${resp.status_code}
 
 Invoke Put command by device name "${deviceName}" and command name "${commandName}" with request body "${Resource}":"${value}"
-    Create Session  Device Service  url=${deviceServiceUrl}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${data}=    Create Dictionary   ${Resource}=${value}
-    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  Put Request  Device Service    ${dsDeviceUri}/name/${deviceName}/${commandName}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Put command failed"
     set test variable  ${response}  ${resp.status_code}
 
 Invoke Post callback for the device "${callback_id}" with action type "${action_type}"
-    Create Session  Device Service  url=${deviceServiceUrl}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${data}=    Create Dictionary   id=${callback_id}   type=${action_type}
-    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  Post Request  Device Service    ${dsCallBack}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Post Callback command failed"
     set test variable  ${response}  ${resp.status_code}
 
 Invoke Delete callback for the device "${deviceId}" with action type "${action_type}"
-    Create Session  Device Service  url=${deviceServiceUrl}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${data}=    Create Dictionary   id=${deviceId}   type=${action_type}
-    ${headers}=  Create Dictionary  Content-Type=application/json
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  Delete Request  Device Service    ${dsCallBack}  json=${data}   headers=${headers}
     run keyword if  ${resp.status_code}!=200  log   ${resp.content}
     run keyword if  ${resp.status_code}!=200  log   "Invoke Delete Callback command failed"
@@ -83,8 +86,9 @@ Value should be "${dataType}"
     should be true  ${status}
 
 DS should receive a Device Post callback
-    Create Session  Device Service  url=${deviceServiceUrl}
-    ${resp}=  Get Request  Device Service    ${deviceServiceUrl}/${dsCallBack}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Device Service    ${deviceServiceUrl}/${dsCallBack}  headers=${headers}
     log  ${resp.content}
     set test variable  ${response}  ${resp.status_code}
 

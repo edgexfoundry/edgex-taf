@@ -132,3 +132,17 @@ def get_service_logs_since_timestamp(service, timestamp):
     logs = subprocess.check_output("docker logs {} --since {}".format(service, timestamp), shell=True)
     return logs
 
+
+def access_token(arg):
+    cmd = ["sh", "{}/TAF/utils/scripts/{}/api-gateway-token.sh".format(SettingsInfo().workDir,
+                                                                       SettingsInfo().constant.DEPLOY_TYPE),
+           arg, "/dev/null"]
+    try:
+        output = subprocess.run(cmd, stdout=subprocess.PIPE, check=True).stdout.decode('utf-8').rstrip('\n')
+        SettingsInfo().TestLog.info("./api-gateway-token.sh {} output: {} ".format(arg, output))
+        return output
+    except subprocess.CalledProcessError as e:
+        msg = "Fail to execute cmd: " + " ".join(str(x) for x in cmd)
+        SettingsInfo().TestLog.info("exit " + str(e.returncode))
+        SettingsInfo().TestLog.error(msg)
+        raise Exception(msg)
