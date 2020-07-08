@@ -6,6 +6,9 @@ USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
 USE_RELEASE=${4:-geneva}
 
+# TODO: Change URl and file spec to use edgexfoundry master once developer-scripts PR is merged
+NIGHTLY_BUILD_SOURCE_URL="https://raw.githubusercontent.com/lenny-intel/developer-scripts/multi2/releases/nightly-build/compose-files/source"
+
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64" && ARM64_OPTION="arm64"
 
@@ -19,9 +22,8 @@ USE_RELEASE=${4:-geneva}
 mkdir temp
 
 # Use base compose file from nightly-build for core services
-# TODO: Change URl use edgexfoundry master once developer-scripts PR is merged
-curl -o temp/nb-compose.yaml "https://raw.githubusercontent.com/lenny-intel/developer-scripts/multi2/releases/nightly-build/compose-files/source/docker-compose-nexus-base.yml"
-
+curl -o temp/nb-compose.yaml "${NIGHTLY_BUILD_SOURCE_URL}/docker-compose-nexus-base.yml"
+curl -o common.env "${NIGHTLY_BUILD_SOURCE_URL}/common.env"
 curl -o temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
 
 # replace geneva core services with nightly-build core services

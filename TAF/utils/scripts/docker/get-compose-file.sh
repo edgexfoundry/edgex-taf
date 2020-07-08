@@ -18,7 +18,9 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
   ./sync-nightly-build.sh no-ds ${ARM64_OPTION} ${NO_SECTY_OPTION}
-  mv docker-compose.yml temp/docker-compose-temp.yaml
+
+  # Need to remove the existing device services so the added ones below don't conflict
+  sed '/  device-rest:/,/- 127.0.0.1:49990:49990\/tcp/d' docker-compose.yml > temp/docker-compose-temp.yaml
 
   # Insert device services into the compose file
   sed -e '/app-service-rules:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
@@ -28,7 +30,7 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
 
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
-  wget -O ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"
+  curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"
 
   cp ${COMPOSE_FILE} temp/docker-compose-temp.yaml
 
@@ -39,5 +41,13 @@ else
      -e '/Service_Host: edgex-device-virtual/ r temp/device-virtual.yaml' \
      -e '/#  device-random:/,$ p' \
      temp/docker-compose-temp.yaml > docker-compose.yaml
+
+  # new compose file uses `database` as the service name, while older compose has `redis` or `mongo` as the service name
+  # so need to adjust the names in the older file so deploy works with service `database` as the service name.
+  sed -i 's/\  redis:/  database:/g' docker-compose.yaml
+  sed -i 's/\- redis/- database/g' docker-compose.yaml
+  sed -i 's/\  mongo:/  database:/g' docker-compose.yaml
+  sed -i 's/\- mongo/- database/g' docker-compose.yaml
 fi
+
 rm -rf temp
