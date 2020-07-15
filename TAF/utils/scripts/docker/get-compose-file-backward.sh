@@ -6,8 +6,7 @@ USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
 USE_RELEASE=${4:-geneva}
 
-# TODO: Change URl and file spec to use edgexfoundry master once developer-scripts PR is merged
-NIGHTLY_BUILD_SOURCE_URL="https://raw.githubusercontent.com/lenny-intel/developer-scripts/multi2/releases/nightly-build/compose-files/source"
+NIGHTLY_BUILD_SOURCE_URL="https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/source"
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64" && ARM64_OPTION="arm64"
