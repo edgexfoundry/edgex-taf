@@ -5,11 +5,11 @@
     container_name: edgex-device-virtual
     hostname: edgex-device-virtual
     networks:
-      edgex-network:
-        aliases:
-        - edgex-device-virtual
+      - edgex-network
     environment:
-      <<: *common-variables
+      REGISTRY_HOST: edgex-core-consul
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      CLIENTS_METADATA_HOST: edgex-core-metadata
       Service_Host: edgex-device-virtual
     entrypoint: ["/device-virtual"]
     command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
@@ -29,11 +29,11 @@
     entrypoint: ["/device-modbus"]
     command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
     networks:
-      edgex-network:
-        aliases:
-          - edgex-device-modbus
+      - edgex-network
     environment:
-      <<: *common-variables
+      REGISTRY_HOST: edgex-core-consul
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      CLIENTS_METADATA_HOST: edgex-core-metadata
       Service_Host: edgex-device-modbus
     volumes:
       - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
