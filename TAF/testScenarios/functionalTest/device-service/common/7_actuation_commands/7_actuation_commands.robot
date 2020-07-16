@@ -20,8 +20,9 @@ ${SUITE}        Actuation Commands
 PUT001 - Test DS actuates commands to device/sensor by id on multiple data type
     [Tags]  Backward
     @{data_types_get_rw}=  Skip read only and write only commands "${SUPPORTED_DATA_TYPES}"
-    : FOR    ${item}    IN    @{data_types_get_rw}
-    \   run keyword and continue on failure   DS actuates commands to device/sensor by id  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}
+    FOR    ${item}    IN    @{data_types_get_rw}
+       run keyword and continue on failure   DS actuates commands to device/sensor by id  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}
+    END
 
 PUT002 - Test DS actuates commands to device/sensor by id with invalid request body
     [Tags]  Backward
@@ -47,8 +48,9 @@ PUT004 - Test DS actuates commands to device/sensor by id with invalid command
 PUT005 - Test DS actuates commands to device/sensor by name on multiple data type
     [Tags]  Backward
     @{data_types_get_rw}=  Skip read only and write only commands "${SUPPORTED_DATA_TYPES}"
-    : FOR    ${item}    IN    @{data_types_get_rw}
-    \   run keyword and continue on failure   DS actuates commands to device/sensor by name  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}
+    FOR    ${item}    IN    @{data_types_get_rw}
+        run keyword and continue on failure   DS actuates commands to device/sensor by name  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}
+    END
 
 PUT006 - Test DS actuates commands to device/sensor by name with invalid request body
     @{data_types_skip_read_only}=  Skip read only commands

@@ -40,10 +40,11 @@ Query readings by value descriptor and device id
 Readings should contain the value descriptor and device id and value
     [Arguments]    ${valueDescriptor}   ${deviceId}   ${value}
         ${length}=  get length  ${READINGS}
-    :FOR    ${reading}   IN  @{READINGS}
-    \  Should contain    ${reading}[name]  ${valueDescriptor}
-    \  Should contain    ${reading}[device]  ${deviceId}
-    \  Should contain    ${reading}[value]  ${value}
+    FOR    ${reading}   IN  @{READINGS}
+       Should contain    ${reading}[name]  ${valueDescriptor}
+       Should contain    ${reading}[device]  ${deviceId}
+       Should contain    ${reading}[value]  ${value}
+    END
 
 The config MetaDataCheck set to ${boolVal}
     Modify consul config  /v1/kv/edgex/core/1.0/edgex-core-data/Writable/MetaDataCheck  ${boolVal}

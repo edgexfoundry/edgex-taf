@@ -13,30 +13,34 @@ Setup Suite
 
 Skip write only commands
     @{data_types_skip_write_only}=    Create List
-    :FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
-    \     Continue For Loop If   '${item["readWrite"]}' == 'W'
-    \     Append To List    ${data_types_skip_write_only}    ${item}
+    FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
+          Continue For Loop If   '${item["readWrite"]}' == 'W'
+          Append To List    ${data_types_skip_write_only}    ${item}
+    END
     [Return]   ${data_types_skip_write_only}
 
 Skip read only commands
     @{data_types_skip_read_only}=    Create List
-    :FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
-    \     Continue For Loop If   '${item["readWrite"]}' == 'R'
-    \     Append To List    ${data_types_skip_read_only}    ${item}
+    FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
+          Continue For Loop If   '${item["readWrite"]}' == 'R'
+          Append To List    ${data_types_skip_read_only}    ${item}
+    END
     [Return]  ${data_types_skip_read_only}
 
 Skip data types BOOL and STRING only commands "${SUPPORTED_DATA}"
     @{data_types_skip_bool_string}=    Create List
-    :FOR    ${item}    IN    @{SUPPORTED_DATA}
-    \     Continue For Loop If   '${item["dataType"]}' == 'BOOL' or '${item["dataType"]}' == 'STRING'
-    \     Append To List    ${data_types_skip_bool_string}    ${item}
+    FOR    ${item}    IN    @{SUPPORTED_DATA}
+          Continue For Loop If   '${item["dataType"]}' == 'BOOL' or '${item["dataType"]}' == 'STRING'
+          Append To List    ${data_types_skip_bool_string}    ${item}
+    END
     [Return]  ${data_types_skip_bool_string}
 
 Skip read only and write only commands "${SUPPORTED_DATA}"
     @{data_types_get_rw}=    Create List
-    :FOR    ${item}    IN    @{SUPPORTED_DATA}
-    \     Continue For Loop If   '${item["readWrite"]}' == 'R' or '${item["readWrite"]}' == 'W'
-    \     Append To List    ${data_types_get_rw}    ${item}
+    FOR    ${item}    IN    @{SUPPORTED_DATA}
+          Continue For Loop If   '${item["readWrite"]}' == 'R' or '${item["readWrite"]}' == 'W'
+          Append To List    ${data_types_get_rw}    ${item}
+    END
     [Return]  ${data_types_get_rw}
 
 Get reading value with data type "${data_type}"

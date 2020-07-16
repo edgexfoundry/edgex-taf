@@ -19,8 +19,9 @@ ${SUITE}              Query Commands
 Get001 - Test Retrieve device reading by id and the data is sent to Core Data with multiple data type
     [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
-    : FOR    ${item}    IN    @{data_types_skip_write_only}
-    \  run keyword and continue on failure  Retrieve reading by device id and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
+    FOR    ${item}    IN    @{data_types_skip_write_only}
+       run keyword and continue on failure  Retrieve reading by device id and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
+    END
 
 Get002 - Test Retrieve device reading by id but the device does not exist
     [Tags]  Backward
@@ -35,8 +36,9 @@ Get003 - Test Retrieve device reading by id but the command does not exist
 Get004 - Test Retrieve device reading by name and the data is sent to Core Data with multiple data type
     [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
-    : FOR    ${item}    IN    @{data_types_skip_write_only}
-    \  run keyword and continue on failure  Retrieve reading by device name and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
+    FOR    ${item}    IN    @{data_types_skip_write_only}
+      run keyword and continue on failure  Retrieve reading by device name and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
+    END
 
 Get005 - Test Retrieve device reading by name but the device does not exist
     @{data_types_skip_write_only}=  Skip write only commands
@@ -50,8 +52,9 @@ Get006 - Test Retrieve device reading by name but the command does not exist
 
 Get007 - Test Retrieve all devices data and the data is sent to Core Data
     @{data_types_skip_write_only}=  Skip write only commands
-    : FOR    ${item}    IN    @{data_types_skip_write_only}
-    \  run keyword and continue on failure  Retrieve all devices data and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
+    FOR    ${item}    IN    @{data_types_skip_write_only}
+       run keyword and continue on failure  Retrieve all devices data and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
+    END
 
 Get008 - Test Retrieve all devices data but the command does not exist
     When Invoke Get command name "invalid_command_name" for all devices
@@ -99,9 +102,10 @@ Retrieve all devices data and the data is sent to Core Data
     ${responseBody}=  Invoke Get command name "${command_name}" for all devices
     ${response_length}=  get length  ${responseBody}
     run keyword if  ${response_length} >=5  fail  "No device reading found"
-    :FOR    ${response}    IN    @{responseBody}
-    \     ${readings_length}=  get length  ${response}[readings]
-    \     sleep  500ms
-    \     ${end_time}=  Get current milliseconds epoch time
-    \     run keyword if  ${readings_length} == 0   fail  "No readings found:"+ ${response}[device]
-    \     Query device reading by start/end time  ${start_time}  ${end_time}
+    FOR    ${response}    IN    @{responseBody}
+          ${readings_length}=  get length  ${response}[readings]
+          sleep  500ms
+          ${end_time}=  Get current milliseconds epoch time
+          run keyword if  ${readings_length} == 0   fail  "No readings found:"+ ${response}[device]
+          Query device reading by start/end time  ${start_time}  ${end_time}
+    END

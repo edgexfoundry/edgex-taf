@@ -74,13 +74,14 @@ Device autoEvents with "${reading_name}" send by frequency setting "${frequency_
     sleep  2
     ${init_device_reading_data}=  run keyword and continue on failure  Query device reading by device name "AutoEvent-Device"
     ${init_device_reading_count}=  get length  ${init_device_reading_data}
-    :FOR    ${INDEX}    IN RANGE  1  4
-    \  sleep  ${sleep_time}s
-    \  ${end_time}=   Get current milliseconds epoch time
-    \  ${expected_device_reading_count}=  evaluate  ${init_device_reading_count} + ${INDEX}
-    \  ${device_reading_data}=  run keyword and continue on failure  Query device reading by device name "AutoEvent-Device"
-    \  ${device_reading_count}=  get length  ${device_reading_data}
-    \  run keyword and continue on failure  should be equal as integers  ${expected_device_reading_count}  ${device_reading_count}
+    FOR    ${INDEX}    IN RANGE  1  4
+       sleep  ${sleep_time}s
+       ${end_time}=   Get current milliseconds epoch time
+       ${expected_device_reading_count}=  evaluate  ${init_device_reading_count} + ${INDEX}
+       ${device_reading_data}=  run keyword and continue on failure  Query device reading by device name "AutoEvent-Device"
+       ${device_reading_count}=  get length  ${device_reading_data}
+       run keyword and continue on failure  should be equal as integers  ${expected_device_reading_count}  ${device_reading_count}
+    END
 
 Query value descriptor for name "${value_descriptor_name}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
