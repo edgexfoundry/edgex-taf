@@ -70,9 +70,10 @@ Get random command and skip write only data
     [Return]  ${random_command}
 
 Create events by get device command
-    :FOR  ${INDEX}  IN RANGE  0  5
-    \     ${random_command}=  Get random command and skip write only data
-    \     Invoke Get command by device id "${device_id}" and command name "${random_command}"
+    FOR  ${INDEX}  IN RANGE  0  5
+          ${random_command}=  Get random command and skip write only data
+          Invoke Get command by device id "${device_id}" and command name "${random_command}"
+    END
     ${status_code}  ${response_content}   Query events
     should be equal as integers  ${status_code}  200
     ${events_length}=   GET LENGTH  ${response_content}

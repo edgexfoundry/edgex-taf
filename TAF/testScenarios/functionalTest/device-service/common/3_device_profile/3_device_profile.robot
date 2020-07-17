@@ -23,14 +23,16 @@ DeviceProfile "${device_profile_name}" should be created in Core Metadata
 
 DS should create ValueDescriptors in Core Data according to DeviceProfile "${device_profile_name}"
     @{resources}=  Retrieve all resource names for the device profile "${device_profile_name}"
-    :For    ${resource_name}   IN    @{resources}
-    \   run keyword and continue on failure  Query value descriptor for name "${resource_name}"
+    FOR    ${resource_name}   IN    @{resources}
+        run keyword and continue on failure  Query value descriptor for name "${resource_name}"
+    END
 
 Retrieve all resource names for the device profile "${device_profile_name}"
     ${device_profile_content}=  Query device profile by name    ${device_profile_name}
     ${device_profile_json}=  evaluate  json.loads('''${device_profile_content}''')  json
     ${resource_length}=  get length  ${device_profile_json}[deviceResources]
     @{resource_names}=   create list
-    :For    ${INDEX}  IN RANGE  ${resource_length}
-    \   Append To List    ${resource_names}    ${device_profile_json}[deviceResources][${INDEX}][name]
+    FOR    ${INDEX}  IN RANGE  ${resource_length}
+        Append To List    ${resource_names}    ${device_profile_json}[deviceResources][${INDEX}][name]
+    END
     [Return]   ${resource_names}

@@ -19,8 +19,9 @@ ${VALUE_DESCRIPTOR_TEST_DEVICE_1_VAL1}    test-device-1-val
 
 *** Keywords ***
 core-data has ${amount} readings with value descriptor ${valueDescriptor} and device id ${deviceId}
-    :FOR    ${INDEX}    IN RANGE  ${amount}
-    \  run keyword and continue on failure  add reading with value ${INDEX} by value descriptor ${valueDescriptor} and device id ${deviceId}
+    FOR    ${INDEX}    IN RANGE  ${amount}
+       run keyword and continue on failure  add reading with value ${INDEX} by value descriptor ${valueDescriptor} and device id "${deviceId}"
+    END
 
 Query readings by value descriptor and device id
     [Arguments]    ${valueDescriptor}   ${deviceId}
@@ -30,15 +31,17 @@ Query readings by value descriptor and device id
 Readings should order by created in descending order
     # Compare the created date to check the reading order
     ${length}=  get length  ${READINGS}
-    :FOR    ${index}   IN RANGE  0  ${length}-1
-    \  Should Be True  ${READINGS}[${index}][created] > ${READINGS}[${index+1}][created]
+    FOR    ${index}   IN RANGE  0  ${length}-1
+       Should Be True  ${READINGS}[${index}][created] > ${READINGS}[${index+1}][created]
+    END
 
 Readings should contain the value descriptor and device id
     [Arguments]    ${valueDescriptor}   ${deviceId}
         ${length}=  get length  ${READINGS}
-    :FOR    ${reading}   IN  @{READINGS}
-    \  Should contain      ${reading}[name]  ${valueDescriptor}
-    \  Should contain      ${reading}[device]  ${deviceId}
+    FOR    ${reading}   IN  @{READINGS}
+       Should contain      ${reading}[name]  ${valueDescriptor}
+       Should contain      ${reading}[device]  ${deviceId}
+    END
 
 *** Test Cases ***
 Query readings by device name and value descriptor
