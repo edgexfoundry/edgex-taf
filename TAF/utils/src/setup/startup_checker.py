@@ -9,10 +9,12 @@
     Helper functions to check value range
 """
 import http.client
+import ssl
 import time
 import subprocess
 
 from TUC.data.SettingsInfo import SettingsInfo
+from TAF.utils.src.setup import edgex
 
 services = {
         "data": {"composeName": "data",
@@ -41,27 +43,53 @@ services = {
                                     "pingUrl": "/api/v1/ping"},
         "app-service-mqtt-export": {"composeName": "app-service-mqtt-export",
                                     "port": SettingsInfo().constant.APP_SERVICE_MQTT_EXPORT_PORT,
-                                    "pingUrl": "/api/v1/ping"},
+                                    "pingUrl": "/api/v1/ping"}
     }
 
 httpConnTimeout = 5
 
 
 def check_services_startup(check_list):
+    token = security_startup_check()
     for item in check_list:
         if item in services:
             SettingsInfo().TestLog.info("Check service " + item + " is startup...")
-            check_service_startup(services[item])
+            check_service_startup(services[item], token)
 
 
-def check_service_startup(d):
+def security_startup_check():
+    if SettingsInfo().constant.SECURITY_SERVICE_NEEDED == 'true':
+        SettingsInfo().TestLog.info("Check security services ... ")
+        token = edgex.access_token("-useradd")
+    else:
+        token = ''
+    return token
+
+
+def http_client_connection(port):
+    if SettingsInfo().constant.SECURITY_SERVICE_NEEDED == 'true' and '/' in str(port):
+        kong_port = port.split('/')[0]
+        service_name = "/"+port.split('/')[1]
+        conn = http.client.HTTPSConnection(host=SettingsInfo().constant.BASE_URL, port=kong_port, timeout=httpConnTimeout,
+                                           context=ssl._create_unverified_context())
+    else:
+        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=port, timeout=httpConnTimeout)
+        service_name = ''
+
+    return [conn, service_name]
+
+
+def check_service_startup(d, token):
     recheck_times = int(SettingsInfo().constant.SERVICE_STARTUP_RECHECK_TIMES)
     wait_time = int(SettingsInfo().constant.SERVICE_STARTUP_WAIT_TIME)
     for i in range(recheck_times):
         SettingsInfo().TestLog.info(
             "Ping service with port {} and request url {} {} ... ".format(str(d["port"]),SettingsInfo().constant.BASE_URL, d["pingUrl"]))
-        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"], timeout=httpConnTimeout)
-        conn.request(method="GET", url=d["pingUrl"])
+        http_connection = http_client_connection(d["port"])
+        conn = http_connection[0]
+        service_name = http_connection[1]
+        conn.request(method="GET", url="{}{}".format(service_name, d["pingUrl"]),
+                     headers={"Authorization": "Bearer {}".format(token)})
         try:
             r1 = conn.getresponse()
         except:
@@ -81,12 +109,16 @@ def check_service_startup(d):
 def check_service_is_available(port, ping_url):
     recheck_times = int(SettingsInfo().constant.SERVICE_STARTUP_RECHECK_TIMES)
     wait_time = int(SettingsInfo().constant.SERVICE_STARTUP_WAIT_TIME)
+    token = security_startup_check()
     for i in range(recheck_times):
         SettingsInfo().TestLog.info(
             "Ping service is available with port {} and request url {} {} ... ".format(port, SettingsInfo().constant.BASE_URL, ping_url))
-        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=port, timeout=httpConnTimeout)
+        http_connection = http_client_connection(port)
+        conn = http_connection[0]
+        service_name = http_connection[1]
         try:
-            conn.request(method="GET", url=ping_url)
+            conn.request(method="GET", url="{}{}".format(service_name, ping_url),
+                         headers={"Authorization": "Bearer {}".format(token)})
             r1 = conn.getresponse()
         except:
             time.sleep(wait_time)

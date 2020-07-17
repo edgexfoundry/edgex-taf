@@ -4,8 +4,9 @@ Library   Collections
 Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
 Resource  TAF/testCaseModules/keywords/deviceServiceAPI.robot
 Resource  TAF/testCaseModules/keywords/commonKeywords.robot
-Suite Setup     Setup Suite
-
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 *** Variables ***
 ${SUITE}        Metadata Update
