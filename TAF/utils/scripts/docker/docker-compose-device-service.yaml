@@ -8,13 +8,13 @@
       - edgex-network
     environment:
       REGISTRY_HOST: edgex-core-consul
-      CLIENTS_COREDATA_HOST: edgex-core-data
+      CLIENTS_DATA_HOST: edgex-core-data
       CLIENTS_METADATA_HOST: edgex-core-metadata
       Service_Host: edgex-device-virtual
     entrypoint: ["/device-virtual"]
     command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
     volumes:
-      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
+      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:z
     depends_on:
       - consul
       - data
@@ -26,17 +26,17 @@
       - "49991:49991"
     container_name: edgex-device-modbus
     hostname: edgex-device-modbus
-    entrypoint: ["/device-modbus"]
-    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
     networks:
       - edgex-network
     environment:
       REGISTRY_HOST: edgex-core-consul
-      CLIENTS_COREDATA_HOST: edgex-core-data
+      CLIENTS_DATA_HOST: edgex-core-data
       CLIENTS_METADATA_HOST: edgex-core-metadata
       Service_Host: edgex-device-modbus
+    entrypoint: ["/device-modbus"]
+    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
     volumes:
-      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:rw,z
+      - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:z
     depends_on:
       - consul
       - data
