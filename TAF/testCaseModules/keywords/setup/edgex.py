@@ -10,7 +10,7 @@
 """
 import subprocess
 from TUC.data.SettingsInfo import SettingsInfo
-import TAF.utils.src.setup.startup_checker as checker
+import startup_checker as checker
 
 
 def deploy_edgex(*args):

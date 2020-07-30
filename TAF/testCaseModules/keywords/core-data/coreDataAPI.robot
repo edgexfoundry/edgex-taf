@@ -1,9 +1,9 @@
 *** Settings ***
 Library  RequestsLibrary
 Library  OperatingSystem
-Library  TAF.utils.src.data.value_checker
-Resource  ./coreMetadataAPI.robot
-Resource  ./commonKeywords.robot
+Library  TAF/testCaseModules/keywords/common/value_checker.py
+Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
 ${coreDataUrl}  ${URI_SCHEME}://${BASE_URL}:${CORE_DATA_PORT}

@@ -1,9 +1,9 @@
 *** Settings ***
-Resource         TAF/testCaseModules/keywords/commonKeywords.robot
-Resource         TAF/testCaseModules/keywords/coreMetadataAPI.robot
-Resource         TAF/testCaseModules/keywords/deviceServiceAPI.robot
-Resource         TAF/testCaseModules/keywords/coreDataAPI.robot
-Resource         TAF/testCaseModules/keywords/supportSchedulerAPI.robot
+Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource         TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
+Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Resource         TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Deploy device service  device-virtual

@@ -2,10 +2,10 @@
 Documentation  Device Readings - Query readings
 Library   OperatingSystem
 Library   Collections
-Library   TAF.utils.src.setup.consul
-Resource  TAF/testCaseModules/keywords/commonKeywords.robot
-Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
-Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Library   TAF/testCaseModules/keywords/common/consul.py
+Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keywords  Suite Teardown

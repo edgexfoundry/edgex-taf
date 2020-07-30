@@ -1,8 +1,7 @@
 *** Settings ***
 Documentation    Deploy EdgeX
-Library          TAF.utils.src.setup.setup_teardown
-Library          TAF.utils.src.setup.edgex
-Library          TAF.utils.src.setup.consul
+Library          TAF/testCaseModules/keywords/setup/setup_teardown.py
+Library          TAF/testCaseModules/keywords/setup/edgex.py
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 

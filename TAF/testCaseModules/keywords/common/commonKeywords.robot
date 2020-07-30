@@ -3,7 +3,7 @@ Library   OperatingSystem
 Library   Collections
 Library   String
 Library   DateTime
-Library   TAF.utils.src.setup.edgex
+Library   TAF/testCaseModules/keywords/setup/edgex.py
 
 
 *** Keywords ***

@@ -1,8 +1,7 @@
 *** Settings ***
 Library  RequestsLibrary
 Library  OperatingSystem
-Library  TAF.utils.src.data.value_checker
-Resource  ./coreMetadataAPI.robot
+Library  TAF/testCaseModules/keywords/common/value_checker.py
 
 *** Variables ***
 ${deviceServiceUrl}  ${URI_SCHEME}://${BASE_URL}:${SERVICE_PORT}
@@ -77,7 +76,7 @@ Invoke Delete callback for the device "${deviceId}" with action type "${action_t
     set test variable  ${response}  ${resp.status_code}
 
 Device resource should be updated to "${value}"
-    {commandName}=  get variable value  ${readingName}
+    ${commandName}=  get variable value  ${readingName}
     Invoke Get command by device id "${device_id}" and command name "${commandName}"
     should be equal  ${value}   ${deviceResourceValue}
 

@@ -1,5 +1,5 @@
 *** Settings ***
-Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Default Tags  skipped
 
 *** Variables ***

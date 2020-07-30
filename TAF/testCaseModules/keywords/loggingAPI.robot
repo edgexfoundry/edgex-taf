@@ -1,9 +1,8 @@
 *** Settings ***
 Library  RequestsLibrary
 Library  OperatingSystem
-Library  TAF.utils.src.setup.setup_teardown
+Library  TAF/testCaseModules/keywords/setup/setup_teardown.py
 Library  String
-Resource  ./commonKeywords.robot
 
 *** Variables ***
 ${loggingUrl}  ${URI_SCHEME}://${BASE_URL}:${SUPPORT_LOGGING_PORT}

@@ -2,11 +2,9 @@
 Documentation    Service Operation Test Case
 Library          RequestsLibrary
 Library	         Collections
-Library          TAF.utils.src.setup.setup_teardown
-Library          TAF.utils.src.setup.startup_checker
-Library          TAF.utils.src.setup.edgex
-Library          TAF.utils.src.setup.consul
-Resource         TAF/testCaseModules/keywords/commonKeywords.robot
+Library          TAF/testCaseModules/keywords/setup/setup_teardown.py
+Library          TAF/testCaseModules/keywords/setup/startup_checker.py
+Library          TAF/testCaseModules/keywords/setup/edgex.py
 Resource         TAF/testCaseModules/keywords/loggingAPI.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
