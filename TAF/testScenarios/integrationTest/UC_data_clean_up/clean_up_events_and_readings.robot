@@ -15,18 +15,6 @@ Suite Teardown   Run keywords   Remove services  device-virtual
 
 *** Variables ***
 ${SUITE}         Clean Up Events/Readings By Scheduler
-${interval_frequency}
-...  {
-...    "name" : "frequency_%interval_time%s", "start": "20200101T000000", "frequency": "PT%interval_time%S"
-...  }
-
-${delete_events}
-...  {
-...    "name" :"delete_events_%interval_time%s","interval":"frequency_%interval_time%s","target":"core-data",
-...    "protocol": "http", "httpMethod": "DELETE", "address": "edgex-core-data",
-...    "path":"/api/v1/event/removeold/age/0", "port": ${CORE_DATA_PORT}
-...  }
-
 
 *** Test Cases ***
 Scheduler001-Set scheduler for each 30s to clean up events
@@ -50,15 +38,23 @@ Scheduler002-Set scheduler for each 60s to clean up events
 
 *** Keywords ***
 Create Interval and set frequency to "${interval_time}"s
-    ${interval_frequency}=  replace string  ${interval_frequency}  %interval_time%  ${interval_time}
+    ${interval_frequency}=  Load data file "support-scheduler/interval.json" and get variable "interval_frequency"
+    ${interval_frequency_str}=  convert to string  ${interval_frequency}
+    ${interval_delete_replace_qoute}=  replace string    ${interval_frequency_str}   '   \"
+    ${interval_frequency}=  replace string  ${interval_delete_replace_qoute}  %interval_time%  ${interval_time}
     Create interval  ${interval_frequency}
     Should return status code "200"
 
 Create interval action with interval "${interval_time}"s delete events for core-data
-    ${delete_events}=  replace string  ${delete_events}  %interval_time%  ${interval_time}
+    ${interval_delete_events}=  Load data file "support-scheduler/interval_action.json" and get variable "interval_delete_events"
+    ${interval_delete_events_str}=  convert to string  ${interval_delete_events}
+    ${interval_delete_replace_qoute}=  replace string    ${interval_delete_events_str}   '   \"
+    ${delete_events_replace_interval_time}=  replace string  ${interval_delete_replace_qoute}  %interval_time%  ${interval_time}
+    ${data_port}=  convert to string  ${CORE_DATA_PORT}
+    ${delete_events}=  replace string  ${delete_events_replace_interval_time}  "%CORE_DATA_PORT%"  ${data_port}
     log to console  1++++:${delete_events}
     ${delete_events}=  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'
-    ...                                replace string  ${delete_events}  ${CORE_DATA_PORT}  48080
+    ...                                replace string  ${delete_events}  "%CORE_DATA_PORT%"  48080
     ...                                ELSE  Set Variable  ${delete_events}
     log to console  2++++:${delete_events}
     Create intervalAction  ${delete_events}

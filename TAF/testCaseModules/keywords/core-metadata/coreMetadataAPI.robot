@@ -70,8 +70,12 @@ Delete device profile by name ${device_profile_name}
 Create device
     [Arguments]  ${device_file}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/${device_file}  encoding=UTF-8
-    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${SERVICE_NAME}
+    ${deviceServiceProtocol}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
+    ${protocol_str}=  convert to string  ${deviceServiceProtocol}
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/${device_file}  encoding=UTF-8
+    ${newdata_protocol}=  replace string    ${data}   %DeviceServiceProtocal%   ${protocol_str}
+    ${newdata_protocol}=  replace string    ${newdata_protocol}   '   \"
+    ${newdata}=  replace string  ${newdata_protocol}   %DeviceServiceName%    ${SERVICE_NAME}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
@@ -89,8 +93,12 @@ Create device with ${entity}
 Creat device with autoEvents parameter
     [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${data}=  Get File  ${WORK_DIR}/TAF/config/${PROFILE}/create_autoevent_device.json  encoding=UTF-8
-    ${newdata}=  replace string  ${data}   %DeviceServiceName%    ${SERVICE_NAME}
+    ${deviceServiceProtocol}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
+    ${protocol_str}=  convert to string  ${deviceServiceProtocol}
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/create_autoevent_device.json  encoding=UTF-8
+    ${newdata_protocol}=  replace string    ${data}   %DeviceServiceProtocal%   ${protocol_str}
+    ${newdata_protocol}=  replace string    ${newdata_protocol}   '   \"
+    ${newdata}=  replace string  ${newdata_protocol}   %DeviceServiceName%    ${SERVICE_NAME}
     ${newdata}=  replace string  ${newdata}   %frequency%    ${frequency_time}
     ${newdata}=  replace string  ${newdata}   %onChangeValue%   ${onChange_value}
     ${newdata}=  replace string  ${newdata}   %ReadingName%    ${reading_name}

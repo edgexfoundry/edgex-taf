@@ -1,0 +1,15 @@
+{
+    "edgex-device-modbus": {
+        "modbus-tcp": {
+            "Address": "edgex-modbus-simulator",
+            "Port": "1502",
+            "UnitID": "1"
+        }
+    },
+    "device-virtual": {
+        "other": {
+            "Address": "simple01",
+            "Port": "300"
+        }
+    }
+}
