@@ -1,12 +1,12 @@
 *** Settings ***
 Library          BuiltIn
 Library          Process
-Library          TAF.utils.src.setup.setup_teardown
-Library          TAF.utils.src.setup.edgex
-Resource         TAF/testCaseModules/keywords/commonKeywords.robot
-Resource         TAF/testCaseModules/keywords/coreMetadataAPI.robot
-Resource         TAF/testCaseModules/keywords/coreDataAPI.robot
-Resource         TAF/testCaseModules/keywords/deviceServiceAPI.robot
+Library          TAF/testCaseModules/keywords/setup/setup_teardown.py
+Library          TAF/testCaseModules/keywords/setup/edgex.py
+Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource         TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Deploy device service  device-virtual

@@ -16,7 +16,7 @@
 
 import sys
 import logging
-import TAF.utils.src.setup.tc_utils as utils
+import tc_utils as utils
 from TUC.data.SettingsInfo import SettingsInfo
 from TUC.report.ColorLog import ColorLog
 

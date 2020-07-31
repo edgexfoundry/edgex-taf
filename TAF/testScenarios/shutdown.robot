@@ -1,8 +1,8 @@
 *** Settings ***
 Documentation    Shutdown EdgeX
-Library          TAF.utils.src.setup.setup_teardown
-Library          TAF.utils.src.setup.edgex
-Resource         TAF/testCaseModules/keywords/coreMetadataAPI.robot
+Library          TAF/testCaseModules/keywords/setup/setup_teardown.py
+Library          TAF/testCaseModules/keywords/setup/edgex.py
+Resource         TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
 

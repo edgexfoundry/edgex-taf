@@ -1,9 +1,9 @@
 *** Settings ***
 Documentation  Device Readings - Actuation commands
 Library   Collections
-Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
-Resource  TAF/testCaseModules/keywords/deviceServiceAPI.robot
-Resource  TAF/testCaseModules/keywords/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
+Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token

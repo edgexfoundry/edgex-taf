@@ -14,7 +14,7 @@ import time
 import subprocess
 
 from TUC.data.SettingsInfo import SettingsInfo
-from TAF.utils.src.setup import edgex
+import edgex
 
 services = {
         "data": {"composeName": "data",

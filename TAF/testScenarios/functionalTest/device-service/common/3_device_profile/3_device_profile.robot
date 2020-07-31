@@ -1,7 +1,7 @@
 *** Settings ***
-Resource  TAF/testCaseModules/keywords/coreMetadataAPI.robot
-Resource  TAF/testCaseModules/keywords/coreDataAPI.robot
-Resource  TAF/testCaseModules/keywords/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Resource  TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
