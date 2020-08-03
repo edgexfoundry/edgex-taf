@@ -1,16 +1,10 @@
 {
    "origin":1471806386919,
-   "name" :"Test-Device",
-   "description":"Test-Device",
+   "name" :"AutoEvent-Device",
+   "description":"AutoEvent-Device",
    "adminState":"UNLOCKED",
    "operatingState":"ENABLED",
-   "protocols":{
-      "modbus-tcp":{
-         "Address"  : "edgex-modbus-simulator",
-         "Port" : "1502",
-         "UnitID": "1"
-      }
-   },
+   "protocols": %DeviceServiceProtocal%,
    "labels":[
       "device-example"
    ],
@@ -21,5 +15,13 @@
    },
    "profile":{
       "name":"Sample-Profile"
-   }
+   },
+   "autoEvents":[
+      {
+         "frequency":"%frequency%s",
+         "onChange":%onChangeValue%,
+         "resource":"%ReadingName%"
+      }
+   ]
+   
 }

@@ -120,4 +120,8 @@ Remove Token
     Set Global Variable  ${jwt_token}  ${EMPTY}
     Should Be Empty  ${jwt_token}
 
+Load data file "${json_file}" and get variable "${use_variable}"
+    ${json_data}=  Get File  ${WORK_DIR}/TAF/testData/${json_file}  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads('''${json_data}''')  json
+    [Return]    ${json_string}[${use_variable}]
 

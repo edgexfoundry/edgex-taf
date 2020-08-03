@@ -68,20 +68,12 @@ Copy the default folder and rename to device-virtual::
         ├── default
         │   ├── configuration.py
         │   ├── configuration.toml
-        │   ├── create_autoevent_device.json
-        │   ├── create_device.json
-        │   ├── create_disabled_device.json
-        │   ├── create_locked_device.json
         │   ├── docker
         │   │   └── configuration.toml
         │   └── sample_profile.yaml
         └── device-virtual
             ├── configuration.py
             ├── configuration.toml
-            ├── create_autoevent_device.json
-            ├── create_device.json
-            ├── create_disabled_device.json
-            ├── create_locked_device.json
             ├── docker
             │   └── configuration.toml
             └── sample_profile.yaml
@@ -125,24 +117,22 @@ Remove string data type because device-virtual only support boolean, float and i
             ...
         ]
 
-Modify the protocol properties of xxx_device.json, the property key and value are base on the DS implementation::
-
-    TAF/config/device-virtual
-    ├── create_autoevent_device.json
-    ├── create_device.json
-    ├── create_disabled_device.json
-    └── create_locked_device.json
-
+Add the protocol properties with name same as ${SERVICE_NAME} on TAF/testData/core-metadata/device_protocol.json, the property key and value are base on the DS implementation::
 
     {
-       ...
-       "protocols":{
-          "other":{
-             "Address"  : "simple01",
-              "Port" : "300"
-          }
-       },
-      ...
+        "edgex-devic-modbus": {
+            "modbus-tcp": {
+                "Address": "edgex-modbus-simulator",
+                "Port": "1502",
+                "UnitID": "1"
+            }
+        },
+        "device-virtual": {
+            "other": {
+                "Address": "simple01",
+                "Port": "300"
+            }
+        }
     }
 
 4. Add the DS to the docker-compose File
@@ -294,14 +284,13 @@ The usage for robot file is illustrated below::
     Documentation    Deploy EdgeX
     Library          TAF/testCaseModules/keywords/setup/setup_teardown.py
     Library          TAF/testCaseModules/keywords/setup/edgex.py
-    Library          TAF/testCaseModules/keywords/setup/consul.py
 
 The usage for python script is illustrated below::
 
-    TAF/utils/src/setup/edgex.py
+    TAF/testCaseModules/keywords/setup/edgex.py
 
     from TUC.data.SettingsInfo import SettingsInfo
-    import TAF.utils.src.setup.startup_checker as checker
+    import startup_checker as checker
 
 
 Using the EdgeX-taf-common docker Container

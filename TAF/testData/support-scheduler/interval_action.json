@@ -1,0 +1,12 @@
+{
+    "interval_delete_events": {
+        "name" :"delete_events_%interval_time%s",
+        "interval":"frequency_%interval_time%s",
+        "target":"core-data",
+        "protocol": "http",
+        "httpMethod": "DELETE",
+        "address": "edgex-core-data",
+        "path":"/api/v1/event/removeold/age/0",
+        "port": "%CORE_DATA_PORT%"
+    }
+}

@@ -4,12 +4,7 @@
    "description":"Adminstate parameter of device set to locked",
    "adminState":"LOCKED",
    "operatingState":"ENABLED",
-   "protocols":{
-      "other":{
-         "Address"  : "simple01",
-          "Port" : "300"
-      }
-   },
+   "protocols": %DeviceServiceProtocal%,
    "labels":[
       "device-example"
    ],
