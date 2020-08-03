@@ -65,6 +65,7 @@ Copy the default folder and rename to device-virtual::
 
         TAF/config
         ├── README.md
+        ├── global_variables.py
         ├── default
         │   ├── configuration.py
         │   ├── configuration.toml
@@ -169,40 +170,40 @@ In this document, we deploy all services using docker, so we must add the docker
 
 5. Run testing
 ---------------
-Navigate to the edgex-taf root path and Run the tests using the following commands::
+Navigate to the edgex-taf root path and Run the tests using the following commands
 
 1.Prepare test environment::
 
         # Fetch the latest docker-compose file
-        cd path/to/edgex-taf/TAF/utils/scripts/docker/
-        ./get-compose-file.sh
+        cd TAF/utils/scripts/docker
+        sh get-compose-file.sh ${USE_DB} ${ARCH} ${USE_SECURITY}
 
         # export the environment variable which depend on your machine
-        cd path/to/edgex-taf
-        export ARCH=x86_64
-        export COMPOSE_IMAGE=docker/compose:1.24.0
+        ${USE_DB}: -redis | -mongo (mongo is not supported from hanoi release)
+        ${ARCH}: x86_64 | arm64
+        ${USE_SECURITY}: - (false) | -security- (true)
 
 2.Deploy edgex::
 
-        python3 -m TUC -p device-virtual -t functionalTest/deploy-edgex.robot
+        python3 -m TUC --exclude Skipped --include deploy-base-service -u deploy.robot -p default
 
-3.Deploy DS::
+3.Deploy Device Service::
 
-        python3 -m TUC -p device-virtual -t functionalTest/device-service/deploy_device_service.robot
+        python3 -m TUC --exclude Skipped --include deploy-device-service -u deploy.robot -p device-virtual
 
-4.Run DS testing::
+4.Run testing::
 
-        python3 -m TUC -p device-virtual -u functionalTest/device-service/common
+        python3 -m TUC --exclude Skipped -u functionalTest/device-service/common -p device-virtual
 
 5. Open the Test Reports
 
-Open the test reports in the browser. For example, to open the virtual DS testing report, enter the following URL in the browser::
+Open the test reports in the browser. For example, to open the testing report, enter the following URL in the browser::
 
-    path/to/edgex-taf/TAF/testArtifacts/reports/edgex/report.html
+    path/to/edgex-taf/TAF/testArtifacts/reports/edgex/log.html
 
 6.Shutdown edgex::
 
-    python3 -m TUC -p device-virtual -t functionalTest/shutdown.robot
+    python3 -m TUC --exclude Skipped --include shutdown-edgex -u shutdown.robot -p default
 
 Add New Testing
 ===============
@@ -259,17 +260,26 @@ How to use the configuration in the testing script
 
 Define constant in the configuration.py::
 
+    #global_variables.py
+        # EdgeX host
+        BASE_URL = "localhost"
+
     # configuration.py
-    BASE_URL = "localhost"
+        # Service for testing
+        SERVICE_NAME = "device-virtual"
+        SERVICE_PORT = 49990
 
 Pass the constant to the robot file or python code::
 
     # coreCommandAPI.robot
-    *** Variables ***
-    ${coreCommandUrl}  http://${BASE_URL}:${CORE_COMMAND_PORT}
+        *** Variables ***
+        ${coreCommandUrl}  http://${BASE_URL}:${CORE_COMMAND_PORT}
 
     # startup_checker.py
-    conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"], timeout=httpConnTimeout)
+        conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=d["port"], timeout=httpConnTimeout)
+
+You can reference the following URL for more details on variables usage
+https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#variable-priorities-and-scopes
 
 Python System Path Setup
 ========================
@@ -296,45 +306,93 @@ The usage for python script is illustrated below::
 Using the EdgeX-taf-common docker Container
 ===========================================
 
-Run DS testing as follows
+Used variable value::
 
-1.Deploy edgex::
+    ${USE_DB}: -redis | -mongo (mongo is not supported from hanoi release)
+    ${ARCH}: x86_64 | arm64
+    ${USE_SECURITY}: - (false) | -security- (true)
+    ${COMPOSE_IMAGE}: nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose:latest
+    ${SECURITY_SERVICE_NEEDED}: false | true
+    ${profile}: device-virtual | device-modbus
+
+Preparation::
+
+    1. Get compose file from developer-script repo:
+
+        cd TAF/utils/scripts/docker
+        sh get-compose-file.sh ${USE_DB} ${ARCH} ${USE_SECURITY}
+
+    2. Deploy edgex:
+
+        docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
+            -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e USE_DB=${USE_DB} \
+            -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            docker-edgex-taf-common --exclude Skipped \
+            --include deploy-base-service -u deploy.robot -p default
+
+Functional Test::
+
+    1.Deploy Device Service:
+
+        docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
+            -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+            -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            docker-edgex-taf-common --exclude Skipped \
+            --include deploy-device-service -u deploy.robot -p ${profile}
+
+    2.Run testing:
+
+        docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
+            -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+            -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            docker-edgex-taf-common --exclude Skipped \
+            -u functionalTest/device-service/common -p ${profile}
+
+Integration Test::
+
+    Run testing:
 
     docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
+        -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+        -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        docker-edgex-taf-common \
-        -p device-virtual -t functionalTest/deploy-edgex.robot
+        docker-edgex-taf-common --exclude Skipped \
+        -u integrationTest -p device-virtual
 
-2.Deploy DS::
+Open the Test Reports::
+
+    Open the test reports in the browser. For example, to open the testing report, enter the following URL in the browser:
+    TAF/testArtifacts/reports/edgex/log.html
+
+Shutdown::
 
     docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
+        -e COMPOSE_IMAGE=${COMPOSE_IMAGE} \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        docker-edgex-taf-common \
-        -p device-virtual -t functionalTest/device-service/deploy_device_service.robot
-
-3.Run DS testing::
-
-    docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        docker-edgex-taf-common \
-        -p device-virtual -u functionalTest/device-service/common
-
-4.Shutdown edgex::
-
-    docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        docker-edgex-taf-common \
-        -p device-virtual -t functionalTest/shutdown.robot
+        docker-edgex-taf-common --exclude Skipped \
+        --include shutdown-edgex -u shutdown.robot -p default
 
 
-Run CoreData Testing
-====================
+Test Report Example
+===================
 
-1.Deploy edgex::
+Suite level example:
 
-        python3 -m TUC -p core-data -t functionalTest/deploy-edgex.robot
+.. image:: images/test_report_suite.png
+    :scale: 5%
+    :alt: Suite Level
 
-2.Run testing::
+Test case level example:
 
-        python3 -m TUC -p core-data -u functionalTest/core-data
+.. image:: images/test_report_testcase.png
+    :scale: 5%
+    :alt: TestCase Level
 
+Keyword level example:
+
+.. image:: images/test_report_keyword.png
+    :scale: 5%
+    :alt: Keyword Level
