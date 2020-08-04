@@ -314,9 +314,7 @@ https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#va
 
 We use the project root path as the system path. The python module names are **TAF**.
 
-The usage for robot file is illustrated below:
-
-`TAF/testScenarios/functionalTest/deploy-edgex.robot`
+The usage for robot file is:  `TAF/testScenarios/functionalTest/deploy-edgex.robot`
 
 |**Settings**||
 |---|---|
