@@ -316,7 +316,7 @@ We use the project root path as the system path. The python module names are **T
 
 The usage for robot file is illustrated below:
 
-    `TAF/testScenarios/functionalTest/deploy-edgex.robot`
+`TAF/testScenarios/functionalTest/deploy-edgex.robot`
 
 |**Settings**||
 |---|---|
