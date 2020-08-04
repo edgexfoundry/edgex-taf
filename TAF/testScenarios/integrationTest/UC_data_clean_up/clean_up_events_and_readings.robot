@@ -50,13 +50,7 @@ Create interval action with interval "${interval_time}"s delete events for core-
     ${interval_delete_events_str}=  convert to string  ${interval_delete_events}
     ${interval_delete_replace_qoute}=  replace string    ${interval_delete_events_str}   '   \"
     ${delete_events_replace_interval_time}=  replace string  ${interval_delete_replace_qoute}  %interval_time%  ${interval_time}
-    ${data_port}=  convert to string  ${CORE_DATA_PORT}
-    ${delete_events}=  replace string  ${delete_events_replace_interval_time}  "%CORE_DATA_PORT%"  ${data_port}
-    log to console  1++++:${delete_events}
-    ${delete_events}=  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'
-    ...                                replace string  ${delete_events}  "%CORE_DATA_PORT%"  48080
-    ...                                ELSE  Set Variable  ${delete_events}
-    log to console  2++++:${delete_events}
+    ${delete_events}=  replace string  ${delete_events_replace_interval_time}  "%CORE_DATA_PORT%"  48080
     Create intervalAction  ${delete_events}
     Should return status code "200"
 
