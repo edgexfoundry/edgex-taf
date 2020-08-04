@@ -7,20 +7,20 @@ USE_SECURITY=${3:--}
 USE_RELEASE=${4:-nightly-build}
 
 # # x86_64 or arm64
-[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64" && ARM64_OPTION="arm64"
+[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
 
 # # security or no security
-[ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty" && NO_SECTY_OPTION="no-secty"
+[ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
 # # nightly or other release
 mkdir temp
 if [ "$USE_RELEASE" = "nightly-build" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
-  ./sync-nightly-build.sh no-ds ${ARM64_OPTION} ${NO_SECTY_OPTION}
+  ./sync-nightly-build.sh ${USE_ARM64} ${USE_NO_SECURITY}
 
   # Need to remove the existing device services so the added ones below don't conflict
-  sed '/  device-rest:/,/- 127.0.0.1:49990:49990\/tcp/d' docker-compose.yml > temp/docker-compose-temp.yaml
+  sed '/  device-rest:/,/- 127.0.0.1:49990:49990\/tcp/d' docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml > temp/docker-compose-temp.yaml
 
   # Insert device services into the compose file
   sed -e '/app-service-rules:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
