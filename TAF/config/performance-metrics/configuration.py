@@ -56,3 +56,11 @@ GET_CPU_MEM_LOOP_TIME = 10
 # Interval time for retrieving CPU and Memory (in seconds)
 GET_CPU_MEM_INTERVAL = 7
 
+
+# Suite: 4_ping_response_time
+# Loop time for sending ping request
+PING_RES_LOOP_TIME = 100
+
+# Ping response time threshold value (in milliseconds)
+PING_RES_THRESHOLD = 100
+
