@@ -1,3 +1,14 @@
+"""
+ @copyright Copyright (C) 2020 IOTech Ltd
+
+ @license SPDX-License-Identifier: Apache-2.0
+
+ @file value_checker.py
+
+ @description
+    data validation
+"""
+
 from TUC.data.SettingsInfo import SettingsInfo
 import numpy as np
 import struct

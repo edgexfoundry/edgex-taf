@@ -29,3 +29,17 @@ REDIS_BINARY = 0
 # Footprint threshold vlue
 # ex. 1.2 = prior release + 20%
 FOOTPRINT_THRESHOLD = 1.2
+
+
+# Suite: 3_resource_usage_with_autoevent
+# CPU threshold value (percentage)
+CPU_USAGE_THRESHOLD = 50
+
+# Memory threshold value (in MB)
+MEM_USAGE_THRESHOLD = 300
+
+# Loop time for retrieving CPU and Memory
+GET_CPU_MEM_LOOP_TIME = 10
+
+# Period time for retrieving CPU and Memory (in seconds)
+GET_CPU_MEM_PERIOD = 7

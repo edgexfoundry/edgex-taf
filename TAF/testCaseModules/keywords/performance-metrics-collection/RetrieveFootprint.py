@@ -1,3 +1,14 @@
+"""
+ @copyright Copyright (C) 2020 IOTech Ltd
+
+ @license SPDX-License-Identifier: Apache-2.0
+
+ @file RetrieveFootprint.py
+
+ @description
+
+"""
+
 import traceback
 import docker
 from robot.api import logger
@@ -52,7 +63,7 @@ prior_rel_binary_footprint = {
 }
 
 
-class ResourceUsage(object):
+class RetrieveFootprint(object):
 
     def __init__(self):
         self._result = ""
