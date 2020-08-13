@@ -4,6 +4,7 @@ Library   Collections
 Library   String
 Library   DateTime
 Library   TAF/testCaseModules/keywords/setup/edgex.py
+Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
 
 *** Keywords ***
