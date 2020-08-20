@@ -1,0 +1,519 @@
+name: "test-device-profile"
+manufacturer: "testing"
+model: "testing"
+labels:
+- "modbus"
+- "scalability test"
+description: "Mock Modbus device for scalability test."
+
+deviceResources:
+-
+  name: "int16-1"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "1" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-2"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "2" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-3"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "3" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-4"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "4" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-5"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "5" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-6"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "6" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-7"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "7" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-8"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "8" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-9"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "9" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-10"
+  description: "test int value"
+  attributes:
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: "10" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+    
+-
+  name: "int16-11"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "11" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-12"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "12" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-13"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "13" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-14"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "14" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-15"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "15" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-16"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "16" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-17"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "17" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-18"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "18" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-19"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "19" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}
+-
+  name: "int16-20"
+  description: "test int value"
+  attributes:
+    { primaryTable: "INPUT_REGISTERS", startingAddress: "20" }
+  properties:
+    value:
+      { type: "INT16", readWrite: "RW" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Integer value"}  
+    
+    
+-
+  name: "bool-1"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "1" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+
+-
+  name: "bool-2"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "2" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+
+-
+  name: "bool-3"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "3" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-4"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "4" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-5"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "5" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-6"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "6" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-7"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "7" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-8"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "8" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-9"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "9" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-10"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "COILS", startingAddress: "10" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+
+
+-
+  name: "bool-11"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "11" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-12"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "12" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-13"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "13" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-14"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "14" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+
+-
+  name: "bool-15"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "15" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-16"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "16" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-17"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "17" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-18"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "18" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-19"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "19" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+-
+  name: "bool-20"
+  description: "test bool value"
+  attributes:
+    { primaryTable: "DISCRETES_INPUT", startingAddress: "20" }
+  properties:
+    value:
+      { type: "BOOL", readWrite: "RW", scale: "1", minimum: "0", maximum: "1", defaultValue: "0"}
+    units:
+      { type: "String", readWrite: "R", defaultValue: "Boolean value"}
+
+deviceCommands:
+-
+  name: "integerA"
+  get:
+    - { index: "1", operation: "get", deviceResource: "int16-1"}
+    - { index: "2", operation: "get", deviceResource: "int16-2"}
+    - { index: "3", operation: "get", deviceResource: "int16-3"}
+    - { index: "4", operation: "get", deviceResource: "int16-4"}
+    - { index: "5", operation: "get", deviceResource: "int16-5"}
+    - { index: "6", operation: "get", deviceResource: "int16-6"}
+    - { index: "7", operation: "get", deviceResource: "int16-7"}
+    - { index: "8", operation: "get", deviceResource: "int16-8"}
+    - { index: "9", operation: "get", deviceResource: "int16-9"}
+    - { index: "10", operation: "get", deviceResource: "int16-10"}
+-
+  name: "integerB"
+  get:
+    - { index: "1", operation: "get", deviceResource: "int16-11"}
+    - { index: "2", operation: "get", deviceResource: "int16-12"}
+    - { index: "3", operation: "get", deviceResource: "int16-13"}
+    - { index: "4", operation: "get", deviceResource: "int16-14"}
+    - { index: "5", operation: "get", deviceResource: "int16-15"}
+    - { index: "6", operation: "get", deviceResource: "int16-16"}
+    - { index: "7", operation: "get", deviceResource: "int16-17"}
+    - { index: "8", operation: "get", deviceResource: "int16-18"}
+    - { index: "9", operation: "get", deviceResource: "int16-19"}
+    - { index: "10", operation: "get", deviceResource: "int16-20"}
+
+-
+  name: "booleanA"
+  get:
+    - { index: "1", operation: "get", deviceResource: "bool-1"}
+    - { index: "2", operation: "get", deviceResource: "bool-2"}
+    - { index: "3", operation: "get", deviceResource: "bool-3"}
+    - { index: "4", operation: "get", deviceResource: "bool-4"}
+    - { index: "5", operation: "get", deviceResource: "bool-5"}
+    - { index: "6", operation: "get", deviceResource: "bool-6"}
+    - { index: "7", operation: "get", deviceResource: "bool-7"}
+    - { index: "8", operation: "get", deviceResource: "bool-8"}
+    - { index: "9", operation: "get", deviceResource: "bool-9"}
+    - { index: "10", operation: "get", deviceResource: "bool-10"}
+-
+  name: "booleanB"
+  get:
+    - { index: "1", operation: "get", deviceResource: "bool-11"}
+    - { index: "2", operation: "get", deviceResource: "bool-12"}
+    - { index: "3", operation: "get", deviceResource: "bool-13"}
+    - { index: "4", operation: "get", deviceResource: "bool-14"}
+    - { index: "5", operation: "get", deviceResource: "bool-15"}
+    - { index: "6", operation: "get", deviceResource: "bool-16"}
+    - { index: "7", operation: "get", deviceResource: "bool-17"}
+    - { index: "8", operation: "get", deviceResource: "bool-18"}
+    - { index: "9", operation: "get", deviceResource: "bool-19"}
+    - { index: "10", operation: "get", deviceResource: "bool-20"}
+
+coreCommands:
+-
+  name: "integerA"
+  get:
+    path: "/api/v1/device/{deviceId}/integerA"
+    responses:
+    - code: "200"
+      description: "Get the integerA"
+      expectedValues: ["int16-1","int16-2","int16-3","int16-4","int16-5","int16-6","int16-7","int16-8","int16-9","int16-10"]
+    - code: "500"
+      description: "internal server error"
+      expectedValues: []
+-
+  name: "integerB"
+  get:
+    path: "/api/v1/device/{deviceId}/integerB"
+    responses:
+    - code: "200"
+      description: "Get the integerB"
+      expectedValues: ["int16-11","int16-12","int16-13","int16-14","int16-15","int16-16","int16-17","int16-18","int16-19","int16-20"]
+    - code: "500"
+      description: "internal server error"
+      expectedValues: []
+
+-
+  name: "booleanA"
+  get:
+    path: "/api/v1/device/{deviceId}/booleanA"
+    responses:
+    - code: "200"
+      description: "Get the booleanA"
+      expectedValues: ["bool-1","bool-2","bool-3","bool-4","bool-5","bool-6","bool-7","bool-8","bool-9","bool-10"]
+    - code: "500"
+      description: "internal server error"
+      expectedValues: []
+-
+  name: "booleanB"
+  get:
+    path: "/api/v1/device/{deviceId}/booleanB"
+    responses:
+    - code: "200"
+      description: "Get the booleanB"
+      expectedValues: ["bool-11","bool-12","bool-13","bool-14","bool-15","bool-16","bool-17","bool-18","bool-19","bool-20"]
+    - code: "500"
+      description: "internal server error"
+      expectedValues: []

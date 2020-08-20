@@ -5,3 +5,5 @@ configparser
 requests
 robotframework-requests
 RESTinstance
+PyYAML
+psutil

@@ -117,3 +117,31 @@
       - data
     networks:
       - edgex-network
+
+  scalability-test-mqtt-export:
+    image: ${appService}
+    ports:
+      - "48098:48098"
+    container_name: scalability-test-mqtt-export
+    hostname: scalability-test-mqtt-export
+    environment:
+      edgex_profile: mqtt-export
+      Service_Host: app-service-mqtt-export
+      Clients_CoreData_Host: edgex-core-data
+      Clients_Logging_Host: edgex-support-logging
+      Registry_Host: edgex-core-consul
+      Service_Port: 48098
+      MessageBus_SubscribeHost_Host: edgex-core-data
+      Database_Host: edgex-mongo
+      Database_Username: appservice
+      Database_Password: password
+      EDGEX_SECURITY_SECRET_STORE: "false"
+      Writable_Pipeline_ExecutionOrder: "TransformToJSON, MQTTSecretSend"
+      Writable_Pipeline_Functions_MQTTSecretSend_Parameters_brokeraddress: tcp://${MQTT_BROKER_IP}:1883
+      Writable_Pipeline_Functions_MQTTSecretSend_Parameters_topic: edgex-events
+      Writable_LogLevel: DEBUG
+    depends_on:
+      - consul
+      - data
+    networks:
+      - edgex-network

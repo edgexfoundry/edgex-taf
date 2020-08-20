@@ -16,7 +16,8 @@
 
 import sys
 import logging
-import tc_utils as utils
+
+from TAF.testCaseModules.keywords.setup import tc_utils
 from TUC.data.SettingsInfo import SettingsInfo
 from TUC.report.ColorLog import ColorLog
 
@@ -55,7 +56,7 @@ def suite_setup(suite_name, logfile, loglevel="DEBUG"):
     test_log = ColorLog(filename=logfile, lvl=loglevel, logName=suite_name, useBackGroundLogger=False)
 
     loglvl = logging.getLogger().getEffectiveLevel()
-    utils.print_log_header(test_log)
+    tc_utils.print_log_header(test_log)
     test_log.info('{} Logging started, level: {}'.format(tc_name, logging.getLevelName(loglvl)))
     test_log.info('{} python version: {}'.format(tc_name, sys.version))
     test_log.info('{} testcases version: {}'.format(tc_name, __VERSION__))
@@ -75,7 +76,7 @@ def suite_teardown():
     testLog = SettingsInfo().TestLog
     testLog.info("Suite teardown")
 
-    utils.print_log_footer(testLog)
+    tc_utils.print_log_footer(testLog)
     testLog.close()
 
     return True
