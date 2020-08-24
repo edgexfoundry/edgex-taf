@@ -262,7 +262,7 @@ def show_the_cpu_aggregation_table_in_html(results):
                 Average
             </th>
         </tr>
-    """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIME,
+    """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIMES,
                SettingsInfo().profile_constant.GET_CPU_MEM_INTERVAL,
                SettingsInfo().profile_constant.CPU_USAGE_THRESHOLD)
 
@@ -309,7 +309,7 @@ def show_the_mem_aggregation_table_in_html(results):
                     Average
                 </th>
             </tr>
-        """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIME,
+        """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIMES,
                    SettingsInfo().profile_constant.GET_CPU_MEM_INTERVAL,
                    SettingsInfo().profile_constant.MEM_USAGE_THRESHOLD)
 

@@ -186,7 +186,7 @@ def show_avg_max_min_in_html(title, aggregation_list):
                 </th>
             </tr>
         """.format(title, SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD,
-                   SettingsInfo().profile_constant.STARTUP_TIME_LOOP_TIME)
+                   SettingsInfo().profile_constant.STARTUP_TIME_LOOP_TIMES)
 
     keys = []
     for item in aggregation_list:
@@ -202,17 +202,17 @@ def show_avg_max_min_in_html(title, aggregation_list):
             <tr style="border: 1px solid black;">
                 <td style="border: 1px solid black;">
                     {}
-                </td>
-                <td style="border: 1px solid black;">
-                    {} seconds
-                </td>
-                <td style="border: 1px solid black;">
-                    {} seconds
-                </td>
-                <td style="border: 1px solid black;">
-                    {} seconds
-                </td>
-                <td style="border: 1px solid black;">
+                </td>""".format(service)
+        if service == "Total startup time":
+            html = html + """<td style="border: 1px solid black;"> </td>"""
+            html = html + """<td style="border: 1px solid black;"> </td>"""
+            html = html + """<td style="border: 1px solid black;"> </td>"""
+        else:
+            html = html + """<td style="border: 1px solid black;">{} seconds""".format(binary["max"])
+            html = html + """<td style="border: 1px solid black;">{} seconds""".format(binary["min"])
+            html = html + """<td style="border: 1px solid black;">{} seconds""".format(binary["avg"])
+
+        html = html + """<td style="border: 1px solid black;">
                     {} seconds
                 </td>
                 <td style="border: 1px solid black;">
@@ -222,8 +222,7 @@ def show_avg_max_min_in_html(title, aggregation_list):
                     {} seconds
                 </td>
             </tr>
-        """.format(service, binary["max"], binary["min"], binary["avg"], container["max"], container["min"],
-                   container["avg"])
+        """.format(container["max"], container["min"], container["avg"])
         i = i+1
     html = html + "</table>"
     logger.info(html, html=True)

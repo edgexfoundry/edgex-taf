@@ -173,6 +173,7 @@ def show_the_summary_table_in_html(usages):
     html = """ 
     <h3 style="margin:0px">Image / Executable Footprint:</h3>
     <h4 style="margin:0px;color:blue">Threshold Setting: Geneva value * {} </h4>
+    <div style="margin:0px">We don't retrieve the executable footprint of the third party services, so the tabale show 0.00 MB here</div>
     <table style="border: 1px solid black;white-space: initial;"> 
         <tr style="border: 1px solid black;">
             <th style="border: 1px solid black;">

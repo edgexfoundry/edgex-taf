@@ -40,7 +40,7 @@ RETRY_TIMES = 5
 STARTUP_TIME_THRESHOLD = 300
 
 # Loop time for retrieving services startup time
-STARTUP_TIME_LOOP_TIME = 5
+STARTUP_TIME_LOOP_TIMES = 5
 
 
 # Suite: 3_resource_usage_with_autoevent
@@ -51,7 +51,7 @@ CPU_USAGE_THRESHOLD = 50
 MEM_USAGE_THRESHOLD = 300
 
 # Loop time for retrieving CPU and Memory
-GET_CPU_MEM_LOOP_TIME = 10
+GET_CPU_MEM_LOOP_TIMES = 10
 
 # Interval time for retrieving CPU and Memory (in seconds)
 GET_CPU_MEM_INTERVAL = 7
@@ -59,8 +59,15 @@ GET_CPU_MEM_INTERVAL = 7
 
 # Suite: 4_ping_response_time
 # Loop time for sending ping request
-PING_RES_LOOP_TIME = 100
+PING_RES_LOOP_TIMES = 100
 
 # Ping response time threshold value (in milliseconds)
 PING_RES_THRESHOLD = 100
 
+
+# Suite: 5_event_exported_time
+# Loop time for sending ping request
+EXPORTED_LOOP_TIMES = 10
+
+# Ping response time threshold value (in milliseconds)
+EXPORT_TIME_THRESHOLD = 1200

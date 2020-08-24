@@ -72,4 +72,3 @@ def compare_startup_time_with_threshold(list):
         if compare_value < x:
             raise Exception("Startup time is longer than {} seconds".format(SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD))
     return True
-
