@@ -1,3 +1,4 @@
+# Suite: 1_resource_usage
 # Prior release (GENEVA) image size (MB)
 CONSUL_IMAGE = 139.26
 DATA_IMAGE = 23.80
@@ -26,9 +27,20 @@ DEVICE_REST_BINARY = 14.17
 KUIPER_BINARY = 0
 REDIS_BINARY = 0
 
-# Footprint threshold vlue
+# Footprint threshold value
 # ex. 1.2 = prior release + 20%
 FOOTPRINT_THRESHOLD = 1.2
+
+# Suite: 2_service_startup_time
+# Retry setting to fetch service startup time
+WAIT_TIME = 5
+RETRY_TIMES = 5
+
+# Startup time threshold value (in seconds)
+STARTUP_TIME_THRESHOLD = 300
+
+# Loop time for retrieving services startup time
+STARTUP_TIME_LOOP_TIME = 5
 
 
 # Suite: 3_resource_usage_with_autoevent
@@ -43,3 +55,4 @@ GET_CPU_MEM_LOOP_TIME = 10
 
 # Period time for retrieving CPU and Memory (in seconds)
 GET_CPU_MEM_PERIOD = 7
+

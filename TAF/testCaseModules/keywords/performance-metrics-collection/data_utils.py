@@ -13,8 +13,8 @@
 # Get Maximum, Minimum, and Average from list
 def calculate_avg_max_min_from_list(list):
 
-    calculate_values = {"max": max(list),
-                        "min": min(list),
+    calculate_values = {"max": round(max(list), 2),
+                        "min": round(min(list), 2),
                         "avg": round(sum(list) / len(list), 2)}
 
     return calculate_values
