@@ -1,11 +1,12 @@
 *** Settings ***
 Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup      Run Keywords  Setup Suite  AND  Deploy App Service
-Suite Teardown   Run Keywords  Suite Teardown  And  Remove App Service
+Suite Teardown   Run Keywords  Suite Teardown  AND  Remove App Service
 
 *** Variables ***
 ${SUITE}          App-Service GET Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-get.log
+${edgex_profile}  blackbox-tests
 
 *** Test Cases ***
 InfoGET001 - Query ping
@@ -24,3 +25,4 @@ InfoGET003 - Query metrics
 InfoGET004 - Query config
     When Query Config
     Then Should Return Status Code "200" And Config
+
