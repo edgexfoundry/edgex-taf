@@ -35,7 +35,6 @@ class RetrieveResourceUsage(object):
     def retrieve_cpu_and_memory_usage(self):
         global resource_usage
         resource_usage = {}
-
         for k in services:
             resource_usage[k] = fetch_by_service(k)
         return resource_usage
@@ -56,10 +55,14 @@ class RetrieveResourceUsage(object):
         show_the_summary_table_in_html(results)
 
     def show_the_cpu_aggregation_table(self, results):
-        show_the_cpu_aggregation_table_in_html(results)
+        global cpu_usage
+        cpu_usage = results
+        show_the_cpu_aggregation_table_in_html(cpu_usage)
 
     def show_the_mem_aggregation_table(self, results):
-        show_the_mem_aggregation_table_in_html(results)
+        global mem_usage
+        mem_usage = results
+        show_the_mem_aggregation_table_in_html(mem_usage)
 
 
 def fetch_by_service(service):
