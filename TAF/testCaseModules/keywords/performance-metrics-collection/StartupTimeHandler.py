@@ -124,7 +124,7 @@ def show_full_startup_time_report(title, results):
         <table style="border: 1px solid black;white-space: initial;"> 
             <tr style="border: 1px solid black;">
                 <th style="border: 1px solid black;">
-                    Micro service			 	 
+                    Micro service
                 </th>
                 <th style="border: 1px solid black;">
                     Startup time(Binary)
@@ -156,7 +156,7 @@ def show_full_startup_time_report(title, results):
         logger.info(html, html=True)
 
 
-def show_avg_max_min_in_html(title, list):
+def show_avg_max_min_in_html(title, aggregation_list):
     html = """ 
         <h3 style="margin:0px">{}</h3>
         <h4 style="margin:0px;color:blue">Startup Time Threshold: {}ms / Retrieve Times: {}
@@ -164,30 +164,65 @@ def show_avg_max_min_in_html(title, list):
         <table style="border: 1px solid black;white-space: initial;"> 
             <tr style="border: 1px solid black;">
                 <th style="border: 1px solid black;">
-                    Maximum startup time			 	 
+                    Micro service		 	 
                 </th>
                 <th style="border: 1px solid black;">
-                    Minimum startup time
+                    Binary maximum time			 	 
                 </th>
                 <th style="border: 1px solid black;">
-                    Average startup time
+                    Binary minimum time
+                </th>
+                <th style="border: 1px solid black;">
+                    Binary average time
+                </th>
+                <th style="border: 1px solid black;">
+                    Container maximum time			 	 
+                </th>
+                <th style="border: 1px solid black;">
+                    Container minimum time
+                </th>
+                <th style="border: 1px solid black;">
+                    Container average time
                 </th>
             </tr>
         """.format(title, SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD, SettingsInfo().profile_constant.STARTUP_TIME_LOOP_TIME)
 
-    html = html + """ 
-        <tr style="border: 1px solid black;">
-            <td style="border: 1px solid black;">
-                {} seconds
-            </td>
-            <td style="border: 1px solid black;">
-                {} seconds
-            </td>
-            <td style="border: 1px solid black;">
-                {} seconds
-            </td>
-        </tr>
-    """.format(list["max"], list["min"], list["avg"])
+    keys = []
+    for item in aggregation_list:
+        key = list(item.keys())[0]
+        keys.append(key)
 
+    i = 0
+    for service in keys:
+        binary = aggregation_list[i][service]["binaryStartupTime"]
+        container = aggregation_list[i][service]["startupTime"]
+
+        html = html + """ 
+            <tr style="border: 1px solid black;">
+                <td style="border: 1px solid black;">
+                    {}
+                </td>
+                <td style="border: 1px solid black;">
+                    {} seconds
+                </td>
+                <td style="border: 1px solid black;">
+                    {} seconds
+                </td>
+                <td style="border: 1px solid black;">
+                    {} seconds
+                </td>
+                <td style="border: 1px solid black;">
+                    {} seconds
+                </td>
+                <td style="border: 1px solid black;">
+                    {} seconds
+                </td>
+                <td style="border: 1px solid black;">
+                    {} seconds
+                </td>
+            </tr>
+        """.format(service, binary["max"], binary["min"], binary["avg"], container["max"], container["min"],
+                   container["avg"])
+        i = i+1
     html = html + "</table>"
     logger.info(html, html=True)

@@ -17,13 +17,13 @@ class PerformanceSummaryReports(object):
 
         # Suite: 2_service_startup_time
         if startup_with_creating_container != 'None':
-            StartupTimeHandler.show_avg_max_min_in_html("Startup time aggregation with creating containers",
+            StartupTimeHandler.show_avg_max_min_in_html("Startup time aggregations with creating containers",
                                                         startup_with_creating_container)
         else:
             logger.error("Fail to generate startup time with creating container report")
 
         if startup_without_creating_container != 'None':
-            StartupTimeHandler.show_avg_max_min_in_html("Startup time aggregation without creating containers",
+            StartupTimeHandler.show_avg_max_min_in_html("Startup time aggregations without creating containers",
                                                         startup_without_creating_container)
         else:
             logger.error("Fail to generate startup time without creating container report")
