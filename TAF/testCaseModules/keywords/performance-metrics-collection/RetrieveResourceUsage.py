@@ -207,7 +207,7 @@ def calculateCPUPercentUnix(v):
 def show_the_summary_table_in_html(results):
     for res in results:
         html = """ 
-        <h3 style="margin:0px">Resource usage:</h3>
+        <h3 style="margin:0px">Full resource usage result:</h3>
         <table style="border: 1px solid black;white-space: initial;"> 
             <tr style="border: 1px solid black;">
                 <th style="border: 1px solid black;">
@@ -246,6 +246,7 @@ def show_the_summary_table_in_html(results):
 def show_the_cpu_aggregation_table_in_html(results):
     html = """ 
     <h3 style="margin:0px">CPU usage aggregation:</h3>
+    <h4 style="margin:0px;color:blue">Retrieve Resource Times: {} / Retrieve Resource Interval: {} seconds / Threshold: {}%</h4>
     <table style="border: 1px solid black;white-space: initial;"> 
         <tr style="border: 1px solid black;">
             <th style="border: 1px solid black;">
@@ -261,7 +262,9 @@ def show_the_cpu_aggregation_table_in_html(results):
                 Average
             </th>
         </tr>
-    """
+    """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIME,
+               SettingsInfo().profile_constant.GET_CPU_MEM_INTERVAL,
+               SettingsInfo().profile_constant.CPU_USAGE_THRESHOLD)
 
     for res in results:
         html = html + """ 
@@ -290,6 +293,7 @@ def show_the_cpu_aggregation_table_in_html(results):
 def show_the_mem_aggregation_table_in_html(results):
     html = """ 
         <h3 style="margin:0px">Memory usage aggregation:</h3>
+        <h4 style="margin:0px;color:blue">Retrieve Resource Times: {} / Retrieve Resource Interval: {} seconds / Threshold: {}MB</h4>
         <table style="border: 1px solid black;white-space: initial;"> 
             <tr style="border: 1px solid black;">
                 <th style="border: 1px solid black;">
@@ -305,7 +309,9 @@ def show_the_mem_aggregation_table_in_html(results):
                     Average
                 </th>
             </tr>
-        """
+        """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIME,
+                   SettingsInfo().profile_constant.GET_CPU_MEM_INTERVAL,
+                   SettingsInfo().profile_constant.MEM_USAGE_THRESHOLD)
 
     for res in results:
         html = html + """ 

@@ -171,7 +171,8 @@ def compare_binary_footprint_size_with_prior_release(usages):
 
 def show_the_summary_table_in_html(usages):
     html = """ 
-    <h3 style="margin:0px">Resource usage:</h3>
+    <h3 style="margin:0px">Image / Executable Footprint:</h3>
+    <h4 style="margin:0px;color:blue">Threshold Setting: Geneva value * {} </h4>
     <table style="border: 1px solid black;white-space: initial;"> 
         <tr style="border: 1px solid black;">
             <th style="border: 1px solid black;">
@@ -190,7 +191,7 @@ def show_the_summary_table_in_html(usages):
                 Prior Release Executable Footprint
             </th>
         </tr>
-    """
+    """.format(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
 
     for k in usages:
         html = html + """ 

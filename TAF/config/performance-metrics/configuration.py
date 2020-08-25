@@ -53,6 +53,6 @@ MEM_USAGE_THRESHOLD = 300
 # Loop time for retrieving CPU and Memory
 GET_CPU_MEM_LOOP_TIME = 10
 
-# Period time for retrieving CPU and Memory (in seconds)
-GET_CPU_MEM_PERIOD = 7
+# Interval time for retrieving CPU and Memory (in seconds)
+GET_CPU_MEM_INTERVAL = 7
 

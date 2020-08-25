@@ -22,7 +22,8 @@ StartupTime001 - Get service startup time with creating containers
     startup time is less than threshold setting  ${total_startup_time_list}
     show full startup time report  Full startup time with creating containers  ${services_startup_time_list}
     show startup time with creating container avg max min  ${startup_time_with_create_container_aggregation_list}
-    set global variable  ${startup_time_with_create_container_aggregation_list}
+    set global variable  ${startup_time_with_create_container}  ${startup_time_with_create_container_aggregation_list}
+    [Teardown]  run keyword if test failed  set global variable  ${startup_time_with_create_container}  None
 
 StartupTime002 - Get service startup time without creating containers
     [Setup]  Run keywords   Deploy EdgeX  -  PerformanceMetrics
@@ -32,9 +33,9 @@ StartupTime002 - Get service startup time without creating containers
     startup time is less than threshold setting  ${total_startup_time_list}
     show full startup time report  Full startup time without creating containers  ${services_startup_time_list}
     show startup time without creating container avg max min   ${startup_time_without_create_container_aggregation_list}
-    set global variable  ${startup_time_without_create_container_aggregation_list}
-    [Teardown]  Shutdown services
-
+    set global variable  ${startup_time_without_create_container}  ${startup_time_without_create_container_aggregation_list}
+    [Teardown]  Run Keywords  Shutdown services
+                ...           AND  run keyword if test failed  set global variable  ${startup_time_without_create_container}  None
 
 
 *** Keywords ***
