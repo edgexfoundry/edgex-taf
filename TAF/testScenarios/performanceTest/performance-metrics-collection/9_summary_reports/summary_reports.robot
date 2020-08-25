@@ -4,5 +4,4 @@ Library         TAF/testCaseModules/keywords/performance-metrics-collection/Perf
 
 *** Test Cases ***
 Show performance summary reports
-    Show reports  ${startup_time_with_create_container_aggregation_list}
-    ...           ${startup_time_without_create_container_aggregation_list}
+    Show reports  ${startup_time_with_create_container}  ${startup_time_without_create_container}
