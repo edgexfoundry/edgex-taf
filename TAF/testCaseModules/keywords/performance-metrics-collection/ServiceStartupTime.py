@@ -29,12 +29,8 @@ class ServiceStartupTime(object):
                                                                   StartupTimeHandler.services)
         return all_up_time_without_recreate
 
-    def show_startup_time_with_creating_container_avg_max_min(self, list):
-        StartupTimeHandler.show_avg_max_min_in_html("Startup time aggreation with creating containers", list)
-
-    def show_startup_time_without_creating_container_avg_max_min(self, list):
-
-        StartupTimeHandler.show_avg_max_min_in_html("Startup time aggregation without creating containers", list)
+    def show_startup_time_with_avg_max_min(self, title, list):
+        StartupTimeHandler.show_avg_max_min_in_html(title, list)
 
     def get_avg_max_min_values(self, list):
         global max_min_avg
@@ -76,3 +72,4 @@ def compare_startup_time_with_threshold(list):
         if compare_value < x:
             raise Exception("Startup time is longer than {} seconds".format(SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD))
     return True
+
