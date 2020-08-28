@@ -1,7 +1,7 @@
 import RetrieveFootprint
 import RetrieveResourceUsage
 import StartupTimeHandler
-# import PingResponse
+import PingResponse
 # import EventExportedTime
 from robot.api import logger
 
@@ -40,7 +40,10 @@ class PerformanceSummaryReports(object):
             logger.error("Retrieve MEM Usage Fail")
 
         # Suite: 4_ping_response_time
-        # PingResponse.show_the_summary_table_in_html()
+        if hasattr(RetrieveResourceUsage, 'mem_usage'):
+            PingResponse.show_aggregation_table_in_html()
+        else:
+            logger.error("Retrieve Ping Response Time Fail")
 
         # Suite: 5_exported_time
         # EventExportedTime.show_the_summary_table_in_html("redis")

@@ -159,7 +159,7 @@ def show_full_startup_time_report(title, results):
 def show_avg_max_min_in_html(title, aggregation_list):
     html = """ 
         <h3 style="margin:0px">{}</h3>
-        <h4 style="margin:0px;color:blue">Startup Time Threshold: {}ms / Retrieve Times: {}
+        <h4 style="margin:0px;color:blue">Startup Time Threshold: {}s / Retrieve Times: {}
         </h4>
         <table style="border: 1px solid black;white-space: initial;"> 
             <tr style="border: 1px solid black;">
@@ -185,7 +185,8 @@ def show_avg_max_min_in_html(title, aggregation_list):
                     Container average time
                 </th>
             </tr>
-        """.format(title, SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD, SettingsInfo().profile_constant.STARTUP_TIME_LOOP_TIME)
+        """.format(title, SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD,
+                   SettingsInfo().profile_constant.STARTUP_TIME_LOOP_TIME)
 
     keys = []
     for item in aggregation_list:
