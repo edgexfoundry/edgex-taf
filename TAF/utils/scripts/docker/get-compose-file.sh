@@ -28,6 +28,19 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
   # Insert required services for end to end tests
   sed -e '/app-service-rules:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
 
+  if [ "$USE_SECURITY" = '-security-' ]; then
+    # sed command of MacOS is in different syntax
+    if [ "$(uname)" = "Darwin" ]; then
+      sed -i '' "/hostname: edgex-vault-worker/i \\
+      \      ADD_SECRETSTORE_TOKENS: appservice-http-export-secrets
+      " docker-compose.yaml
+    else
+      sed -i "/hostname: edgex-vault-worker/i \\
+      \ADD_SECRETSTORE_TOKENS: appservice-http-export-secrets
+      " docker-compose.yaml
+    fi
+  fi
+
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
   curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"

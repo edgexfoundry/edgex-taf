@@ -2,7 +2,7 @@
 Documentation  Device Readings - Query readings
 Library   OperatingSystem
 Library   Collections
-Library   TAF/testCaseModules/keywords/common/consul.py
+Library   TAF/testCaseModules/keywords/consul/consul.py
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot

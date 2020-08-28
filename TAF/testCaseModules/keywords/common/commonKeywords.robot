@@ -68,20 +68,19 @@ Get random "${value}" from "${list}"
     ${random_value}=  convert to string  ${random}[${value}]
     [Return]  ${random_value}
 
-Should return status code "200"
-    Should be true    ${response} == 200
+Should return status code "${status_code}"
+    Should be true  ${response} == ${status_code}
 
-Should return status code "400"
-    Should be true    ${response} == 400
+Should return Content-Type "${content_type}"
+    Should be true  '${headers}' == '${content_type}'
 
-Should return status code "404"
-    Should be true    ${response} == 404
+Should contain "${element}"
+    Should Not be empty  ${content}[${element}]
 
-Should return status code "423"
-    Should be true    ${response} == 423
-
-Should return status code "500"
-    Should be true    ${response} == 500
+Should Return Status Code "${status_code}" And ${element}
+    Should return status code "${status_code}"
+    Should return Content-Type "application/json"
+    Should contain "${element}"
 
 Get current milliseconds epoch time
     ${current_epoch_time}=  Get current epoch time
@@ -125,4 +124,39 @@ Load data file "${json_file}" and get variable "${use_variable}"
     ${json_data}=  Get File  ${WORK_DIR}/TAF/testData/${json_file}  encoding=UTF-8
     ${json_string}=  Evaluate  json.loads('''${json_data}''')  json
     [Return]    ${json_string}[${use_variable}]
+
+Set Response to Test Variables
+    [Arguments]  ${resp}
+    Set test variable  ${response}  ${resp.status_code}
+    ${headers}=  Run keyword if  'Content-Type' in ${resp.headers}  Set variable  ${resp.headers}[Content-Type]
+    ...          ELSE  Set variable  None
+    ${content}=  Run Keyword If  '${headers}' == 'application/json'  Evaluate  json.loads('''${resp.content}''')  json
+    ...          ELSE  Set variable  ${resp.content}
+    Set test variable  ${headers}  ${headers}
+    Set test variable  ${content}  ${content}
+
+Query Ping
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    Create Session  Ping  url=${url}  disable_warnings=true
+    ${resp}=  Get request  Ping  api/${api_version}/ping  headers=${headers}
+    Set Response to Test Variables  ${resp}
+
+Query Config
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    Create Session  Config  url=${url}  disable_warnings=true
+    ${resp}=  Get request  Config  api/${api_version}/config  headers=${headers}
+    Set Response to Test Variables  ${resp}
+
+Query Version
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    Create Session  Ping  url=${url}  disable_warnings=true
+    ${resp}=  Get request  Ping  api/${api_version}/version  headers=${headers}
+    Set Response to Test Variables  ${resp}
+
+Query Metrics
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    Create Session  Ping  url=${url}  disable_warnings=true
+    ${resp}=  Get request  Ping  api/${api_version}/metrics  headers=${headers}
+    Set Response to Test Variables  ${resp}
+
 
