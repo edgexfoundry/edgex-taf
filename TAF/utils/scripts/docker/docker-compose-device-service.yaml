@@ -12,7 +12,7 @@
       CLIENTS_METADATA_HOST: edgex-core-metadata
       Service_Host: edgex-device-virtual
     entrypoint: ["/device-virtual"]
-    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
+    command: ["--registry","--confdir=${CONF_DIR}"]
     volumes:
       - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:z
     depends_on:
@@ -34,7 +34,7 @@
       CLIENTS_METADATA_HOST: edgex-core-metadata
       Service_Host: edgex-device-modbus
     entrypoint: ["/device-modbus"]
-    command: ["--registry","--confdir=${CONF_DIR}", "--profile=${DS_PROFILE}"]
+    command: ["--registry","--confdir=${CONF_DIR}"]
     volumes:
       - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:z
     depends_on:
