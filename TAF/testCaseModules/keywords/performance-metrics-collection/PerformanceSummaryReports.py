@@ -2,7 +2,7 @@ import RetrieveFootprint
 import RetrieveResourceUsage
 import StartupTimeHandler
 import PingResponse
-# import EventExportedTime
+import EventExportedTime
 from robot.api import logger
 
 
@@ -46,5 +46,7 @@ class PerformanceSummaryReports(object):
             logger.error("Retrieve Ping Response Time Fail")
 
         # Suite: 5_exported_time
-        # EventExportedTime.show_the_summary_table_in_html("redis")
-
+        if hasattr(EventExportedTime, 'devices_aggregate_values_list'):
+            EventExportedTime.show_the_aggregation_table_in_html(EventExportedTime.devices_aggregate_values_list)
+        else:
+            logger.error("Retrieve Event Exported Time Fail")

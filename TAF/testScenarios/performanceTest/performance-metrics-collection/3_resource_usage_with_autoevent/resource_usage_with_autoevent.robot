@@ -12,7 +12,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/performance-metric-collecti
 *** Test Cases ***
 Resource001 - Get CPU and Memory Usage while sending autoevent
     Deploy EdgeX  -  PerformanceMetrics
-    ${CPU_MEM_USAGE_LIST}=  Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIME}" times per "${ GET_CPU_MEM_INTERVAL}"s
+    ${CPU_MEM_USAGE_LIST}=  Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIMES}" times per "${ GET_CPU_MEM_INTERVAL}"s
     ${cpu_usage}=  retrieve cpu aggregation value  ${CPU_MEM_USAGE_LIST}
     ${mem_usage}=  retrieve mem aggregation value  ${CPU_MEM_USAGE_LIST}
     Show the summary table  ${CPU_MEM_USAGE_LIST}
@@ -21,10 +21,10 @@ Resource001 - Get CPU and Memory Usage while sending autoevent
     [Teardown]  Shutdown services
 
 *** Keywords ***
-Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIME}" times per "${ GET_CPU_MEM_INTERVAL}"s
+Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIMES}" times per "${ GET_CPU_MEM_INTERVAL}"s
     @{CPU_MEM_USAGE_LIST}=  Create List
     sleep  30
-    FOR  ${index}  IN RANGE  0  ${GET_CPU_MEM_LOOP_TIME}
+    FOR  ${index}  IN RANGE  0  ${GET_CPU_MEM_LOOP_TIMES}
         sleep  ${ GET_CPU_MEM_INTERVAL}
         ${resource_usage}=  Retrieve CPU and memory usage
         CPU usage is over than threshold setting

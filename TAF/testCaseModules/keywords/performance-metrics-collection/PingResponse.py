@@ -1,3 +1,4 @@
+import requests
 from robot.api import logger
 import data_utils
 from TUC.data.SettingsInfo import SettingsInfo
@@ -12,11 +13,27 @@ class PingResponse(object):
         ping_res_result[service] = res
         logger.info("ping_res_result: {}".format(ping_res_result))
 
+    def ping_api_request(self, port):
+        response = send_ping_request(port)
+        return response
+
     def show_the_aggregation_report(self):
         show_aggregation_table_in_html()
 
     def show_full_response_time_report(self):
         show_the_summary_table_in_html()
+
+
+def send_ping_request(port):
+    service_url = "http://{}:{}".format(SettingsInfo().constant.BASE_URL, port)
+    ping_url = "{}/api/v1/ping".format(service_url)
+    res = requests.get(ping_url)
+    logger.info("response body: {}, reponse time: {}".format(res.content, res.elapsed.total_seconds()))
+    response = {
+                "body": res.content.decode("utf-8"),
+                "seconds": res.elapsed.total_seconds()
+                }
+    return response
 
 
 def get_services_response_time_aggregation():
@@ -104,7 +121,7 @@ def show_aggregation_table_in_html():
             </th>
         </tr>
     """.format(SettingsInfo().profile_constant.PING_RES_THRESHOLD,
-               SettingsInfo().profile_constant.PING_RES_LOOP_TIME)
+               SettingsInfo().profile_constant.PING_RES_LOOP_TIMES)
 
     for res in results:
         html = html + """ 

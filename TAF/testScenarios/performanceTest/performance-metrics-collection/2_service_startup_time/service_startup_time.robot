@@ -40,7 +40,7 @@ StartupTime002 - Get service startup time without creating containers
 Deploy edgex with creating containers and get startup time
     @{total_startup_time_list}=  Create List
     @{service_startup_time_list}=  Create List
-    FOR  ${index}    IN RANGE  0  ${STARTUP_TIME_LOOP_TIME}
+    FOR  ${index}    IN RANGE  0  ${STARTUP_TIME_LOOP_TIMES}
         ${result}=  Run Process  ${clear_mem_cache}  shell=True
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem.log
         Start time is recorded
@@ -55,7 +55,7 @@ Deploy edgex with creating containers and get startup time
 
 Deploy edgex without creating containers and get startup time
     @{service_startup_time_list}=  Create List
-    FOR  ${index}    IN RANGE  0  ${STARTUP_TIME_LOOP_TIME}
+    FOR  ${index}    IN RANGE  0  ${STARTUP_TIME_LOOP_TIMES}
         ${result}=  Run Process  ${clear_mem_cache}  shell=True
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem_cache.log
         Start time is recorded
@@ -88,7 +88,7 @@ Get startup time and add to dictionary
 Get service startup time list
     [Arguments]  ${services_startup_time}  ${service}  ${startup_key}
     @{service_data_list}=    create list
-    FOR  ${index}  IN RANGE  0  ${STARTUP_TIME_LOOP_TIME}
+    FOR  ${index}  IN RANGE  0  ${STARTUP_TIME_LOOP_TIMES}
         log  ${services_startup_time}[${index}]
         ${service_data}=  Get from dictionary  ${services_startup_time}[${index}]  ${service}
         ${startup_value_str}=  Get from dictionary  ${service_data}  ${startup_key}

@@ -18,4 +18,3 @@ def calculate_avg_max_min_from_list(list):
                         "avg": round(sum(list) / len(list), 2)}
 
     return calculate_values
-

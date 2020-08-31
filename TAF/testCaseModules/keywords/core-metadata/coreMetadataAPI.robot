@@ -119,6 +119,15 @@ Query device by id and return device name
     ${deviceResponseBody}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]    ${deviceResponseBody}[name]
 
+Query device by name
+    [Arguments]  ${device_name}
+    # device detail
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${responseBody}=  Get Request  Core Metadata    ${deviceUri}/name/${device_name}  headers=${headers}
+    [Return]    ${responseBody}
+
+
 Delete device by name
     ${deviceName}=    Query device by id and return device name
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
