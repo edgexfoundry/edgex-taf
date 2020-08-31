@@ -220,3 +220,4 @@ def show_the_summary_table_in_html(usages):
 
     html = html + "</table>"
     logger.info(html, html=True)
+    return html

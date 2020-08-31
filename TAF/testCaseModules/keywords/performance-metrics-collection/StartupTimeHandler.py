@@ -226,3 +226,4 @@ def show_avg_max_min_in_html(title, aggregation_list):
         i = i+1
     html = html + "</table>"
     logger.info(html, html=True)
+    return html

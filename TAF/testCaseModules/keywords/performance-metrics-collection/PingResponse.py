@@ -145,3 +145,4 @@ def show_aggregation_table_in_html():
 
     html = html + "</table>"
     logger.info(html, html=True)
+    return html

@@ -18,7 +18,8 @@ Those tests can separate to different suites:
 - Performance test
 
 # Usage
-Users can refer to the [the document](./docs/edgex-taf.md) to learn how to use this repository.
+- Users can refer to the [the document](./docs/edgex-taf.md) to learn how to run functional test and integration test.
+- Users can refer to the [the document](./docs/run-performance-metrics-collection-on-local.md) to run performance metrics collection on local.
 
 # Community
 

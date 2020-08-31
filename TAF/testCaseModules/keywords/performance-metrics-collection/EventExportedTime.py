@@ -126,7 +126,7 @@ def show_the_summary_table_in_html():
 def show_the_aggregation_table_in_html(devices_aggregate_list):
     html = """ 
     <h3 style="margin:0px">Event exported time aggregate values:</h3>
-    <h4 style="margin:0px;color:blue"> Export Time Threshold: {}ms, Retrieve events: {}</h4>
+    <h4 style="margin:0px;color:blue">Export Time Threshold: {}ms, Retrieve events: {}</h4>
     <div style="margin:0px">Average = (Retrieved exported time of device events - max - min) / (Retrieve events - 2) </div>
     <table style="border: 1px solid black;white-space: initial;"> 
         <tr style="border: 1px solid black;">
@@ -167,6 +167,7 @@ def show_the_aggregation_table_in_html(devices_aggregate_list):
 
     html = html + "</table>"
     logger.info(html, html=True)
+    return html
 
 
 def get_device_export_time_list(device):
