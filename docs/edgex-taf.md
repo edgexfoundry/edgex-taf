@@ -216,14 +216,10 @@ To write the automation testing for virtual device service, complete the followi
     ├── default
     │   ├── configuration.py
     │   ├── configuration.toml
-    │   ├── docker
-    │   │   └── configuration.toml
     │   └── sample_profile.yaml
     └── device-virtual
         ├── configuration.py
         ├── configuration.toml
-        ├── docker
-        │   └── configuration.toml
         └── sample_profile.yaml
     ```
 
@@ -242,8 +238,6 @@ To write the automation testing for virtual device service, complete the followi
     TAF/config
     └── device-virtual
         ├── configuration.toml
-        └── docker
-               └── configuration.toml
 
     [Device]
         ...
@@ -287,30 +281,27 @@ To write the automation testing for virtual device service, complete the followi
     ``` yaml
     # TAF/utils/scripts/docker/device-service.yaml
     
-    device-virtual:
-        image: edgexfoundry/docker-device-virtual-go:1.0.0
+      device-virtual:
+        image: edgexfoundry/docker-device-virtual-go:master
         ports:
-            - "49990:49990"
+        - "49990:49990"
         container_name: edgex-device-virtual
         hostname: edgex-device-virtual
         networks:
-        edgex-network:
-            aliases:
-            - edgex-device-virtual
+          - edgex-network
+        environment:
+          REGISTRY_HOST: edgex-core-consul
+          CLIENTS_DATA_HOST: edgex-core-data
+          CLIENTS_METADATA_HOST: edgex-core-metadata
+          Service_Host: edgex-device-virtual
+        entrypoint: ["/device-virtual"]
+        command: ["--registry","--confdir=${CONF_DIR}"]
         volumes:
-            - db-data:/data/db
-            - log-data:/edgex/logs
-            - consul-config:/consul/config
-            - consul-data:/consul/data
-            - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}
+          - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:z
         depends_on:
-            - data
-            - command
-        entrypoint:
-            - /device-virtual
-            - --profile=${DS_PROFILE}
-            - --registry=${REGISTRY_URL}
-            - --confdir=${CONF_DIR}
+          - consul
+          - data
+          - command
     ```
 ### Develop new test case
 
