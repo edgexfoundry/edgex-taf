@@ -288,6 +288,7 @@ def show_the_cpu_aggregation_table_in_html(results):
 
     html = html + "</table>"
     logger.info(html, html=True)
+    return html
 
 
 def show_the_mem_aggregation_table_in_html(results):
@@ -335,3 +336,4 @@ def show_the_mem_aggregation_table_in_html(results):
 
     html = html + "</table>"
     logger.info(html, html=True)
+    return html
