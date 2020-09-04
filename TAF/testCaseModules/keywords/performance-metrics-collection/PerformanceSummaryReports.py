@@ -3,6 +3,7 @@ import RetrieveResourceUsage
 import StartupTimeHandler
 import PingResponse
 import EventExportedTime
+import RetrieveSystemInfo
 from robot.api import logger
 import os
 
@@ -11,6 +12,13 @@ class PerformanceSummaryReports(object):
 
     def show_reports(self, startup_with_creating_container, startup_without_creating_container):
         html = """<h2 style="margin:0px">Performance metrics summary report</h2><br>"""
+
+        # Retrieve system info
+        if hasattr(RetrieveSystemInfo, 'report_info'):
+            html = html + RetrieveSystemInfo.generate_report(RetrieveSystemInfo.report_info)
+        else:
+            logger.error("Retrieve System Info")
+
         # Suite: 1_retrieve_footprint
         if hasattr(RetrieveFootprint, 'resource_usage'):
             html = html + RetrieveFootprint.show_the_summary_table_in_html(RetrieveFootprint.resource_usage)

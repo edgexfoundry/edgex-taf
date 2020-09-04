@@ -22,7 +22,6 @@ StartupTime001 - Get service startup time with creating containers
     show full startup time report  Full startup time with creating containers  ${services_startup_time_list}
     show startup time with avg max min  Startup time aggregations with creating containers  ${service_aggregations}
     set global variable  ${startup_time_with_create_container}  ${service_aggregations}
-    [Teardown]  run keyword if test failed  set global variable  ${startup_time_with_create_container}  None
 
 StartupTime002 - Get service startup time without creating containers
     [Setup]  Run keywords   Deploy EdgeX  -  PerformanceMetrics
@@ -32,8 +31,7 @@ StartupTime002 - Get service startup time without creating containers
     show full startup time report  Full startup time without creating containers  ${services_startup_time_list}
     show startup time with avg max min  Startup time aggregations without creating containers  ${service_aggregations}
     set global variable  ${startup_time_without_create_container}  ${service_aggregations}
-    [Teardown]  Run Keywords  Shutdown services
-                ...           AND  run keyword if test failed  set global variable  ${startup_time_without_create_container}  None
+    [Teardown]  Shutdown services
 
 
 *** Keywords ***
@@ -45,7 +43,7 @@ Deploy edgex with creating containers and get startup time
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem.log
         Start time is recorded
         Deploy EdgeX  -  PerformanceMetrics
-        ${services_startup_time}=  fetch services startup time
+        ${services_startup_time}=  Run keyword and continue on failure  fetch services startup time
         Shutdown services
         Append to list  ${service_startup_time_list}  ${services_startup_time}
         Check service is stopped or not
@@ -60,7 +58,7 @@ Deploy edgex without creating containers and get startup time
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem_cache.log
         Start time is recorded
         Deploy EdgeX  -  PerformanceMetrics
-        ${services_startup_time}=  fetch services startup time without creating containers
+        ${services_startup_time}=  Run keyword and continue on failure  fetch services startup time without creating containers
         Stop services
         Append to list  ${service_startup_time_list}  ${services_startup_time}
         Check service is stopped or not
@@ -75,8 +73,8 @@ Get startup time and add to dictionary
     FOR  ${service}  IN  @{service_keys}
         ${service_binary_list}=    Get service startup time list  ${services_startup_time}  ${service}  binaryStartupTime
         ${service_container_list}=    Get service startup time list  ${services_startup_time}  ${service}  startupTime
-        startup time is less than threshold setting  ${service_binary_list}
-        startup time is less than threshold setting  ${service_container_list}
+        Run keyword and continue on failure  startup time is less than threshold setting  ${service_binary_list}
+        Run keyword and continue on failure  startup time is less than threshold setting  ${service_container_list}
         ${binary_aggregations}=  Get avg max min values  ${service_binary_list}
         ${container_aggregations}=  Get avg max min values  ${service_container_list}
         ${aggregation_value}=  create dictionary  binaryStartupTime=${binary_aggregations}  startupTime=${container_aggregations}

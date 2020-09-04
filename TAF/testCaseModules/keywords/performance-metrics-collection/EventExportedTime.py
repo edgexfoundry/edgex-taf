@@ -31,6 +31,8 @@ class EventExportedTime(object):
                     event["exported"] = event["pushed"] - event["origin"]
                     events.append(event)
                 else:
+                    logger.warn("Event didn't export.")
+                    logger.info("Event data: {}".format(event))
                     event["pushed"] = ""
                     event["exported"] = ""
 
@@ -80,9 +82,12 @@ def compare_export_time_with_threshold():
     for device in result["devices"]:
         for event in result["devices"][device]:
             compare_value = int(SettingsInfo().profile_constant.EXPORT_TIME_THRESHOLD)
-            if compare_value < event["exported"]:
-                raise Exception("{} event exported time is longer than {} ms".format(device,
-                                SettingsInfo().profile_constant.EXPORT_TIME_THRESHOLD))
+            if event["exported"] == "":
+                continue
+            else:
+                if compare_value < event["exported"]:
+                    raise Exception("{} event exported time is longer than {} ms".format(device,
+                                    SettingsInfo().profile_constant.EXPORT_TIME_THRESHOLD))
     return True
 
 

@@ -16,6 +16,6 @@ Footprint001 - Verify Image and Binary Footprint
     Given Deploy EdgeX  -  PerformanceMetrics
     When Fetch image binary footprint
     Then Show the summary table
-    And Image footprint is less than threshold value
-    And Binary footprint is less than threshold value
+    And Run keyword and continue on failure  Image footprint is less than threshold value
+    And Run keyword and continue on failure  Binary footprint is less than threshold value
     [Teardown]  Shutdown services
