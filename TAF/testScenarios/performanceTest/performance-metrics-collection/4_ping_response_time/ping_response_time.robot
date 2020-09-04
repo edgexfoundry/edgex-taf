@@ -62,7 +62,7 @@ Ping API for service
     @{RES_LIST}=  Create List
     FOR  ${index}  IN RANGE  0  ${PING_RES_LOOP_TIMES}
         ${res}  Ping api request  ${service_port}
-        Response time is less than threshold setting  ${service_name}  ${res}
+        Run keyword and continue on failure  Response time is less than threshold setting  ${service_name}  ${res}
         APPEND TO LIST  ${RES_LIST}     ${res}
     END
     [Return]  ${RES_LIST}

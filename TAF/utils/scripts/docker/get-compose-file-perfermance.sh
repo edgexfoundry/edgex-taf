@@ -17,8 +17,3 @@ cp docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 # Insert required services for retrieving exported time
 sed -e '1,/- edgex-network/d' docker-compose-end-to-end.yaml > docker-compose-end-mqtt.yaml
 sed -e '/app-service-rules:/r docker-compose-end-mqtt.yaml' -e //N docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml > docker-compose-mqtt.yaml
-
-docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-        --env WORK_DIR=${WORK_DIR} --security-opt label:disable \
-        ${COMPOSE_IMAGE} -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" pull
-sleep 5

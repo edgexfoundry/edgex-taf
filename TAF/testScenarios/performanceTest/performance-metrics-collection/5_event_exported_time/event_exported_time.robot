@@ -15,7 +15,7 @@ Measure the event exported time
     Given Deploy EdgeX  -  PerformanceMetrics  -mqtt
     When query events
     And fetch the exported time
-    Then exported time is less than threshold value
+    Then Run keyword and continue on failure  exported time is less than threshold value
     And show the summary table
     And show the aggregation table
     [Teardown]  Shutdown services  -  PerformanceMetrics  -mqtt

@@ -4,7 +4,13 @@ USE_ARCH=${1:-x86_64}
 USE_SECURITY=${2:--}
 
 # Pull edgex images
-sh pull-images.sh ${USE_ARCH} ${USE_SECURITY}
+sh get-compose-file-perfermance.sh ${USE_ARCH} ${USE_SECURITY}
+
+# Pull images
+docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
+        --env WORK_DIR=${WORK_DIR} --security-opt label:disable \
+        ${COMPOSE_IMAGE} -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" pull
+sleep 5
 
 # Run scripts to collect performance metrics and generate reports
 docker run --rm --network host --privileged -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} -e ARCH=${USE_ARCH} \

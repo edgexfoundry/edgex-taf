@@ -27,8 +27,8 @@ Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIMES}" times per "${
     FOR  ${index}  IN RANGE  0  ${GET_CPU_MEM_LOOP_TIMES}
         sleep  ${ GET_CPU_MEM_INTERVAL}
         ${resource_usage}=  Retrieve CPU and memory usage
-        CPU usage is over than threshold setting
-        Memory usage is over than threshold setting
+        Run keyword and continue on failure  CPU usage is over than threshold setting
+        Run keyword and continue on failure  Memory usage is over than threshold setting
         Append to list  ${CPU_MEM_USAGE_LIST}  ${resource_usage}
     END
     [Return]   ${CPU_MEM_USAGE_LIST}
