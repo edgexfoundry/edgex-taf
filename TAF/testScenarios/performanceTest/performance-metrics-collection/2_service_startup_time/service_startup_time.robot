@@ -57,7 +57,7 @@ Deploy edgex without creating containers and get startup time
         ${result}=  Run Process  ${clear_mem_cache}  shell=True
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem_cache.log
         Start time is recorded
-        Deploy EdgeX  -  PerformanceMetrics
+        Restart Services  PerformanceMetrics
         ${services_startup_time}=  Run keyword and continue on failure  fetch services startup time without creating containers
         Stop services
         Append to list  ${service_startup_time_list}  ${services_startup_time}
