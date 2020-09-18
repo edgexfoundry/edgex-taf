@@ -1,36 +1,68 @@
 *** Settings ***
-Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
-Suite Setup      Run Keywords  Setup Suite  AND  Deploy App Service
-Suite Teardown   Run Keywords  Suite Teardown  AND  Remove App Service
+Library   Process
+Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
+Suite Setup      Setup Suite for App Service Secrets
+Suite Teardown   Suite Teardown for App Service
+Default Tags     v2-api
 
 *** Variables ***
 ${SUITE}          App-Service Secrets POST Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-secrets.log
-${edgex_profile}  http-export
+${api_version}  v2
 
 *** Test Cases ***
 SecretsPOST001 - Stores secrets to the secret client
-    When Store Secret Data
+    When Store Secret Data With Empty Path
     Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
-         ...  Should Return Status Code "201"
+         ...  Run keywords  Should Return Status Code "201"
+         ...  AND  Secrets Should be Stored
+         ...  ELSE  Should Return Status Code "500"
 
-SecretsPOST002 - Stores secrets to the secret client With Path
+SecretsPOST002 - Stores secrets to the secret client with Path
     When Store Secret Data With Path
     Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
-         ...  Should Return Status Code "201"
+         ...  Run keywords  Should Return Status Code "201"
+         ...  AND  Secrets Should be Stored
+         ...  ELSE  Should Return Status Code "500"
 
 ErrSecretsPOST001 - Stores secrets to the secret client fails (missing key)
     When Store Secret Data With Missing Key
-    Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
-         ...  Should Return Status Code "400"
+    Then Should Return Status Code "400"
 
 ErrSecretsPOST002 - Stores secrets to the secret client fails (missing value)
     When Store Secret Data With Missing Value
-    Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
-         ...  Should Return Status Code "400"
+    Then Should Return Status Code "400"
 
 ErrSecretsPOST003 - Stores secrets to the secret client fails (security not enabled)
     When Store Secret Data With Path
     Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'false'
-         ...  Should Return Status Code "500"
+         ...   Should Return Status Code "500"
+         ...   ELSE  Should Return Status Code "201"
+
+*** Keywords ***
+Setup Suite for App Service Secrets
+    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Run Keywords
+    #EDGEX_SECURITY_SECRET_STORE: "true"
+    ...             Set Suite Variable  ${edgex_profile}  http-export-secrets
+    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48098
+    #EDGEX_SECURITY_SECRET_STORE: "false"
+    ...             ELSE  Run keywords  Set Suite Variable  ${edgex_profile}  http-export
+    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48096
+
+Get AppService Token
+    ${command}=  Set Variable  docker exec app-service-${edgex_profile} cat /tmp/edgex/secrets/appservice-${edgex_profile}/secrets-token.json
+    ${result} =  Run Process  ${command}  shell=yes  output_encoding=UTF-8
+    ${result_string}=  Evaluate  json.loads('''${result.stdout}''')  json
+    Set Test Variable  ${token}  ${result_string}[auth][client_token]
+
+Secrets Should be Stored
+    Get AppService Token
+    Create Session  GetSecrets  url=https://${BASE_URL}:8200  disable_warnings=true
+    ${headers}=  Create Dictionary  X-Vault-Token  ${token}
+    ${resp}=  Get request  GetSecrets  /v1/secret/edgex/appservice-${edgex_profile}/${secrets_path}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 200  log to console  ${content}
+    Should Contain  ${content}[data]  ${secrets_key}  ${secrets_value}
+
 

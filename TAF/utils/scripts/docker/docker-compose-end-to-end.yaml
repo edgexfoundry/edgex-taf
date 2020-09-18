@@ -53,3 +53,56 @@
     networks:
       - edgex-network
 
+  app-service-blackbox-tests:
+    image: ${appService}
+    ports:
+      - "48095:48095"
+    container_name: app-service-blackbox-tests
+    hostname: app-service-blackbox-tests
+    environment:
+      edgex_profile: blackbox-tests
+      Service_Host: app-service-blackbox-tests
+      Clients_CoreData_Host: edgex-core-data
+      Clients_Logging_Host: edgex-support-logging
+      Registry_Host: edgex-core-consul
+      Service_Port: 48095
+      EDGEX_SECURITY_SECRET_STORE: "false"
+    networks:
+      - edgex-network
+
+  app-service-http-export-secrets:
+    image: ${appService}
+    ports:
+      - "48098:48098"
+    container_name: app-service-http-export-secrets
+    hostname: app-service-http-export-secrets
+    environment:
+      edgex_profile: http-export
+      Service_Host: app-service-http-export-secrets
+      Clients_CoreData_Host: edgex-core-data
+      Clients_Logging_Host: edgex-support-logging
+      Registry_Host: edgex-core-consul
+      Service_Port: 48098
+      MessageBus_SubscribeHost_Host: edgex-core-data
+      Database_Host: edgex-redis
+      EDGEX_SECURITY_SECRET_STORE: "true"
+      SecretStore_Protocol: https
+      SecretStore_Host: edgex-vault
+      SecretStore_ServerName: edgex-vault
+      SecretStore_RootCaCertPath: /tmp/edgex/secrets/ca/ca.pem
+      SecretStore_TokenFile: /tmp/edgex/secrets/edgex-application-service/secrets-token.json
+      SecretStoreExclusive_Protocol: https
+      SecretStoreExclusive_Host: edgex-vault
+      SecretStoreExclusive_ServerName: edgex-vault
+      SecretStoreExclusive_Path: /v1/secret/edgex/appservice-http-export-secrets/
+      SecretStoreExclusive_RootCaCertPath: /tmp/edgex/secrets/ca/ca.pem
+      SecretStoreExclusive_TokenFile: /tmp/edgex/secrets/appservice-http-export-secrets/secrets-token.json
+      Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
+      Writable_LogLevel: DEBUG
+    volumes:
+    - /tmp/edgex/secrets/ca:/tmp/edgex/secrets/ca:ro,z
+    - /tmp/edgex/secrets/edgex-application-service:/tmp/edgex/secrets/edgex-application-service:ro,z
+    - /tmp/edgex/secrets/appservice-http-export-secrets:/tmp/edgex/secrets/appservice-http-export-secrets:ro,z
+    networks:
+      - edgex-network
+
