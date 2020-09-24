@@ -1,16 +1,16 @@
 *** Settings ***
-Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
-Resource  TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
-Suite Setup      Setup Suite for App Service  ${AppServiceUrl_blackbox}
-Suite Teardown   Suite Teardown for App Service
-Default Tags     v2-api
+Resource     TAF/testCaseModules/keywords/commonKeywords.robot
+Resource     TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+Default Tags    v2-api
 
 *** Variables ***
-${SUITE}          App-Service GET Testcases
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-get.log
-${edgex_profile}  blackbox-tests
-${AppServiceUrl_blackbox}  http://${BASE_URL}:48095
-${api_version}  v2
+${SUITE}          Core-Data Info GET Testcases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-info.log
+${url}            ${coreDataUrl}
+${api_version}    v2
 
 *** Test Cases ***
 InfoGET001 - Query ping
@@ -21,7 +21,6 @@ InfoGET001 - Query ping
 InfoGET002 - Query version
     When Query Version
     Then Should Return Status Code "200" And version
-    And Should Return SDK Version
     And apiVersion Should be ${api_version}
 
 InfoGET003 - Query metrics
@@ -33,8 +32,3 @@ InfoGET004 - Query config
     When Query Config
     Then Should Return Status Code "200" And config
     And apiVersion Should be ${api_version}
-
-**** Keywords ***
-Should Return SDK Version
-    Should contain "sdk_version"
-

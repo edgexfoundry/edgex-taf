@@ -1,0 +1,22 @@
+{
+  "Event": {
+    "event": {
+      "deviceName": "",
+      "id": "",
+      "origin": 0,
+      "readings": ""
+    }
+  },
+  "Event With Tags": {
+    "event": {
+      "deviceName": "",
+      "id": "",
+      "origin": 0,
+      "readings": "",
+      "tags": {
+        "key1": "value1",
+        "key2": "value2"
+      }
+    }
+  }
+}
