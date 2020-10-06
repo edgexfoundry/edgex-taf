@@ -1,15 +1,18 @@
 *** Settings ***
 Library  RequestsLibrary
 Library  OperatingSystem
+Library  Collections
+Library  uuid
 Library  TAF/testCaseModules/keywords/common/value_checker.py
 Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
 ${coreDataUrl}  ${URI_SCHEME}://${BASE_URL}:${CORE_DATA_PORT}
-${coreDataEventUri}     /api/v1/event
-${coreDataReadingUri}   /api/v1/reading
-${coreDataValueDescriptorUri}   /api/v1/valuedescriptor
+${api_version}  v1  # default value is v1, set "${api_version}  v2" in testsuite Variables section for v2 api
+${coreDataEventUri}    /api/${api_version}/event
+${coreDataReadingUri}  /api/${api_version}/reading
+${coreDataValueDescriptorUri}  /api/${api_version}/valuedescriptor
 
 *** Keywords ***
 Device reading should be sent to Core Data
@@ -134,3 +137,51 @@ Query events
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  Get Request  Core Data    ${coreDataEventUri}   headers=${headers}
     [Return]  ${resp.status_code}  ${resp.content}
+
+Create Events
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Post Request  Core Data    ${coreDataEventUri}  json=${events}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+# generate data for core-data
+Generate event sample
+    # event_data: Event, Event With Tags ; readings_type: Simple Reading, Simple Float Reading, Binary Reading
+    [arguments]  ${event_data}  ${deviceName}  @{readings_type}
+    ${uuid}=  Evaluate  str(uuid.uuid4())
+    ${origin}=  Get current milliseconds epoch time
+    @{readings}=  Create List
+    FOR  ${type}  IN  @{readings_type}
+        ${reading}=  Load data file "core-data/readings_data.json" and get variable "${type}"
+        Set to dictionary  ${reading}  origin=${origin}
+        Set to dictionary  ${reading}  deviceName=${deviceName}
+        Append to List  ${readings}  ${reading}
+    END
+    ${event}=  Load data file "core-data/event_data.json" and get variable "${event_data}"
+    Set to dictionary  ${event}[event]  deviceName=${deviceName}
+    Set to dictionary  ${event}[event]  id=${uuid}
+    Set to dictionary  ${event}[event]  origin=${origin}
+    Set to dictionary  ${event}[event]  readings=${readings}
+    Set test variable  ${id}  ${uuid}
+    [return]  ${event}
+
+Change ${event} readings[${index}] values ${property_dict}
+    ${keys}=  Get dictionary keys  ${property_dict}
+    FOR  ${key}  IN  @{keys}
+        Dictionary should contain key  ${event}[event][readings][${index}]  ${key}  Reading doesn't contain key: ${key}
+        Set to dictionary  ${event}[event][readings][${index}]  ${key}=${property_dict}[${key}]
+    END
+
+Generate multiple events sample with simple readings
+    ${event1}=  Generate event sample  Event  Device-Test-001  Simple Reading
+    ${event2}=  Generate event sample  Event  Device-Test-001  Simple Float Reading
+    ${event3}=  Generate event sample  Event  Device-Test-001  Simple Reading  Simple Float Reading
+    ${event4}=  Generate event sample  Event With Tags  Device-Test-001  Simple Reading  Simple Float Reading
+    ${events}=  Create List  ${event1}  ${event2}  ${event3}  ${event4}
+    Set test variable  ${events}  ${events}
+
+Generate an event sample with simple readings
+    ${event}=  Generate event sample  Event  Device-Test-001  Simple Reading  Simple Float Reading
+    ${events}=  Create List  ${event}
+    Set test variable  ${events}  ${events}

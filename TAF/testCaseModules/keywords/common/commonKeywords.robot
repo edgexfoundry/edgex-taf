@@ -82,6 +82,24 @@ Should Return Status Code "${status_code}" And ${element}
     Should return Content-Type "application/json"
     Should contain "${element}"
 
+apiVersion Should be ${api_version}
+    Should contain "apiVersion"
+    Should be true  '${content}[apiVersion]' == '${api_version}'
+
+Item Index ${index} Should Contain Status Code "${status_code}" And ${element}
+    ${content_type}=  Evaluate  type($content).__name__
+    ${content}=  Run keyword if  ${content_type} != list  Evaluate  json.loads('''${content}''')  json
+    ...          ELSE  Set Variable  ${content}
+    ${len}=  Get length  ${content}
+    ${index}=  Run keyword if  "${index}" == "All"  Evaluate  list(range(0,${len}))
+    ...        ELSE  Split String  ${index}  ,
+    FOR  ${i}  IN  @{index}
+        Should be true  ${content}[${i}][statusCode] == ${status_code}
+        ${key}=  Fetch From Right  ${element}  no${SPACE}
+        Run keyword if  "no" in "${element}"  Dictionary Should Not Contain Key  ${content}[${i}]  ${key}
+        ...  ELSE  Dictionary Should Contain Key  ${content}[${i}]  ${key}
+    END
+
 Get current milliseconds epoch time
     ${current_epoch_time}=  Get current epoch time
     ${millisec_epoch_time}=    evaluate   int(${current_epoch_time}*1000)
@@ -149,14 +167,14 @@ Query Config
 
 Query Version
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    Create Session  Ping  url=${url}  disable_warnings=true
-    ${resp}=  Get request  Ping  api/${api_version}/version  headers=${headers}
+    Create Session  Version  url=${url}  disable_warnings=true
+    ${resp}=  Get request  Version  api/${api_version}/version  headers=${headers}
     Set Response to Test Variables  ${resp}
 
 Query Metrics
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    Create Session  Ping  url=${url}  disable_warnings=true
-    ${resp}=  Get request  Ping  api/${api_version}/metrics  headers=${headers}
+    Create Session  Metrics  url=${url}  disable_warnings=true
+    ${resp}=  Get request  Metrics  api/${api_version}/metrics  headers=${headers}
     Set Response to Test Variables  ${resp}
 
 
