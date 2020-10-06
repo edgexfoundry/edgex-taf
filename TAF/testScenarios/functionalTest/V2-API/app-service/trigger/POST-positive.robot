@@ -21,6 +21,7 @@ TriggerPOST001 - Trigger pipeline (no match)
     And Body Should Match Empty
 
 TriggerPOST002 - Trigger pipeline (XML)
+    [Tags]  SmokeTest
     Given Set Functions FilterByDeviceName, TransformToXML, SetOutputData
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"

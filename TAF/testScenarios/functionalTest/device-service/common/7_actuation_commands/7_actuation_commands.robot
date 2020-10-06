@@ -18,7 +18,7 @@ ${SUITE}        Actuation Commands
 *** Test Cases ***
 # Actuation commands by id /device/{id}/{command}
 PUT001 - Test DS actuates commands to device/sensor by id on multiple data type
-    [Tags]  Backward
+    [Tags]  Backward  SmokeTest
     @{data_types_get_rw}=  Skip read only and write only commands "${SUPPORTED_DATA_TYPES}"
     FOR    ${item}    IN    @{data_types_get_rw}
        run keyword and continue on failure   DS actuates commands to device/sensor by id  ${item["dataType"]}   ${item["commandName"]}  ${item["readingName"]}

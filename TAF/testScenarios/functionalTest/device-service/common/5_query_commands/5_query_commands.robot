@@ -17,7 +17,7 @@ ${SUITE}              Query Commands
 
 *** Test Cases ***
 Get001 - Test Retrieve device reading by id and the data is sent to Core Data with multiple data type
-    [Tags]  Backward
+    [Tags]  Backward  SmokeTest
     @{data_types_skip_write_only}=  Skip write only commands
     FOR    ${item}    IN    @{data_types_skip_write_only}
        run keyword and continue on failure  Retrieve reading by device id and the data is sent to Core Data  ${item["dataType"]}  ${item["commandName"]}  ${item["readingName"]}
