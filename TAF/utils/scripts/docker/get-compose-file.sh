@@ -5,6 +5,7 @@ USE_DB=${1:--redis}
 USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
 USE_RELEASE=${4:-nightly-build}
+USE_SHA1=${5:-master}
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
@@ -17,7 +18,7 @@ mkdir temp
 if [ "$USE_RELEASE" = "nightly-build" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
-  ./sync-nightly-build.sh ${USE_ARM64} ${USE_NO_SECURITY}
+  ./sync-nightly-build.sh ${USE_SHA1} ${USE_NO_SECURITY} ${USE_ARM64}
 
   # Need to remove the existing device services so the added ones below don't conflict
   sed '/  device-rest:/,/- 127.0.0.1:49990:49990\/tcp/d' docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml > temp/docker-compose-temp.yaml
