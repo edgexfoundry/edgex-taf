@@ -1,7 +1,7 @@
   app-service-http-export:
     image: ${appService}
     ports:
-      - "48096:48096"
+      - 127.0.0.1:48096:48096/tcp
     container_name: app-service-http-export
     hostname: app-service-http-export
     environment:
@@ -20,11 +20,14 @@
       Writable_LogLevel: DEBUG
     networks:
       - edgex-network
+    depends_on:
+      - consul
+      - data
 
   app-service-mqtt-export:
     image: ${appService}
     ports:
-      - "48097:48097"
+      - 127.0.0.1:48097:48097/tcp
     container_name: app-service-mqtt-export
     hostname: app-service-mqtt-export
     environment:
@@ -43,6 +46,9 @@
       Writable_LogLevel: DEBUG
     networks:
       - edgex-network
+    depends_on:
+      - consul
+      - data
 
   mqtt-broker:
     image: eclipse-mosquitto
@@ -56,7 +62,7 @@
   app-service-blackbox-tests:
     image: ${appService}
     ports:
-      - "48095:48095"
+      - 127.0.0.1:48095:48095/tcp
     container_name: app-service-blackbox-tests
     hostname: app-service-blackbox-tests
     environment:
@@ -69,11 +75,14 @@
       EDGEX_SECURITY_SECRET_STORE: "false"
     networks:
       - edgex-network
+    depends_on:
+      - consul
+      - data
 
   app-service-http-export-secrets:
     image: ${appService}
     ports:
-      - "48098:48098"
+      - 127.0.0.1:48098:48098/tcp
     container_name: app-service-http-export-secrets
     hostname: app-service-http-export-secrets
     environment:
@@ -105,4 +114,6 @@
     - /tmp/edgex/secrets/appservice-http-export-secrets:/tmp/edgex/secrets/appservice-http-export-secrets:ro,z
     networks:
       - edgex-network
-
+    depends_on:
+      - consul
+      - data
