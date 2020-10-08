@@ -13,6 +13,7 @@ EventPUT001 - Update event pushed time
     And Should Have Content-Type "application/json"
     And Each Item Should Contain Status Code "200" and checksum
     And Each Item Pushed Time Should Be Updated
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
 ErrEventPUT001 - Update event pushed time fails
@@ -21,6 +22,7 @@ ErrEventPUT001 - Update event pushed time fails
     Then Should Return Status Code "207"
     And Should Have Content-Type "application/json"
     And Each Item Should Contain Status Code "404" and no checksum
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
 ErrEventPUT002 - Update event pushed time fails (Partial Failure)
@@ -30,4 +32,5 @@ ErrEventPUT002 - Update event pushed time fails (Partial Failure)
     And Should Have Content-Type "application/json"
     And Item Should Contain Status Code "200" and checksum
     And Item Should Contain Status Code "404" and no checksum
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events

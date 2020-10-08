@@ -12,6 +12,7 @@ EventGET001 - Query all events
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
     And Validate Response Schema
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
 EventGET002 - Query event by ID
@@ -20,6 +21,7 @@ EventGET002 - Query event by ID
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
     And Validate Response Schema
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
 EventGET003 - Query all events with specified device by device id
@@ -28,6 +30,7 @@ EventGET003 - Query all events with specified device by device id
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
     And Events Should Be Linked To Specified Device
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
 EventGET004 - Query events by start/end time
@@ -44,6 +47,7 @@ EventGET005 - Query a count of all of events
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
     And Count Should Be Correct
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
 EventGET006 - Query a count of all of events with specified device by device id
@@ -52,5 +56,6 @@ EventGET006 - Query a count of all of events with specified device by device id
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
     And Count Should Be Correct
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
