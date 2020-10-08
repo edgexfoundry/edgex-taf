@@ -18,6 +18,7 @@ ${SUITE}         Clean Up Events/Readings By Scheduler
 
 *** Test Cases ***
 Scheduler001-Set scheduler for each 30s to clean up events
+    [Tags]  SmokeTest
     Given Create Interval and set frequency to "30"s
     And Create interval action with interval "30"s delete events for core-data
     And Create events by get device command

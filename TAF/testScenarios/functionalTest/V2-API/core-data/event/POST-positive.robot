@@ -13,6 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 EventPOST001 - Create events
+    [Tags]  SmokeTest
     Given Generate Multiple Events Sample With Simple Readings
     When Create Events
     Then Should Return Status Code "207"

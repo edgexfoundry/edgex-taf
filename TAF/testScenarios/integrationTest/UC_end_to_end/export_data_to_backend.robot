@@ -20,6 +20,7 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 
 *** Test Cases ***
 Export001 - Export events/readings to HTTP Server
+    [Tags]  SmokeTest
     ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
     Given Deploy services  app-service-http-export
     And Create device  create_device.json
@@ -32,6 +33,7 @@ Export001 - Export events/readings to HTTP Server
                 ...           AND  Terminate Process  ${handle}  kill=True
 
 Export002 - Export events/readings to MQTT Server
+    [Tags]  SmokeTest
     Given Deploy services  mqtt-broker
     And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
