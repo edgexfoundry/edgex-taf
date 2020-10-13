@@ -19,6 +19,7 @@ EventPOST001 - Create events
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     #[Teardown]  Delete Events
 
 EventPOST002 - Create event with binary data
@@ -27,6 +28,7 @@ EventPOST002 - Create event with binary data
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     #[Teardown]  Delete Events
 
 *** Keywords ***

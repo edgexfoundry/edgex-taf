@@ -19,6 +19,7 @@ ErrEventPOST001 - Create events fails (Event ID Conflict)
     And Should Return Content-Type "application/json"
     And Item Index 0,1,2 Should Contain Status Code "201" And id
     And Item Index 3 Should Contain Status Code "409" And no id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventPOST002 - Create events fails (Bad Events)
     ${bad_property}=  Create List  no_event  no_deviceName  no_origin  no_readings  no_id  bad_id
@@ -26,6 +27,7 @@ ErrEventPOST002 - Create events fails (Bad Events)
          Given Generate Bad Event With ${property}
          And Create Events
          Then Should Return Status Code "400"
+         And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 
 ErrEventPOST003 - Create events fails (Bad Simple Readings)
@@ -34,6 +36,7 @@ ErrEventPOST003 - Create events fails (Bad Simple Readings)
          Given Generate Bad Simple Reading With ${property}
          And Create Events
          Then Should Return Status Code "400"
+         And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 
 ErrEventPOST004 - Create events fails (Bad Binary Readings)
@@ -42,6 +45,7 @@ ErrEventPOST004 - Create events fails (Bad Binary Readings)
          Given Generate Bad Binary Reading With ${property}
          And Create Events
          Then Should Return Status Code "400"
+         And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 
 *** Keywords ***

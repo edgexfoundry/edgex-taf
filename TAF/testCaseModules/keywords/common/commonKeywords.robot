@@ -6,6 +6,8 @@ Library   DateTime
 Library   TAF/testCaseModules/keywords/setup/edgex.py
 Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
+*** Variables ***
+${default_response_time_threshold}  1200
 
 *** Keywords ***
 Setup Suite
@@ -77,6 +79,10 @@ Should return Content-Type "${content_type}"
 Should contain "${element}"
     Should Not be empty  ${content}[${element}]
 
+Response Time Should Be Less Than "${time_limit}"ms
+    log  Response Time:${response_time}ms
+    Should be true  ${time_limit} >= ${response_time}  Response Time Exceeded:${response_time}ms
+
 Should Return Status Code "${status_code}" And ${element}
     Should return status code "${status_code}"
     Should return Content-Type "application/json"
@@ -146,6 +152,8 @@ Load data file "${json_file}" and get variable "${use_variable}"
 Set Response to Test Variables
     [Arguments]  ${resp}
     Set test variable  ${response}  ${resp.status_code}
+    ${elapsed}=  Evaluate   int(${resp.elapsed.total_seconds()}*1000)
+    Set test variable  ${response_time}  ${elapsed}
     ${headers}=  Run keyword if  'Content-Type' in ${resp.headers}  Set variable  ${resp.headers}[Content-Type]
     ...          ELSE  Set variable  None
     ${content}=  Run Keyword If  '${headers}' == 'application/json'  Evaluate  json.loads('''${resp.content}''')  json

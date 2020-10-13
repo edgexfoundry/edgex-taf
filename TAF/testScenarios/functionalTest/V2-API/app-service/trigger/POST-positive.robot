@@ -19,6 +19,7 @@ TriggerPOST001 - Trigger pipeline (no match)
     When Trigger Function Pipeline With No Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match Empty
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST002 - Trigger pipeline (XML)
     [Tags]  SmokeTest
@@ -26,30 +27,35 @@ TriggerPOST002 - Trigger pipeline (XML)
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match XML String
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST003 - Trigger pipeline (JSON)
     Given Set Functions FilterByDeviceName, TransformToJSON, SetOutputData
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON String
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST004 - Trigger pipeline (JSON-GZIP)
     Given Set Functions FilterByDeviceName, TransformToJSON, CompressWithGZIP, SetOutputData
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON-GZIP String
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
     Given Set Functions FilterByDeviceName, TransformToJSON, CompressWithZLIB, SetOutputData
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON-ZLIB String
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST006 - Trigger pipeline (JSON-ZLIB-AES)
     Given Set Functions FilterByDeviceName, TransformToXML, CompressWithZLIB, EncryptWithAES, SetOutputData
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON-ZLIB-AES String
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 *** Keywords ***
 Body Should Match ${type}
