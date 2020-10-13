@@ -1,0 +1,43 @@
+name: "Test-Profile-2"
+description: "Modbus Honeywell variable speed motors"
+manufacturer: "Honeywell"
+model: "ABC123"
+labels:
+  - "modbus"
+  - "variable speed motor"
+  - "Honeywell"
+  - "string_r"
+  - "float32_r"
+
+deviceResources:
+  - name: "DeviceValue_String_R"
+    description: "Generate device string value"
+    tag: "kind"
+    properties:
+      type: "STRING"
+      readWrite: "R"
+  - name: "DeviceValue_FLOAT32_R"
+    description: "Generate device FLOAT32 value"
+    tag: "speed"
+    properties:
+      type: "FLOAT32"
+      readWrite: "R"
+      floatEncoding: "Base64"
+      scale: "0.001"
+      units: "kHz"
+
+deviceCommands:
+  - name: "MotorKind"
+    get:
+      - deviceResource: "DeviceValue_String_R"
+  - name: "CurrentSpeed"
+    get:
+      - deviceResource: "DeviceValue_FLOAT32_R"
+
+coreCommands:
+- name: "MotorKind"
+  get: true
+  put: false
+- name: "CurrentSpeed"
+  get: true
+  put: false

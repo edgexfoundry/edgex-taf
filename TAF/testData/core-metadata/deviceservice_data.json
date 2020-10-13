@@ -1,0 +1,10 @@
+{
+   "name" :"Test-Device-Service",
+   "description":"deviceservice",
+   "adminState":"UNLOCKED",
+   "operatingState":"ENABLED",
+   "labels":[
+      "device-example"
+   ],
+   "baseAddress":"http://home-device-service:49990"
+}

@@ -11,7 +11,7 @@ Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Deploy device service  device-virtual
 Suite Teardown   Run keywords   Remove services  device-virtual
-...                             AND  Delete device profile by name Sample-Profile
+...                             AND  Delete device profile by name  Sample-Profile
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 *** Variables ***

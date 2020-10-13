@@ -3,6 +3,7 @@ Library   OperatingSystem
 Library   Collections
 Library   String
 Library   DateTime
+Library   yaml
 Library   TAF/testCaseModules/keywords/setup/edgex.py
 Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
@@ -148,6 +149,11 @@ Load data file "${json_file}" and get variable "${use_variable}"
     ${json_data}=  Get File  ${WORK_DIR}/TAF/testData/${json_file}  encoding=UTF-8
     ${json_string}=  Evaluate  json.loads('''${json_data}''')  json
     [Return]    ${json_string}[${use_variable}]
+
+Load yaml file "${yaml_file}" and convert to dictionary
+    ${yaml_data}=  Get Binary File  ${WORK_DIR}/TAF/testData/${yaml_file}
+    ${dict}=  yaml.Safe Load  ${yaml_data}
+    [Return]  ${dict}
 
 Set Response to Test Variables
     [Arguments]  ${resp}
