@@ -77,6 +77,6 @@ Success to add reading to core data srevice when the config MetaDataCheck set to
     Then should return status code "200"
     [Teardown]  Run Keywords  the config MetaDataCheck set to false
     ...  AND  delete device by name ${device}[name]
-    ...  AND  delete device profile by name ${deviceProfile}[name]
-    ...  AND  delete device service by name ${deviceService}[name]
+    ...  AND  delete device profile by name  ${deviceProfile}[name]
+    ...  AND  delete device service by name  ${deviceService}[name]
     ...  AND  delete addressable by name ${addressable}[name]

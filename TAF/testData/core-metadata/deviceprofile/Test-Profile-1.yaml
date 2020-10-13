@@ -1,0 +1,46 @@
+name: "Test-Profile-1"
+description: "BACnet Honeywell thermostats"
+manufacturer: "Honeywell"
+model: "ABC123"
+labels: 
+  - "bacnet"
+  - "thermostat"
+  - "Honeywell"
+  - "bool_rw"
+  - "uint8_r"
+
+deviceResources:
+  - name: "DeviceValue_Boolean_RW"
+    description: "Generate device boolean value"
+    tag: "status"
+    properties:
+      type: "BOOL"
+      readWrite: "RW"
+      minimum: "0"
+      maximum: "1"
+      defaultValue: "true"
+  - name: "DeviceValue_UINT8_R"
+    description: "Generate device UINT8 value"
+    tag: "temperature"
+    properties:
+      type: "UINT8"
+      readWrite: "R"
+      units: "degreesFarenheit"
+
+deviceCommands:
+  - name: "CurrentStatus"
+    get:
+      - deviceResource: "DeviceValue_Boolean_RW"
+    set:
+      - deviceResource: "DeviceValue_Boolean_RW"
+  - name: "CurrentTemperature"
+    get:
+      - deviceResource: "DeviceValue_UINT8_R"
+
+coreCommands:
+- name: "CurrentStatus"
+  get: true
+  put: true
+- name: "CurrentTemperature"
+  get: true
+  put: false

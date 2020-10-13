@@ -17,7 +17,6 @@ Callback001 - Test Callback API Post method is available
     [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
-    #Given Create device profile
     When Create device  create_device.json
     sleep  500ms
     Then Invoke Get command by device id "${device_id}" and command name "${commandName}"
@@ -32,7 +31,6 @@ Callback003 - Test Callback API Delete method is available
     [Tags]  Backward
     @{data_types_skip_write_only}=  Skip write only commands
     ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
-    #Given Create device profile
     Given Create device  create_device.json
     sleep  500ms
     ${device_id_str}=  convert to string  ${device_id}
@@ -43,7 +41,6 @@ Callback003 - Test Callback API Delete method is available
     [Teardown]  Delete device by name
 
 Callback004 - Test Callback API Delete method with invalid action type
-    #Given Create device profile
     Given Create device  create_device.json
     ${device_id_str}=  convert to string  ${device_id}
     When Invoke Delete callback for the device "${device_id_str}" with action type "invalid_action_type"

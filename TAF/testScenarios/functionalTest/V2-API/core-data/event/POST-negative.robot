@@ -13,6 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ErrEventPOST001 - Create events fails (Event ID Conflict)
+    [Tags]  Skipped
     Given Generate Multiple Events Sample With Id Conflict
     When Create Events
     Then Should Return Status Code "207"
@@ -57,20 +58,23 @@ Generate Multiple Events Sample With Id Conflict
 Generate Bad Event With ${property}
     Generate an event sample with simple readings
     ${no_property}=  Fetch From Right  ${property}  no_
-    Run keyword if  "${property}" == "no_event"  Set to dictionary  ${events}[0]  event=
+    Run keyword if  "${property}" == "no_event"  Set to dictionary  ${events}[0]  event=&{EMPTY}
     ...    ELSE IF  "${property}" == "bad_id"  Set to dictionary  ${events}[0][event]  id=Invalid_ID
-    ...    ELSE  Set to dictionary  ${events}[0][event]  ${no_property}=
+    ...    ELSE IF  "${property}" == "no_origin"  Set to dictionary  ${events}[0][event]  origin=${0}
+    ...    ELSE IF  "${property}" == "no_readings"  Set to dictionary  ${events}[0][event]  readings=@{EMPTY}
+    ...    ELSE     Set to dictionary  ${events}[0][event]  ${no_property}=${EMPTY}
 
 Generate Bad Simple Reading With ${property}
     Generate an event sample with simple readings
     ${no_property}=  Fetch From Right  ${property}  no_
     Run keyword if  "${property}" == "bad_valueType"  Set to dictionary  ${events}[0][event][readings][0]  valueType=Invalid_type
-    ...    ELSE IF  "${property}" == "no_FloatEncoding"  Set to dictionary  ${events}[0][event][readings][1]  floatEncoding=
-    ...    ELSE  Set to dictionary  ${events}[0][event][readings][0]  ${no_property}=
+    ...    ELSE IF  "${property}" == "no_FloatEncoding"  Set to dictionary  ${events}[0][event][readings][1]  floatEncoding=${EMPTY}
+    ...    ELSE IF  "${property}" == "no_origin"  Set to dictionary  ${events}[0][event][readings][0]  origin=${0}
+    ...    ELSE     Set to dictionary  ${events}[0][event][readings][0]  ${no_property}=${EMPTY}
 
 Generate Bad Binary Reading With ${property}
     ${event}=  Generate event sample  Event  Device-Test-001  Binary Reading
     ${events}=  Create List  ${event}
     Set test variable  ${events}  ${events}
     ${no_property}=  Fetch From Right  ${property}  no_
-    Set to dictionary  ${events}[0][event][readings][0]  ${no_property}=
+    Set to dictionary  ${events}[0][event][readings][0]  ${no_property}=${EMPTY}

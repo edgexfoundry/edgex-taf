@@ -1,0 +1,29 @@
+name: "Test-Profile-3"
+description: "BACnet livingroom thermostats"
+manufacturer: "Honeywell"
+model: "ABC123"
+labels:
+  - "bacnet"
+  - "thermostat"
+  - "Honeywell"
+  - "float32_r"
+
+deviceResources:
+  - name: "DeviceValue_FLOAT32_R"
+    description: "Generate device FLOAT32 value"
+    tag: "humidity"
+    properties:
+      type: "FLOAT32"
+      readWrite: "R"
+      units: "%"
+
+deviceCommands:
+  - name: "CurrentHumidity"
+    get:
+      - deviceResource: "DeviceValue_FLOAT32_R"
+
+coreCommands:
+- name: "CurrentHumidity"
+  get: true
+  put: false
+
