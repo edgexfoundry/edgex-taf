@@ -18,7 +18,7 @@
     ],
     "origin": 0,
     "valueType": "Float32",
-    "floatEncoding": "IEEE-754",
+    "floatEncoding": "eNotation",
     "value": "39.5"
   },
   "Binary Reading": {

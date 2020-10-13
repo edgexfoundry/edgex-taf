@@ -28,6 +28,7 @@ ErrEventPOST002 - Create events fails (Bad Events)
          Given Generate Bad Event With ${property}
          And Create Events
          Then Should Return Status Code "400"
+         And Should Return Content-Type "application/json"
          And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 
@@ -37,6 +38,7 @@ ErrEventPOST003 - Create events fails (Bad Simple Readings)
          Given Generate Bad Simple Reading With ${property}
          And Create Events
          Then Should Return Status Code "400"
+         And Should Return Content-Type "application/json"
          And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 
@@ -46,6 +48,7 @@ ErrEventPOST004 - Create events fails (Bad Binary Readings)
          Given Generate Bad Binary Reading With ${property}
          And Create Events
          Then Should Return Status Code "400"
+         And Should Return Content-Type "application/json"
          And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 

@@ -117,7 +117,10 @@ Add reading with value ${value} by value descriptor ${valueDescriptor} and devic
 Query event by event id "${event_id}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataEventUri}/${event_id}   headers=${headers}
+    ${api}=  Set Variable If   "${api_version}"=="v1"  ${coreDataEventUri}/${event_id}
+    ...      "${api_version}"=="v2"  ${coreDataEventUri}/id/${event_id}
+    ${resp}=  Get Request  Core Data    ${api}   headers=${headers}
+    Run Keyword If  "${api_version}"=="v2"  Set Response to Test Variables  ${resp}
     [Return]  ${resp.status_code}  ${resp.content}
 
 Query device event by start/end time
@@ -138,6 +141,12 @@ Query events
     ${resp}=  Get Request  Core Data    ${coreDataEventUri}   headers=${headers}
     [Return]  ${resp.status_code}  ${resp.content}
 
+Query all events count
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Data    ${coreDataEventUri}/count  headers=${headers}
+    Set Response to Test Variables  ${resp}
+
 Create Events
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -150,7 +159,8 @@ Generate event sample
     # event_data: Event, Event With Tags ; readings_type: Simple Reading, Simple Float Reading, Binary Reading
     [arguments]  ${event_data}  ${deviceName}  @{readings_type}
     ${uuid}=  Evaluate  str(uuid.uuid4())
-    ${origin}=  Get current milliseconds epoch time
+    ${millisec_epoch_time}=  Get current milliseconds epoch time
+    ${origin}=  Evaluate  int(${millisec_epoch_time}*1000000)
     @{readings}=  Create List
     FOR  ${type}  IN  @{readings_type}
         ${reading}=  Load data file "core-data/readings_data.json" and get variable "${type}"
