@@ -18,11 +18,11 @@
       EDGEX_SECURITY_SECRET_STORE: "false"
       Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
       Writable_LogLevel: DEBUG
-    networks:
-      - edgex-network
     depends_on:
       - consul
       - data
+    networks:
+      - edgex-network
 
   app-service-mqtt-export:
     image: ${appService}
@@ -44,11 +44,11 @@
       EDGEX_SECURITY_SECRET_STORE: "false"
       Writable_Pipeline_Functions_MQTTSend_Addressable_Address: mqtt-broker
       Writable_LogLevel: DEBUG
-    networks:
-      - edgex-network
     depends_on:
       - consul
       - data
+    networks:
+      - edgex-network
 
   mqtt-broker:
     image: eclipse-mosquitto
@@ -73,11 +73,11 @@
       Registry_Host: edgex-core-consul
       Service_Port: 48095
       EDGEX_SECURITY_SECRET_STORE: "false"
-    networks:
-      - edgex-network
     depends_on:
       - consul
       - data
+    networks:
+      - edgex-network
 
   app-service-http-export-secrets:
     image: ${appService}
@@ -112,8 +112,8 @@
     - /tmp/edgex/secrets/ca:/tmp/edgex/secrets/ca:ro,z
     - /tmp/edgex/secrets/edgex-application-service:/tmp/edgex/secrets/edgex-application-service:ro,z
     - /tmp/edgex/secrets/appservice-http-export-secrets:/tmp/edgex/secrets/appservice-http-export-secrets:ro,z
-    networks:
-      - edgex-network
     depends_on:
       - consul
       - data
+    networks:
+      - edgex-network
