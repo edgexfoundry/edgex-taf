@@ -10,7 +10,7 @@ USE_SECURITY=${2:--}
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
 # # sync docker-compose file from developer-script repo
-./sync-nightly-build.sh master ${USE_ARM64} ${USE_NO_SECURITY}
+./sync-nightly-build.sh master ${USE_NO_SECURITY} ${USE_ARM64}
 
 cp docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
