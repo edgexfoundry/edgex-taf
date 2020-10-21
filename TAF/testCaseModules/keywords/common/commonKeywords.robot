@@ -71,6 +71,10 @@ Get random "${value}" from "${list}"
     ${random_value}=  convert to string  ${random}[${value}]
     [Return]  ${random_value}
 
+Get "${property}" from multi-status item ${index}
+    ${item_value}=  Set Variable  ${content}[${index}][${property}]
+    Set Test Variable  ${item_value}  ${item_value}
+
 Should return status code "${status_code}"
     Should be true  ${response} == ${status_code}
 
@@ -93,15 +97,24 @@ apiVersion Should be ${api_version}
     Should contain "apiVersion"
     Should be true  '${content}[apiVersion]' == '${api_version}'
 
-Item Index ${index} Should Contain Status Code "${status_code}" And ${element}
+Item Index ${index} Should Contain Status Code "${status_code}"
     ${content_type}=  Evaluate  type($content).__name__
     ${content}=  Run keyword if  ${content_type} != list  Evaluate  json.loads('''${content}''')  json
     ...          ELSE  Set Variable  ${content}
     ${len}=  Get length  ${content}
+    Set Test Variable  ${content}  ${content}
+    Set Test Variable  ${content_len}  ${len}
     ${index}=  Run keyword if  "${index}" == "All"  Evaluate  list(range(0,${len}))
     ...        ELSE  Split String  ${index}  ,
     FOR  ${i}  IN  @{index}
         Should be true  ${content}[${i}][statusCode] == ${status_code}
+    END
+
+Item Index ${index} Should Contain Status Code "${status_code}" And ${element}
+    Item Index ${index} Should Contain Status Code "${status_code}"
+    ${index}=  Run keyword if  "${index}" == "All"  Evaluate  list(range(0,${content_len}))
+    ...        ELSE  Split String  ${index}  ,
+    FOR  ${i}  IN  @{index}
         ${key}=  Fetch From Right  ${element}  no${SPACE}
         Run keyword if  "no" in "${element}"  Dictionary Should Not Contain Key  ${content}[${i}]  ${key}
         ...  ELSE  Dictionary Should Contain Key  ${content}[${i}]  ${key}

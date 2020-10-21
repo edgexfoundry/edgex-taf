@@ -1,43 +1,51 @@
 *** Settings ***
-Resource         TAF/testCaseModules/keywords/commonKeywords.robot
-Suite Setup      Setup Suite
+Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+Default Tags    v2-api
 
 *** Variables ***
-${SUITE}         Core Metadata Device Service DELETE Negative Test Cases
+${SUITE}          Core Metadata Device Service DELETE Negative Test Cases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-delete-negative.log
+${api_version}    v2
 
 *** Test Cases ***
 ErrServiceDELETE001 - Delete device service by ID with invalid id format
     # use non uuid format, like d138fccc-f39a4fd0-bd32
-    Given Create A Device Service
-    When Delete Device Service By ID
+    When Delete Device Service By ID  d138fccc-f39a4fd0-bd32
     Then Should Return Status Code "400"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrServiceDELETE002 - Delete device service by ID that used by device
+    [Tags]  Skipped
     Given Create A Device Service
     And Create A Device
     When Delete Device Service By ID
     Then Should Return Status Code "423"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrServiceDELETE003 - Delete device service by ID with non-existent id
-    When Delete Device Service By ID
+    ${random_uuid}=  Evaluate  str(uuid.uuid4())
+    When Delete Device Service By ID  ${random_uuid}
     Then Should Return Status Code "404"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrServiceDELETE004 - Delete device service by name with empty name
-    When Delete Device Service By Name
-    Then Should Return Status Code "400"
-    And Response Time Should Be Less Than "1200"ms
-
-ErrServiceDELETE005 - Delete device service by name that used by device
+ErrServiceDELETE004 - Delete device service by name that used by device
+    [Tags]  Skipped
     Given Create A Device Service
     And Create A Device
     When Delete Device Service By Name
     Then Should Return Status Code "423"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrServiceDELETE006 - Delete device service by name with non-existent service name
-    When Delete Device Service By Name
+ErrServiceDELETE005 - Delete device service by name with non-existent service name
+    When Delete Device Service By Name  Invalid_Name
     Then Should Return Status Code "404"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
