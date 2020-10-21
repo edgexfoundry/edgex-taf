@@ -24,7 +24,7 @@ ErrProfilePOSTUpload001 - Create device profile by upload file with duplicate pr
 
 ErrProfilePOSTUpload002 - Create device profile by upload file with profile name validation error
     # Empty profile name
-    Given Generate New Test-Profile-4.yaml With Bad "profile" Property "name" Value "${EMPTY}"
+    Given Generate New Test-Profile-4.yaml With "profile" Property "name" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -33,7 +33,7 @@ ErrProfilePOSTUpload002 - Create device profile by upload file with profile name
 
 ErrProfilePOSTUpload003 - Create device profile by upload file with deviceResources validation error
     # Empty deviceResources
-    Given Generate New Test-Profile-4.yaml With Bad "profile" Property "deviceResources" Value "@{EMPTY}"
+    Given Generate New Test-Profile-4.yaml With "profile" Property "deviceResources" Value "@{EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -42,7 +42,7 @@ ErrProfilePOSTUpload003 - Create device profile by upload file with deviceResour
 
 ErrProfilePOSTUpload004 - Create device profile by upload file with PropertyValue validation error
     # deviceResources > PropertyValue without type
-    Given Generate New Test-Profile-4.yaml With Bad "deviceResources-properties" Property "type" Value "${EMPTY}"
+    Given Generate New Test-Profile-4.yaml With "deviceResources-properties" Property "type" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -51,7 +51,7 @@ ErrProfilePOSTUpload004 - Create device profile by upload file with PropertyValu
 
 ErrProfilePOSTUpload005 - Create device profile by upload file with ProfileResource validation error
     # deviceCommands > ProfileResource without name
-    Given Generate New Test-Profile-4.yaml With Bad "deviceCommands" Property "name" Value "${EMPTY}"
+    Given Generate New Test-Profile-4.yaml With "deviceCommands" Property "name" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -60,7 +60,7 @@ ErrProfilePOSTUpload005 - Create device profile by upload file with ProfileResou
 
 ErrProfilePOSTUpload006 - Create device profile by upload file with coreCommands name validation error
     # coreCommands without name
-    Given Generate New Test-Profile-4.yaml With Bad "coreCommands" Property "name" Value "${EMPTY}"
+    Given Generate New Test-Profile-4.yaml With "coreCommands" Property "name" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -69,24 +69,11 @@ ErrProfilePOSTUpload006 - Create device profile by upload file with coreCommands
 
 ErrProfilePOSTUpload007 - Create device profile by upload file with coreCommands command validation error
     # coreCommands get and put both are false
-    Given Generate New Test-Profile-4.yaml With Bad "coreCommands" Property "get" Value "${false}"
+    Given Generate New Test-Profile-4.yaml With "coreCommands" Property "get" Value "${false}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
-*** keywords ***
-Generate New ${file} With Bad "${dict}" Property "${property}" Value "${value}"
-    ${yaml_dict}=  Load yaml file "core-metadata/deviceprofile/${file}" and convert to dictionary
-    Run Keyword IF  "${dict}" == "profile"  Set to Dictionary  ${yaml_dict}  ${property}=${value}
-    ...    ELSE IF  "${dict}" == "deviceResources-properties"  Set to Dictionary  ${yaml_dict}[deviceResources][0][properties]  ${property}=${value}
-    ...    ELSE IF  "${dict}" == "deviceCommands"  Set to Dictionary  ${yaml_dict}[deviceCommands][0]  ${property}=${value}
-    ...    ELSE IF  "${dict}" == "coreCommands"  Set to Dictionary  ${yaml_dict}[coreCommands][1]  ${property}=${value}
-    ${yaml}=  yaml.Safe Dump  ${yaml_dict}
-    Create File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/NEW-${file}  ${yaml}
-
-Delete Profile Files
-    [Arguments]  ${file}
-    Remove File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${file}
 
