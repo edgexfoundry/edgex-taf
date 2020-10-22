@@ -52,15 +52,20 @@ Update device profile ${entity}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 
-Query device profile by id and return by device profile name
+Query all device profiles
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=   get request  Core Metadata    ${deviceProfileUri}/${deviceProfileId}  headers=${headers}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Get request  Core Metadata    ${deviceProfileUri}/all  headers=${headers}
+    Set Response to Test Variables  ${resp}
     ${resp_length}=  get length  ${resp.content}
-    run keyword if  ${resp_length} == 3   fail  "No device profile found"
-    ${deviceProfileBody}=  evaluate  json.loads('''${resp.content}''')  json
-    [Return]    ${deviceProfileBody}[name]
+    Run keyword if  ${resp_length} == 3   fail  "No device profile found"
+
+Query all device profiles with ${parameter}=${value}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata  ${deviceProfileUri}/all?${parameter}=${value}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
 
 Query device profile by name
     [Arguments]   ${device_profile_name}
@@ -189,18 +194,39 @@ Delete addressable by name ${addressableName}
 Create device service ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata  /api/${api_version}/deviceservice  json=${entity}   headers=${headers}
+    ${resp}=  Post Request  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
     Run Keyword If  "${api_version}" == "v1"  Run Keywords
     ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ...             AND  Set Test Variable  ${response}  ${resp.status_code}
     ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
     ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
 
+Update device service ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  Patch Request  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Query all device services
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata  ${deviceServiceUri}/all  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all device services with ${parameter}=${value}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata  ${deviceServiceUri}/all?${parameter}=${value}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
 Query device service by name
     [Arguments]  ${device_service_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceServiceUri}/name/${device_service_name}  headers=${headers}
+    ${resp}=  Get Request  Core Metadata  ${deviceServiceUri}/name/${device_service_name}  headers=${headers}
     Set Response to Test Variables  ${resp}
     run keyword if  ${response}!=200  fail  "The device service ${device_service_name} is not found"
 
@@ -275,11 +301,10 @@ Generate Multiple Device Services Sample
     ${index}=  Get current milliseconds epoch time
     Set Test Variable  ${index}
     ${service_names}=  Create List  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
-    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/deviceservice_data.json  encoding=UTF-8
-    ${dict}=  Evaluate  json.loads('''${data}''')  json
     ${data_list}=  Create List
     FOR  ${name}  IN  @{service_names}
-        ${service}=  Copy Dictionary  ${dict}
+        ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/deviceservice_data.json  encoding=UTF-8
+        ${service}=  Evaluate  json.loads('''${data}''')  json
         Set To Dictionary  ${service}  name=${name}
         Append To List  ${data_list}  ${service}
     END
@@ -290,3 +315,9 @@ Generate an device service sample
     ${service}=  Evaluate  json.loads('''${data}''')  json
     Generate Device Services  ${service}
 
+Generate Multiple Device Services Sample For Updating
+    ${labels}=  Create List  device-example  device-update
+    ${update_opstate}=  Create Dictionary  name=Device-Service-${index}-1  labels=${labels}
+    ${update_adminstate}=  Create Dictionary  name=Device-Service-${index}-2  adminState=LOCKED
+    ${update_baseAddr}=  Create Dictionary  name=Device-Service-${index}-3  baseAddress=http://home-device-service:49991
+    Generate Device Services  ${update_opstate}  ${update_adminstate}  ${update_baseAddr}

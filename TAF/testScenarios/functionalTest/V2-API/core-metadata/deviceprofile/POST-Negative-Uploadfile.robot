@@ -7,7 +7,7 @@ Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 Default Tags    v2-api
 
 *** Variables ***
-${SUITE}         Core Metadata Device Profile POST For Upload File Negative Test Cases
+${SUITE}          Core Metadata Device Profile POST For Upload File Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-upload-negative.log
 ${api_version}    v2
 

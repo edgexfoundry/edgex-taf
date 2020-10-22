@@ -7,7 +7,7 @@ Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 Default Tags    v2-api
 
 *** Variables ***
-${SUITE}         Core Metadata Device Service POST Positive Test Cases
+${SUITE}          Core Metadata Device Service POST Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-post-positive.log
 ${api_version}    v2
 

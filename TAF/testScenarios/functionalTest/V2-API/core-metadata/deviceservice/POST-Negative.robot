@@ -7,7 +7,7 @@ Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 Default Tags    v2-api
 
 *** Variables ***
-${SUITE}         Core Metadata Device Service POST Negative Test Cases
+${SUITE}          Core Metadata Device Service POST Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-post-negative.log
 ${api_version}    v2
 
@@ -27,6 +27,7 @@ ErrServicePOST001 - Create device service with duplicate service name
     [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-3
 
 ErrServicePOSTValidate001 - Create device service with empty property
+    # operatingState property will be removed soon
     ${bad_property}=  Create List  no_adminState  no_operatingState  no_name  no_baseAddress
     FOR  ${property}  IN  @{bad_property}
          Given Generate Multiple Device Services With ${property}
@@ -37,6 +38,7 @@ ErrServicePOSTValidate001 - Create device service with empty property
     END
 
 ErrServicePOSTValidate002 - Create device service with invalid property
+    # operatingState property will be removed soon
     ${bad_property}=  Create List  bad_adminState  bad_operatingState
     FOR  ${property}  IN  @{bad_property}
          Given Generate Multiple Device Services With ${property}
@@ -50,7 +52,6 @@ ErrServicePOSTValidate002 - Create device service with invalid property
 Generate Multiple Device Services With ${property}
     Generate Multiple Device Services Sample
     ${bad_property}=  Split String  ${property}  _
-    log to console  ${bad_property}
     Run Keyword If  "${bad_property}[0]" == "no"
     ...             Set to dictionary  ${deviceService}[1][service]  ${bad_property}[1]=${EMPTY}
     ...    ELSE IF  "${bad_property}[0]" == "bad"

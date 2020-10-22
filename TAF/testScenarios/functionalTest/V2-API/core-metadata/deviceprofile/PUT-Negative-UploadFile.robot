@@ -24,7 +24,7 @@ ErrProfilePUTUpload002 - Update device profile by upload file with profile name 
     # Contains valid profile body
     Given Upload Device Profile Test-Profile-1.yaml
     And Generate New Test-Profile-1.yaml With "profile" Property "name" Value "${EMPTY}"
-    When Upload File New-Test-Profile-1.yaml To Update Device Profile
+    When Upload File NEW-Test-Profile-1.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -37,7 +37,7 @@ ErrProfilePUTUpload003 - Update device profile by upload file with deviceResourc
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Generate New Test-Profile-1.yaml With "profile" Property "deviceResources" Value "@{EMPTY}"
-    When Upload File New-Test-Profile-1.yaml To Update Device Profile
+    When Upload File NEW-Test-Profile-1.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -50,7 +50,7 @@ ErrProfilePUTUpload004 - Update device profile by upload file with PropertyValue
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Generate New Test-Profile-2.yaml With "deviceResources-properties" Property "type" Value "${EMPTY}"
-    When Upload File New-Test-Profile-2.yaml To Update Device Profile
+    When Upload File NEW-Test-Profile-2.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -63,7 +63,7 @@ ErrProfilePUTUpload005 - Update device profile by upload file with ProfileResour
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Generate New Test-Profile-3.yaml With "deviceCommands" Property "name" Value "${EMPTY}"
-    When Upload File New-Test-Profile-3.yaml To Update Device Profile
+    When Upload File NEW-Test-Profile-3.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -76,7 +76,7 @@ ErrProfilePUTUpload006 - Update device profile by upload file with coreCommands 
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Generate New Test-Profile-4.yaml With "coreCommands" Property "name" Value "${EMPTY}"
-    When Upload File New-Test-Profile-4.yaml To Update Device Profile
+    When Upload File NEW-Test-Profile-4.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -90,7 +90,7 @@ ErrProfilePUTUpload007 - Update device profile by upload file with coreCommands 
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Generate New Test-Profile-4.yaml With "coreCommands" Property "get" Value "${false}"
-    When Upload File New-Test-Profile-4.yaml To Update Device Profile
+    When Upload File NEW-Test-Profile-4.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
