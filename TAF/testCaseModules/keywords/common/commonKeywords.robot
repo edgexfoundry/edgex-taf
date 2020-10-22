@@ -157,15 +157,15 @@ Load yaml file "${yaml_file}" and convert to dictionary
 
 Set Response to Test Variables
     [Arguments]  ${resp}
-    Set test variable  ${response}  ${resp.status_code}
+    Set suite variable  ${response}  ${resp.status_code}
     ${elapsed}=  Evaluate   int(${resp.elapsed.total_seconds()}*1000)
-    Set test variable  ${response_time}  ${elapsed}
+    Set suite variable  ${response_time}  ${elapsed}
     ${headers}=  Run keyword if  'Content-Type' in ${resp.headers}  Set variable  ${resp.headers}[Content-Type]
     ...          ELSE  Set variable  None
     ${content}=  Run Keyword If  '${headers}' == 'application/json'  Evaluate  json.loads('''${resp.content}''')  json
     ...          ELSE  Set variable  ${resp.content}
-    Set test variable  ${headers}  ${headers}
-    Set test variable  ${content}  ${content}
+    Set suite variable  ${headers}  ${headers}
+    Set suite variable  ${content}  ${content}
 
 Query Ping
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
