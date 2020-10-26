@@ -60,7 +60,7 @@ ServiceGET004 - Query all device services by labels
     ...                                                  Device-Service-${index}-3
 
 ServiceGET005 - Query device service by name
-    Given Generate An Device Service Sample
+    Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     When Query Device Service By Name  Test-Device-Service
     Then Should Return Status Code "200" And service

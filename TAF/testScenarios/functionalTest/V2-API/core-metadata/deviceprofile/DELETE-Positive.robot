@@ -13,7 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ProfileDELETE001 - Delete device profile by ID
-    Given Generate An Device Profile Sample  Test-Profile-2
+    Given Generate A Device Profile Sample  Test-Profile-2
     And Create device profile ${deviceProfile}
     And Get "id" From Multi-status Item 0
     When Delete Device Profile By ID  ${item_value}
@@ -23,7 +23,7 @@ ProfileDELETE001 - Delete device profile by ID
     And Device Profile Should Be Deleted  Test-Profile-2
 
 ProfileDELETE002 - Delete device profile by name
-    Given Generate An Device Profile Sample  Test-Profile-3
+    Given Generate A Device Profile Sample  Test-Profile-3
     And Create device profile ${deviceProfile}
     When Delete Device Profile By Name  Test-Profile-3
     Then Should Return Status Code "200"
