@@ -21,7 +21,7 @@ NIGHTLY_BUILD_SOURCE_URL="https://raw.githubusercontent.com/edgexfoundry/develop
 mkdir temp
 
 # Use base compose file from nightly-build for core services
-curl -o temp/nb-compose.yaml "${NIGHTLY_BUILD_SOURCE_URL}/docker-compose-nexus-base.yml"
+curl -o temp/nb-compose.yaml "${NIGHTLY_BUILD_SOURCE_URL}/docker-compose-base.yml"
 curl -o common.env "${NIGHTLY_BUILD_SOURCE_URL}/common.env"
 curl -o temp/geneva-compose.yaml "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/geneva/compose-files/docker-compose-geneva${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
 
