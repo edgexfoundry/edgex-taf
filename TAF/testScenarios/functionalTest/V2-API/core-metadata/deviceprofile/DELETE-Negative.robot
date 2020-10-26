@@ -30,13 +30,21 @@ ErrProfileDELETE002 - Delete device profile by non-existent ID
     log to console  ${content}
 
 ErrProfileDELETE003 - Delete device profile by ID that used by device
-    [Tags]  Skipped
-    Given Create A Device Profile
-    And Create A Device
-    When Delete Device Profile By ID
+    [Tags]  Skipped  # haven't implemented
+    Given Generate A Device Service Sample
+    And Create Device Service ${deviceService}
+    And Generate A Device Profile Sample  Test-Profile-1
+    And Create Device Profile ${deviceProfile}
+    And Get "id" From Multi-status Item 0
+    And Generate A Device Sample  Test-Device-Service  Test-Profile-1
+    And Create Device With ${Device}
+    When Delete Device Profile By ID  ${item_value}
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete Device By Name Test-Device
+    ...                  AND  Delete Device Service By Name  Test-Device-Service
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ErrProfileDELETE004 - Delete device profile by non-existent name
     When Delete Device Profile By Name  Invalid_Name
@@ -45,10 +53,17 @@ ErrProfileDELETE004 - Delete device profile by non-existent name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrProfileDELETE005 - Delete device profile by name that used by device
-    [Tags]  Skipped
-    Given Create A Device Profile
-    And Create A Device
-    When Delete Device Profile By Name
+    [Tags]  Skipped  # haven't implemented
+    Given Generate A Device Service Sample
+    And Create Device Service ${deviceService}
+    And Generate A Device Profile Sample  Test-Profile-2
+    And Create Device Profile ${deviceProfile}
+    And Generate A Device Sample  Test-Device-Service  Test-Profile-2
+    And Create Device With ${Device}
+    When Delete Device Profile By Name  Test-Profile-2
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete Device By Name Test-Device
+    ...                  AND  Delete Device Service By Name  Test-Device-Service
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1

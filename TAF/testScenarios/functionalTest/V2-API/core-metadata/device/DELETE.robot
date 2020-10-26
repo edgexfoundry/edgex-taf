@@ -1,43 +1,69 @@
 *** Settings ***
-Resource         TAF/testCaseModules/keywords/commonKeywords.robot
-Suite Setup      Setup Suite
+Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Suite Setup  Run Keywords  Setup Suite
+...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+Default Tags    v2-api
 
 *** Variables ***
-${SUITE}         Core Metadata Device DELETE Test Cases
+${SUITE}          Core Metadata Device DELETE Test Cases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-delete.log
+${api_version}    v2
 
 *** Test Cases ***
 DeviceDELETE001 - Delete device by ID
-    Given Create A Device
-    When Delete Device By ID
+    Given Generate A Device Service Sample
+    And Create Device Service ${deviceService}
+    And Generate A Device Profile Sample  Test-Profile-1
+    And Create Device Profile ${deviceProfile}
+    And Generate A Device Sample  Test-Device-Service  Test-Profile-1
+    And Create Device With ${Device}
+    And Get "id" From Multi-status Item 0
+    When Delete Device By ID  ${item_value}
     Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Device Should Be Deleted
-    And Response Time Should Be Less Than "1200"ms
+    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 DeviceDELETE002 - Delete device by name
-    Given Create A Device
-    When Delete Device By Name
+    Given Generate A Device Service Sample
+    And Create Device Service ${deviceService}
+    And Generate A Device Profile Sample  Test-Profile-2
+    And Create Device Profile ${deviceProfile}
+    And Generate A Device Sample  Test-Device-Service  Test-Profile-2
+    And Create Device With ${Device}
+    When Delete Device By Name Test-Device
     Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Device Should Be Deleted
-    And Response Time Should Be Less Than "1200"ms
+    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
+    ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
 ErrDeviceDELETE001 - Delete device by ID with invalid id format
     # use non uuid format, like d138fccc-f39a4fd0-bd32
-    Given Create A Device
-    When Delete Device By ID
+    When Delete Device Service By ID  d138fccc-f39a4fd0-bd32
     Then Should Return Status Code "400"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrDeviceDELETE002 - Delete device by ID with non-existent ID
-    When Delete Device By ID
+    ${random_uuid}=  Evaluate  str(uuid.uuid4())
+    When Delete Device Service By ID  ${random_uuid}
     Then Should Return Status Code "404"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrDeviceDELETE003 - Delete device by name with empty value
-    When Delete Device By Name
-    Then Should Return Status Code "400"
-    And Response Time Should Be Less Than "1200"ms
-
-ErrDeviceDELETE004 - Delete device by name with non-existent name
-    When Delete Device By Name
+ErrDeviceDELETE003 - Delete device by name with non-existent name
+    When Delete Device By Name Non-Existent
     Then Should Return Status Code "404"
-    And Response Time Should Be Less Than "1200"ms
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+*** Keywords ***
+Device Should Be Deleted
+    Check existence of device by name   Test-Device
+    Should Return Status Code "404"

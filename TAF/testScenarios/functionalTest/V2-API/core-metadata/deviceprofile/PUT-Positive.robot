@@ -13,7 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ProfilePUT001 - Update a device profile
-    Given Generate An Device Profile Sample  Test-Profile-1
+    Given Generate A Device Profile Sample  Test-Profile-1
     And Create Device Profile ${deviceProfile}
     And Set To Dictionary  ${deviceProfile}[0][profile]  manufacturer=Mfr_ABC
     When Update Device Profile ${deviceProfile}

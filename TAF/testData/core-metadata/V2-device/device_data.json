@@ -1,0 +1,14 @@
+{
+   "origin": 1471806386919,
+   "name" : "Test-Device",
+   "description": "Test-Device",
+   "adminState": "UNLOCKED",
+   "operatingState": "ENABLED",
+   "protocols": "%DeviceServiceProtocal%",
+   "labels":[
+      "device-example"
+   ],
+   "location": "{lat:45.45,long:47.80}",
+   "serviceName": "",
+   "profileName": ""
+}

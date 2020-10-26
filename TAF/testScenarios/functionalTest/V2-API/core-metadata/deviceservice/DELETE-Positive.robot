@@ -13,7 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ServiceDELETE001 - Delete device service by ID
-    Given Generate An Device Service Sample
+    Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     And Get "id" from multi-status item 0
     When Delete Device Service By ID  ${item_value}
@@ -23,7 +23,7 @@ ServiceDELETE001 - Delete device service by ID
     And Device Service Should Be Deleted  Test-Device-Service
 
 ServiceDELETE002 - Delete device service by name
-    Given Generate An Device Service Sample
+    Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     When Delete Device Service By Name  Test-Device-Service
     Then Should Return Status Code "200"

@@ -100,6 +100,7 @@ Delete device profile by id
     Set Response to Test Variables  ${resp}
 
 # Device
+# v1 only: in functionalTest/device-service/common/ and integrationTest
 Create device
     [Arguments]  ${device_file}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -120,9 +121,13 @@ Create device with ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  Post Request  Core Metadata    ${deviceUri}  json=${entity}   headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Set test variable  ${response}  ${resp.status_code}
+    Run Keyword If  "${api_version}" == "v1"  Run Keywords
+    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
+    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
+    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
 
+# v1 only: in functionalTest/device-service/common/
 Creat device with autoEvents parameter
     [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -141,6 +146,7 @@ Creat device with autoEvents parameter
     Should Be Equal As Strings  ${resp.status_code}  200
     set test variable  ${device_id}   ${resp.content}
 
+# v1 only: in keywords/core-data and functionTest/device-service/common/
 Query device by id and return device name
     # output device name
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -152,14 +158,45 @@ Query device by id and return device name
     ${deviceResponseBody}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]    ${deviceResponseBody}[name]
 
-Query device by name
-    [Arguments]  ${device_name}
-    # device detail
+Query all devices
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${responseBody}=  Get Request  Core Metadata    ${deviceUri}/name/${device_name}  headers=${headers}
-    [Return]    ${responseBody}
+    ${resp}=  Get Request  Core Metadata  ${deviceUri}/all  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
 
+Query all devices with ${parameter}=${value}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata  ${deviceUri}/all?${parameter}=${value}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query device by name
+    [Arguments]  ${device_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata    ${deviceUri}/name/${device_name}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail  "The device ${device_name} is not found"
+
+Check existence of device by id
+    [Arguments]  ${device_id}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata    ${deviceUri}/check/id/${device_id}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  log to console  ${content}
+
+Check existence of device by name
+    [Arguments]  ${device_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata    ${deviceUri}/check/name/${device_name}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  log to console  ${content}
+
+# v1 only: in functionalTest/device-service/common/
 Delete device by name
     ${deviceName}=    Query device by id and return device name
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -173,9 +210,24 @@ Delete device by name ${deviceName}
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  Delete Request  Core Metadata  ${deviceUri}/name/${deviceName}  headers=${headers}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Response to Test Variables  ${resp}
+
+Delete multiple devices by names
+    [Arguments]  @{device_list}
+    FOR  ${device}  IN  @{device_list}
+        Delete device by name ${device}
+    END
+
+Delete device by id
+    [Arguments]  ${device_id}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Delete Request  Core Metadata  ${deviceUri}/id/${device_id}  headers=${headers}
+    Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
 
 # Addressable
+# v1 only: in functionalTest/core-data/UC_readings/add_reading.robot
 Create addressable ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
@@ -183,6 +235,7 @@ Create addressable ${entity}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set test variable  ${response}  ${resp.status_code}
 
+# v1 only: in functionalTest/core-data/UC_readings/add_reading.robot
 Delete addressable by name ${addressableName}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -269,9 +322,9 @@ Generate Multiple Device Profiles Sample
     ${profile_3}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-3.yaml" and convert to dictionary
     Generate Device Profiles  ${profile_1}  ${profile_2}  ${profile_3}
 
-Generate an device profile sample
-    [Arguments]  ${profile_name}  # Test-Profile-1, Test-Profile-2, Test-Profile-3 or Test-Profile-4
-    ${profile}=  Load yaml file "core-metadata/deviceprofile/${profile_name}.yaml" and convert to dictionary
+Generate a device profile sample
+    [Arguments]  ${device_profile_name}  # Test-Profile-1, Test-Profile-2, Test-Profile-3 or Test-Profile-4
+    ${profile}=  Load yaml file "core-metadata/deviceprofile/${device_profile_name}.yaml" and convert to dictionary
     Generate Device Profiles  ${profile}
 
 Generate New ${file} With "${dict}" Property "${property}" Value "${value}"
@@ -310,7 +363,7 @@ Generate Multiple Device Services Sample
     END
     Generate Device Services  @{data_list}
 
-Generate an device service sample
+Generate a device service sample
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/deviceservice_data.json  encoding=UTF-8
     ${service}=  Evaluate  json.loads('''${data}''')  json
     Generate Device Services  ${service}
@@ -321,3 +374,56 @@ Generate Multiple Device Services Sample For Updating
     ${update_adminstate}=  Create Dictionary  name=Device-Service-${index}-2  adminState=LOCKED
     ${update_baseAddr}=  Create Dictionary  name=Device-Service-${index}-3  baseAddress=http://home-device-service:49991
     Generate Device Services  ${update_opstate}  ${update_adminstate}  ${update_baseAddr}
+
+# Device
+Generate Devices
+    [Arguments]  @{data_list}
+    ${device_list}=  Create List
+    FOR  ${data}  IN  @{data_list}
+        ${json}=  Create Dictionary  device=${data}
+        Append To List  ${device_list}  ${json}
+    END
+    Set Test Variable  ${Device}  ${device_list}
+
+Generate Multiple Devices Sample
+    [Arguments]  ${device_service_name}  ${device_profile_name}
+    ${device_1}=  Set device values  ${device_service_name}  ${device_profile_name}
+    ${device_2}=  Set device values  ${device_service_name}  ${device_profile_name}
+    Set To Dictionary  ${device_2}  name=Test-Device-Locked
+    Set To Dictionary  ${device_2}  adminState=LOCKED
+    ${device_3}=  Set device values  ${device_service_name}  ${device_profile_name}
+    Set To Dictionary  ${device_3}  name=Test-Device-Disabled
+    Set To Dictionary  ${device_3}  operatingState=DISABLED
+    ${profile}=  Load yaml file "core-metadata/deviceprofile/${device_profile_name}.yaml" and convert to dictionary
+    ${autoEvent}=  Set autoEvents values  10s  false  ${profile}[deviceResources][0][name]
+    ${autoEvents}=  Create List  ${autoEvent}
+    ${device_4}=  Set device values  ${device_service_name}  ${device_profile_name}
+    Set To Dictionary  ${device_4}  name=Test-Device-AutoEvents
+    Set To Dictionary  ${device_4}  autoEvents=${autoEvents}
+    Generate Devices  ${device_1}  ${device_2}  ${device_3}  ${device_4}
+
+Generate a device sample
+    [Arguments]  ${device_service_name}  ${device_profile_name}
+    ${device}=  Set device values  ${device_service_name}  ${device_profile_name}
+    Generate Devices  ${device}
+
+Set device values
+    [Arguments]  ${device_service_name}  ${device_profile_name}
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/V2-device/device_data.json  encoding=UTF-8
+    ${device}=  Evaluate  json.loads('''${data}''')  json
+    ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
+    Set To Dictionary  ${device}  protocols=${protocols}
+    Set To Dictionary  ${device}  serviceName=${device_service_name}
+    Set To Dictionary  ${device}  profileName=${device_profile_name}
+    [Return]  ${device}
+
+Set autoEvents values
+    [Arguments]  ${frequency}  ${onChange}  ${resource}
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/V2-device/auto_events_data.json  encoding=UTF-8
+    ${autoEvent}=  Evaluate  json.loads('''${data}''')  json
+    Set To Dictionary  ${autoEvent}  frequency=${frequency}
+    ${onChange}=  Convert To Boolean  ${onChange}
+    Set To Dictionary  ${autoEvent}  onChange=${onChange}
+    Set To Dictionary  ${autoEvent}  resource=${resource}
+    [Return]  ${autoEvent}
+
