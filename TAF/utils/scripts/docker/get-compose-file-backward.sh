@@ -6,7 +6,7 @@ USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
 USE_RELEASE=${4:-geneva}
 
-NIGHTLY_BUILD_SOURCE_URL="https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/source"
+NIGHTLY_BUILD_SOURCE_URL="https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/compose-builder"
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64" && ARM64_OPTION="arm64"
