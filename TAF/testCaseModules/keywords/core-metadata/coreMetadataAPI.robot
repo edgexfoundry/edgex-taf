@@ -146,6 +146,13 @@ Creat device with autoEvents parameter
     Should Be Equal As Strings  ${resp.status_code}  200
     set test variable  ${device_id}   ${resp.content}
 
+Update devices ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  Patch Request  Core Metadata  ${deviceUri}  json=${entity}   headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
 # v1 only: in keywords/core-data and functionTest/device-service/common/
 Query device by id and return device name
     # output device name
@@ -179,6 +186,22 @@ Query device by name
     ${resp}=  Get Request  Core Metadata    ${deviceUri}/name/${device_name}  headers=${headers}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail  "The device ${device_name} is not found"
+
+Query all devices by serviceName
+    [Arguments]  ${device_service_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata    ${deviceUri}/service/name/${device_service_name}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all devices by ${associated}Name ${associated_name} with ${parameter}=${value}
+    # associated: profile or service ; associated_name: profileName or serviceName
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  Get Request  Core Metadata  ${deviceUri}/${associated}/name/${associated_name}?${parameter}=${value}  headers=${headers}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
 
 Check existence of device by id
     [Arguments]  ${device_id}
@@ -291,7 +314,7 @@ Delete device service by name
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
-Delete multiple device servics by names
+Delete multiple device services by names
     [Arguments]  @{service_list}
     FOR  ${service}  IN  @{service_list}
         Delete device service by name  ${service}
@@ -385,27 +408,38 @@ Generate Devices
     END
     Set Test Variable  ${Device}  ${device_list}
 
-Generate Multiple Devices Sample
-    [Arguments]  ${device_service_name}  ${device_profile_name}
-    ${device_1}=  Set device values  ${device_service_name}  ${device_profile_name}
-    ${device_2}=  Set device values  ${device_service_name}  ${device_profile_name}
+Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Generate Multiple Device Services Sample
+    Create Device Service ${deviceService}
+    Generate Multiple Device Profiles Sample
+    Create Device Profile ${deviceProfile}
+    ${device_1}=  Set device values  Device-Service-${index}-1  Test-Profile-1
+    ${device_2}=  Set device values  Device-Service-${index}-2  Test-Profile-2
     Set To Dictionary  ${device_2}  name=Test-Device-Locked
     Set To Dictionary  ${device_2}  adminState=LOCKED
-    ${device_3}=  Set device values  ${device_service_name}  ${device_profile_name}
+    ${device_3}=  Set device values  Device-Service-${index}-3  Test-Profile-3
     Set To Dictionary  ${device_3}  name=Test-Device-Disabled
     Set To Dictionary  ${device_3}  operatingState=DISABLED
-    ${profile}=  Load yaml file "core-metadata/deviceprofile/${device_profile_name}.yaml" and convert to dictionary
+    ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-1.yaml" and convert to dictionary
     ${autoEvent}=  Set autoEvents values  10s  false  ${profile}[deviceResources][0][name]
     ${autoEvents}=  Create List  ${autoEvent}
-    ${device_4}=  Set device values  ${device_service_name}  ${device_profile_name}
+    ${device_4}=  Set device values  Device-Service-${index}-1  Test-Profile-1
     Set To Dictionary  ${device_4}  name=Test-Device-AutoEvents
     Set To Dictionary  ${device_4}  autoEvents=${autoEvents}
     Generate Devices  ${device_1}  ${device_2}  ${device_3}  ${device_4}
 
-Generate a device sample
-    [Arguments]  ${device_service_name}  ${device_profile_name}
-    ${device}=  Set device values  ${device_service_name}  ${device_profile_name}
+Create A Device Sample With Associated Test-Device-Service And ${device_profile_name}
+    Generate A Device Service Sample
+    Create Device Service ${deviceService}
+    Get "id" From Multi-status Item 0
+    Set Test Variable  ${device_service_id}  ${item_value}
+    Generate A Device Profile Sample  ${device_profile_name}
+    Create Device Profile ${deviceProfile}
+    Get "id" From Multi-status Item 0
+    Set Test Variable  ${device_profile_id}  ${item_value}
+    ${device}=  Set device values  Test-Device-Service  ${device_profile_name}
     Generate Devices  ${device}
+    Create Device With ${Device}
 
 Set device values
     [Arguments]  ${device_service_name}  ${device_profile_name}
@@ -426,4 +460,28 @@ Set autoEvents values
     Set To Dictionary  ${autoEvent}  onChange=${onChange}
     Set To Dictionary  ${autoEvent}  resource=${resource}
     [Return]  ${autoEvent}
+
+Create Devices And Generate Multiple Devices Sample For Updating ${type}
+    Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Create Device With ${Device}
+    ${labels}=  Create List  device-example  device-update
+    ${update_labels}=  Create Dictionary  name=Test-Device  labels=${labels}
+    ${update_adminstate}=  Create Dictionary  name=Test-Device-Locked  adminState=UNLOCKED
+    ${update_opstate}=  Create Dictionary  name=Test-Device-Disabled  operatingState=ENABLED
+    ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "device-virtual"
+    Set To Dictionary  ${protocols}[other]  Address=simple02
+    ${update_protocols}=  Create Dictionary  name=Test-Device-AutoEvents  protocols=${protocols}
+    Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
+    ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
+    Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_opstate}  operatingState=DISABLED
+    ...        AND  Set To Dictionary  ${update_opstate}  profileName=Test-Profile-3
+    Generate Devices  ${update_labels}  ${update_adminstate}  ${update_opstate}  ${update_protocols}
+
+Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    Delete Multiple Devices By Names
+    ...  Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
+    Delete multiple device services by names
+    ...  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    Delete multiple device profiles by names
+    ...  Test-Profile-1  Test-Profile-2  Test-Profile-3
 

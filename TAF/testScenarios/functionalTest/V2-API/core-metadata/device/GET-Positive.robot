@@ -14,62 +14,37 @@ ${api_version}    v2
 *** Test Cases ***
 DeviceGET001 - Query all devices
     [Tags]  SmokeTest
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-1
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-1
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
     When Query All Devices
     Then Should Return Status Code "200" And devices
     And Should Be True  len(${content}[devices]) == 4
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Multiple Devices By Names
-    ...                       Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-1
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET002 - Query all devices with offset
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-2
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-2
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
     When Query All Devices With offset=2
     Then Should Return Status Code "200" And devices
     And Should Be True  len(${content}[devices]) == 2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Multiple Devices By Names
-    ...                       Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-2
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET003 - Query all devices with limit
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-3
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-3
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
     When Query All Devices With limit=3
     Then Should Return Status Code "200" And devices
     And Should Be True  len(${content}[devices]) == 3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Multiple Devices By Names
-    ...                       Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-3
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET004 - Query all devices with specified labels
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-4
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-4
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  labels=@{EMPTY}
     And Append To List  ${Device}[2][device][labels]  new_label
     And Create Device With ${Device}
@@ -79,18 +54,10 @@ DeviceGET004 - Query all devices with specified labels
     And Devices Should Be Linked To Specified Label: device-example
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Multiple Devices By Names
-    ...                       Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-4
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET005 - Query device by name
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-1
-    And Create Device Profile ${deviceProfile}
-    And Generate A Device Sample  Test-Device-Service  Test-Profile-1
-    And Create Device With ${Device}
+    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-1
     When Query Device By Name  Test-Device
     Then Should Return Status Code "200" and device
     And Should Be True  "${content}[device][name]" == "Test-Device"
@@ -102,12 +69,7 @@ DeviceGET005 - Query device by name
 
 DeviceGET006 - Check device exists by name
     [Tags]  SmokeTest
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-2
-    And Create Device Profile ${deviceProfile}
-    And Generate A Device Sample  Test-Device-Service  Test-Profile-2
-    And Create Device With ${Device}
+    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
     When Check Existence Of Device By Name  Test-Device
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
@@ -117,12 +79,7 @@ DeviceGET006 - Check device exists by name
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
 DeviceGET006 - Check device exists by id
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-3
-    And Create Device Profile ${deviceProfile}
-    And Generate A Device Sample  Test-Device-Service  Test-Profile-3
-    And Create Device With ${Device}
+    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-3
     And Get "id" From Multi-status Item 0
     When Check Existence Of Device By Id  ${item_value}
     Then Should Return Status Code "200"

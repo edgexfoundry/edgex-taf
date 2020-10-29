@@ -175,9 +175,9 @@ Set Response to Test Variables
     Set suite variable  ${response_time}  ${elapsed}
     ${headers}=  Run keyword if  'Content-Type' in ${resp.headers}  Set variable  ${resp.headers}[Content-Type]
     ...          ELSE  Set variable  None
+    Set suite variable  ${headers}  ${headers}
     ${content}=  Run Keyword If  '${headers}' == 'application/json'  Evaluate  json.loads('''${resp.content}''')  json
     ...          ELSE  Set variable  ${resp.content}
-    Set suite variable  ${headers}  ${headers}
     Set suite variable  ${content}  ${content}
 
 Query Ping

@@ -32,7 +32,7 @@ ErrDevicePATCH002 - Update device with non-existent device service name
     And Should Return Content-Type "application/json"
     And Item Index 2 Should Contain Status Code "404"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate001 - Update device with service name validate error
@@ -45,7 +45,7 @@ ErrDevicePATCHValidate001 - Update device with service name validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate002 - Update device with service name validate error
@@ -58,7 +58,7 @@ ErrDevicePATCHValidate002 - Update device with service name validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate003 - Update device with baseAddress validate error
@@ -71,7 +71,7 @@ ErrDevicePATCHValidate003 - Update device with baseAddress validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate004 - Update device with adminState validate error
@@ -84,7 +84,7 @@ ErrDevicePATCHValidate004 - Update device with adminState validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate005 - Update device with adminState value validate error
@@ -97,7 +97,7 @@ ErrDevicePATCHValidate005 - Update device with adminState value validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate006 - Update device with operatingState validate error
@@ -111,7 +111,7 @@ ErrDevicePATCHValidate006 - Update device with operatingState validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ErrDevicePATCHValidate007 - Update device with operatingState validate error
@@ -125,6 +125,6 @@ ErrDevicePATCHValidate007 - Update device with operatingState validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 

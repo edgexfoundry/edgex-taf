@@ -13,12 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 DeviceDELETE001 - Delete device by ID
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-1
-    And Create Device Profile ${deviceProfile}
-    And Generate A Device Sample  Test-Device-Service  Test-Profile-1
-    And Create Device With ${Device}
+    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-1
     And Get "id" From Multi-status Item 0
     When Delete Device By ID  ${item_value}
     Then Should Return Status Code "200"
@@ -30,12 +25,7 @@ DeviceDELETE001 - Delete device by ID
 
 DeviceDELETE002 - Delete device by name
     [Tags]  SmokeTest
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-2
-    And Create Device Profile ${deviceProfile}
-    And Generate A Device Sample  Test-Device-Service  Test-Profile-2
-    And Create Device With ${Device}
+    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
     When Delete Device By Name Test-Device
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"

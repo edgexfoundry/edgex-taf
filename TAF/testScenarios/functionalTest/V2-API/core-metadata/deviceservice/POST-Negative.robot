@@ -24,7 +24,7 @@ ErrServicePOST001 - Create device service with duplicate service name
     And Item Index 0,2 Should Contain Status Code "201" And id
     And Item Index 1 Should Contain Status Code "409" And no id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-3
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-3
 
 ErrServicePOSTValidate001 - Create device service with empty property
     # operatingState property will be removed soon
