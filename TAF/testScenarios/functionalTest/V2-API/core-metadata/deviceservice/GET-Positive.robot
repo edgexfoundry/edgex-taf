@@ -21,7 +21,7 @@ ServiceGET001 - Query all device services
     And Should Be True  len(${content}[services]) == 3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ServiceGET002 - Query all device services by offset
@@ -32,7 +32,7 @@ ServiceGET002 - Query all device services by offset
     And Should Be True  len(${content}[services]) == 1
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ServiceGET003 - Query all device services by limit
@@ -43,7 +43,7 @@ ServiceGET003 - Query all device services by limit
     And Should Be True  len(${content}[services]) == 2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ServiceGET004 - Query all device services by labels
@@ -57,7 +57,7 @@ ServiceGET004 - Query all device services by labels
     And Should Return Content-Type "application/json"
     And Device Services Should Be Linked To Specified Label: device-example
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 ServiceGET005 - Query device service by name

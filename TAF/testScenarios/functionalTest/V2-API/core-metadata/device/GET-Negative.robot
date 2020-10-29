@@ -24,31 +24,39 @@ ErrDeviceGET002 - Check device exists by non-existent device name
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrDeviceGET003 - Query devices with empty device profile name
+ErrDeviceGET003 - Query all devices by profile name with non-int value on offset
     [Tags]  Skipped
-    Given Create Device Profile
-    When Query All Devices With Specified Profile
+    When Query All Devices By serviceName  ${empty}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Device Profile
 
-ErrDeviceGET004 - Query all devices with empty device service name
+ErrDeviceGET004 - Query all devices by profile name with non-int value on limit
     [Tags]  Skipped
-    Given Create Device Service
-    When Query All Devices With Specified Device Service
+    When Query All Devices By serviceName  ${empty}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Device Services
 
-ErrDeviceGET005 - Query all devices with non-int value on offset/limit
+ErrDeviceGET004 - Query all devices by service name with non-int value on offset
+    When Run Keyword And Expect Error  *  Query All Devices By serviceName Test-Device-Service With offset=Invalid
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrDeviceGET005 - Query all devices by service name with non-int value on limit
+    When Run Keyword And Expect Error  *  Query All Devices By serviceName Test-Device-Service With limit=Invalid
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrDeviceGET006 - Query all devices with non-int value on offset
     When Run Keyword And Expect Error  *  Query All Devices With offset=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrDeviceGET006 - Query all devices with non-int value on limit
+ErrDeviceGET007 - Query all devices with non-int value on limit
     When Run Keyword And Expect Error  *  Query All Devices With limit=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"

@@ -20,5 +20,5 @@ ServicePOST001 - Create device service
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3

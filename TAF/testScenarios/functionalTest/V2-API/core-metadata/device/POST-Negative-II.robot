@@ -14,11 +14,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ErrDevicePOST010 - Create device with non-existent device service name
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-1
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-1
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  serviceName=Non-existent
     When Create Device With ${Device}
     Then Should Return Status Code "207"
@@ -28,15 +24,13 @@ ErrDevicePOST010 - Create device with non-existent device service name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Devices By Names
     ...                       Test-Device  Test-Device-Disabled  Test-Device-AutoEvents
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-1
+    ...                  AND  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST011 - Create device with non-existent device profile name
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-2
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-2
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[2][device]  profileName=Non-existent
     When Create Device With ${Device}
     Then Should Return Status Code "207"
@@ -46,5 +40,7 @@ ErrDevicePOST011 - Create device with non-existent device profile name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Devices By Names
     ...                       Test-Device  Test-Device-Locked  Test-Device-AutoEvents
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-2
+    ...                  AND  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3

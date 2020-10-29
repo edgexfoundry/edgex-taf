@@ -26,121 +26,105 @@ ErrDevicePOST001 - Create device with duplicate device name
 
 ErrDevicePOST002 - Create device with device name validate error
     # Empty device name
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-1
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-1
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  name=${EMPTY}
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-1
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST003 - Create device with adminState validate error
     # Empty adminState
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-1
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-1
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  adminState=${EMPTY}
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-1
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST004 - Create device with operatingState validate error
     # Empty operatingState
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-2
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-2
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  operatingState=${EMPTY}
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-2
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST005 - Create device with serviceName validate error
     # Empty serviceName
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-2
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-2
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  serviceName=${EMPTY}
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-2
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST006 - Create device with profileName validate error
     # Empty profileName
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-3
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-3
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  profileName=${EMPTY}
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-3
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST007 - Create device with protocols validate error
     # Empty protocols
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-3
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-3
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  protocols=&{EMPTY}
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-3
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST008 - Create device with adminState value validate error
     # Out of optional value for adminState
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-4
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-4
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  adminState=Invalid
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-4
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST009 - Create device with operatingState value validate error
     # Out of optional value for operatingState
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Generate A Device Profile Sample  Test-Profile-4
-    And Create Device Profile ${deviceProfile}
-    And Generate Multiple Devices Sample  Test-Device-Service  Test-Profile-4
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  operatingState=Invalid
     When Create Device With ${Device}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-4
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 

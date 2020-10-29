@@ -24,7 +24,7 @@ DevicePATCH001 - Update device services
     And Item Index All Should Contain Status Code "200"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Service Data Should Be Updated
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 DevicePATCH002 - Update device services with service id
@@ -40,7 +40,7 @@ DevicePATCH002 - Update device services with service id
     And Item Index All Should Contain Status Code "200"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Service Data Should Be Updated
-    [Teardown]  Delete Multiple Device Servics By Names  Device-Service-${index}-1  Device-Service-${index}-2
+    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
 *** Keywords ***
