@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
-Default Tags    v2-api
+Force Tags      v2-api
 
 *** Variables ***
 ${SUITE}          Core Metadata Device Service GET Positive Test Cases
@@ -13,6 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ServiceGET001 - Query all device services
+    [Tags]  SmokeTest
     Given Generate Multiple Device Services Sample
     And Create Device Service ${deviceService}
     When Query All Device Services
@@ -60,6 +61,7 @@ ServiceGET004 - Query all device services by labels
     ...                                                  Device-Service-${index}-3
 
 ServiceGET005 - Query device service by name
+    [Tags]  SmokeTest
     Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     When Query Device Service By Name  Test-Device-Service

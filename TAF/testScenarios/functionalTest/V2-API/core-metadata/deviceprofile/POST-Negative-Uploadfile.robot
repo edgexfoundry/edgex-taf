@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
-Default Tags    v2-api
+Force Tags      v2-api
 
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile POST For Upload File Negative Test Cases

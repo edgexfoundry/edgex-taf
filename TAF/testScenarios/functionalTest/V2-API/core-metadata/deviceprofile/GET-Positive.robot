@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
-Default Tags    v2-api
+Force Tags      v2-api
 
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile GET Positive Test Cases
@@ -13,6 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ProfileGET001 - Query all device profiles
+    [Tags]  SmokeTest
     Given Generate Multiple Device Profiles Sample
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles
@@ -54,6 +55,7 @@ ProfileGET004 - Query all device profiles by labels
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ProfileGET005 - Query device profile by name
+    [Tags]  SmokeTest
     Given Generate A Device Profile Sample  Test-Profile-1
     And Create Device Profile ${deviceProfile}
     When Query Device Profile By Name  Test-Profile-1

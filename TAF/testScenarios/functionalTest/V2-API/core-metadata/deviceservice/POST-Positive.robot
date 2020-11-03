@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
-Default Tags    v2-api
+Force Tags      v2-api
 
 *** Variables ***
 ${SUITE}          Core Metadata Device Service POST Positive Test Cases
@@ -13,6 +13,7 @@ ${api_version}    v2
 
 *** Test Cases ***
 ServicePOST001 - Create device service
+    [Tags]  SmokeTest
     Given Generate Multiple Device Services Sample
     When Create Device Service ${deviceService}
     Then Should Return Status Code "207"
