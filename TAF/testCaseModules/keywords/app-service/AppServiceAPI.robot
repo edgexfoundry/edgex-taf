@@ -40,6 +40,7 @@ Trigger Function Pipeline With ${data}
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  Post request  Trigger  api/${api_version}/trigger  json=${trigger_data}  headers=${headers}
     Set Response to Test Variables  ${resp}
+    Set Test Variable  ${content}  ${resp.content}
     Run keyword if  ${response} != 200  log to console  ${content}
 
 Store Secret Data With ${data}
