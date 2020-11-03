@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
-Default Tags    v2-api
+Force Tags      v2-api
 
 *** Variables ***
 ${SUITE}          Core-Data Event GET Postive Testcases
@@ -23,6 +23,7 @@ EventGET001 - Query all events
     [Teardown]  Delete Events
 
 EventGET002 - Query event by ID
+    [Tags]  SmokeTest
     Given Generate An Event Sample With Simple Readings
     And Create Events
     When Query Event By Event Id "${id}"

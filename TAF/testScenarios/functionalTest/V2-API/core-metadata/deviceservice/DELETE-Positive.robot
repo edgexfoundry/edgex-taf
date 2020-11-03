@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
-Default Tags    v2-api
+Force Tags      v2-api
 
 *** Variables ***
 ${SUITE}          Core Metadata Device Service DELETE Positive Test Cases
@@ -23,6 +23,7 @@ ServiceDELETE001 - Delete device service by ID
     And Device Service Should Be Deleted  Test-Device-Service
 
 ServiceDELETE002 - Delete device service by name
+    [Tags]  SmokeTest
     Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     When Delete Device Service By Name  Test-Device-Service

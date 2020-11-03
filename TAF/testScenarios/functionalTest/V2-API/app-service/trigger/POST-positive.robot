@@ -4,7 +4,7 @@ Resource   TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Variables  TAF/testData/app-service/trigger_response_content.py
 Suite Setup      Setup Suite for App Service  ${AppServiceUrl_blackbox}
 Suite Teardown   Suite Teardown for App Service
-Default Tags     v2-api
+Force Tags       v2-api
 
 *** Variables ***
 ${SUITE}          App-Service Trigger POST Positive Testcases
