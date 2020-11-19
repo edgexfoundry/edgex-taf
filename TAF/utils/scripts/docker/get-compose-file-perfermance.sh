@@ -12,8 +12,8 @@ USE_SECURITY=${2:--}
 # # sync docker-compose file from developer-script repo
 ./sync-nightly-build.sh master ${USE_NO_SECURITY} ${USE_ARM64}
 
-cp docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
+cp docker-compose-hanoi${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
 # Insert required services for retrieving exported time
 sed -e '1,/- edgex-network/d' docker-compose-end-to-end.yaml > docker-compose-end-mqtt.yaml
-sed -e '/app-service-rules:/r docker-compose-end-mqtt.yaml' -e //N docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml > docker-compose-mqtt.yaml
+sed -e '/app-service-rules:/r docker-compose-end-mqtt.yaml' -e //N docker-compose-hanoi${USE_NO_SECURITY}${USE_ARM64}.yml > docker-compose-mqtt.yaml
