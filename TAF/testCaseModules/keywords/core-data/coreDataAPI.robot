@@ -157,7 +157,7 @@ Create Events
 # generate data for core-data
 Generate event sample
     # event_data: Event, Event With Tags ; readings_type: Simple Reading, Simple Float Reading, Binary Reading
-    [arguments]  ${event_data}  ${deviceName}  @{readings_type}
+    [arguments]  ${event_data}  ${deviceName}  ${profileName}  @{readings_type}
     ${uuid}=  Evaluate  str(uuid.uuid4())
     ${millisec_epoch_time}=  Get current milliseconds epoch time
     ${origin}=  Evaluate  int(${millisec_epoch_time}*1000000)
@@ -166,10 +166,12 @@ Generate event sample
         ${reading}=  Load data file "core-data/readings_data.json" and get variable "${type}"
         Set to dictionary  ${reading}  origin=${origin}
         Set to dictionary  ${reading}  deviceName=${deviceName}
+        Set to dictionary  ${reading}  profileName=${profileName}
         Append to List  ${readings}  ${reading}
     END
     ${event}=  Load data file "core-data/event_data.json" and get variable "${event_data}"
     Set to dictionary  ${event}[event]  deviceName=${deviceName}
+    Set to dictionary  ${event}[event]  profileName=${profileName}
     Set to dictionary  ${event}[event]  id=${uuid}
     Set to dictionary  ${event}[event]  origin=${origin}
     Set to dictionary  ${event}[event]  readings=${readings}
@@ -184,14 +186,14 @@ Change ${event} readings[${index}] values ${property_dict}
     END
 
 Generate multiple events sample with simple readings
-    ${event1}=  Generate event sample  Event  Device-Test-001  Simple Reading
-    ${event2}=  Generate event sample  Event  Device-Test-001  Simple Float Reading
-    ${event3}=  Generate event sample  Event  Device-Test-001  Simple Reading  Simple Float Reading
-    ${event4}=  Generate event sample  Event With Tags  Device-Test-001  Simple Reading  Simple Float Reading
+    ${event1}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
+    ${event2}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Float Reading
+    ${event3}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
+    ${event4}=  Generate event sample  Event With Tags  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
     ${events}=  Create List  ${event1}  ${event2}  ${event3}  ${event4}
     Set test variable  ${events}  ${events}
 
 Generate an event sample with simple readings
-    ${event}=  Generate event sample  Event  Device-Test-001  Simple Reading  Simple Float Reading
+    ${event}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
     ${events}=  Create List  ${event}
     Set test variable  ${events}  ${events}

@@ -23,7 +23,7 @@ ErrEventPOST001 - Create events fails (Event ID Conflict)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventPOST002 - Create events fails (Bad Events)
-    ${bad_property}=  Create List  no_event  no_deviceName  no_origin  no_readings  no_id  bad_id
+    ${bad_property}=  Create List  no_event  no_deviceName  no_profileName  no_origin  no_readings  no_id  bad_id
     FOR  ${property}  IN  @{bad_property}
          Given Generate Bad Event With ${property}
          And Create Events
@@ -33,7 +33,7 @@ ErrEventPOST002 - Create events fails (Bad Events)
     END
 
 ErrEventPOST003 - Create events fails (Bad Simple Readings)
-    ${bad_property}=  Create List  no_deviceName  no_name  no_origin  no_valueType  bad_valueType  no_value  no_FloatEncoding
+    ${bad_property}=  Create List  no_deviceName  no_resourceName  no_profileName  no_origin  no_valueType  bad_valueType  no_value
     FOR  ${property}  IN  @{bad_property}
          Given Generate Bad Simple Reading With ${property}
          And Create Events
@@ -76,7 +76,7 @@ Generate Bad Simple Reading With ${property}
     ...    ELSE     Set to dictionary  ${events}[0][event][readings][0]  ${no_property}=${EMPTY}
 
 Generate Bad Binary Reading With ${property}
-    ${event}=  Generate event sample  Event  Device-Test-001  Binary Reading
+    ${event}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Binary Reading
     ${events}=  Create List  ${event}
     Set test variable  ${events}  ${events}
     ${no_property}=  Fetch From Right  ${property}  no_

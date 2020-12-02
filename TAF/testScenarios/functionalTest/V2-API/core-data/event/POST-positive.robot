@@ -33,8 +33,8 @@ EventPOST002 - Create event with binary data
 
 *** Keywords ***
 Generate Multiple Events Sample With Binary Readings
-    ${event1}=  Generate event sample  Event  Device-Test-001  Binary Reading
-    ${event2}=  Generate event sample  Event With Tags  Device-Test-002  Binary Reading  Binary Reading
+    ${event1}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Binary Reading
+    ${event2}=  Generate event sample  Event With Tags  Device-Test-002  Profile-Test-002  Binary Reading  Binary Reading
     ${events}=  Create List  ${event1}  ${event2}
     Set test variable  ${events}  ${events}
 

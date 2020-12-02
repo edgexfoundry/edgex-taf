@@ -2,6 +2,7 @@
   "Event": {
     "event": {
       "deviceName": "",
+      "profileName": "",
       "id": "",
       "origin": 0,
       "readings": ""
@@ -10,6 +11,7 @@
   "Event With Tags": {
     "event": {
       "deviceName": "",
+      "profileName": "",
       "id": "",
       "origin": 0,
       "readings": "",
