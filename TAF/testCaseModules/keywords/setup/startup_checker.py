@@ -13,8 +13,9 @@ import ssl
 import time
 import subprocess
 
+from TAF.testCaseModules.keywords.setup import edgex
 from TUC.data.SettingsInfo import SettingsInfo
-import edgex
+
 
 services = {
         "data": {"composeName": "data",

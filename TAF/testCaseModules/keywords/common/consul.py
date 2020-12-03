@@ -1,10 +1,7 @@
 """
  @copyright Copyright (C) 2019 IOTech Ltd
-
  @license SPDX-License-Identifier: Apache-2.0
-
- @file edgex.py
-
+ @file consul.py
  @description
     Helper functions to manage consul API
 """

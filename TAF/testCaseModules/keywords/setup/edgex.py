@@ -9,8 +9,9 @@
     Helper functions to manage EdgeX deployment
 """
 import subprocess
+
 from TUC.data.SettingsInfo import SettingsInfo
-import startup_checker as checker
+from TAF.testCaseModules.keywords.setup import startup_checker as checker
 
 
 def deploy_edgex(*args):
