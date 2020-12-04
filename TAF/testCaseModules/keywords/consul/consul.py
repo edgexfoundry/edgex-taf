@@ -22,4 +22,4 @@ def modify_consul_config(path,value):
     if int(r1.status) == 200:
         SettingsInfo().TestLog.info("Modify consul with key {} and value {}".format(path,value))
     else:
-        raise Exception("Fail to enable MarkPushed.")
+        raise Exception("Fail to modify config on Consul")
