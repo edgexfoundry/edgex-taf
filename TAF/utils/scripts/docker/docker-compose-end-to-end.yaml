@@ -1,5 +1,6 @@
   app-service-http-export:
     image: ${appService}
+    command: "-s -cp=consul.http://edgex-core-consul:8500 --registry --confdir=/res"
     ports:
       - 127.0.0.1:48096:48096/tcp
     container_name: app-service-http-export
@@ -26,6 +27,7 @@
 
   app-service-mqtt-export:
     image: ${appService}
+    command: "-s -cp=consul.http://edgex-core-consul:8500 --registry --confdir=/res"
     ports:
       - 127.0.0.1:48097:48097/tcp
     container_name: app-service-mqtt-export
@@ -61,6 +63,7 @@
 
   app-service-blackbox-tests:
     image: ${appService}
+    command: "-s -cp=consul.http://edgex-core-consul:8500 --registry --confdir=/res"
     ports:
       - 127.0.0.1:48095:48095/tcp
     container_name: app-service-blackbox-tests
@@ -81,6 +84,7 @@
 
   app-service-http-export-secrets:
     image: ${appService}
+    command: "-s -cp=consul.http://edgex-core-consul:8500 --registry --confdir=/res"
     ports:
       - 127.0.0.1:48098:48098/tcp
     container_name: app-service-http-export-secrets
