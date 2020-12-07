@@ -100,12 +100,12 @@
       MessageBus_SubscribeHost_Host: edgex-core-data
       Database_Host: edgex-redis
       EDGEX_SECURITY_SECRET_STORE: "true"
-      SecretStore_Protocol: https
+      SecretStore_Protocol: http
       SecretStore_Host: edgex-vault
       SecretStore_ServerName: edgex-vault
       SecretStore_RootCaCertPath: /tmp/edgex/secrets/ca/ca.pem
       SecretStore_TokenFile: /tmp/edgex/secrets/edgex-application-service/secrets-token.json
-      SecretStoreExclusive_Protocol: https
+      SecretStoreExclusive_Protocol: http
       SecretStoreExclusive_Host: edgex-vault
       SecretStoreExclusive_ServerName: edgex-vault
       SecretStoreExclusive_Path: /v1/secret/edgex/appservice-http-export-secrets/
