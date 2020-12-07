@@ -44,7 +44,8 @@
       Database_Username: appservice
       Database_Password: password
       EDGEX_SECURITY_SECRET_STORE: "false"
-      Writable_Pipeline_Functions_MQTTSend_Addressable_Address: mqtt-broker
+      Writable.Pipeline.Functions.MQTTSecretSend.Parameters.brokeraddress: tcp://mqtt-broker:1883
+      Writable_Pipeline_Functions_MQTTSecretSend_Parameters_topic: edgex-events
       Writable_LogLevel: DEBUG
     depends_on:
       - consul
