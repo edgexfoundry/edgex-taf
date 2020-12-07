@@ -60,7 +60,7 @@ Get AppService Token
 
 Secrets Should be Stored
     Get AppService Token
-    Create Session  GetSecrets  url=https://${BASE_URL}:8200  disable_warnings=true
+    Create Session  GetSecrets  url=http://${BASE_URL}:8200  disable_warnings=true
     ${headers}=  Create Dictionary  X-Vault-Token  ${token}
     ${resp}=  Get request  GetSecrets  /v1/secret/edgex/appservice-${edgex_profile}/${secrets_path}  headers=${headers}
     Set Response to Test Variables  ${resp}
