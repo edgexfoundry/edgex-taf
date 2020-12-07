@@ -13,7 +13,6 @@ ${api_version}  v2
 
 *** Test Cases ***
 SecretsPOST001 - Stores secrets to the secret client with Path
-    [Tags]  SmokeTest
     When Store Secret Data With Path
     Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
          ...  Run keywords  Should Return Status Code "201"
