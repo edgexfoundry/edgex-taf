@@ -28,7 +28,7 @@ ErrServicePOST001 - Create device service with duplicate service name
 
 ErrServicePOSTValidate001 - Create device service with empty property
     # operatingState property will be removed soon
-    ${bad_property}=  Create List  no_adminState  no_operatingState  no_name  no_baseAddress
+    ${bad_property}=  Create List  no_adminState  no_name  no_baseAddress
     FOR  ${property}  IN  @{bad_property}
          Given Generate Multiple Device Services With ${property}
          When Create Device Service ${deviceService}
@@ -39,7 +39,7 @@ ErrServicePOSTValidate001 - Create device service with empty property
 
 ErrServicePOSTValidate002 - Create device service with invalid property
     # operatingState property will be removed soon
-    ${bad_property}=  Create List  bad_adminState  bad_operatingState
+    ${bad_property}=  Create List  bad_adminState
     FOR  ${property}  IN  @{bad_property}
          Given Generate Multiple Device Services With ${property}
          When Create Device Service ${deviceService}

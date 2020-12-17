@@ -50,7 +50,7 @@ Deivce ${type} Should Be Updated
         ...    ELSE IF  "${device}" == "Test-Device-Locked"
         ...             Should Be Equal  ${content}[device][serviceName]  Device-Service-${index}-3
         Run Keyword If  "${type}" == "Data" and "${device}" == "Test-Device-Disabled"
-        ...             Should Be Equal  ${content}[device][operatingState]  ENABLED
+        ...             Should Be Equal  ${content}[device][operatingState]  UP
         ...    ELSE IF  "${device}" == "Test-Device-Disabled"
         ...             Should Be Equal  ${content}[device][profileName]  Test-Profile-3
         Run Keyword If  "${type}" == "Data" and "${device}" == "Test-Device-AutoEvents"

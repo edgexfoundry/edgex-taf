@@ -419,7 +419,7 @@ Create Multiple Profiles/Services And Generate Multiple Devices Sample
     Set To Dictionary  ${device_2}  adminState=LOCKED
     ${device_3}=  Set device values  Device-Service-${index}-3  Test-Profile-3
     Set To Dictionary  ${device_3}  name=Test-Device-Disabled
-    Set To Dictionary  ${device_3}  operatingState=DISABLED
+    Set To Dictionary  ${device_3}  operatingState=DOWN
     ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-1.yaml" and convert to dictionary
     ${autoEvent}=  Set autoEvents values  10s  false  ${profile}[deviceResources][0][name]
     ${autoEvents}=  Create List  ${autoEvent}
@@ -467,13 +467,13 @@ Create Devices And Generate Multiple Devices Sample For Updating ${type}
     ${labels}=  Create List  device-example  device-update
     ${update_labels}=  Create Dictionary  name=Test-Device  labels=${labels}
     ${update_adminstate}=  Create Dictionary  name=Test-Device-Locked  adminState=UNLOCKED
-    ${update_opstate}=  Create Dictionary  name=Test-Device-Disabled  operatingState=ENABLED
+    ${update_opstate}=  Create Dictionary  name=Test-Device-Disabled  operatingState=UP
     ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "device-virtual"
     Set To Dictionary  ${protocols}[other]  Address=simple02
     ${update_protocols}=  Create Dictionary  name=Test-Device-AutoEvents  protocols=${protocols}
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
     ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
-    Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_opstate}  operatingState=DISABLED
+    Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_opstate}  operatingState=DOWN
     ...        AND  Set To Dictionary  ${update_opstate}  profileName=Test-Profile-3
     Generate Devices  ${update_labels}  ${update_adminstate}  ${update_opstate}  ${update_protocols}
 

@@ -3,7 +3,7 @@
    "name" : "Test-Device",
    "description": "Test-Device",
    "adminState": "UNLOCKED",
-   "operatingState": "ENABLED",
+   "operatingState": "UP",
    "protocols": "%DeviceServiceProtocal%",
    "labels":[
       "device-example"

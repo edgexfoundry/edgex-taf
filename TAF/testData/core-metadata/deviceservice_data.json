@@ -2,7 +2,6 @@
    "name" :"Test-Device-Service",
    "description":"deviceservice",
    "adminState":"UNLOCKED",
-   "operatingState":"ENABLED",
    "labels":[
       "device-example"
    ],

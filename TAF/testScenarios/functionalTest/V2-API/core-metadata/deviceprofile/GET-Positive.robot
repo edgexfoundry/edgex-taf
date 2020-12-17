@@ -55,7 +55,6 @@ ProfileGET004 - Query all device profiles by labels
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ProfileGET005 - Query device profile by name
-    [Tags]  SmokeTest
     Given Generate A Device Profile Sample  Test-Profile-1
     And Create Device Profile ${deviceProfile}
     When Query Device Profile By Name  Test-Profile-1
