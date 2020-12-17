@@ -100,31 +100,3 @@ ErrDevicePATCHValidate005 - Update device with adminState value validate error
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
-ErrDevicePATCHValidate006 - Update device with operatingState validate error
-    # Empty operatingState
-    # operatingState property will be removed soon
-    Given Generate Multiple Device Services Sample
-    And Create Device Service ${deviceService}
-    And Generate Multiple Device Services Sample For Updating
-    And Set To Dictionary  ${deviceService}[1][service]  operatingState=${EMPTY}
-    When Update Device Service ${deviceService}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
-    ...                                                  Device-Service-${index}-3
-
-ErrDevicePATCHValidate007 - Update device with operatingState validate error
-    # Out of optional value for operatingState
-    # operatingState property will be removed soon
-    Given Generate Multiple Device Services Sample
-    And Create Device Service ${deviceService}
-    And Generate Multiple Device Services Sample For Updating
-    And Set To Dictionary  ${deviceService}[1][service]  operatingState=Invalid
-    When Update Device Service ${deviceService}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
-    ...                                                  Device-Service-${index}-3
-

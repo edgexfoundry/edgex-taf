@@ -14,7 +14,6 @@ ${api_version}    v2
 *** Test Cases ***
 DevicePATCH001 - Update device services
     # operatingState, adminState, labels, baseAddress
-    [Tags]  SmokeTest
     Given Generate Multiple Device Services Sample
     And Create Device Service ${deviceService}
     And Generate Multiple Device Services Sample For Updating
@@ -46,7 +45,7 @@ DevicePATCH002 - Update device services with service id
 *** Keywords ***
 Service Data Should Be Updated
     ${list}=  Create List  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
-    ${expected_keys}=  Create List  name  operatingState  adminState  baseAddress
+    ${expected_keys}=  Create List  name  adminState  baseAddress
     FOR  ${service}  IN  @{list}
         Query Device Service By Name  ${service}
         ${keys}=  Get Dictionary Keys  ${content}[service]

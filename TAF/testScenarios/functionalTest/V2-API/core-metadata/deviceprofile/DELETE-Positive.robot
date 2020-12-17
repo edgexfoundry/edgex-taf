@@ -23,7 +23,6 @@ ProfileDELETE001 - Delete device profile by ID
     And Device Profile Should Be Deleted  Test-Profile-2
 
 ProfileDELETE002 - Delete device profile by name
-    [Tags]  SmokeTest
     Given Generate A Device Profile Sample  Test-Profile-3
     And Create device profile ${deviceProfile}
     When Delete Device Profile By Name  Test-Profile-3
@@ -32,7 +31,7 @@ ProfileDELETE002 - Delete device profile by name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Device Profile Should Be Deleted  Test-Profile-3
 
-*** keywords ***
+*** Keywords ***
 Device Profile Should Be Deleted
     [Arguments]  ${device_profile_name}
     Run Keyword And Expect Error  "*not found"  Query device profile by name  ${device_profile_name}

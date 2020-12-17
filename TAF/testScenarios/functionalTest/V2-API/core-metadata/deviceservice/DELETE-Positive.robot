@@ -23,7 +23,6 @@ ServiceDELETE001 - Delete device service by ID
     And Device Service Should Be Deleted  Test-Device-Service
 
 ServiceDELETE002 - Delete device service by name
-    [Tags]  SmokeTest
     Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     When Delete Device Service By Name  Test-Device-Service

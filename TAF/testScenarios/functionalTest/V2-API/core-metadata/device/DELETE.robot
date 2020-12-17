@@ -24,7 +24,6 @@ DeviceDELETE001 - Delete device by ID
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 DeviceDELETE002 - Delete device by name
-    [Tags]  SmokeTest
     Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
     When Delete Device By Name Test-Device
     Then Should Return Status Code "200"
