@@ -100,21 +100,16 @@
       MessageBus_SubscribeHost_Host: edgex-core-data
       Database_Host: edgex-redis
       EDGEX_SECURITY_SECRET_STORE: "true"
-      SecretStore_Protocol: http
       SecretStore_Host: edgex-vault
       SecretStore_ServerName: edgex-vault
-      SecretStore_RootCaCertPath: /tmp/edgex/secrets/ca/ca.pem
       SecretStore_TokenFile: /tmp/edgex/secrets/edgex-application-service/secrets-token.json
-      SecretStoreExclusive_Protocol: http
       SecretStoreExclusive_Host: edgex-vault
       SecretStoreExclusive_ServerName: edgex-vault
       SecretStoreExclusive_Path: /v1/secret/edgex/appservice-http-export-secrets/
-      SecretStoreExclusive_RootCaCertPath: /tmp/edgex/secrets/ca/ca.pem
       SecretStoreExclusive_TokenFile: /tmp/edgex/secrets/appservice-http-export-secrets/secrets-token.json
       Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
       Writable_LogLevel: DEBUG
     volumes:
-    - /tmp/edgex/secrets/ca:/tmp/edgex/secrets/ca:ro,z
     - /tmp/edgex/secrets/edgex-application-service:/tmp/edgex/secrets/edgex-application-service:ro,z
     - /tmp/edgex/secrets/appservice-http-export-secrets:/tmp/edgex/secrets/appservice-http-export-secrets:ro,z
     depends_on:
