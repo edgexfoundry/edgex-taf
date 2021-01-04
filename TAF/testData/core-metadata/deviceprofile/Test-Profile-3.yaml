@@ -13,7 +13,7 @@ deviceResources:
     description: "Generate device FLOAT32 value"
     tag: "humidity"
     properties:
-      type: "FLOAT32"
+      type: "Float32"
       readWrite: "R"
       units: "%"
 

@@ -14,7 +14,7 @@ deviceResources:
     description: "Generate device boolean value"
     tag: "status"
     properties:
-      type: "BOOL"
+      type: "Bool"
       readWrite: "RW"
       minimum: "0"
       maximum: "1"
@@ -23,7 +23,7 @@ deviceResources:
     description: "Generate device UINT8 value"
     tag: "temperature"
     properties:
-      type: "UINT8"
+      type: "Uint8"
       readWrite: "R"
       units: "degreesFarenheit"
 
