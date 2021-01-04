@@ -14,13 +14,13 @@ deviceResources:
     description: "Generate device string value"
     tag: "kind"
     properties:
-      type: "STRING"
+      type: "String"
       readWrite: "R"
   - name: "DeviceValue_FLOAT32_R"
     description: "Generate device FLOAT32 value"
     tag: "speed"
     properties:
-      type: "FLOAT32"
+      type: "Float32"
       readWrite: "R"
       floatEncoding: "Base64"
       scale: "0.001"

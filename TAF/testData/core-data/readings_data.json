@@ -1,7 +1,7 @@
 {
   "Simple Reading": {
     "deviceName": "Device-001",
-    "resourceName": "Simple Reading",
+    "resourceName": "Simple-Reading",
     "profileName": "Profile-001",
     "origin": 0,
     "valueType": "Int8",
@@ -9,7 +9,7 @@
   },
   "Simple Float Reading": {
     "deviceName": "Device-001",
-    "resourceName": "Simple Float Reading",
+    "resourceName": "Simple-Float-Reading",
     "profileName": "Profile-001",
     "origin": 0,
     "valueType": "Float32",
@@ -18,7 +18,7 @@
   },
   "Binary Reading": {
     "deviceName": "Device-001",
-    "resourceName": "Binary Reading",
+    "resourceName": "Binary-Reading",
     "profileName": "Profile-001",
     "origin": 0,
     "mediaType": "image",

@@ -13,7 +13,7 @@ deviceResources:
     description: "Generate device UINT16 value"
     tag: "rpm"
     properties:
-      type: "UINT16"
+      type: "Uint16"
       readWrite: "RW"
       minimum: "1500"
       units: "rpm"
