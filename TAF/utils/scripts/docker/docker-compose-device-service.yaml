@@ -10,7 +10,7 @@
       REGISTRY_HOST: edgex-core-consul
       CLIENTS_DATA_HOST: edgex-core-data
       CLIENTS_METADATA_HOST: edgex-core-metadata
-      Service_Host: edgex-device-virtual
+      SERVICE_HOST: edgex-device-virtual
     entrypoint: ["/device-virtual"]
     command: ["--registry","--confdir=${CONF_DIR}"]
     volumes:
@@ -32,7 +32,7 @@
       REGISTRY_HOST: edgex-core-consul
       CLIENTS_DATA_HOST: edgex-core-data
       CLIENTS_METADATA_HOST: edgex-core-metadata
-      Service_Host: edgex-device-modbus
+      SERVICE_HOST: edgex-device-modbus
     entrypoint: ["/device-modbus"]
     command: ["--registry","--confdir=${CONF_DIR}"]
     volumes:
