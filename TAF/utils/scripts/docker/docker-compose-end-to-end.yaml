@@ -6,19 +6,18 @@
     container_name: app-service-http-export
     hostname: app-service-http-export
     environment:
-      edgex_profile: http-export
-      Service_Host: app-service-http-export
-      Clients_CoreData_Host: edgex-core-data
-      Clients_Logging_Host: edgex-support-logging
-      Registry_Host: edgex-core-consul
-      Service_Port: 48096
-      MessageBus_SubscribeHost_Host: edgex-core-data
-      Database_Host: edgex-mongo
-      Database_Username: appservice
-      Database_Password: password
+      EDGEX_PROFILE: http-export
+      SERVICE_HOST: app-service-http-export
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      REGISTRY_HOST: edgex-core-consul
+      SERVICE_PORT: 48096
+      MESSAGEBUS_SUBSCRIBEHOST_HOST: edgex-core-data
+      DATABASE_HOST: edgex-redis
+      DATABASE_USERNAME: appservice
+      DATABASE_PASSWORD: password
       EDGEX_SECURITY_SECRET_STORE: "false"
-      Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
-      Writable_LogLevel: DEBUG
+      WRITABLE_PIPELINE_FUNCTIONS_HTTPPOSTJSON_PARAMETERS_URL: http://${DOCKER_HOST_IP}:7770
+      WRITABLE_LOGLEVEL: DEBUG
     depends_on:
       - consul
       - data
@@ -33,20 +32,19 @@
     container_name: app-service-mqtt-export
     hostname: app-service-mqtt-export
     environment:
-      edgex_profile: mqtt-export
-      Service_Host: app-service-mqtt-export
-      Clients_CoreData_Host: edgex-core-data
-      Clients_Logging_Host: edgex-support-logging
-      Registry_Host: edgex-core-consul
-      Service_Port: 48097
-      MessageBus_SubscribeHost_Host: edgex-core-data
-      Database_Host: edgex-mongo
-      Database_Username: appservice
-      Database_Password: password
+      EDGEX_PROFILE: mqtt-export
+      SERVICE_HOST: app-service-mqtt-export
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      REGISTRY_HOST: edgex-core-consul
+      SERVICE_PORT: 48097
+      MESSAGEBUS_SUBSCRIBEHOST_HOST: edgex-core-data
+      DATABASE_HOST: edgex-mongo
+      DATABASE_USERNAME: appservice
+      DATABASE_PASSWORD: password
       EDGEX_SECURITY_SECRET_STORE: "false"
-      Writable.Pipeline.Functions.MQTTSecretSend.Parameters.brokeraddress: tcp://mqtt-broker:1883
-      Writable_Pipeline_Functions_MQTTSecretSend_Parameters_topic: edgex-events
-      Writable_LogLevel: DEBUG
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTSECRETSEND_PARAMETERS_BROKERADDRESS: tcp://mqtt-broker:1883
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTSECRETSEND_PARAMETERS_TOPIC: edgex-events
+      WRITABLE_LOGLEVEL: DEBUG
     depends_on:
       - consul
       - data
@@ -70,12 +68,11 @@
     container_name: app-service-blackbox-tests
     hostname: app-service-blackbox-tests
     environment:
-      edgex_profile: blackbox-tests
-      Service_Host: app-service-blackbox-tests
-      Clients_CoreData_Host: edgex-core-data
-      Clients_Logging_Host: edgex-support-logging
-      Registry_Host: edgex-core-consul
-      Service_Port: 48095
+      EDGEX_PROFILE: blackbox-tests
+      SERVICE_HOST: app-service-blackbox-tests
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      REGISTRY_HOST: edgex-core-consul
+      SERVICE_PORT: 48095
       EDGEX_SECURITY_SECRET_STORE: "false"
     depends_on:
       - consul
@@ -91,24 +88,19 @@
     container_name: app-service-http-export-secrets
     hostname: app-service-http-export-secrets
     environment:
-      edgex_profile: http-export
-      Service_Host: app-service-http-export-secrets
-      Clients_CoreData_Host: edgex-core-data
-      Clients_Logging_Host: edgex-support-logging
-      Registry_Host: edgex-core-consul
-      Service_Port: 48098
-      MessageBus_SubscribeHost_Host: edgex-core-data
-      Database_Host: edgex-redis
+      EDGEX_PROFILE: http-export
+      SERVICE_HOST: app-service-http-export-secrets
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      REGISTRY_HOST: edgex-core-consul
+      SERVICE_PORT: 48098
+      DATABASE_HOSE: edgex-redis
       EDGEX_SECURITY_SECRET_STORE: "true"
-      SecretStore_Host: edgex-vault
-      SecretStore_ServerName: edgex-vault
-      SecretStore_TokenFile: /tmp/edgex/secrets/edgex-application-service/secrets-token.json
-      SecretStoreExclusive_Host: edgex-vault
-      SecretStoreExclusive_ServerName: edgex-vault
-      SecretStoreExclusive_Path: /v1/secret/edgex/appservice-http-export-secrets/
-      SecretStoreExclusive_TokenFile: /tmp/edgex/secrets/appservice-http-export-secrets/secrets-token.json
-      Writable_Pipeline_Functions_HTTPPostJSON_Parameters_url: http://${DOCKER_HOST_IP}:7770
-      Writable_LogLevel: DEBUG
+      SECRETSTORE_HOST: edgex-vault
+      SECRETSTORE_SERVERNAME: edgex-vault
+      SECRETSTORE_PATH: /v1/secret/edgex/appservice-http-export-secrets/
+      SECRETSTORE_TOKENFILE: /tmp/edgex/secrets/appservice-http-export-secrets/secrets-token.json
+      WRITABLE_PIPELINE_FUNCTIONS_HTTPPOSTJSON_PARAMETERS_URL: http://${DOCKER_HOST_IP}:7770
+      WRITABLE_LOGLEVEL: DEBUG
     volumes:
     - /tmp/edgex/secrets/edgex-application-service:/tmp/edgex/secrets/edgex-application-service:ro,z
     - /tmp/edgex/secrets/appservice-http-export-secrets:/tmp/edgex/secrets/appservice-http-export-secrets:ro,z
@@ -125,21 +117,20 @@
     container_name: scalability-test-mqtt-export
     hostname: scalability-test-mqtt-export
     environment:
-      edgex_profile: mqtt-export
-      Service_Host: app-service-mqtt-export
-      Clients_CoreData_Host: edgex-core-data
-      Clients_Logging_Host: edgex-support-logging
-      Registry_Host: edgex-core-consul
-      Service_Port: 48098
-      MessageBus_SubscribeHost_Host: edgex-core-data
-      Database_Host: edgex-mongo
-      Database_Username: appservice
-      Database_Password: password
+      EDGEX_PROFILE: mqtt-export
+      SERVICE_HOST: app-service-mqtt-export
+      CLIENTS_COREDATA_HOST: edgex-core-data
+      REGISTRY_HOST: edgex-core-consul
+      SERVICE_PORT: 48098
+      MESSAGEBUS_SUBSCRIBEHOST_HOST: edgex-core-data
+      DATABASE_HOST: edgex-redis
+      DATABASE_USERNAME: appservice
+      DATABASE_PASSWORD: password
       EDGEX_SECURITY_SECRET_STORE: "false"
-      Writable_Pipeline_ExecutionOrder: "TransformToJSON, MQTTSecretSend"
-      Writable_Pipeline_Functions_MQTTSecretSend_Parameters_brokeraddress: tcp://${MQTT_BROKER_IP}:1883
-      Writable_Pipeline_Functions_MQTTSecretSend_Parameters_topic: edgex-events
-      Writable_LogLevel: DEBUG
+      WRITABLE_PIPELINE_EXECUTIONORDER: "TransformToJSON, MQTTSecretSend"
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTSECRETSEND_PARAMETERS_BROKERADDRESS: tcp://${MQTT_BROKER_IP}:1883
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTSECRETSEND_PARAMETERS_TOPIC: edgex-events
+      WRITABLE_LOGLEVEL: DEBUG
     depends_on:
       - consul
       - data
