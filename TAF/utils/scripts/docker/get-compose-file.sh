@@ -19,29 +19,14 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
   ./sync-nightly-build.sh ${USE_SHA1} ${USE_NO_SECURITY} ${USE_ARM64}
+  cp docker-compose-taf-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
-  # Need to remove the existing device services so the added ones below don't conflict
-  sed '/  device-rest:/,/- 127.0.0.1:49990:49990\/tcp/d' docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml > temp/docker-compose-temp.yaml
-
-  # Insert device services into the compose file
-  sed -e '/app-service-rules:/r docker-compose-device-service.yaml' -e //N temp/docker-compose-temp.yaml > temp/device-service-temp.yaml
-
-  # Insert required services for end to end tests
-  sed -e '/app-service-rules:/r docker-compose-end-to-end.yaml' -e //N temp/device-service-temp.yaml > docker-compose.yaml
-
-  if [ "$USE_SECURITY" = '-security-' ]; then
-    # sed command of MacOS is in different syntax
-    if [ "$(uname)" = "Darwin" ]; then
-      sed -i '' "/hostname: edgex-vault-worker/i \\
-      \      ADD_SECRETSTORE_TOKENS: appservice-http-export-secrets
-      " docker-compose.yaml
-    else
-      sed -i "/hostname: edgex-vault-worker/i \\
-      \ADD_SECRETSTORE_TOKENS: appservice-http-export-secrets
-      " docker-compose.yaml
-    fi
-  fi
-
+  sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' docker-compose.yaml
+  sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' docker-compose.yaml
+  sed -i 's/\PROFILE_VOLUME_PLACE_HOLDER/${WORK_DIR}\/TAF\/config\/${PROFILE}/g' docker-compose.yaml
+  sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose.yaml
+  sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose.yaml
+  sed -i 's/\WRITABLE_LOGLEVEL: INFO/WRITABLE_LOGLEVEL: DEBUG/g' docker-compose.yaml
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
   curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"

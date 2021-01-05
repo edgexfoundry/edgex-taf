@@ -10,10 +10,12 @@ USE_SECURITY=${2:--}
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
 # # sync docker-compose file from developer-script repo
-./sync-nightly-build.sh master ${USE_NO_SECURITY} ${USE_ARM64}
+./sync-nightly-build.sh master "${USE_NO_SECURITY}" "${USE_ARM64}" "-perf"
 
-cp docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
+cp docker-compose-taf-perf-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose-end-mqtt.yaml
 
-# Insert required services for retrieving exported time
-sed -e '1,/- edgex-network/d' docker-compose-end-to-end.yaml > docker-compose-end-mqtt.yaml
-sed -e '/app-service-rules:/r docker-compose-end-mqtt.yaml' -e //N docker-compose-nexus${USE_NO_SECURITY}${USE_ARM64}.yml > docker-compose-mqtt.yaml
+sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' docker-compose-end-mqtt.yaml
+sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' docker-compose-end-mqtt.yaml
+sed -i 's/\PROFILE_VOLUME_PLACE_HOLDER/${WORK_DIR}\/TAF\/config\/${PROFILE}/g' docker-compose-end-mqtt.yaml
+sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose-end-mqtt.yaml
+sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose-end-mqtt.yaml
