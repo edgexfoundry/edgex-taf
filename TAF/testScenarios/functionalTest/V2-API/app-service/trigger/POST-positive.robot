@@ -10,7 +10,7 @@ Force Tags       v2-api
 ${SUITE}          App-Service Trigger POST Positive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-trigger-positive.log
 ${edgex_profile}  blackbox-tests
-${AppServiceUrl_blackbox}  http://${BASE_URL}:48095
+${AppServiceUrl_blackbox}  http://${BASE_URL}:48105
 ${api_version}  v2
 
 *** Test Cases ***
