@@ -14,9 +14,6 @@ USE_SECURITY=${2:--}
 
 cp docker-compose-taf-perf-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose-mqtt.yaml
 
-sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' docker-compose-mqtt.yaml
-sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' docker-compose-mqtt.yaml
-sed -i 's/\PROFILE_VOLUME_PLACE_HOLDER/${WORK_DIR}\/TAF\/config\/${PROFILE}/g' docker-compose-mqtt.yaml
 sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose-mqtt.yaml
 sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose-mqtt.yaml
 sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose-mqtt.yaml
