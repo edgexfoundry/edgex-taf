@@ -14,6 +14,5 @@ USE_SECURITY=${2:--}
 
 cp docker-compose-taf-perf-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose-mqtt.yaml
 
-sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose-mqtt.yaml
-sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose-mqtt.yaml
+sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/edgex-mqtt-broker/g' docker-compose-mqtt.yaml
 sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose-mqtt.yaml
