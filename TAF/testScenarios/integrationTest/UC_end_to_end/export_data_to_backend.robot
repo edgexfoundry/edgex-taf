@@ -26,7 +26,6 @@ Export001 - Export events/readings to HTTP Server
     And Create device  create_device.json
     When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT8_RW"
     Then HTTP Server received event is the same with exported from service "app-service-http-export"
-    And Exported events/readings from "app-service-http-export" has marked as PUSHED
     [Teardown]  Run keywords  Delete device by name Test-Device
                 ...           AND  Remove all events
                 ...           AND  remove services  app-service-http-export
@@ -42,7 +41,6 @@ Export002 - Export events/readings to MQTT Server
     When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT16_RW"
     Then Device data has recevied by mqtt subscriber
     And Found "Sent data to MQTT Broker" in service "app-service-mqtt-export" log
-    And Exported events/readings from "app-service-mqtt-export" has marked as PUSHED
     [Teardown]  Run keywords  Delete device by name Test-Device
                 ...           AND  Remove all events
                 ...           AND  remove services  app-service-mqtt-export  mqtt-broker
@@ -51,8 +49,7 @@ ExportErr001 - Export events/readings to unreachable HTTP backend
     Given Deploy services  app-service-http-export
     And Create device  create_device.json
     When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT32_RW"
-    Then Created event did not mark as PUSHED
-    And No exported logs found on configurable application service  app-service-http-export
+    Then No exported logs found on configurable application service  app-service-http-export
     [Teardown]  Run keywords  Delete device by name Test-Device
                 ...           AND  Remove all events
                 ...           AND  remove services  app-service-http-export
@@ -61,25 +58,13 @@ ExportErr002 - Export events/readings to unreachable MQTT backend
     Given Deploy services  app-service-mqtt-export
     And Create device  create_device.json
     When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT64_RW"
-    Then Created event did not mark as PUSHED
-    And No exported logs found on configurable application service  app-service-mqtt-export
+    Then No exported logs found on configurable application service  app-service-mqtt-export
     [Teardown]  Run keywords  Delete device by name Test-Device
                 ...           AND  Remove all events
                 ...           AND  remove services  app-service-mqtt-export
 
 
 *** Keywords ***
-Exported events/readings from "${app_service_name}" has marked as PUSHED
-    ${export_data}=  Run keyword if  '${app_service_name}'=='app-service-http-export'  Get exported data from "${app_service_name}" service log
-    ...              ELSE IF         '${app_service_name}'=='app-service-mqtt-export'  Device data has recevied by mqtt subscriber
-    ${export_data_json}=  evaluate  json.loads('''${export_data}''')  json
-    ${event_statuscode}  ${event_response}  Query event by event id "${export_data_json}[id]"
-    run keyword if  ${event_statuscode} != 200  fail  no event found
-    ${event_json}=  evaluate  json.loads('''${event_response}''')  json
-    ${pushed}=  convert to string  ${event_json}[pushed]
-    ${pushed_length}=  get length  ${pushed}
-    should be equal as integers  ${pushed_length}  13  The event didn't export to backend
-
 HTTP Server received event is the same with exported from service "${app_service}"
     ${export_data_app_service}=  Get exported data from "${app_service}" service log
     run keyword if  '${export_data_app_service}' == '${EMPTY}'  fail  No export log found on application service
@@ -94,15 +79,6 @@ MQTT broker received event is the same with exported from service "${app_service
     ${export_data_app_service}=  Get exported data from "${app_service}" service log
     run keyword if  '${export_data_app_service}' == '${EMPTY}'  fail  No export log found on MQTT application service
     should contain  ${export_data_app_service}  ${mqtt_broker_received}  MQTT broker received data matched exported data
-
-Created event did not mark as PUSHED
-    ${current_time}=  Get current milliseconds epoch time
-    ${start_time}=  evaluate  ${current_time}-1000
-    ${end_time}=  set variable  ${current_time}
-    ${event_status_code}  ${event_content}  Query device event by start/end time  ${start_time}  ${end_time}
-    run keyword if  ${event_statuscode} != 200  fail  no event found
-    ${event_content_str}=  convert to string  ${event_content}
-    should not contain  ${event_content_str}  pushed
 
 Get exported data from "${app_service}" service log
     ${app_service_log}=  Catch logs for service "${app_service}" with keyword "origin"

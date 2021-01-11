@@ -9,7 +9,7 @@ import http.client
 from TUC.data.SettingsInfo import SettingsInfo
 
 
-def modify_consul_config(path,value):
+def modify_consul_config(path, value):
     conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=8500, timeout=5)
     conn.request(method="PUT", url=path, body=value)
     try:
@@ -17,6 +17,6 @@ def modify_consul_config(path,value):
     except Exception as e:
         raise e
     if int(r1.status) == 200:
-        SettingsInfo().TestLog.info("Modify consul with key {} and value {}".format(path,value))
+        SettingsInfo().TestLog.info("Modify consul with key {} and value {}".format(path, value))
     else:
-        raise Exception("Fail to enable MarkPushed.")
+        raise Exception("Fail to update the consul configuration.")
