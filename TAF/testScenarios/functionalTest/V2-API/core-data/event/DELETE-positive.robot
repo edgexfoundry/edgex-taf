@@ -27,10 +27,3 @@ EventDELETE003 - Delete all old events (and associated readings) based on delimi
     And Old Events Should Be Deleted
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-EventDELETE004 - Delete all events (and associated readings)
-    Given Create Multiple Events
-    When Delete Pushed Events
-    Then Should Return Status Code "204"
-    And All Pushed Events Should Be Deleted
-    And All Associated Readings Should Be Non-existent
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
