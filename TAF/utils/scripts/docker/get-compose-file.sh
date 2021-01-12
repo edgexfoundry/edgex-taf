@@ -18,7 +18,7 @@ mkdir temp
 if [ "$USE_RELEASE" = "nightly-build" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
-  ./sync-nightly-build.sh ${USE_SHA1} ${USE_NO_SECURITY} ${USE_ARM64}
+  ./sync-nightly-build.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
   cp docker-compose-taf-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
   sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' docker-compose.yaml

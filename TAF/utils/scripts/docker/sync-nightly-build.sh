@@ -8,9 +8,13 @@ USE_NO_SECURITY=$2
 # x86_64 or arm64
 USE_ARM64=$3
 
-PERF=$4
+TAF=$4
+TAF_PERF=$5
 
-NIGHTLY_BUILD_URL="https://raw.githubusercontent.com/lenny-intel/developer-scripts/taf/releases/nightly-build/compose-files/taf"
+# Handle TAF specific compose files
+[ "$TAF" = "-taf" ] && TAF_SUB_FOLDER="/taf"
 
-COMPOSE_FILE="docker-compose-taf${PERF}-nexus${USE_NO_SECURITY}${USE_ARM64}.yml"
+NIGHTLY_BUILD_URL="https://raw.githubusercontent.com/lenny-intel/developer-scripts/taf/releases/nightly-build/compose-files${TAF_SUB_FOLDER}"
+
+COMPOSE_FILE="docker-compose${TAF}${TAF_PERF}-nexus${USE_NO_SECURITY}${USE_ARM64}.yml"
 curl -o ${COMPOSE_FILE} "${NIGHTLY_BUILD_URL}/${COMPOSE_FILE}"
