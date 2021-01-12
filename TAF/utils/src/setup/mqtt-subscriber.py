@@ -3,6 +3,7 @@
 Origin : https://www.ev3dev.org/docs/tutorials/sending-and-receiving-messages-with-mqtt/
 """
 import paho.mqtt.client as mqtt
+import time
 
 
 # This is the Subscriber
@@ -13,6 +14,8 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
+    current_timestamp = int(round(time.time() * 1000))
+    print(current_timestamp)
     print(msg.payload.decode())
     if "origin" in msg.payload.decode():
         print("Got mqtt export data!!")

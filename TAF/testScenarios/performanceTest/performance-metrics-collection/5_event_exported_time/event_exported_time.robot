@@ -13,7 +13,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/performance-metric-collecti
 *** Test Cases ***
 Measure the event exported time
     Given Deploy EdgeX  -  PerformanceMetrics  -mqtt
-    When query events
+    When Retrieve Events From Subscriber
     And fetch the exported time
     Then Run keyword and continue on failure  exported time is less than threshold value
     And show the summary table

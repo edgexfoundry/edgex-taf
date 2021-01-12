@@ -1,7 +1,6 @@
 import math
-import http.client
 import json
-import time
+import subprocess
 from robot.api import logger
 from TUC.data.SettingsInfo import SettingsInfo
 import data_utils
@@ -16,25 +15,42 @@ devices = ["Random-Integer-Device", "Random-Boolean-Device", "Random-UnsignedInt
 
 
 class EventExportedTime(object):
-    def query_events(self):
-        time.sleep(180)
-        result["devices"][devices[0]] = get_device_events(devices[0])
-        result["devices"][devices[1]] = get_device_events(devices[1])
-        result["devices"][devices[2]] = get_device_events(devices[2])
+    def retrieve_events_from_subscriber(self):
+        SettingsInfo().TestLog.info("Run Subscriber And Get Events")
+        times = SettingsInfo().profile_constant.EXPORTED_LOOP_TIMES
+        device_int = []
+        device_bool = []
+        device_uint = []
+
+        while True:
+            subscriber_logs = subprocess.check_output("python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py", shell=True)
+            event = subscriber_logs.decode("utf-8").split('\n')
+            event_json = json.loads(event[2])
+            event_json['received'] = int(event[1])  # received timestamp
+
+            if str(devices[0]) == event_json['device']:
+                device_int.append(event_json)
+            elif str(devices[1]) == event_json['device']:
+                device_bool.append(event_json)
+            elif str(devices[2]) == event_json['device']:
+                device_uint.append(event_json)
+            else:
+                continue
+            if len(device_int) >= times and len(device_bool) >= times \
+                    and len(device_uint) >= times:
+                # Only retrieving last 10 records
+                result["devices"][devices[0]] = device_int[-10:]
+                result["devices"][devices[1]] = device_bool[-10:]
+                result["devices"][devices[2]] = device_uint[-10:]
+                break
 
     def fetch_the_exported_time(self):
         events = []
         for device in result["devices"]:
             for event in result["devices"][device]:
-                if "pushed" in event:
-                    event["origin"] = get_origin_time(event["origin"])
-                    event["exported"] = event["pushed"] - event["origin"]
-                    events.append(event)
-                else:
-                    logger.warn("Event didn't export.")
-                    logger.info("Event data: {}".format(event))
-                    event["pushed"] = ""
-                    event["exported"] = ""
+                event["origin"] = get_origin_time(event["origin"])
+                event["exported"] = event["received"] - event["origin"]
+                events.append(event)
 
         total_exported_time = 0
         for e in events:
@@ -53,21 +69,6 @@ class EventExportedTime(object):
         global devices_aggregate_values_list
         devices_aggregate_values_list = get_devices_aggregate_values()
         show_the_aggregation_table_in_html(devices_aggregate_values_list)
-
-
-def get_device_events(device):
-    conn = http.client.HTTPConnection(host="localhost", port=48080)
-    conn.request(method="GET", url="/api/v1/event/device/" + device + "/"
-                                   + str(SettingsInfo().profile_constant.EXPORTED_LOOP_TIMES))
-    try:
-        res = conn.getresponse()
-    except Exception as e:
-        raise e
-    if int(res.status) == 200:
-        responseBody = res.read().decode()
-        return json.loads(responseBody)
-    else:
-        raise Exception("Fail to query events.")
 
 
 # check origin time is nanoseconds level and convert to milliseconds level
@@ -101,7 +102,7 @@ def show_the_summary_table_in_html():
                 Device			 	 
             </th>
             <th style="border: 1px solid black;" colspan="5">
-                Event exported time ( pushed - origin )
+                Event exported time ( received - origin )
             </th>
         </tr>
     """.format(result["total_average_exported_time"])
@@ -120,7 +121,7 @@ def show_the_summary_table_in_html():
             else:
                 html = html + """ 
                         <td style="border: 1px solid black;">{} ms <br/>({} - {})</td>
-                    """.format(event["exported"], event["pushed"], event["origin"])
+                    """.format(event["exported"], event["received"], event["origin"])
 
         html = html + "</tr>"
 
