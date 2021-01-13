@@ -137,7 +137,7 @@ def get_service_logs_since_timestamp(service, timestamp):
 def access_token(arg):
     cmd = ["sh", "{}/TAF/utils/scripts/{}/api-gateway-token.sh".format(SettingsInfo().workDir,
                                                                        SettingsInfo().constant.DEPLOY_TYPE),
-           arg, "/dev/null"]
+           arg]
     try:
         output = subprocess.run(cmd, stdout=subprocess.PIPE, check=True).stdout.decode('utf-8').rstrip('\n')
         SettingsInfo().TestLog.info("./api-gateway-token.sh {} output: {} ".format(arg, output))
