@@ -34,7 +34,7 @@ Export001 - Export events/readings to HTTP Server
 Export002 - Export events/readings to MQTT Server
     [Tags]  SmokeTest
     Given Deploy services  mqtt-broker
-    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py &   # Process for MQTT Subscriber
+    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Deploy services  app-service-mqtt-export
     And Create device  create_device.json
