@@ -183,25 +183,25 @@ Set Response to Test Variables
 Query Ping
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Ping  url=${url}  disable_warnings=true
-    ${resp}=  Get request  Ping  api/${api_version}/ping  headers=${headers}
+    ${resp}=  GET On Session  Ping  api/${api_version}/ping  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Config
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Config  url=${url}  disable_warnings=true
-    ${resp}=  Get request  Config  api/${api_version}/config  headers=${headers}
+    ${resp}=  GET On Session  Config  api/${api_version}/config  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Version
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Version  url=${url}  disable_warnings=true
-    ${resp}=  Get request  Version  api/${api_version}/version  headers=${headers}
+    ${resp}=  GET On Session  Version  api/${api_version}/version  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Metrics
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Metrics  url=${url}  disable_warnings=true
-    ${resp}=  Get request  Metrics  api/${api_version}/metrics  headers=${headers}
+    ${resp}=  GET On Session  Metrics  api/${api_version}/metrics  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 

@@ -27,7 +27,6 @@ EventGET002 - Query event by ID
     Given Generate An Event Sample With Simple Readings
     And Create Events
     When Query Event By Event Id "${id}"
-    log to console  ${content}
     Then Should Return Status Code "200" And event
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

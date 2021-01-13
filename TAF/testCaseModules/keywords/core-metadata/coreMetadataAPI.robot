@@ -22,14 +22,16 @@ Upload device profile ${file}
     ${files}=  Create Dictionary  file=${yaml}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata  ${deviceProfileUri}/uploadfile  files=${files}  headers=${headers}
+    ${resp}=  POST On Session  Core Metadata  ${deviceProfileUri}/uploadfile  files=${files}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 201  log to console  ${content}
 
 Create device profile ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata  ${deviceProfileUri}  json=${entity}   headers=${headers}
+    ${resp}=  POST On Session  Core Metadata  ${deviceProfileUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
     Run Keyword If  "${api_version}" == "v1"  Run Keywords
     ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ...             AND  Set Test Variable  ${response}  ${resp.status_code}
@@ -41,21 +43,24 @@ Upload file ${file} to update device profile
     ${files}=  Create Dictionary  file=${yaml}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Put Request  Core Metadata  ${deviceProfileUri}/uploadfile  files=${files}  headers=${headers}
+    ${resp}=  PUT On Session  Core Metadata  ${deviceProfileUri}/uploadfile  files=${files}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 200  log to console  ${content}
 
 Update device profile ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Put Request  Core Metadata  ${deviceProfileUri}  json=${entity}   headers=${headers}
+    ${resp}=  PUT On Session  Core Metadata  ${deviceProfileUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 
 Query all device profiles
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=   Get request  Core Metadata    ${deviceProfileUri}/all  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata    ${deviceProfileUri}/all  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     ${resp_length}=  get length  ${resp.content}
     Run keyword if  ${resp_length} == 3   fail  "No device profile found"
@@ -63,7 +68,8 @@ Query all device profiles
 Query all device profiles with ${parameter}=${value}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceProfileUri}/all?${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/all  params=${parameter}=${value}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -71,7 +77,8 @@ Query device profile by name
     [Arguments]   ${device_profile_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=   get request  Core Metadata    ${deviceProfileUri}/name/${device_profile_name}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata    ${deviceProfileUri}/name/${device_profile_name}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     ${resp_length}=  get length  ${resp.content}  #bytes dict: length of empty list ("[]") is 3
     run keyword if  ${response} != 200 or ${resp_length} == 3  fail  "The device profile ${device_profile_name} is not found"
@@ -81,7 +88,8 @@ Delete device profile by name
     [Arguments]   ${device_profile_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceProfileUri}/name/${device_profile_name}  headers=${headers}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceProfileUri}/name/${device_profile_name}  headers=${headers}
+    ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
@@ -95,7 +103,8 @@ Delete device profile by id
     [Arguments]  ${device_profile_id}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceProfileUri}/id/${device_profile_id}  headers=${headers}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceProfileUri}/id/${device_profile_id}  headers=${headers}
+    ...       expected_status=any
     Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
@@ -111,16 +120,17 @@ Create device
     ${newdata_protocol}=  replace string    ${newdata_protocol}   '   \"
     ${newdata}=  replace string  ${newdata_protocol}   %DeviceServiceName%    ${SERVICE_NAME}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  POST On Session  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
     set suite variable  ${device_id}   ${resp.content}
     sleep  500ms
 
 Create device with ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata    ${deviceUri}  json=${entity}   headers=${headers}
+    ${resp}=  POST On Session  Core Metadata    ${deviceUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
     Run Keyword If  "${api_version}" == "v1"  Run Keywords
     ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ...             AND  Set Test Variable  ${response}  ${resp.status_code}
@@ -141,15 +151,15 @@ Creat device with autoEvents parameter
     ${newdata}=  replace string  ${newdata}   %onChangeValue%   ${onChange_value}
     ${newdata}=  replace string  ${newdata}   %ReadingName%    ${reading_name}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  POST On Session  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
     set test variable  ${device_id}   ${resp.content}
 
 Update devices ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Patch Request  Core Metadata  ${deviceUri}  json=${entity}   headers=${headers}
+    ${resp}=  PATCH ON Session  Core Metadata  ${deviceUri}  json=${entity}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 
@@ -158,8 +168,8 @@ Query device by id and return device name
     # output device name
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata    ${deviceUri}/${device_id}  headers=${headers}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  GET On Session  Core Metadata    ${deviceUri}/${device_id}  headers=${headers}
+    ...       expected_status=200
     ${resp_length}=    get length  ${resp.content}
     run keyword if  ${resp_length} == 3   fail  "No device found"
     ${deviceResponseBody}=  evaluate  json.loads('''${resp.content}''')  json
@@ -168,14 +178,15 @@ Query device by id and return device name
 Query all devices
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceUri}/all  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/all  headers=${headers}
+    ...       expected_status=200
     Set Response to Test Variables  ${resp}
-    Run keyword if  ${response}!=200  fail
 
 Query all devices with ${parameter}=${value}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceUri}/all?${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/all  params=${parameter}=${value}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -183,7 +194,7 @@ Query device by name
     [Arguments]  ${device_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata    ${deviceUri}/name/${device_name}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/name/${device_name}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail  "The device ${device_name} is not found"
 
@@ -191,7 +202,8 @@ Query all devices by serviceName
     [Arguments]  ${device_service_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata    ${deviceUri}/service/name/${device_service_name}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata    ${deviceUri}/service/name/${device_service_name}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -199,7 +211,8 @@ Query all devices by ${associated}Name ${associated_name} with ${parameter}=${va
     # associated: profile or service ; associated_name: profileName or serviceName
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceUri}/${associated}/name/${associated_name}?${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/${associated}/name/${associated_name}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -207,7 +220,7 @@ Check existence of device by id
     [Arguments]  ${device_id}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata    ${deviceUri}/check/id/${device_id}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/check/id/${device_id}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
 
@@ -215,7 +228,8 @@ Check existence of device by name
     [Arguments]  ${device_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata    ${deviceUri}/check/name/${device_name}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata    ${deviceUri}/check/name/${device_name}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
 
@@ -224,14 +238,15 @@ Delete device by name
     ${deviceName}=    Query device by id and return device name
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceUri}/name/${deviceName}  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceUri}/name/${deviceName}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  Fail  ${resp.status_code}!=200: ${resp.content}
 
 Delete device by name ${deviceName}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceUri}/name/${deviceName}  headers=${headers}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceUri}/name/${deviceName}  headers=${headers}
+    ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
@@ -245,7 +260,8 @@ Delete device by id
     [Arguments]  ${device_id}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceUri}/id/${device_id}  headers=${headers}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceUri}/id/${device_id}  headers=${headers}
+    ...       expected_status=any
     Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
@@ -254,7 +270,8 @@ Delete device by id
 Create addressable ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata    /api/v1/addressable  json=${entity}   headers=${headers}
+    ${resp}=  POST On Session  Core Metadata    /api/v1/addressable  json=${entity}   headers=${headers}
+    ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set test variable  ${response}  ${resp.status_code}
 
@@ -262,15 +279,16 @@ Create addressable ${entity}
 Delete addressable by name ${addressableName}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  api/v1/addressable/name/${addressableName}  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  DELETE On Session  Core Metadata  api/v1/addressable/name/${addressableName}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  Fail  ${resp.status_code}!=200: ${resp.content}
 
 # Device service
 Create device service ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
+    ${resp}=  POST On Session  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
     Run Keyword If  "${api_version}" == "v1"  Run Keywords
     ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ...             AND  Set Test Variable  ${response}  ${resp.status_code}
@@ -280,21 +298,23 @@ Create device service ${entity}
 Update device service ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Patch Request  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
+    ${resp}=  PATCH ON Session  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 
 Query all device services
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceServiceUri}/all  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceServiceUri}/all  headers=${headers}
+    ...       expected_status=200
     Set Response to Test Variables  ${resp}
-    Run keyword if  ${response}!=200  fail
 
 Query all device services with ${parameter}=${value}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceServiceUri}/all?${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceServiceUri}/all  params=${parameter}=${value}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -302,7 +322,8 @@ Query device service by name
     [Arguments]  ${device_service_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Metadata  ${deviceServiceUri}/name/${device_service_name}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceServiceUri}/name/${device_service_name}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     run keyword if  ${response}!=200  fail  "The device service ${device_service_name} is not found"
 
@@ -310,7 +331,8 @@ Delete device service by name
     [Arguments]  ${device_service_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceServiceUri}/name/${device_service_name}  headers=${headers}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceServiceUri}/name/${device_service_name}  headers=${headers}
+    ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
@@ -324,7 +346,8 @@ Delete device service by iD
     [Arguments]  ${device_service_id}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Metadata  ${deviceServiceUri}/id/${device_service_id}  headers=${headers}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceServiceUri}/id/${device_service_id}  headers=${headers}
+    ...       expected_status=any
     Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
