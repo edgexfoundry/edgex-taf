@@ -27,6 +27,7 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
   sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose.yaml
   sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose.yaml
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose.yaml
+  sed -i 's/\device-modbus:/edgex-device-modbus:/g' docker-compose.yaml
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
   curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"
