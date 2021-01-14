@@ -39,13 +39,13 @@ DS initialize with the registry url
 
 DS configuration settings should be provided by the registry
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
-    ${resp}=   Get Request   Device Service    /api/v1/config
+    ${resp}=   GET On Session   Device Service    /api/v1/config  expected_status=any
     Should contain      ${resp.json()["Writable"]["LogLevel"]}  DEBUG
 
 #TC0002
 DS configuration settings should be provided by the local configuration file
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
-    ${resp}=   Get Request   Device Service    /api/v1/config
+    ${resp}=   GET On Session   Device Service    /api/v1/config  expected_status=any
     Should contain      ${resp.json()["Writable"]["LogLevel"]}  INFO
 
 #TC003
@@ -58,7 +58,7 @@ DS initialize with the confdir option
 
 DS configuration settings should be provided by confdir
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
-    ${resp}=   Get Request   Device Service    /api/v1/config
+    ${resp}=   GET On Session   Device Service    /api/v1/config  expected_status=any
     Should contain      ${resp.json()["Device"]["ProfilesDir"]}  ${CONF_FIR}
 
 #TC004
@@ -78,13 +78,14 @@ LogLevel Configuration changes on registry
 
 DS dynamically apply the logLevel changed settings
     Create Session   Logging Service   url=${LOGGING_SERVICE_URL}
-    ${resp}=   get request   Logging Service    /api/v1/logs/originServices/${SERVICE_NAME}/0/0/100
+    ${resp}=  GET On Session   Logging Service    /api/v1/logs/originServices/${SERVICE_NAME}/0/0/100
+    ...       expected_status=any
     ${result} =  convert to string   ${resp.content}
     Should contain      ${result}  "Writeable configuration has been updated. Setting log level to TRACE"
 
 Corresponding logLevel setting should be updated by DS
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
-    ${resp}=   Get Request   Device Service    /api/v1/config
+    ${resp}=   GET On Session   Device Service    /api/v1/config  expected_status=any
     Should contain      ${resp.json()["Writable"]["LogLevel"]}  TRACE
 
 #TC006
@@ -97,7 +98,7 @@ Restart DS because DS cannot dynamically apply changed settings
 
 Corresponding Service ConnectRetries setting should be updated by DS
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
-    ${resp}=   Get Request   Device Service    /api/v1/config
+    ${resp}=   GET On Session   Device Service    /api/v1/config  expected_status=any
     ${result} =  convert to string   ${resp.json()["Service"]["ConnectRetries"]}
     Should contain      ${result}  10
 

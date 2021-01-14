@@ -31,7 +31,7 @@ Restart EdgeX
 
 Send GET request "${request_path}" to "${url}"
     Create Session   Edgex Service   url=${url}
-    ${resp}=   get request   Edgex Service    ${request_path}
+    ${resp}=   GET On Session   Edgex Service    ${request_path}  expected_status=any
     Set Test Variable  ${REST_RES}  ${resp}
 
 Status code "${status_code}" should be "${expect}"
@@ -74,13 +74,15 @@ DS finishes with initialization
 
 Delete device service instance
     Create Session   Core Metadata   url=${METADATA_SERVICE_URL}
-    ${resp}=   Delete Request   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME}
+    ${resp}=   DELETE On Session   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME}
+    ...       expected_status=any
     Should Be Equal As Strings  ${resp.status_code}  200
     log  ${resp.content}
 
 DS should create a new DS instance in Core Metadata
     Create Session   Core Metadata   url=${METADATA_SERVICE_URL}
-    ${resp}=   Get Request   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME}
+    ${resp}=  GET On Session   Core Metadata    /api/v1/deviceservice/name/${SERVICE_NAME}
+    ...       expected_status=any
     ${result} =  convert to string   ${resp.content}
     Should contain      ${result}  ${SERVICE_NAME}
 
@@ -95,12 +97,12 @@ DS should load the DS instance from Core Metadata
 #TC004
 DS is configured to use the registry
     Create Session   Device Service   url=${DEVICE_SERVICE_URL}
-    ${resp}=   Get Request   Device Service    /api/v1/config
+    ${resp}=   GET On Session   Device Service    /api/v1/config  expected_status=any
     Should contain      ${resp.json()["Registry"]["Host"]}  edgex-core-consul
 
 DS should register as a service to the registry
     Create Session   Registry   url=${REGISTRY_URL}
-    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME}
+    ${resp}=   GET On Session   Registry    /v1/health/checks/${SERVICE_NAME}  expected_status=any
     Should contain      ${resp.json()[0]["Status"]}  passing
 
 #TC005
@@ -146,7 +148,7 @@ Shutdown DS
 
 DS should be unregistered to consul
     Create Session   Registry   url=${REGISTRY_URL}
-    ${resp}=   Get Request   Registry    /v1/health/checks/${SERVICE_NAME}
+    ${resp}=   GET On Session   Registry    /v1/health/checks/${SERVICE_NAME}  expected_status=any
     Should contain      ${resp.json()[0]["Status"]}  critical
 
 *** Test Cases ***

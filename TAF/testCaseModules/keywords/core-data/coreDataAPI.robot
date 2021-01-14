@@ -29,10 +29,9 @@ Query device reading "${validReadingName}" by device id
     ${device_name}=    Query device by id and return device name
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/name/${validReadingName}/device/${device_name}/1
-              ...  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
+    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}/name/${validReadingName}/device/${device_name}/1
+    ...       headers=${headers}  expected_status=any
+    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
     ${get_reading_result_length}=  get length  ${resp.content}
     run keyword if  ${get_reading_result_length} <=3    fail  "No device reading found"
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -42,9 +41,9 @@ Query device reading by start/end time
     [Arguments]  ${start_time}   ${end_time}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/${start_time}/${end_time}/10  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
+    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}/${start_time}/${end_time}/10  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
     ${get_reading_result_length}=  get length  ${resp.content}
     run keyword if  ${get_reading_result_length} <=3    fail  "No device reading found"
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -53,7 +52,7 @@ Query device reading by start/end time
 Query device reading "${validReadingName}" for all device
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}  headers=${headers}
+    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}  headers=${headers}  expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ${get_reading_result_length}=  get length  ${resp.content}
     run keyword if  ${get_reading_result_length} >=3    fail  "No device reading found"
@@ -63,7 +62,8 @@ Query device reading "${validReadingName}" for all device
 Query device reading by device name "${deviceName}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/device/${deviceName}/100  headers=${headers}
+    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}/device/${deviceName}/100  headers=${headers}
+    ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     ${get_reading_result_length}=  get length  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -89,19 +89,18 @@ Device autoEvents with "${reading_name}" send by frequency setting "${frequency_
 Query value descriptor for name "${value_descriptor_name}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataValueDescriptorUri}/name/${value_descriptor_name}  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
-    run keyword if  ${resp.status_code}==200  log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  GET On Session  Core Data    ${coreDataValueDescriptorUri}/name/${value_descriptor_name}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
+    log   ${resp.content}
 
 Query readings by value descriptor ${valueDescriptor} and device id "${deviceId}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataReadingUri}/name/${valueDescriptor}/device/${deviceId}/100
-              ...  headers=${headers}
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    run keyword if  ${resp.status_code}!=200  fail  "Incorrect status code"
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}/name/${valueDescriptor}/device/${deviceId}/100
+    ...       headers=${headers}  expected_status=any
+    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
+
     @{readings}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]   @{readings}
 
@@ -109,7 +108,7 @@ Add reading with value ${value} by value descriptor ${valueDescriptor} and devic
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${data}=    Create Dictionary   device=${deviceId}   name=${valueDescriptor}    value=${value}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Data    ${coreDataReadingUri}  json=${data}   headers=${headers}
+    ${resp}=  POST On Session  Core Data  ${coreDataReadingUri}  json=${data}  headers=${headers}  expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set test variable  ${response}  ${resp.status_code}
 
@@ -119,7 +118,7 @@ Query event by event id "${event_id}"
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${api}=  Set Variable If   "${api_version}"=="v1"  ${coreDataEventUri}/${event_id}
     ...      "${api_version}"=="v2"  ${coreDataEventUri}/id/${event_id}
-    ${resp}=  Get Request  Core Data    ${api}   headers=${headers}
+    ${resp}=  GET On Session  Core Data    ${api}   headers=${headers}  expected_status=any
     Run Keyword If  "${api_version}"=="v2"  Set Response to Test Variables  ${resp}
     [Return]  ${resp.status_code}  ${resp.content}
 
@@ -127,30 +126,32 @@ Query device event by start/end time
     [Arguments]  ${start_time}   ${end_time}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataEventUri}/${start_time}/${end_time}/1   headers=${headers}
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/${start_time}/${end_time}/1   headers=${headers}
+    ...       expected_status=any
     [Return]  ${resp.status_code}  ${resp.content}
 
 Remove all events
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Delete Request  Core Data    ${coreDataEventUri}/removeold/age/0   headers=${headers}
+    ${resp}=  DELETE On Session  Core Data  ${coreDataEventUri}/removeold/age/0  headers=${headers}
+    ...       expected_status=200
 
 Query events
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataEventUri}   headers=${headers}
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}   headers=${headers}  expected_status=any
     [Return]  ${resp.status_code}  ${resp.content}
 
 Query all events count
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Get Request  Core Data    ${coreDataEventUri}/count  headers=${headers}
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/count  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
 Create Events
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post Request  Core Data    ${coreDataEventUri}  json=${events}  headers=${headers}
+    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}  json=${events}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 

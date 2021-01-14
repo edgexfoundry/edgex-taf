@@ -38,7 +38,8 @@ Trigger Function Pipeline With ${data}
     ...    AND  set to dictionary  ${trigger_data}[readings][0]  device="DeviceNotMatch"
     Create Session  Trigger  url=${url}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post request  Trigger  api/${api_version}/trigger  json=${trigger_data}  headers=${headers}
+    ${resp}=  POST On Session  Trigger  api/${api_version}/trigger  json=${trigger_data}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 200  log to console  ${content}
 
@@ -46,7 +47,8 @@ Store Secret Data With ${data}
     ${secrets_data}=  Load data file "app-service/secrets_data.json" and get variable "${data}"
     Create Session  Secrets  url=${url}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  Post request  Secrets  api/${api_version}/secrets  json=${secrets_data}  headers=${headers}
+    ${resp}=  POST On Session  Secrets  api/${api_version}/secrets  json=${secrets_data}  headers=${headers}
+    ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 201  log to console  ${content}
     ...             ELSE  Run Keywords  Set test variable  ${secrets_path}  ${secrets_data}[path]

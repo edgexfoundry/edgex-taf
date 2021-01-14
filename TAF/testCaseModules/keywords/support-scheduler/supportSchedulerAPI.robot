@@ -15,14 +15,16 @@ Create interval
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${json}=    evaluate    json.loads('''${request_body}''')    json
-    ${interval_resp}=  Post Request  Support Scheduler  ${intervalUri}  json=${json}  headers=${headers}
+    ${interval_resp}=  POST On Session  Support Scheduler  ${intervalUri}  json=${json}  headers=${headers}
+    ...                expected_status=any
     Set test variable  ${response}  ${interval_resp.status_code}
     [Return]  ${interval_resp}
 
 Delete interval by name "${interval_name}"
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${interval_resp}=  Delete Request  Support Scheduler  ${intervalUri}/name/${interval_name}  headers=${headers}
+    ${interval_resp}=  DELETE On Session  Support Scheduler  ${intervalUri}/name/${interval_name}  headers=${headers}
+    ...                expected_status=any
     Set test variable  ${response}  ${interval_resp.status_code}
 
 
@@ -32,13 +34,15 @@ Create intervalAction
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${json}=    evaluate    json.loads('''${request_body}''')    json
-    ${intervalAction_resp}=  Post Request  Support Scheduler  ${intervalActionUri}  json=${json}  headers=${headers}
+    ${intervalAction_resp}=  POST On Session  Support Scheduler  ${intervalActionUri}  json=${json}  headers=${headers}
+    ...                      expected_status=any
     Set test variable  ${response}  ${intervalAction_resp.status_code}
     [Return]  ${intervalAction_resp}
 
 Delete intervalAction by name "${intervalAction_name}"
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${interval_resp}=  Delete Request  Support Scheduler  ${intervalActionUri}/name/${intervalAction_name}  headers=${headers}
+    ${interval_resp}=  DELETE On Session  Support Scheduler  ${intervalActionUri}/name/${intervalAction_name}
+    ...                headers=${headers}  expected_status=any
     Set test variable  ${response}  ${interval_resp.status_code}
 
