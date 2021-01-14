@@ -104,7 +104,7 @@ def check_service_startup(d, token):
         else:
             time.sleep(wait_time)
             continue
-    return False
+    raise Exception("Start {} failed.".format(d["composeName"]))
 
 
 def check_service_is_available(port, ping_url):

@@ -1,5 +1,6 @@
 .idea/*
 *.pyc
+ec256.*
 TAF/testArtifacts/logs/*
 TAF/testArtifacts/reports/*
 TAF-Common/*
