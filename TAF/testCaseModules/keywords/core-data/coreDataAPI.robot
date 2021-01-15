@@ -22,9 +22,6 @@ Device reading should be sent to Core Data
     ${result}=  check value equal  ${data_type}  ${set_reading_value}   ${device_reading_data}[0][value]
     should be true  ${result}
 
-Device reading "${validReadingName}" for all device should be sent to Core Data
-    Query device reading "${validReadingName}" for all device
-
 Query device reading by start/end time
     [Arguments]  ${start_time}   ${end_time}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
@@ -100,7 +97,15 @@ Add reading with value ${value} by value descriptor ${valueDescriptor} and devic
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set test variable  ${response}  ${resp.status_code}
 
-## Event API
+# Event
+Create event with ${deviceName} and ${profileName}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${profileName}/${deviceName}  json=${event}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 201  log to console  ${content}
+
 Query event by event id "${event_id}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -110,39 +115,83 @@ Query event by event id "${event_id}"
     Run Keyword If  "${api_version}"=="v2"  Set Response to Test Variables  ${resp}
     [Return]  ${resp.status_code}  ${resp.content}
 
-Query device event by start/end time
-    [Arguments]  ${start_time}   ${end_time}
-    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/${start_time}/${end_time}/1   headers=${headers}
-    ...       expected_status=any
-    [Return]  ${resp.status_code}  ${resp.content}
-
-Remove all events
-    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Core Data  ${coreDataEventUri}/removeold/age/0  headers=${headers}
-    ...       expected_status=200
-
+# v1 only: in integrationTest
 Query events
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Data    ${coreDataEventUri}   headers=${headers}  expected_status=any
     [Return]  ${resp.status_code}  ${resp.content}
 
+Query all events
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/all   headers=${headers}  expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query events by device name
+    [Arguments]  ${device_name}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/device/name/${device_name}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query events by start/end time
+    [Arguments]  ${start_time}   ${end_time}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/start/${start_time}/end/${end_time}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
+
 Query all events count
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/count  headers=${headers}  expected_status=any
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/count  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
-Create Event With ${deviceName} and ${profileName}
+Query events count by device name
+    [Arguments]  ${device_name}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${profileName}/${deviceName}  json=${event}
-    ...       headers=${headers}  expected_status=any
+    ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/count/device/name/${device_name}  headers=${headers}
+    ...       expected_status=200
     Set Response to Test Variables  ${resp}
-    Run keyword if  ${response} != 201  log to console  ${content}
+
+Delete all events by age
+    [Arguments]  ${age}=0
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Data  ${coreDataEventUri}/age/${age}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run Keyword If  ${response}!=202  fail  ${response}!=202: ${content}
+
+Delete event by id
+    [Arguments]  ${id}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Data  ${coreDataEventUri}/id/${id}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
+
+Delete events by device name
+    [Arguments]  ${deviceName}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Data  ${coreDataEventUri}/device/name/${deviceName}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run Keyword If  ${response}!=202  fail  ${response}!=202: ${content}
+
+# v1 only: in integrationTest
+Remove all events
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Data  ${coreDataEventUri}/removeold/age/0  headers=${headers}
+    ...       expected_status=200
 
 # generate data for core-data
 Generate event sample
@@ -168,4 +217,11 @@ Generate event sample
     Set test variable  ${id}  ${uuid}
     Set test variable  ${event}  ${event}
 
+Create multiple events
+  FOR  ${index}  IN RANGE  0  3   # total: 6 events
+    Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
+    Create Event With Device-Test-001 and Profile-Test-001
+    Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Simple Reading  Simple Float Reading
+    Create Event With Device-Test-002 and Profile-Test-001
+  END
 
