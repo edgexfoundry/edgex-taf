@@ -13,7 +13,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/performance-metric-collecti
 
 *** Test Cases ***
 Footprint001 - Verify Image and Binary Footprint
-    Given Deploy EdgeX  -  PerformanceMetrics
+    Given Deploy EdgeX  PerformanceMetrics
     When Fetch image binary footprint
     Then Show the summary table
     And Run keyword and continue on failure  Image footprint is less than threshold value

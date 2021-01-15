@@ -27,14 +27,3 @@ Shutdown Device Service
     [Tags]  shutdown-device-service
     Remove services  ${SERVICE_NAME}
     Delete device profile by name  Sample-Profile
-
-Shutdown Device Virtual for backward compatibility testing
-    [Tags]  backward
-    Remove services  -backward  ${SERVICE_NAME}
-    Delete device profile by name  Sample-Profile
-
-Shutdown EdgeX for backward compatibility testing
-    [Tags]  edgex-base-service
-    Shutdown services  -backward
-
-
