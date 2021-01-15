@@ -22,27 +22,28 @@ class EventExportedTime(object):
         device_bool = []
         device_uint = []
 
-        while True:
-            subscriber_logs = subprocess.check_output("python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py", shell=True)
-            event = subscriber_logs.decode("utf-8").split('\n')
-            event_json = json.loads(event[2])
-            event_json['received'] = int(event[1])  # received timestamp
+        full_subscriber_logs = subprocess.check_output("python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py perf",
+                                                       shell=True)
+        subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with result code 0", "")
+        events = subscriber_logs.split('Got mqtt export data!!')
+        for event in events:
+            if "device" in event:
+                event_str = event.split('\n')
+                event_json = json.loads(event_str[2])
+                event_json['received'] = int(event_str[1])
 
-            if str(devices[0]) == event_json['device']:
-                device_int.append(event_json)
-            elif str(devices[1]) == event_json['device']:
-                device_bool.append(event_json)
-            elif str(devices[2]) == event_json['device']:
-                device_uint.append(event_json)
-            else:
-                continue
-            if len(device_int) >= times and len(device_bool) >= times \
-                    and len(device_uint) >= times:
-                # Only retrieving last 10 records
-                result["devices"][devices[0]] = device_int[-10:]
-                result["devices"][devices[1]] = device_bool[-10:]
-                result["devices"][devices[2]] = device_uint[-10:]
-                break
+                if str(devices[0]) == event_json['device']:
+                    device_int.append(event_json)
+                elif str(devices[1]) == event_json['device']:
+                    device_bool.append(event_json)
+                elif str(devices[2]) == event_json['device']:
+                    device_uint.append(event_json)
+                else:
+                    continue
+
+        result["devices"][devices[0]] = device_int[-times:]
+        result["devices"][devices[1]] = device_bool[-times:]
+        result["devices"][devices[2]] = device_uint[-times:]
 
     def fetch_the_exported_time(self):
         events = []
