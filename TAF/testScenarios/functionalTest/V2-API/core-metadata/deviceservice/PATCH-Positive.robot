@@ -26,22 +26,6 @@ DevicePATCH001 - Update device services
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
     ...                                                  Device-Service-${index}-3
 
-DevicePATCH002 - Update device services with service id
-    Given Generate Multiple Device Services Sample
-    And Create Device Service ${deviceService}
-    And Generate Multiple Device Services Sample For Updating
-    And Remove From Dictionary  ${deviceService}[1][service]  name
-    And Get "id" from multi-status item 1
-    And Set To Dictionary  ${deviceService}[1][service]  id=${item_value}
-    When Update Device Service ${deviceService}
-    Then Should Return Status Code "207"
-    And Should Return Content-Type "application/json"
-    And Item Index All Should Contain Status Code "200"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Service Data Should Be Updated
-    [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
-    ...                                                  Device-Service-${index}-3
-
 *** Keywords ***
 Service Data Should Be Updated
     ${list}=  Create List  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3

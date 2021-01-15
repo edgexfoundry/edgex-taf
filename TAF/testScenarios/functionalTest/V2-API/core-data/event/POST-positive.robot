@@ -14,27 +14,19 @@ ${api_version}    v2
 *** Test Cases ***
 EventPOST001 - Create events
     [Tags]  SmokeTest
-    Given Generate Multiple Events Sample With Simple Readings
-    When Create Events
-    Then Should Return Status Code "207"
+    Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
+    When Create Event With Device-Test-001 And Profile-Test-001
+    Then Should Return Status Code "201" And id
     And Should Return Content-Type "application/json"
-    And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     #[Teardown]  Delete Events
 
 EventPOST002 - Create event with binary data
-    Given Generate Multiple Events Sample With Binary Readings
-    When Create Events
-    Then Should Return Status Code "207"
+    Given Generate Event Sample  Event With Tags  Device-Test-002  Profile-Test-002  Binary Reading
+    When Create Event With Device-Test-002 And Profile-Test-002
+    Then Should Return Status Code "201" And id
     And Should Return Content-Type "application/json"
-    And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     #[Teardown]  Delete Events
 
-*** Keywords ***
-Generate Multiple Events Sample With Binary Readings
-    ${event1}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Binary Reading
-    ${event2}=  Generate event sample  Event With Tags  Device-Test-002  Profile-Test-002  Binary Reading  Binary Reading
-    ${events}=  Create List  ${event1}  ${event2}
-    Set test variable  ${events}  ${events}
 

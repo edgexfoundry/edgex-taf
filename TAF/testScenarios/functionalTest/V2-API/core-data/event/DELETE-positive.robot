@@ -13,7 +13,7 @@ EventDELETE001 - Delete event by ID
     And Event Should Be Deleted
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-EventDELETE002 - Delete events with specified device by device id
+EventDELETE002 - Delete events with specified device by device name
     Given Create Multiple Events
     When Delete Events With Specified Device
     Then Should Return Status Code "204"

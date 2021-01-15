@@ -24,8 +24,8 @@ EventGET001 - Query all events
 
 EventGET002 - Query event by ID
     [Tags]  SmokeTest
-    Given Generate An Event Sample With Simple Readings
-    And Create Events
+    Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
+    And Create Event With Device-Test-001 And Profile-Test-001
     When Query Event By Event Id "${id}"
     Then Should Return Status Code "200" And event
     And Should Return Content-Type "application/json"
@@ -52,18 +52,17 @@ EventGET004 - Query events by start/end time
     [Teardown]  Delete Events
 
 EventGET005 - Query a count of all of events
-    Given Generate Multiple Events Sample With Simple Readings
-    And Create Events
+    Given Create Multiple Events
     When Query All Events Count
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
-    #And Should Be Equal  ${content}[Count]  4
+    #And Should Be Equal  ${content}[Count]  6
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     #[Teardown]  Delete Events
 
 EventGET006 - Query a count of all of events with specified device by device name
     [Tags]  Skipped
-    Given Create Multiple Events with Several Devices
+    Given Create Multiple Events
     When Query All Events Count With Specified Device
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
@@ -71,3 +70,11 @@ EventGET006 - Query a count of all of events with specified device by device nam
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
+*** Keywords ***
+Create Multiple Events
+  FOR  ${index}  IN RANGE  0  3   # total: 6 events
+    Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
+    Create Event With Device-Test-001 and Profile-Test-001
+    Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Simple Reading  Simple Float Reading
+    Create Event With Device-Test-002 and Profile-Test-001
+  END

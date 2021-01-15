@@ -77,17 +77,6 @@ DeviceGET006 - Check device exists by name
     ...                  AND  Delete Device Service By Name  Test-Device-Service
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
-DeviceGET006 - Check device exists by id
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-3
-    And Get "id" From Multi-status Item 0
-    When Check Existence Of Device By Id  ${item_value}
-    Then Should Return Status Code "200"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device By Name Test-Device
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-3
-
 *** Keywords ***
 Devices Should Be Linked To Specified Label: ${label}
     ${devices}=  Set Variable  ${content}[devices]

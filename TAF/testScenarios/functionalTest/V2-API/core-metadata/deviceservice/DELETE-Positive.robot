@@ -12,17 +12,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice
 ${api_version}    v2
 
 *** Test Cases ***
-ServiceDELETE001 - Delete device service by ID
-    Given Generate A Device Service Sample
-    And Create Device Service ${deviceService}
-    And Get "id" from multi-status item 0
-    When Delete Device Service By ID  ${item_value}
-    Then Should Return Status Code "200"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Service Should Be Deleted  Test-Device-Service
-
-ServiceDELETE002 - Delete device service by name
+ServiceDELETE001 - Delete device service by name
     Given Generate A Device Service Sample
     And Create Device Service ${deviceService}
     When Delete Device Service By Name  Test-Device-Service

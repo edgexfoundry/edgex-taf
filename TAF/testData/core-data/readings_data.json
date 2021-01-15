@@ -13,7 +13,6 @@
     "profileName": "Profile-001",
     "origin": 0,
     "valueType": "Float32",
-    "floatEncoding": "eNotation",
     "value": "39.5"
   },
   "Binary Reading": {
