@@ -24,7 +24,7 @@ StartupTime001 - Get service startup time with creating containers
     set global variable  ${startup_time_with_create_container}  ${service_aggregations}
 
 StartupTime002 - Get service startup time without creating containers
-    [Setup]  Run keywords   Deploy EdgeX  -  PerformanceMetrics
+    [Setup]  Run keywords   Deploy EdgeX  PerformanceMetrics
              ...            AND  Stop services
     ${services_startup_time_list}=  Deploy edgex without creating containers and get startup time
     ${service_aggregations}=  Get startup time and add to dictionary  ${services_startup_time_list}
@@ -42,7 +42,7 @@ Deploy edgex with creating containers and get startup time
         ${result}=  Run Process  ${clear_mem_cache}  shell=True
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem.log
         Start time is recorded
-        Deploy EdgeX  -  PerformanceMetrics
+        Deploy EdgeX  PerformanceMetrics
         ${services_startup_time}=  Run keyword and continue on failure  fetch services startup time
         Shutdown services
         Append to list  ${service_startup_time_list}  ${services_startup_time}

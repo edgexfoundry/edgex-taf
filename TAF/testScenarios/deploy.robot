@@ -23,11 +23,3 @@ Deploy EdgeX
 Deploy Device Service
     [Tags]  deploy-device-service
     Deploy device service  ${SERVICE_NAME}
-
-Deploy EdgeX for backward compatibility testing
-    [Tags]  backward
-    Deploy Edgex  -backward
-
-Deploy Device Virtual for backward compatibility testing
-    [Tags]  backward
-    Deploy device service  ${SERVICE_NAME}  -backward

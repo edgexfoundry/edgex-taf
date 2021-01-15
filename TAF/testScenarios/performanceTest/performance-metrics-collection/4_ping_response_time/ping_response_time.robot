@@ -6,7 +6,7 @@ Library         TAF/testCaseModules/keywords/setup/edgex.py
 Library         TAF/testCaseModules/keywords/performance-metrics-collection//PingResponse.py
 Resource        TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup     Run keywords    Setup Suite
-                ...             AND  Deploy EdgeX  -  PerformanceMetrics
+                ...             AND  Deploy EdgeX  PerformanceMetrics
 Suite Teardown  Shutdown services
 
 *** Variables ***

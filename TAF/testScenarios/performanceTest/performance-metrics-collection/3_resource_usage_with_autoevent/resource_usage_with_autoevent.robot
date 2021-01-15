@@ -11,7 +11,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/performance-metric-collecti
 
 *** Test Cases ***
 Resource001 - Get CPU and Memory Usage while sending autoevent
-    Deploy EdgeX  -  PerformanceMetrics
+    Deploy EdgeX  PerformanceMetrics
     ${CPU_MEM_USAGE_LIST}=  Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIMES}" times per "${ GET_CPU_MEM_INTERVAL}"s
     ${cpu_usage}=  retrieve cpu aggregation value  ${CPU_MEM_USAGE_LIST}
     ${mem_usage}=  retrieve mem aggregation value  ${CPU_MEM_USAGE_LIST}
