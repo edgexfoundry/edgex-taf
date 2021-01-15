@@ -12,32 +12,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice
 ${api_version}    v2
 
 *** Test Cases ***
-ErrServiceDELETE001 - Delete device service by ID with invalid id format
-    # use non uuid format, like d138fccc-f39a4fd0-bd32
-    When Delete Device Service By ID  d138fccc-f39a4fd0-bd32
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrServiceDELETE002 - Delete device service by ID that used by device
-    [Tags]  Skipped  # haven't implemented
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-1
-    When Delete Device Service By ID  ${device_service_id}
-    Then Should Return Status Code "423"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device By Name Test-Device
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
-    ...                  AND  Delete Device Profile By Name  Test-Profile-1
-
-ErrServiceDELETE003 - Delete device service by ID with non-existent id
-    ${random_uuid}=  Evaluate  str(uuid.uuid4())
-    When Delete Device Service By ID  ${random_uuid}
-    Then Should Return Status Code "404"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrServiceDELETE004 - Delete device service by name that used by device
+ErrServiceDELETE001 - Delete device service by name that used by device
     [Tags]  Skipped  # haven't implemented
     Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
     When Delete Device Service By Name  Test-Device-Service
@@ -48,7 +23,7 @@ ErrServiceDELETE004 - Delete device service by name that used by device
     ...                  AND  Delete Device Service By Name  Test-Device-Service
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
-ErrServiceDELETE005 - Delete device service by name with non-existent service name
+ErrServiceDELETE002 - Delete device service by name with non-existent service name
     When Delete Device Service By Name  Invalid_Name
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"

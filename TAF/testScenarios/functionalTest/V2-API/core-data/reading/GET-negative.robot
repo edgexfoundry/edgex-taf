@@ -6,13 +6,13 @@ Suite Setup      Setup Suite
 ${SUITE}         Core-Data Reading GET Negative Testcases
 
 *** Test Cases ***
-ErrReadingGET001 - Query reading by ID fails
-    When Query Reading By Invalid ID
+ErrReadingGET001 - Query reading by resourceName fails
+    When Query Reading By Invalid resourceName
     Then Should Return Status Code "404"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrReadingGET002 - Query all readings with specified device by device id fails
-    When Query All Readings With Specified Device By Invalid Device ID
+ErrReadingGET002 - Query all readings with specified device by device name fails
+    When Query All Readings With Specified Device By Invalid Device Name
     Then Should Return Status Code "404"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
@@ -31,13 +31,8 @@ ErrReadingGET005 - Query readings by start/end time fails (Start>End)
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrReadingGET006 - Query readings by valueType fails
-    When Query Readings By Invalid valueType
-    Then Should Return Status Code "400"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrReadingGET007 - Query a count of all of readings with specified device by device id fails
-    When Query All Readings Count With Specified Device By Invalid Device ID
+ErrReadingGET006 - Query a count of all of readings with specified device by device name fails
+    When Query All Readings Count With Specified Device By Invalid Device Name
     Then Should Return Status Code "404"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 

@@ -25,18 +25,6 @@ Device reading should be sent to Core Data
 Device reading "${validReadingName}" for all device should be sent to Core Data
     Query device reading "${validReadingName}" for all device
 
-Query device reading "${validReadingName}" by device id
-    ${device_name}=    Query device by id and return device name
-    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}/name/${validReadingName}/device/${device_name}/1
-    ...       headers=${headers}  expected_status=any
-    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
-    ${get_reading_result_length}=  get length  ${resp.content}
-    run keyword if  ${get_reading_result_length} <=3    fail  "No device reading found"
-    Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.content}
-
 Query device reading by start/end time
     [Arguments]  ${start_time}   ${end_time}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
@@ -148,12 +136,13 @@ Query all events count
     ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/count  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
-Create Events
+Create Event With ${deviceName} and ${profileName}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}  json=${events}  headers=${headers}  expected_status=any
+    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${profileName}/${deviceName}  json=${event}
+    ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
-    Run keyword if  ${response} != 207  log to console  ${content}
+    Run keyword if  ${response} != 201  log to console  ${content}
 
 # generate data for core-data
 Generate event sample
@@ -177,24 +166,6 @@ Generate event sample
     Set to dictionary  ${event}[event]  origin=${origin}
     Set to dictionary  ${event}[event]  readings=${readings}
     Set test variable  ${id}  ${uuid}
-    [return]  ${event}
+    Set test variable  ${event}  ${event}
 
-Change ${event} readings[${index}] values ${property_dict}
-    ${keys}=  Get dictionary keys  ${property_dict}
-    FOR  ${key}  IN  @{keys}
-        Dictionary should contain key  ${event}[event][readings][${index}]  ${key}  Reading doesn't contain key: ${key}
-        Set to dictionary  ${event}[event][readings][${index}]  ${key}=${property_dict}[${key}]
-    END
 
-Generate multiple events sample with simple readings
-    ${event1}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
-    ${event2}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Float Reading
-    ${event3}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
-    ${event4}=  Generate event sample  Event With Tags  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
-    ${events}=  Create List  ${event1}  ${event2}  ${event3}  ${event4}
-    Set test variable  ${events}  ${events}
-
-Generate an event sample with simple readings
-    ${event}=  Generate event sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
-    ${events}=  Create List  ${event}
-    Set test variable  ${events}  ${events}

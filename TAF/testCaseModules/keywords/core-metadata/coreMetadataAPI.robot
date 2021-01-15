@@ -99,15 +99,6 @@ Delete multiple device profiles by names
         Delete device profile by name  ${profile}
     END
 
-Delete device profile by id
-    [Arguments]  ${device_profile_id}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Core Metadata  ${deviceProfileUri}/id/${device_profile_id}  headers=${headers}
-    ...       expected_status=any
-    Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
-    Set Response to Test Variables  ${resp}
-
 # Device
 # v1 only: in functionalTest/device-service/common/ and integrationTest
 Create device
@@ -216,14 +207,6 @@ Query all devices by ${associated}Name ${associated_name} with ${parameter}=${va
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
-Check existence of device by id
-    [Arguments]  ${device_id}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/check/id/${device_id}  headers=${headers}  expected_status=any
-    Set Response to Test Variables  ${resp}
-    Run keyword if  ${response}!=200  log to console  ${content}
-
 Check existence of device by name
     [Arguments]  ${device_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -255,15 +238,6 @@ Delete multiple devices by names
     FOR  ${device}  IN  @{device_list}
         Delete device by name ${device}
     END
-
-Delete device by id
-    [Arguments]  ${device_id}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Core Metadata  ${deviceUri}/id/${device_id}  headers=${headers}
-    ...       expected_status=any
-    Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
-    Set Response to Test Variables  ${resp}
 
 # Addressable
 # v1 only: in functionalTest/core-data/UC_readings/add_reading.robot
@@ -341,15 +315,6 @@ Delete multiple device services by names
     FOR  ${service}  IN  @{service_list}
         Delete device service by name  ${service}
     END
-
-Delete device service by iD
-    [Arguments]  ${device_service_id}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Core Metadata  ${deviceServiceUri}/id/${device_service_id}  headers=${headers}
-    ...       expected_status=any
-    Run Keyword If  ${resp.status_code}!=200  log to console  ${resp.content}
-    Set Response to Test Variables  ${resp}
 
 # generate data for core-metadata
 # Device Profile

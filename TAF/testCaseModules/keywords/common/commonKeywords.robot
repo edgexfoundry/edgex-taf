@@ -91,7 +91,6 @@ Response Time Should Be Less Than "${time_limit}"ms
 
 Should Return Status Code "${status_code}" And ${element}
     Should return status code "${status_code}"
-    Should return Content-Type "application/json"
     Should contain "${element}"
 
 apiVersion Should be ${api_version}

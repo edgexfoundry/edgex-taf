@@ -15,16 +15,16 @@ ReadingGET001 - Query all readings
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
-ReadingGET002 - Query reading by ID
+ReadingGET002 - Query reading by resoucreName
     Given Create An Event
-    When Query Reading By ID
+    When Query Reading By resourceName
     Then Should Return Status Code "200"
     And Should Have Content-Type "application/json"
     And Readings Should Be Matched
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
-ReadingGET003 - Query all readings with specified device by device id
+ReadingGET003 - Query all readings with specified device by device name
     Given Create Multiple Events With Several Devices
     When Query All Readings With Specified Device
     Then Should Return Status Code "200"
@@ -42,16 +42,7 @@ ReadingGET004 - Query readings by start/end time
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
-ReadingGET005 - Query readings by valueType
-    Given Create Multiple Events With Several ValueType
-    When Query Readings By ValueType
-    Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Readings Should Match ValueType
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Events
-
-ReadingGET005 - Query a count of all of readings
+ReadingGET004 - Query a count of all of readings
     Given Create Multiple Events
     When Query All Readings Count
     Then Should Return Status Code "200"
@@ -60,7 +51,7 @@ ReadingGET005 - Query a count of all of readings
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Events
 
-ReadingGET006 - Query a count of all of readings with specified device by device id
+ReadingGET006 - Query a count of all of readings with specified device by device name
     Given Create Multiple Events With Several Devices
     When Query All Readings Count With Specified Device
     Then Should Return Status Code "200"
