@@ -47,10 +47,10 @@ Setup Suite for App Service Secrets
     Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Run Keywords
     #EDGEX_SECURITY_SECRET_STORE: "true"
     ...             Set Suite Variable  ${edgex_profile}  http-export-secrets
-    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48098
+    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48102
     #EDGEX_SECURITY_SECRET_STORE: "false"
     ...             ELSE  Run keywords  Set Suite Variable  ${edgex_profile}  http-export
-    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48096
+    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48101
 
 Get AppService Token
     ${command}=  Set Variable  docker exec app-service-${edgex_profile} cat /tmp/edgex/secrets/appservice-${edgex_profile}/secrets-token.json

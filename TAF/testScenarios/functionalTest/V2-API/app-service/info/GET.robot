@@ -9,7 +9,7 @@ Force Tags       v2-api
 ${SUITE}          App-Service GET Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-get.log
 ${edgex_profile}  blackbox-tests
-${AppServiceUrl_blackbox}  http://${BASE_URL}:48095
+${AppServiceUrl_blackbox}  http://${BASE_URL}:48105
 ${api_version}  v2
 
 *** Test Cases ***
