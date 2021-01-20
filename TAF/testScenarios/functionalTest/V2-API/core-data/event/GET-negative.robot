@@ -8,7 +8,7 @@ Suite Teardown  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 Force Tags      v2-api
 
 *** Variables ***
-${SUITE}         Core-Data Event GET Negative Testcases
+${SUITE}          Core-Data Event GET Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-get-negative.log
 ${api_version}    v2
 
@@ -26,32 +26,25 @@ ErrEventGET002 - Query event by ID fails (Not UUID)
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrEventGET003 - Query all events with specified device by device name fails
-    [Tags]  Skipped
-    When Query All Events with Specified Device By Non-existent Device Name
-    Then Should return Status Code "404"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrEventGET004 - Query events by start/end time fails (Invalid Start)
-    [Tags]  Skipped
-    When Query Events By Invalid Start Time
+ErrEventGET003 - Query events by start/end time fails (Invalid Start)
+    ${end_time}=  Get current milliseconds epoch time
+    When Run Keyword And Expect Error  *  Query Events By Start/End Time  InvalidStart  ${end_time}
     Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrEventGET005 - Query events by start/end time fails (Invalid End)
-    [Tags]  Skipped
-    When Query Events By Invalid End Time
+ErrEventGET004 - Query events by start/end time fails (Invalid End)
+    ${start_time}=  Get current milliseconds epoch time
+    When Run Keyword And Expect Error  *  Query Events By Start/End Time  ${start_time}  InvalidEnd
     Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrEventGET006 - Query events by start/end time fails (Start>End)
-    [Tags]  Skipped
-    When Query Events By Invalid Start/End Time
+ErrEventGET005 - Query events by start/end time fails (Start>End)
+    ${start_time}=  Get current milliseconds epoch time
+    ${end_time}=  Get current milliseconds epoch time
+    When Run Keyword And Expect Error  *  Query Events By Start/End Time  ${end_time}  ${start_time}
     Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrEventGET007 - Query a count of all of events with specified device by device name fails
-    [Tags]  Skipped
-    When Query All Events Count With Specified Device By Non-existent Device Name
-    Then Should Return Status Code "404"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms

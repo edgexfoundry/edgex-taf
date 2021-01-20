@@ -13,14 +13,13 @@ ${api_version}    v2
 
 *** Test Cases ***
 EventGET001 - Query all events
-    [Tags]  Skipped
     Given Create Multiple Events
     When Query All Events
     Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Validate Response Schema
+    And Should Return All Events
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Events
+    [Teardown]  Delete All Events By Age
 
 EventGET002 - Query event by ID
     [Tags]  SmokeTest
@@ -30,51 +29,67 @@ EventGET002 - Query event by ID
     Then Should Return Status Code "200" And event
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    #[Teardown]  Delete Events
+    [Teardown]  Delete All Events By Age
 
 EventGET003 - Query all events with specified device by device name
-    [Tags]  Skipped
-    Given Create Multiple Events With Several Devices
-    When Query All Events With Specified Device
+    Given Create Multiple Events
+    When Query Events By Device Name  Device-Test-001
     Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
     And Events Should Be Linked To Specified Device
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Events
+    [Teardown]  Delete All Events By Age
 
 EventGET004 - Query events by start/end time
-    [Tags]  Skipped
-    Given Create Multiple Events
-    When Query Events By Start/End Time
+    Given Create Multiple Events For Querying Events By Time
+    When Query Events By Start/End Time  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Events Should Be Created Within Given Time
-    [Teardown]  Delete Events
+    And Events Should Be Created Between ${start_time} And ${end_time}
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete All Events By Age
 
 EventGET005 - Query a count of all of events
     Given Create Multiple Events
     When Query All Events Count
     Then Should Return Status Code "200"
+    And Should Be Equal As Integers  ${content}[Count]  6
     And Should Return Content-Type "application/json"
-    #And Should Be Equal  ${content}[Count]  6
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    #[Teardown]  Delete Events
+    [Teardown]  Delete All Events By Age
 
 EventGET006 - Query a count of all of events with specified device by device name
-    [Tags]  Skipped
     Given Create Multiple Events
-    When Query All Events Count With Specified Device
+    When Query Events Count By Device Name  Device-Test-002
     Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Count Should Be Correct
+    And Should Be Equal As Integers  ${content}[Count]  3
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Events
+    [Teardown]  Delete All Events By Age
 
 *** Keywords ***
-Create Multiple Events
-  FOR  ${index}  IN RANGE  0  3   # total: 6 events
-    Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
-    Create Event With Device-Test-001 and Profile-Test-001
-    Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Simple Reading  Simple Float Reading
-    Create Event With Device-Test-002 and Profile-Test-001
+Should Return All Events
+  ${count}=  Get Length  ${content}[events]
+  Should Be Equal As Integers  ${count}  6
+
+Events Should Be Linked To Specified Device
+  ${count}=  Get Length  ${content}[events]
+  Should Be Equal As Integers  ${count}  3
+  FOR  ${index}  IN RANGE  0  3
+    Should Be Equal  ${content}[events][${index}][deviceName]  Device-Test-001
+  END
+
+Create Multiple Events For Querying Events By Time
+  ${start_time}=  Get current milliseconds epoch time
+  Create Multiple Events
+  ${end_time}=  Get current milliseconds epoch time
+  Create Multiple Events
+  Set Test Variable  ${start_time}  ${start_time}
+  Set Test Variable  ${end_time}  ${end_time}
+
+Events Should Be Created Between ${start} And ${end}
+  ${count}=  Get Length  ${content}[events]
+  Should Be Equal As Integers  ${count}  6
+  FOR  ${index}  IN RANGE  0  6
+    Should Be True  ${end} >= ${content}[events][${index}][created] >=${start}
   END

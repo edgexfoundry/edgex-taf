@@ -12,14 +12,14 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-post-positive.log
 ${api_version}    v2
 
 *** Test Cases ***
-EventPOST001 - Create events
+EventPOST001 - Create event
     [Tags]  SmokeTest
     Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
     When Create Event With Device-Test-001 And Profile-Test-001
     Then Should Return Status Code "201" And id
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    #[Teardown]  Delete Events
+    [Teardown]  Delete All Events By Age
 
 EventPOST002 - Create event with binary data
     Given Generate Event Sample  Event With Tags  Device-Test-002  Profile-Test-002  Binary Reading
@@ -27,6 +27,5 @@ EventPOST002 - Create event with binary data
     Then Should Return Status Code "201" And id
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    #[Teardown]  Delete Events
-
+    [Teardown]  Delete All Events By Age
 
