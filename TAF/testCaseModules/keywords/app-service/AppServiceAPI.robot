@@ -8,10 +8,11 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Keywords ***
 Setup Suite for App Service
-    [Arguments]  ${appServiceUrl}
+    [Arguments]  ${appServiceUrl}  ${app_service_name}
     Setup Suite
     Set Suite Variable  ${url}  ${appServiceUrl}
-    Deploy services  app-service-${edgex_profile}
+    Set Suite Variable  ${app_service_name}  ${app_service_name}
+    Deploy services  ${app_service_name}
     Check app-service is available
     Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 
@@ -21,11 +22,11 @@ Check app-service is available
 
 Suite Teardown for App Service
     Suite Teardown
-    Remove services  app-service-${edgex_profile}
+    Remove services  ${app_service_name}
     Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
 Set Functions ${functions}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-${edgex_profile}/Writable/Pipeline/ExecutionOrder
+    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-blackbox-tests/Writable/Pipeline/ExecutionOrder
     Modify consul config  ${path}  ${functions}
     sleep  1
 

@@ -44,16 +44,14 @@ ErrSecretsPOST004 - Stores secrets to the secret client fails (security not enab
 
 *** Keywords ***
 Setup Suite for App Service Secrets
-    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Run Keywords
+    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
     #EDGEX_SECURITY_SECRET_STORE: "true"
-    ...             Set Suite Variable  ${edgex_profile}  http-export-secrets
-    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48102
+    ...             Setup Suite for App Service  http://${BASE_URL}:48102  app-service-http-export-secrets
     #EDGEX_SECURITY_SECRET_STORE: "false"
-    ...             ELSE  Run keywords  Set Suite Variable  ${edgex_profile}  http-export
-    ...             AND  Setup Suite for App Service  http://${BASE_URL}:48101
+    ...             ELSE  Setup Suite for App Service  http://${BASE_URL}:48101  app-service-http-export
 
 Get AppService Token
-    ${command}=  Set Variable  docker exec app-service-${edgex_profile} cat /tmp/edgex/secrets/appservice-${edgex_profile}/secrets-token.json
+    ${command}=  Set Variable  docker exec ${app_service_name} cat /tmp/edgex/secrets/${app_service_name}/secrets-token.json
     ${result} =  Run Process  ${command}  shell=yes  output_encoding=UTF-8
     ${result_string}=  Evaluate  json.loads('''${result.stdout}''')  json
     Set Test Variable  ${token}  ${result_string}[auth][client_token]
@@ -62,7 +60,7 @@ Secrets Should be Stored
     Get AppService Token
     Create Session  GetSecrets  url=http://${BASE_URL}:8200  disable_warnings=true
     ${headers}=  Create Dictionary  X-Vault-Token  ${token}
-    ${resp}=  GET On Session  GetSecrets  /v1/secret/edgex/appservice-${edgex_profile}/${secrets_path}  headers=${headers}
+    ${resp}=  GET On Session  GetSecrets  /v1/secret/edgex/${app_service_name}/${secrets_path}  headers=${headers}
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
     Should Contain  ${content}[data]  ${secrets_key}  ${secrets_value}

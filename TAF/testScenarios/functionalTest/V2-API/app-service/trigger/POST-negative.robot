@@ -2,14 +2,13 @@
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Library   TAF/testCaseModules/keywords/consul/consul.py
-Suite Setup      Setup Suite for App Service  ${AppServiceUrl_blackbox}
+Suite Setup      Setup Suite for App Service  ${AppServiceUrl_blackbox}  app-service-blackbox-tests
 Suite Teardown   Suite Teardown for App Service
 Force Tags       v2-api
 
 *** Variables ***
 ${SUITE}          App-Service Trigger POST Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-trigger-negative.log
-${edgex_profile}  blackbox-tests
 ${AppServiceUrl_blackbox}  http://${BASE_URL}:48105
 ${api_version}  v2
 
@@ -31,7 +30,7 @@ ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
 *** Keywords ***
 Accept raw data
     [arguments]  ${bool}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-${edgex_profile}/Writable/Pipeline/UseTargetTypeOfByteArray
+    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-blackbox-tests/Writable/Pipeline/UseTargetTypeOfByteArray
     Modify consul config  ${path}  ${bool}
     sleep  1
 
