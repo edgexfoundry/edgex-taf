@@ -1,8 +1,8 @@
 #!/bin/sh
 
 option=${1}
-PROXY_IMAGE=$(docker inspect --format='{{.Config.Image}}' edgex-proxy)
-PROXY_NETWORK_ID=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' edgex-proxy)
+PROXY_IMAGE=$(docker inspect --format='{{.Config.Image}}' edgex-proxy-setup)
+PROXY_NETWORK_ID=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' edgex-proxy-setup)
 
 if [ ! -f "${WORK_DIR}/ec256.pub" ];
 then

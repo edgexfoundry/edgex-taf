@@ -21,11 +21,11 @@ else
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
           -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d security-bootstrapper vault
 
-    sleep 20
+    sleep 10
 
     docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d vault-worker kong-db
+          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d secretstore-setup kong-db consul
 
     sleep 10
 
@@ -37,13 +37,13 @@ else
 
     docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d edgex-proxy
+          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d proxy-setup
   fi
 
   docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
           -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up \
-          -d database consul data metadata command notifications scheduler
+          -d database data metadata command notifications scheduler
   sleep 5
 
 fi

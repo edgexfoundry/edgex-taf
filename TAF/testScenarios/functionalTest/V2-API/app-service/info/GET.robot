@@ -1,14 +1,13 @@
 *** Settings ***
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
-Suite Setup      Setup Suite for App Service  ${AppServiceUrl_blackbox}
+Suite Setup      Setup Suite for App Service  ${AppServiceUrl_blackbox}  app-service-blackbox-tests
 Suite Teardown   Suite Teardown for App Service
 Force Tags       v2-api
 
 *** Variables ***
 ${SUITE}          App-Service GET Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-get.log
-${edgex_profile}  blackbox-tests
 ${AppServiceUrl_blackbox}  http://${BASE_URL}:48105
 ${api_version}  v2
 
