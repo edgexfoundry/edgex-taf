@@ -52,8 +52,8 @@ Store Secret Data With ${data}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 201  log to console  ${content}
     ...             ELSE  Run Keywords  Set test variable  ${secrets_path}  ${secrets_data}[path]
-    ...             AND  Set test variable  ${secrets_key}  ${secrets_data}[secrets][0][key]
-    ...             AND  Set test variable  ${secrets_value}  ${secrets_data}[secrets][0][value]
+    ...             AND  Set test variable  ${secrets_key}  ${secrets_data}[secretData][0][key]
+    ...             AND  Set test variable  ${secrets_value}  ${secrets_data}[secretData][0][value]
 
 
 
