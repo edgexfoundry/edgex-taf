@@ -47,7 +47,7 @@ Store Secret Data With ${data}
     ${secrets_data}=  Load data file "app-service/secrets_data.json" and get variable "${data}"
     Create Session  Secrets  url=${url}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Secrets  api/${api_version}/secrets  json=${secrets_data}  headers=${headers}
+    ${resp}=  POST On Session  Secrets  api/${api_version}/secret  json=${secrets_data}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 201  log to console  ${content}
