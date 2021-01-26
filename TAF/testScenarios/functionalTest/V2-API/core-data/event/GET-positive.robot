@@ -41,7 +41,7 @@ EventGET003 - Query all events with specified device by device name
     [Teardown]  Delete All Events By Age
 
 EventGET004 - Query events by start/end time
-    Given Create Multiple Events For Querying Events By Time
+    Given Create Multiple Events Twice To Get Start/End Time
     When Query Events By Start/End Time  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
     And Events Should Be Created Between ${start_time} And ${end_time}
@@ -78,14 +78,6 @@ Events Should Be Linked To Specified Device
   FOR  ${index}  IN RANGE  0  3
     Should Be Equal  ${content}[events][${index}][deviceName]  Device-Test-001
   END
-
-Create Multiple Events For Querying Events By Time
-  ${start_time}=  Get current milliseconds epoch time
-  Create Multiple Events
-  ${end_time}=  Get current milliseconds epoch time
-  Create Multiple Events
-  Set Test Variable  ${start_time}  ${start_time}
-  Set Test Variable  ${end_time}  ${end_time}
 
 Events Should Be Created Between ${start} And ${end}
   ${count}=  Get Length  ${content}[events]

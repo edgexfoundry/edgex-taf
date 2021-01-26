@@ -15,6 +15,7 @@ ${coreDataReadingUri}  /api/${api_version}/reading
 ${coreDataValueDescriptorUri}  /api/${api_version}/valuedescriptor
 
 *** Keywords ***
+# v1 only: in integrationTest
 Device reading should be sent to Core Data
     [Arguments]     ${data_type}    ${reading_name}    ${set_reading_value}
     ${device_name}=  Query device by id and return device name
@@ -22,6 +23,62 @@ Device reading should be sent to Core Data
     ${result}=  check value equal  ${data_type}  ${set_reading_value}   ${device_reading_data}[0][value]
     should be true  ${result}
 
+Query all readings
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/all  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query all readings with ${parameter}=${value}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/all  params=${parameter}=${value}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query readings by resourceName
+    [Arguments]  ${resource_name}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/resourceName/${resource_name}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query readings by device name
+    [Arguments]  ${device_name}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/device/name/${device_name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query readings by start/end time
+    [Arguments]  ${start_time}   ${end_time}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/start/${start_time}/end/${end_time}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
+
+Query all readings count
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/count  headers=${headers}  expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query readings count by device name
+    [Arguments]  ${device_name}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/count/device/name/${device_name}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+# v1 only: in functionTest/device-service/common/
 Query device reading by start/end time
     [Arguments]  ${start_time}   ${end_time}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
@@ -34,16 +91,7 @@ Query device reading by start/end time
     Should Be Equal As Strings  ${resp.status_code}  200
     [Return]   ${resp.content}
 
-Query device reading "${validReadingName}" for all device
-    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data    ${coreDataReadingUri}  headers=${headers}  expected_status=any
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    ${get_reading_result_length}=  get length  ${resp.content}
-    run keyword if  ${get_reading_result_length} >=3    fail  "No device reading found"
-    Should Be Equal As Strings  ${resp.status_code}  200
-    log  ${resp.content}
-
+# v1 only: in keywords/core-data
 Query device reading by device name "${deviceName}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -55,6 +103,7 @@ Query device reading by device name "${deviceName}"
     ${readings}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]   ${readings}
 
+# v1 only: in functionTest/device-service/common/
 Device autoEvents with "${reading_name}" send by frequency setting "${frequency_value}"s
     ${sleep_time}=  evaluate  ${frequency_value}
     ${start_time}=   Get current milliseconds epoch time
@@ -71,6 +120,7 @@ Device autoEvents with "${reading_name}" send by frequency setting "${frequency_
        run keyword and continue on failure  should be equal as integers  ${expected_device_reading_count}  ${device_reading_count}
     END
 
+# v1 only: in keywords/core-data
 Query value descriptor for name "${value_descriptor_name}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -79,6 +129,7 @@ Query value descriptor for name "${value_descriptor_name}"
     run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
     log   ${resp.content}
 
+# v1 only: in keywords/core-data
 Query readings by value descriptor ${valueDescriptor} and device id "${deviceId}"
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -89,6 +140,7 @@ Query readings by value descriptor ${valueDescriptor} and device id "${deviceId}
     @{readings}=  evaluate  json.loads('''${resp.content}''')  json
     [Return]   @{readings}
 
+# v1 only: in functionalTest/core-data
 Add reading with value ${value} by value descriptor ${valueDescriptor} and device id ${deviceId}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${data}=    Create Dictionary   device=${deviceId}   name=${valueDescriptor}    value=${value}
@@ -218,10 +270,17 @@ Generate event sample
     Set test variable  ${event}  ${event}
 
 Create multiple events
-  FOR  ${index}  IN RANGE  0  3   # total: 6 events
+  FOR  ${index}  IN RANGE  0  3   # total: 6 events, 9 readings
     Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
     Create Event With Device-Test-001 and Profile-Test-001
     Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Simple Reading  Simple Float Reading
     Create Event With Device-Test-002 and Profile-Test-001
   END
 
+Create multiple events twice to get start/end time
+  ${start_time}=  Get current milliseconds epoch time
+  Create Multiple Events
+  ${end_time}=  Get current milliseconds epoch time
+  Create Multiple Events
+  Set Test Variable  ${start_time}  ${start_time}
+  Set Test Variable  ${end_time}  ${end_time}
