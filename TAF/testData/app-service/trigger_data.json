@@ -1,25 +1,25 @@
 {
   "Valid Data": {
-    "id": "5bd794de0e36080001f53eab",
-    "pushed": 0,
-    "device": "Random-Float-Device",
-    "created": 1540855006481,
-    "modified": 0,
-    "origin": 1540855006469,
-    "schedule": null,
-    "event": null,
-    "readings": [
-      {
-        "id": "5bd794de0e36080001f53eac",
-        "pushed": 0,
-        "created": 1540855006481,
-        "origin": 1540855006469,
-        "modified": 0,
-        "device": "Random-Float-Device",
-        "name": "RandomValue_Float64",
-        "value": "QAFk2HxRUOo="
-      }
-    ]
+    "requestId": "82eb2e26-0f24-48aa-ae4c-de9dac3fb9bc",
+    "event": {
+      "apiVersion" : "v2",
+      "deviceName": "Random-Integer-Device",
+      "profileName": "Random-Integer-Device",
+      "origin": 1540855006469,
+      "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903",
+      "readings": [
+        {
+          "apiVersion" : "v2",
+          "resourceName": "Int32",
+          "profileName": "Random-Integer-Device",
+          "deviceName": "Random-Integer-Device",
+          "value": "123",
+          "origin": 1540855006469,
+          "ValueType": "Int32",
+          "id": "82eb2e26-0f24-48aa-ae4c-de9dac3fb920"
+        }
+      ]
+    }
   },
   "Invalid Data": {
     "id": "5bd794de0e36080001f53eab",

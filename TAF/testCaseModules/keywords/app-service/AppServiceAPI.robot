@@ -35,8 +35,8 @@ Trigger Function Pipeline With ${data}
     ...               ELSE  set variable  ${data}
     ${trigger_data}=  Load data file "app-service/trigger_data.json" and get variable "${trigger_data}"
     Run keyword if  '${data}' == 'No Matching DeviceName'
-    ...    Run keywords  set to dictionary  ${trigger_data}  device="DeiveNotMatch"
-    ...    AND  set to dictionary  ${trigger_data}[readings][0]  device="DeviceNotMatch"
+    ...    Run keywords  set to dictionary  ${trigger_data}[event]  deviceName=DeiveNotMatch
+    ...    AND  set to dictionary  ${trigger_data}[event][readings][0]  deviceName=DeviceNotMatch
     Create Session  Trigger  url=${url}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Trigger  api/${api_version}/trigger  json=${trigger_data}  headers=${headers}
