@@ -25,7 +25,7 @@ else
 
     docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d secretstore-setup kong-db consul
+          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d secretstore-setup kong-db consul database
 
     sleep 10
 
@@ -43,7 +43,7 @@ else
   docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
           -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up \
-          -d database data metadata command notifications scheduler
+          -d data metadata command notifications scheduler
   sleep 5
 
 fi
