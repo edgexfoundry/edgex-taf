@@ -27,16 +27,16 @@ class EventExportedTime(object):
         subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with result code 0", "")
         events = subscriber_logs.split('Got mqtt export data!!')
         for event in events:
-            if "device" in event:
+            if "deviceName" in event:
                 event_str = event.split('\n')
                 event_json = json.loads(event_str[2])
                 event_json['received'] = int(event_str[1])
 
-                if str(devices[0]) == event_json['device']:
+                if str(devices[0]) == event_json['deviceName']:
                     device_int.append(event_json)
-                elif str(devices[1]) == event_json['device']:
+                elif str(devices[1]) == event_json['deviceName']:
                     device_bool.append(event_json)
-                elif str(devices[2]) == event_json['device']:
+                elif str(devices[2]) == event_json['deviceName']:
                     device_uint.append(event_json)
                 else:
                     continue
