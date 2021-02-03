@@ -1,3 +1,4 @@
+apiVersion: "v2"
 name: "Test-Profile-1"
 description: "BACnet Honeywell thermostats"
 manufacturer: "Honeywell"

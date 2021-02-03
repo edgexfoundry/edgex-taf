@@ -1,4 +1,5 @@
 {
+   "apiVersion" : "v2",
    "origin": 1471806386919,
    "name" : "Test-Device",
    "description": "Test-Device",

@@ -1,5 +1,6 @@
 {
   "Simple Reading": {
+    "apiVersion" : "v2",
     "deviceName": "Device-001",
     "resourceName": "Simple-Reading",
     "profileName": "Profile-001",
@@ -8,6 +9,7 @@
     "value": "3"
   },
   "Simple Float Reading": {
+    "apiVersion" : "v2",
     "deviceName": "Device-001",
     "resourceName": "Simple-Float-Reading",
     "profileName": "Profile-001",
@@ -16,6 +18,7 @@
     "value": "39.5"
   },
   "Binary Reading": {
+    "apiVersion" : "v2",
     "deviceName": "Device-001",
     "resourceName": "Binary-Reading",
     "profileName": "Profile-001",
