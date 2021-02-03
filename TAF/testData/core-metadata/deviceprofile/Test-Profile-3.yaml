@@ -1,3 +1,4 @@
+apiVersion: "v2"
 name: "Test-Profile-3"
 description: "BACnet livingroom thermostats"
 manufacturer: "Honeywell"

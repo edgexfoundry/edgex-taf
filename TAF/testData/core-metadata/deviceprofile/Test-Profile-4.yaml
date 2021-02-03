@@ -1,3 +1,4 @@
+apiVersion: "v2"
 name: "Test-Profile-4"
 description: "aeroplane tachometer profile"
 manufacturer: "Honeywell"

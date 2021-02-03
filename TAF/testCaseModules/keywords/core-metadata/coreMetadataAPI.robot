@@ -323,6 +323,7 @@ Generate Device Profiles
     ${profile_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  profile=${data}
+        Set to dictionary  ${json}       apiVersion=${api_version}
         Append To List  ${profile_list}  ${json}
     END
     Set Test Variable  ${deviceProfile}  ${profile_list}
@@ -357,6 +358,7 @@ Generate Device Services
     ${service_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  service=${data}
+        Set to dictionary  ${json}       apiVersion=${api_version}
         Append To List  ${service_list}  ${json}
     END
     Set Test Variable  ${deviceService}  ${service_list}
@@ -392,6 +394,7 @@ Generate Devices
     ${device_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  device=${data}
+        Set to dictionary  ${json}       apiVersion=${api_version}
         Append To List  ${device_list}  ${json}
     END
     Set Test Variable  ${Device}  ${device_list}

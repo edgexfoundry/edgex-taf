@@ -1,3 +1,4 @@
+apiVersion: "v2"
 name: "Test-Profile-2"
 description: "Modbus Honeywell variable speed motors"
 manufacturer: "Honeywell"

@@ -261,6 +261,7 @@ Generate event sample
         Append to List  ${readings}  ${reading}
     END
     ${event}=  Load data file "core-data/event_data.json" and get variable "${event_data}"
+    Set to dictionary  ${event}         apiVersion=${api_version}
     Set to dictionary  ${event}[event]  deviceName=${deviceName}
     Set to dictionary  ${event}[event]  profileName=${profileName}
     Set to dictionary  ${event}[event]  id=${uuid}

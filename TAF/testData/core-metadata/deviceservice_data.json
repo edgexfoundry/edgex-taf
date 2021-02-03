@@ -1,4 +1,5 @@
 {
+   "apiVersion" : "v2",
    "name" :"Test-Device-Service",
    "description":"deviceservice",
    "adminState":"UNLOCKED",
