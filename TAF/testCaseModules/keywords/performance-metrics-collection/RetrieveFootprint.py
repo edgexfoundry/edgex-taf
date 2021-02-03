@@ -131,8 +131,9 @@ def compare_image_footprint_size_with_prior_release(usages):
         try:
             if float(usages[k]["priorImageFootprint"]) != 0.0:
                 if float(usages[k]["imageFootprint"]) >= threshold_limit:
-                    logger.error("{} image size {} > Prior release size {} * 1.2".
-                                    format(k, str(usages[k]["imageFootprint"]), str(usages[k]["priorImageFootprint"])))
+                    logger.error("{} image size {} > Prior release size {} * {}".
+                                    format(k, str(usages[k]["imageFootprint"]), str(usages[k]["priorImageFootprint"]),
+                                           str(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)))
                     isfailed = 1
 
             else:
@@ -154,8 +155,9 @@ def compare_binary_footprint_size_with_prior_release(usages):
         try:
             if float(usages[k]["priorBinaryFootprint"]) != 0.0:
                 if float(usages[k]["binaryFootprint"]) >= threshold_limit:
-                    logger.error("{} binary size {} > Prior release size {} * 1.2".
-                                 format(k, str(usages[k]["binaryFootprint"]), str(usages[k]["priorBinaryFootprint"])))
+                    logger.error("{} binary size {} > Prior release size {} * {}".
+                                 format(k, str(usages[k]["binaryFootprint"]), str(usages[k]["priorBinaryFootprint"]),
+                                        str(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)))
                     isfailed = 1
             else:
                 # Failure if prior release is no binary file and current binary size is over than 50MB

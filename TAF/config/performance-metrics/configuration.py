@@ -28,8 +28,8 @@ KUIPER_BINARY = 0
 REDIS_BINARY = 0
 
 # Footprint threshold value
-# ex. 1.2 = prior release + 20%
-FOOTPRINT_THRESHOLD = 1.2
+# ex. 1.5 = prior release + 50%
+FOOTPRINT_THRESHOLD = 1.5
 
 # Suite: 2_service_startup_time
 # Retry setting to fetch service startup time
