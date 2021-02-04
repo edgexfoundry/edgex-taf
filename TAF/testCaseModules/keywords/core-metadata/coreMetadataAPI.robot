@@ -13,6 +13,7 @@ ${api_version}       v1  # default value is v1, set "${api_version}  v2" in test
 ${deviceProfileUri}  /api/${api_version}/deviceprofile
 ${deviceServiceUri}  /api/${api_version}/deviceservice
 ${deviceUri}         /api/${api_version}/device
+${provisionWatcherUri}  /api/v2/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
 
 *** Keywords ***
@@ -316,6 +317,32 @@ Delete multiple device services by names
         Delete device service by name  ${service}
     END
 
+# Provision Watcher
+Create provision watcher ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  POST On Session  Core Metadata    ${provisionWatcherUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
+    Run Keyword If  "${api_version}" == "v1"  Run Keywords
+    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
+    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
+    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
+
+Delete provision watcher by name ${provisionWatcherName}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Metadata  ${provisionWatcherUri}/name/${provisionWatcherName}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
+
+Delete multiple provision watchers by names
+    [Arguments]  @{provisionWatcher_list}
+    FOR  ${provisionWatcher}  IN  @{provisionWatcher_list}
+        Delete provision watcher by name ${provisionWatcher}
+    END
+
 # generate data for core-metadata
 # Device Profile
 Generate Device Profiles
@@ -471,6 +498,50 @@ Create Devices And Generate Multiple Devices Sample For Updating ${type}
 Delete Multiple Devices Sample, Profiles Sample And Services Sample
     Delete Multiple Devices By Names
     ...  Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
+    Delete multiple device services by names
+    ...  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    Delete multiple device profiles by names
+    ...  Test-Profile-1  Test-Profile-2  Test-Profile-3
+
+# Provision Watcher Sample
+Generate Provision Watchers
+    [Arguments]  @{data_list}
+    ${provisionwatcher_list}=  Create List
+    FOR  ${data}  IN  @{data_list}
+        ${json}=  Create Dictionary  provisionwatcher=${data}
+        Set to dictionary  ${json}       apiVersion=${api_version}
+        Append To List  ${provisionwatcher_list}  ${json}
+    END
+    Set Test Variable  ${provisionwatcher}  ${provisionwatcher_list}
+
+Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
+    Generate Multiple Device Services Sample
+    Create Device Service ${deviceService}
+    Generate Multiple Device Profiles Sample
+    Create Device Profile ${deviceProfile}
+    ${provisionwatcher_1}=  Set provision watcher values  Device-Service-${index}-1  Test-Profile-1
+    ${provisionwatcher_2}=  Set provision watcher values  Device-Service-${index}-2  Test-Profile-2
+    Set To Dictionary  ${provisionwatcher_2}  name=Test-Provision-Watcher-Locked
+    Set To Dictionary  ${provisionwatcher_2}  adminState=LOCKED
+    ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-3.yaml" and convert to dictionary
+    ${autoEvent}=  Set autoEvents values  20s  true  ${profile}[deviceResources][0][name]
+    ${autoEvents}=  Create List  ${autoEvent}
+    ${provisionwatcher_3}=  Set provision watcher values  Device-Service-${index}-3  Test-Profile-3
+    Set To Dictionary  ${provisionwatcher_3}  name=Test-Provision-Watcher-AutoEvents
+    Set To Dictionary  ${provisionwatcher_3}  autoEvents=${autoEvents}
+    Generate Provision Watchers  ${provisionwatcher_1}  ${provisionwatcher_2}  ${provisionwatcher_3}
+
+Set provision watcher values
+    [Arguments]  ${device_service_name}  ${device_profile_name}
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/provisionwatcher_data.json  encoding=UTF-8
+    ${provisionwatcher}=  Evaluate  json.loads('''${data}''')  json
+    Set To Dictionary  ${provisionwatcher}  serviceName=${device_service_name}
+    Set To Dictionary  ${provisionwatcher}  profileName=${device_profile_name}
+    [Return]  ${provisionwatcher}
+
+Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
+    Delete Multiple Provision Watchers By Names
+    ...  Test-Provision-Watcher  Test-Provision-Watcher-Locked  Test-Provision-Watcher-AutoEvents
     Delete multiple device services by names
     ...  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
     Delete multiple device profiles by names
