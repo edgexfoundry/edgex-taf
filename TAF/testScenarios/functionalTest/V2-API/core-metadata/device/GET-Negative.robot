@@ -25,15 +25,13 @@ ErrDeviceGET002 - Check device exists by non-existent device name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrDeviceGET003 - Query all devices by profile name with non-int value on offset
-    [Tags]  Skipped
-    When Query All Devices By serviceName  ${empty}
+    When Run Keyword And Expect Error  *  Query All Devices By profileName Test-Profile-1 With offset=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrDeviceGET004 - Query all devices by profile name with non-int value on limit
-    [Tags]  Skipped
-    When Query All Devices By serviceName  ${empty}
+    When Run Keyword And Expect Error  *  Query All Devices By profileName Test-Profile-1 With limit=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

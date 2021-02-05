@@ -13,10 +13,9 @@ ${api_version}    v2
 
 *** Test Cases ***
 ErrServiceDELETE001 - Delete device service by name that used by device
-    [Tags]  Skipped  # haven't implemented
     Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
     When Delete Device Service By Name  Test-Device-Service
-    Then Should Return Status Code "423"
+    Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Device By Name Test-Device
@@ -28,3 +27,12 @@ ErrServiceDELETE002 - Delete device service by name with non-existent service na
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrServiceDELETE003 - Delete device service by name that used by provisionwatcher
+    Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
+    And Create Provision Watcher ${provisionwatcher}
+    When Delete Device Service By Name  Device-Service-${index}-1
+    Then Should Return Status Code "409"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample

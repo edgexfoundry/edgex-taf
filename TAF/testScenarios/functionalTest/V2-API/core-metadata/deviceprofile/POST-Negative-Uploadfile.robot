@@ -14,7 +14,6 @@ ${api_version}    v2
 *** Test Cases ***
 ErrProfilePOSTUpload001 - Create device profile by upload file with duplicate profile name
     # Profile name is existed
-    [Tags]  Skipped
     Given Upload Device Profile Test-Profile-4.yaml
     When Upload Device Profile Test-Profile-4.yaml
     Then Should Return Status Code "409"

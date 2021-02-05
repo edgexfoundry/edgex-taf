@@ -20,12 +20,20 @@ ErrProfileDELETE001 - Delete device profile by non-existent name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrProfileDELETE002 - Delete device profile by name that used by device
-    [Tags]  Skipped  # haven't implemented
     Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
     When Delete Device Profile By Name  Test-Profile-2
-    Then Should Return Status Code "423"
+    Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Device By Name Test-Device
     ...                  AND  Delete Device Service By Name  Test-Device-Service
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
+
+ErrProfileDELETE003 - Delete device profile by name that used by rovisionwatcher
+    Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
+    And Create Provision Watcher ${provisionwatcher}
+    When Delete Device Profile By Name  Test-Profile-1
+    Then Should Return Status Code "409"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample

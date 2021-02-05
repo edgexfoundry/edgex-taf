@@ -13,36 +13,37 @@ ${api_version}    v2
 
 *** Test Cases ***
 DeviceGET007 - Query all devices with specified device profile by profile name
-    [Tags]  Skipped
-    Given Create Multiple Devices With Several Profiles
-    When Query All Devices With Specified Profile
-    Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Devices Should Be Linked To Specified Profile
-    And Response Time Should Be Less Than "1200"ms
-    [Teardown]  Delete Devices
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    And Create Device With ${Device}
+    When Query All Devices By profileName  Test-Profile-1
+    Then Should Return Status Code "200" And devices
+    And Should Be True  len(${content}[devices]) == 2
+    And Devices Should Be Linked To Specified Device Profile: Test-Profile-1
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET008 - Query all devices with specified device profile by profile name and offset
-    [Tags]  Skipped
-    Given Create Multiple Devices With Several Profiles
-    When Query All Devices With Specified Profile
-    Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Devices Should Be Linked To Specified Profile
-    And Skipped Records Should Be The Same As Setting
-    And Response Time Should Be Less Than "1200"ms
-    [Teardown]  Delete Devices
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    And Create Device With ${Device}
+    When Query All Devices By profileName Test-Profile-1 With offset=1
+    Then Should Return Status Code "200" And devices
+    And Should Be True  len(${content}[devices]) == 1
+    And Devices Should Be Linked To Specified Device Profile: Test-Profile-1
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET009 - Query all devices with specified device profile by profile name and limit
-    [Tags]  Skipped
-    Given Create Multiple Devices With Several Profiles
-    When Query All Devices With Specified Profile
-    Then Should Return Status Code "200"
-    And Should Have Content-Type "application/json"
-    And Devices Should Be Linked To Specified Profile
-    And Returned Number Should Be The Same As Setting
-    And Response Time Should Be Less Than "1200"ms
-    [Teardown]  Delete Devices
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    And Create Device With ${Device}
+    When Query All Devices By profileName Test-Profile-2 With limit=-1  # all devices with Test-Profile-2
+    Then Should Return Status Code "200" And devices
+    And Should Be True  len(${content}[devices]) == 1
+    And Devices Should Be Linked To Specified Device Profile: Test-Profile-2
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DeviceGET010 - Query all devices with specified device service by service name
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
