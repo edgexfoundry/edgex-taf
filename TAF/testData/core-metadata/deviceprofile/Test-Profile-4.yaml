@@ -14,7 +14,7 @@ deviceResources:
     description: "Generate device UINT16 value"
     tag: "rpm"
     properties:
-      type: "Uint16"
+      valueType: "Uint16"
       readWrite: "RW"
       minimum: "1500"
       units: "rpm"
@@ -35,9 +35,9 @@ deviceCommands:
 coreCommands:
 - name: "EngineSpeed"
   get: true
-  put: true
+  set: true
 - name: "PropellerSpeed"
   get: true
-  put: false
+  set: false
 
 

@@ -14,7 +14,7 @@ deviceResources:
     description: "Generate device FLOAT32 value"
     tag: "humidity"
     properties:
-      type: "Float32"
+      valueType: "Float32"
       readWrite: "R"
       units: "%"
 
@@ -26,5 +26,5 @@ deviceCommands:
 coreCommands:
 - name: "CurrentHumidity"
   get: true
-  put: false
+  set: false
 

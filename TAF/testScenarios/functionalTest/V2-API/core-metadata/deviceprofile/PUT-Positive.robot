@@ -30,8 +30,8 @@ ProfilePUT002 - Update multiple device profiles
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Set To Dictionary  ${deviceProfile}[0][profile]   model=Model_ABC
-    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][1][properties]  type=Float64
-    And Set To Dictionary  ${deviceProfile}[2][profile][coreCommands][0]  put=${true}
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][1][properties]  valueType=Float64
+    And Set To Dictionary  ${deviceProfile}[2][profile][coreCommands][0]  set=${true}
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
@@ -59,6 +59,6 @@ Profile ${device_profile_name} Data "${property}" Should Be Updated
     Run Keyword IF  "${property}" == "manufacturer"  Should Be Equal  ${content}[profile][manufacturer]  Mfr_ABC
     ...    ELSE IF  "${property}" == "model"  Should Be Equal  ${content}[profile][model]  Model_ABC
     ...    ELSE IF  "${property}" == "deviceResources-properties"
-    ...             Should Be Equal  ${content}[profile][deviceResources][1][properties][type]  Float64
-    ...    ELSE IF  "${property}" == "coreCommands"  Should Be Equal  ${content}[profile][coreCommands][0][put]  ${true}
+    ...             Should Be Equal  ${content}[profile][deviceResources][1][properties][valueType]  Float64
+    ...    ELSE IF  "${property}" == "coreCommands"  Should Be Equal  ${content}[profile][coreCommands][0][set]  ${true}
 

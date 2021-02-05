@@ -44,10 +44,10 @@ ErrProfilePOST003 - Create device profile with deviceResources validation error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrProfilePOST004 - Create device profile with PropertyValue validation error
-    # deviceResources > PropertyValue without type
+    # deviceResources > PropertyValue without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
-    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][0][properties]  type=${EMPTY}
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][0][properties]  valueType=${EMPTY}
     When Create Device Profile ${deviceProfile}
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -73,7 +73,7 @@ ErrProfilePOST006 - Create device profile with coreCommands name validation erro
 ErrProfilePOST007 - Create device profile with coreCommands command validation error
     # Contains valid profile body
     # Duplicated device profile name
-    # coreCommands get and put both are false
+    # coreCommands get and set both are false
     Given Generate Multiple Device Profiles Sample
     And Set To Dictionary  ${deviceProfile}[1][profile]  name=Test-Profile-1
     And Set To Dictionary  ${deviceProfile}[1][profile][coreCommands][0]  get=${false}
