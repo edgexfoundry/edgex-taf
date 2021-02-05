@@ -45,11 +45,11 @@ ErrProfilePUTUpload003 - Update device profile by upload file with deviceResourc
     ...                  AND  Delete Profile Files  NEW-Test-Profile-1.yaml
 
 ErrProfilePUTUpload004 - Update device profile by upload file with PropertyValue validation error
-    # deviceResources > PropertyValue without type
+    # deviceResources > PropertyValue without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
-    And Generate New Test-Profile-2.yaml With "deviceResources-properties" Property "type" Value "${EMPTY}"
+    And Generate New Test-Profile-2.yaml With "deviceResources-properties" Property "valueType" Value "${EMPTY}"
     When Upload File NEW-Test-Profile-2.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -86,7 +86,7 @@ ErrProfilePUTUpload006 - Update device profile by upload file with coreCommands 
 ErrProfilePUTUpload007 - Update device profile by upload file with coreCommands command validation error
     # Contains valid profile body
     # Duplicated device profile name
-    # coreCommands get and put both are false
+    # coreCommands get and set both are false
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Generate New Test-Profile-4.yaml With "coreCommands" Property "get" Value "${false}"

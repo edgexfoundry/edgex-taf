@@ -41,8 +41,8 @@ ErrProfilePOSTUpload003 - Create device profile by upload file with deviceResour
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
 ErrProfilePOSTUpload004 - Create device profile by upload file with PropertyValue validation error
-    # deviceResources > PropertyValue without type
-    Given Generate New Test-Profile-4.yaml With "deviceResources-properties" Property "type" Value "${EMPTY}"
+    # deviceResources > PropertyValue without valueType
+    Given Generate New Test-Profile-4.yaml With "deviceResources-properties" Property "valueType" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -68,7 +68,7 @@ ErrProfilePOSTUpload006 - Create device profile by upload file with coreCommands
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
 ErrProfilePOSTUpload007 - Create device profile by upload file with coreCommands command validation error
-    # coreCommands get and put both are false
+    # coreCommands get and set both are false
     Given Generate New Test-Profile-4.yaml With "coreCommands" Property "get" Value "${false}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"

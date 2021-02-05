@@ -15,7 +15,7 @@ deviceResources:
     description: "Generate device boolean value"
     tag: "status"
     properties:
-      type: "Bool"
+      valueType: "Bool"
       readWrite: "RW"
       minimum: "0"
       maximum: "1"
@@ -24,7 +24,7 @@ deviceResources:
     description: "Generate device UINT8 value"
     tag: "temperature"
     properties:
-      type: "Uint8"
+      valueType: "Uint8"
       readWrite: "R"
       units: "degreesFarenheit"
 
@@ -41,7 +41,7 @@ deviceCommands:
 coreCommands:
 - name: "CurrentStatus"
   get: true
-  put: true
+  set: true
 - name: "CurrentTemperature"
   get: true
-  put: false
+  set: false

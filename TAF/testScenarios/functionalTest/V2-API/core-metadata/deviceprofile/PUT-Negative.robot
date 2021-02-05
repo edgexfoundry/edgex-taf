@@ -50,11 +50,11 @@ ErrProfilePUT003 - Update device profile with deviceResources validation error
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrProfilePUT004 - Update device profile with PropertyValue validation error
-    # deviceResources > PropertyValue without type
+    # deviceResources > PropertyValue without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
-    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][0][properties]  type=${EMPTY}
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][0][properties]  valueType=${EMPTY}
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -88,7 +88,7 @@ ErrProfilePUT006 - Update device profile with coreCommands name validation error
 ErrProfilePUT007 - Update device profile with coreCommands command validation error
     # Contains valid profile body
     # Duplicated device profile name
-    # coreCommands get and put both are false
+    # coreCommands get and set both are false
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Set To Dictionary  ${deviceProfile}[1][profile]  name=Test-Profile-1

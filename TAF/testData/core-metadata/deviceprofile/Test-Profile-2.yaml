@@ -15,13 +15,13 @@ deviceResources:
     description: "Generate device string value"
     tag: "kind"
     properties:
-      type: "String"
+      valueType: "String"
       readWrite: "R"
   - name: "DeviceValue_FLOAT32_R"
     description: "Generate device FLOAT32 value"
     tag: "speed"
     properties:
-      type: "Float32"
+      valueType: "Float32"
       readWrite: "R"
       floatEncoding: "Base64"
       scale: "0.001"
@@ -38,7 +38,7 @@ deviceCommands:
 coreCommands:
 - name: "MotorKind"
   get: true
-  put: false
+  set: false
 - name: "CurrentSpeed"
   get: true
-  put: false
+  set: false
