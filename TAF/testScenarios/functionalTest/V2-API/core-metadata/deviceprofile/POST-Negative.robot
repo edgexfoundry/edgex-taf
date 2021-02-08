@@ -14,7 +14,6 @@ ${api_version}    v2
 *** Test Cases ***
 ErrProfilePOST001 - Create device profile with duplicate profile name
     # 2 device profiles with same profile name
-    [Tags]  Skipped
     Given Generate Multiple Device Profiles Sample
     And Set To Dictionary  ${deviceProfile}[1][profile]  name=Test-Profile-1
     When Create Device Profile ${deviceProfile}

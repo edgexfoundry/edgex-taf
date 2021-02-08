@@ -15,14 +15,16 @@ ${api_version}    v2
 *** Test Cases ***
 ErrDevicePOST001 - Create device with duplicate device name
     # 2 devices with same device name
-    [Tags]  Skipped
-    When Create multiple device
+    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    And Create Device With ${Device}
+    When Create Devices With Duplicate Names
     Then Should Return Status Code "207"
-    And Should Have Content-Type "application/json"
-    And Item Index 0 Should Contain Status Code "201" And id
-    And Item Index 1 Should Contain Status Code "409"
+    And Item Index 0 Should Contain Status Code "409" and no id
+    And Item Index 1 Should Contain Status Code "201" and id
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete device by name Test-Device-Locked-New
+    ...                  AND  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 ErrDevicePOST002 - Create device with device name validate error
     # Empty device name
@@ -128,3 +130,10 @@ ErrDevicePOST009 - Create device with operatingState value validate error
     ...                  AND  Delete multiple device profiles by names
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
+*** Keywords ***
+Create devices with duplicate names
+  ${device_1}=  Set device values  Device-Service-${index}-1  Test-Profile-1
+  ${device_2}=  Set device values  Device-Service-${index}-2  Test-Profile-2
+  Set To Dictionary  ${device_2}  name=Test-Device-Locked-New
+  Generate Devices  ${device_1}  ${device_2}
+  Create Device With ${Device}

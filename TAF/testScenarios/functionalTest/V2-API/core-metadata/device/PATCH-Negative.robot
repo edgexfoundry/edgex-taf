@@ -12,14 +12,17 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-patch-
 ${api_version}    v2
 
 *** Test Cases ***
-ErrDevicePATCH001 - Update device with use duplicate device name
-    [Tags]  Skipped
-    Given Create Multiple Devices
-    When Update Multiple Devices
+ErrDevicePATCH001 - Update device with non-existent device name and device name not match id
+    Given Create Devices And Generate Multiple Devices Sample For Updating Data
+    And Set To Dictionary  ${Device}[0][device]  name=Non-existent
+    And Set To Dictionary  ${Device}[1][device]  id=${content}[0][id]
+    When Update Devices ${Device}
     Then Should Return Status Code "207"
-    And Item Index All Should Contain Status Code "409"
+    And Item Index 0 Should Contain Status Code "404"
+    And Item Index 1 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 ErrDevicePATCH002 - Update device with device name validate error
     # Empty device name

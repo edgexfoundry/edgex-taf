@@ -18,23 +18,21 @@ ErrProfileGET001 - Query device profile by non-existent name
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfileGET002 - Query device profiles by empty manufacturer value
-    [Tags]  Skipped
-    When Query Device Profile By Manufacturer
+ErrProfileGET002 - Query device profiles by manufacturer with non-int value on offset
+    When Run Keyword And Expect Error  *  Query All Device Profiles By Manufacturer Honeywell With offset=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfileGET003 - Query device profiles by existed manufacturer and empty model value
-    [Tags]  Skipped
-    When Query Device Profile By Manufacturer And Model
+ErrProfileGET003 - Query device profiles by manufacturer and model with non-int value on offset
+    When Run Keyword And Expect Error  *  Query All Device Profiles Having Manufacturer Honeywell And Model ABC123
+    ...                                   With offset=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfileGET004 - Query device profiles by empty model value
-    [Tags]  Skipped
-    When Query Device Profile By Model
+ErrProfileGET004 - Query device profiles by model with non-int value on offset
+    When Run Keyword And Expect Error  *  Query All Device Profiles By Model ABC123 With offset=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -45,8 +43,27 @@ ErrProfileGET005 - Query all device profile with non-int value on offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfileGET005 - Query all device profile with non-int value on limit
+ErrProfileGET006 - Query all device profile with non-int value on limit
+    When Run Keyword And Expect Error  *  Query All Device Profiles By Manufacturer Honeywell With limit=Invalid
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrProfileGET007 - Query all device profile by manufacturer with non-int value on limit
     When Run Keyword And Expect Error  *  Query All Device Profiles With limit=Invalid
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrProfileGET008 - Query all device profile by model with non-int value on limit
+    When Run Keyword And Expect Error  *  Query All Device Profiles By Model ABC123 With limit=Invalid
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrProfileGET009 - Query all device profile by manufacturer and model with non-int value on limit
+    When Run Keyword And Expect Error  *  Query All Device Profiles Having Manufacturer Honeywell And Model ABC123
+    ...                                   With limit=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

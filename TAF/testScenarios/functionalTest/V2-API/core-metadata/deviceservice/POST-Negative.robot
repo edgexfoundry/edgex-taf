@@ -15,7 +15,6 @@ ${api_version}    v2
 *** Test Cases ***
 ErrServicePOST001 - Create device service with duplicate service name
     # 2 device services with same service name
-    [Tags]  Skipped
     Given Generate Multiple Device Services Sample
     And Set to Dictionary  ${deviceService}[1][service]  name=${deviceService}[0][service][name]
     When Create Device Service ${deviceService}

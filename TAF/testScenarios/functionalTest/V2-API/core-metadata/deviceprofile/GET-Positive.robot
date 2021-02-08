@@ -18,8 +18,8 @@ ProfileGET001 - Query all device profiles
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles
     Then Should Return Status Code "200" And profiles
-    And Should Return Content-Type "application/json"
     And Should Be True  len(${content}[profiles]) == 3
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
@@ -28,8 +28,8 @@ ProfileGET002 - Query all device profiles by offset
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles With offset=2
     Then Should Return Status Code "200" And profiles
-    And Should Return Content-Type "application/json"
     And Should Be True  len(${content}[profiles]) == 1
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
@@ -38,8 +38,8 @@ ProfileGET003 - Query all device profiles by limit
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles With limit=2
     Then Should Return Status Code "200" And profiles
-    And Should Return Content-Type "application/json"
     And Should Be True  len(${content}[profiles]) == 2
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
@@ -48,9 +48,9 @@ ProfileGET004 - Query all device profiles by labels
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles With labels=bacnet
     Then Should Return Status Code "200" And profiles
-    And Should Return Content-Type "application/json"
     And Should Be True  len(${content}[profiles]) == 2
     And Profiles Should Be Linked To Specified Labels: bacnet
+    And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
@@ -66,46 +66,49 @@ ProfileGET005 - Query device profile by name
 
 ProfileGET006 - Query device profiles by manufacturer
     # Multiple device profile which part of same manufacturer
-    [Tags]  Skipped
-    Given Create Multiple Device Profiles
-    When Query Device Profile By Manufacturer
-    Then Should Return Status Code "200"
+    Given Create Multiple Device Profiles Sample With Different Manufacturers
+    When Query All Device Profiles By Manufacturer  Honeywell
+    Then Should Return Status Code "200" And profiles
+    And Should Be True  len(${content}[profiles]) == 2
+    And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Should Return Content-Type "application/json"
-    And Profile Should Be Linked To Specified Manufacturer
-    And Validate Response Schema
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Device Profiles
+    [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ProfileGET007 - Query device profiles by manufacturer and offset
     # Multiple device profile which part of same manufacturer
-    [Tags]  Skipped
-    Given Create Multiple Device Profiles
-    When Query Device Profiles By Manufacturer
-    Then Should Return Status Code "200"
+    Given Create Multiple Device Profiles Sample With Different Manufacturers
+    When Query All Device Profiles By Manufacturer Honeywell With offset=1
+    Then Should Return Status Code "200" And profiles
+    And Should Be True  len(${content}[profiles]) == 1
+    And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Should Return Content-Type "application/json"
-    And Profile Should Be Linked To Specified Manufacturer
-    And Validate Response Schema
-    And Skipped Records Should Be The Same As Setting
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Device Profiles
+    [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ProfileGET008 - Query device profiles by manufacturer and limit
     # Multiple device profile which part of same manufacturer
-    [Tags]  Skipped
-    Given Create Multiple Device Profiles
-    When Query Device Profile By Manufacturer
-    Then Should Return Status Code "200"
+    Given Create Multiple Device Profiles Sample With Different Manufacturers
+    When Query All Device Profiles By Manufacturer Honeywell With limit=2
+    Then Should Return Status Code "200" And profiles
+    And Should Be True  len(${content}[profiles]) == 2
+    And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Should Return Content-Type "application/json"
-    And Profile Should Be Linked To Specified Manufacturer
-    And Validate Response Schema
-    And Returned Number Should Be The Same As Setting
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Device Profiles
+    [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 *** Keywords ***
 Profiles Should Be Linked To Specified ${property}: ${value}
     ${profiles}=  Set Variable  ${content}[profiles]
     ${property}=  Convert To Lower Case  ${property}
     FOR  ${item}  IN  @{profiles}
-        List Should Contain Value  ${item}[${property}]  ${value}
+        Run keyword if  "${property}" == "labels"  List Should Contain Value  ${item}[${property}]  ${value}
+        ...    ELSE IF  "${property}" == "manufacturer"  Should Be Equal As Strings  ${item}[${property}]  ${value}
     END
+
+Create Multiple Device Profiles Sample With Different Manufacturers
+    Generate Multiple Device Profiles Sample
+    Set To Dictionary  ${deviceProfile}[0][profile]  manufacturer=Not_Honeywell
+    Create Device Profile ${deviceProfile}
+
+

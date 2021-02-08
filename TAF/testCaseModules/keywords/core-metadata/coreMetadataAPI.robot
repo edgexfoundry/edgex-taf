@@ -74,6 +74,51 @@ Query all device profiles with ${parameter}=${value}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
+Query all device profiles by manufacturer
+    [Arguments]  ${manufacturer}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/manufacturer/${manufacturer}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all device profiles by model
+    [Arguments]  ${model}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/model/${model}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all device profiles by ${device_info} ${info_value} with ${parameter}=${value}
+    # device_info: manufacturer or model ; info_value: the value of manfacturer or model
+    ${device_info}=  Convert To Lower Case  ${device_info}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/${device_info}/${info_value}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all device profiles by manufacturer and model
+    [Arguments]  ${manufacturer}  ${model}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/manufacturer/${manufacturer}/model/${model}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all device profiles having manufacturer ${manufacturer} and model ${model} with ${parameter}=${value}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/manufacturer/${manufacturer}/model/${model}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
 Query device profile by name
     [Arguments]   ${device_profile_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -195,6 +240,15 @@ Query all devices by serviceName
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Metadata    ${deviceUri}/service/name/${device_service_name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query all devices by profileName
+    [Arguments]  ${device_profile_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata    ${deviceUri}/profile/name/${device_profile_name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
