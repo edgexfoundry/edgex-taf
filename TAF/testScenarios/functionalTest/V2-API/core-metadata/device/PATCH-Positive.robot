@@ -21,7 +21,7 @@ DevicePATCH001 - Update device
     And Item Index All Should Contain Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Deivce Data Should Be Updated
+    And Device Data Should Be Updated
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 DevicePATCH002 - Update device with device service and profile
@@ -32,11 +32,11 @@ DevicePATCH002 - Update device with device service and profile
     And Item Index All Should Contain Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Deivce Profile/Device Should Be Updated
+    And Device Profile/Device Should Be Updated
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
 
 *** Keywords ***
-Deivce ${type} Should Be Updated
+Device ${type} Should Be Updated
     ${list}=  Create List  Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
     ${expected_keys}=  Create List  name  operatingState  adminState  protocols  serviceName  profileName
     FOR  ${device}  IN  @{list}
