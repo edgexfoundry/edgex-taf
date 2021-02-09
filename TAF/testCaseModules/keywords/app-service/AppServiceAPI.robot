@@ -8,11 +8,9 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Keywords ***
 Setup Suite for App Service
-    [Arguments]  ${appServiceUrl}  ${app_service_name}
+    [Arguments]  ${appServiceUrl}
     Setup Suite
     Set Suite Variable  ${url}  ${appServiceUrl}
-    Set Suite Variable  ${app_service_name}  ${app_service_name}
-    Deploy services  ${app_service_name}
     Check app-service is available
     Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 
@@ -22,7 +20,6 @@ Check app-service is available
 
 Suite Teardown for App Service
     Suite Teardown
-    Remove services  ${app_service_name}
     Run Teardown Keywords
 
 Set Functions ${functions}
