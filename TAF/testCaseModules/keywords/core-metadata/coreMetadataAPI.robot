@@ -397,6 +397,21 @@ Delete multiple provision watchers by names
         Delete provision watcher by name ${provisionWatcher}
     END
 
+Update Provision Watchers ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH ON Session  Core Metadata  ${provisionWatcherUri}  json=${entity}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Query Provision Watchers By Name
+    [Arguments]  ${provision_watcher_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/name/${provision_watcher_name}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail  "The provision watcher ${provision_watcher_name} is not found"
+
 # generate data for core-metadata
 # Device Profile
 Generate Device Profiles
@@ -601,4 +616,5 @@ Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
     ...  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
     Delete multiple device profiles by names
     ...  Test-Profile-1  Test-Profile-2  Test-Profile-3
+
 
