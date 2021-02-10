@@ -1,6 +1,7 @@
 {
   "Valid Data": {
     "requestId": "82eb2e26-0f24-48aa-ae4c-de9dac3fb9bc",
+    "apiVersion" : "v2",
     "event": {
       "apiVersion" : "v2",
       "deviceName": "Random-Integer-Device",
