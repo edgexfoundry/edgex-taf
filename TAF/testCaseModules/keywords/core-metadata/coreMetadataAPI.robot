@@ -617,4 +617,12 @@ Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
     Delete multiple device profiles by names
     ...  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
+Create A Provision Watcher Sample With Associated Test-Device-Service And ${device_profile_name}
+    Generate A Device Service Sample
+    Create Device Service ${deviceService}
+    Generate A Device Profile Sample  ${device_profile_name}
+    Create Device Profile ${deviceProfile}
+    ${provisionwatcher}=  Set Provision Watcher Values  Test-Device-Service  ${device_profile_name}
+    Generate Provision Watchers  ${provisionwatcher}
+    Create provision watcher ${provisionwatcher}
 
