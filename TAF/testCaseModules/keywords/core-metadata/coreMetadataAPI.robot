@@ -412,6 +412,48 @@ Query Provision Watchers By Name
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail  "The provision watcher ${provision_watcher_name} is not found"
 
+Query All Provision Watchers by ${associated}Name ${associated_name} with ${parameter}=${value}
+    # associated: profile or service ; associated_name: profileName or serviceName
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/${associated}/name/${associated_name}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Provision Watchers
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/all  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Provision Watchers with ${parameter}=${value}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/all  params=${parameter}=${value}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Provision Watchers By profileName
+    [Arguments]  ${device_profile_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata    ${provisionWatcherUri}/profile/name/${device_profile_name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Provision Watchers By serviceName
+    [Arguments]  ${device_service_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata    ${provisionWatcherUri}/service/name/${device_service_name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
 # generate data for core-metadata
 # Device Profile
 Generate Device Profiles
