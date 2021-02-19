@@ -23,7 +23,7 @@ Check app-service is available
 Suite Teardown for App Service
     Suite Teardown
     Remove services  ${app_service_name}
-    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+    Run Teardown Keywords
 
 Set Functions ${functions}
     ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-functional-tests/Writable/Pipeline/ExecutionOrder

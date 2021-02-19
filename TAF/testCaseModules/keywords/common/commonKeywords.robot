@@ -16,6 +16,10 @@ Setup Suite
    ${status} =  Suite Setup  ${SUITE}  ${LOG_FILE_PATH}  ${LOG_LEVEL}
    Should Be True  ${status}  Failed Suite Setup
 
+Run Teardown Keywords
+    Delete All Sessions  # Delete http or https request sessions
+    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+
 Skip write only commands
     @{data_types_skip_write_only}=    Create List
     FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
