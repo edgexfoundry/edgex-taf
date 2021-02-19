@@ -11,7 +11,7 @@ Suite Setup      Run keywords   Setup Suite
 Suite Teardown   Run keywords   Remove services  device-virtual
 ...                             AND  Delete device by name Test-Device
 ...                             AND  Delete device profile by name  Sample-Profile
-...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+...                             AND  Run Teardown Keywords
 
 *** Variables ***
 ${SUITE}         Clean Up Events/Readings By Scheduler

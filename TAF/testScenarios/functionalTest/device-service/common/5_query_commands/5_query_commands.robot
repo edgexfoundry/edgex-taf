@@ -10,7 +10,7 @@ Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                        AND  Create device  create_device.json
 Suite Teardown  Run Keywords  Delete device by name
-...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+...                           AND  Run Teardown Keywords
 
 *** Variables ***
 ${SUITE}              Query Commands
