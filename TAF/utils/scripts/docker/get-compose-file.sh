@@ -4,7 +4,7 @@
 USE_DB=${1:--redis}
 USE_ARCH=${2:--x86_64}
 USE_SECURITY=${3:--}
-USE_RELEASE=${4:-nightly-build}
+USE_RELEASE=${4:-pre-release}
 USE_SHA1=${5:-master}
 
 # # x86_64 or arm64
@@ -13,13 +13,13 @@ USE_SHA1=${5:-master}
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
-# # nightly or other release
+# # pre-release or other release
 mkdir temp
-if [ "$USE_RELEASE" = "nightly-build" ]; then
+if [ "$USE_RELEASE" = "pre-release" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
-  ./sync-nightly-build.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
-  cp docker-compose-taf-nexus${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
+  ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
+  cp docker-compose-taf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
   sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' docker-compose.yaml
   sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' docker-compose.yaml
@@ -30,7 +30,7 @@ if [ "$USE_RELEASE" = "nightly-build" ]; then
   sed -i 's/\device-modbus:/edgex-device-modbus:/g' docker-compose.yaml
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_DB}${USE_NO_SECURITY}${USE_ARM64}.yml"
-  curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/${USE_RELEASE}/compose-files/${COMPOSE_FILE}"
+  curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/edgex-compose/master/releases/${USE_RELEASE}/${COMPOSE_FILE}"
 
   cp ${COMPOSE_FILE} temp/docker-compose-temp.yaml
 
