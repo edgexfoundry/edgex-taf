@@ -150,10 +150,10 @@ Add reading with value ${value} by value descriptor ${valueDescriptor} and devic
     Set test variable  ${response}  ${resp.status_code}
 
 # Event
-Create event with ${deviceName} and ${profileName}
+Create event with ${deviceName} and ${profileName} and ${sourceName}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${profileName}/${deviceName}  json=${event}
+    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${profileName}/${deviceName}/${sourceName}  json=${event}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 201  log to console  ${content}
@@ -248,7 +248,7 @@ Remove all events
 # generate data for core-data
 Generate event sample
     # event_data: Event, Event With Tags ; readings_type: Simple Reading, Simple Float Reading, Binary Reading
-    [arguments]  ${event_data}  ${deviceName}  ${profileName}  @{readings_type}
+    [arguments]  ${event_data}  ${deviceName}  ${profileName}  ${sourceName}  @{readings_type}
     ${uuid}=  Evaluate  str(uuid.uuid4())
     ${millisec_epoch_time}=  Get current milliseconds epoch time
     ${origin}=  Evaluate  int(${millisec_epoch_time}*1000000)
@@ -264,6 +264,7 @@ Generate event sample
     Set to dictionary  ${event}         apiVersion=${api_version}
     Set to dictionary  ${event}[event]  deviceName=${deviceName}
     Set to dictionary  ${event}[event]  profileName=${profileName}
+    Set to dictionary  ${event}[event]  sourceName=${sourceName}
     Set to dictionary  ${event}[event]  id=${uuid}
     Set to dictionary  ${event}[event]  origin=${origin}
     Set to dictionary  ${event}[event]  readings=${readings}
@@ -272,10 +273,10 @@ Generate event sample
 
 Create multiple events
   FOR  ${index}  IN RANGE  0  3   # total: 6 events, 9 readings
-    Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading
-    Create Event With Device-Test-001 and Profile-Test-001
-    Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Simple Reading  Simple Float Reading
-    Create Event With Device-Test-002 and Profile-Test-001
+    Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
+    Create Event With Device-Test-001 and Profile-Test-001 and Command-Test-001
+    Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Command-Test-002  Simple Reading  Simple Float Reading
+    Create Event With Device-Test-002 and Profile-Test-001 and Command-Test-002
   END
 
 Create multiple events twice to get start/end time

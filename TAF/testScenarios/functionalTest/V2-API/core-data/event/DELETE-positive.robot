@@ -13,8 +13,8 @@ ${api_version}    v2
 
 *** Test Cases ***
 EventDELETE001 - Delete event by ID
-    Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Simple Reading  Simple Float Reading
-    And Create Event With Device-Test-001 And Profile-Test-001
+    Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading  Simple Float Reading
+    And Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001
     And Set Test Variable  ${id}  ${content}[id]
     When Delete Event By ID  ${id}
     Then Should Return Status Code "200"

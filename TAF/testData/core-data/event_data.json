@@ -4,6 +4,7 @@
       "apiVersion" : "v2",
       "deviceName": "",
       "profileName": "",
+      "sourceName": "",
       "id": "",
       "origin": 0,
       "readings": ""
@@ -14,6 +15,7 @@
       "apiVersion" : "v2",
       "deviceName": "",
       "profileName": "",
+      "sourceName": "",
       "id": "",
       "origin": 0,
       "readings": "",

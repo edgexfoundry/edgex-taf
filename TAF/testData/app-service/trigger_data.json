@@ -6,6 +6,7 @@
       "apiVersion" : "v2",
       "deviceName": "Random-Integer-Device",
       "profileName": "Random-Integer-Device",
+      "sourceName": "Int32",
       "origin": 1540855006469,
       "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903",
       "readings": [

@@ -582,13 +582,13 @@ Set device values
     [Return]  ${device}
 
 Set autoEvents values
-    [Arguments]  ${frequency}  ${onChange}  ${resource}
+    [Arguments]  ${frequency}  ${onChange}  ${sourceName}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/V2-device/auto_events_data.json  encoding=UTF-8
     ${autoEvent}=  Evaluate  json.loads('''${data}''')  json
     Set To Dictionary  ${autoEvent}  frequency=${frequency}
     ${onChange}=  Convert To Boolean  ${onChange}
     Set To Dictionary  ${autoEvent}  onChange=${onChange}
-    Set To Dictionary  ${autoEvent}  resource=${resource}
+    Set To Dictionary  ${autoEvent}  sourceName=${sourceName}
     [Return]  ${autoEvent}
 
 Create Devices And Generate Multiple Devices Sample For Updating ${type}
