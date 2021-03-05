@@ -2,7 +2,7 @@
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Library   TAF/testCaseModules/keywords/consul/consul.py
-Suite Setup      Setup Suite for App Service  ${AppServiceUrl_functional}  app-service-functional-tests
+Suite Setup  Setup Suite for App Service  ${AppServiceUrl_functional}
 Suite Teardown   Suite Teardown for App Service
 Force Tags       v2-api
 

@@ -8,6 +8,7 @@ Resource         TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robo
 Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
+...                             AND  Remove services  app-service-http-export
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Deploy device service  device-virtual
 Suite Teardown   Run keywords   Remove services  device-virtual

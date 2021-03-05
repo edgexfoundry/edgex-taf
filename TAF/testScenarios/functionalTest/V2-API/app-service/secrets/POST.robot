@@ -44,11 +44,12 @@ ErrSecretsPOST004 - Stores secrets to the secret client fails (security not enab
 
 *** Keywords ***
 Setup Suite for App Service Secrets
-    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
+    Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Run Keywords
     #EDGEX_SECURITY_SECRET_STORE: "true"
-    ...             Setup Suite for App Service  http://${BASE_URL}:48102  app-service-http-export-secrets
+    ...             Set Suite Variable  ${app_service_name}  app-service-http-export-secrets
+    ...        AND  Setup Suite for App Service  http://${BASE_URL}:48102
     #EDGEX_SECURITY_SECRET_STORE: "false"
-    ...             ELSE  Setup Suite for App Service  http://${BASE_URL}:48101  app-service-http-export
+    ...             ELSE  Setup Suite for App Service  http://${BASE_URL}:48101
 
 Get AppService Token
     ${command}=  Set Variable  docker exec ${app_service_name} cat /tmp/edgex/secrets/${app_service_name}/secrets-token.json
