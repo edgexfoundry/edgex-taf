@@ -27,6 +27,21 @@ Set Functions ${functions}
     Modify consul config  ${path}  ${functions}
     sleep  1
 
+Set Transform Type ${type}
+    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
+    Modify consul config  ${path}  ${type}
+    sleep  1
+
+Set Compress Algorithm ${algorithm}
+    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
+    Modify consul config  ${path}  ${algorithm}
+    sleep  1
+
+Set Encrypt Algorithm ${algorithm}
+    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
+    Modify consul config  ${path}  ${algorithm}
+    sleep  1
+
 Trigger Function Pipeline With ${data}
     ${trigger_data}=  Run keyword if  '${data}' != 'Invalid Data'  set variable  Valid Data
     ...               ELSE  set variable  ${data}

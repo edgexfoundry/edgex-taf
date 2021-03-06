@@ -14,7 +14,7 @@ ${api_version}  v2
 
 *** Test Cases ***
 TriggerPOST001 - Trigger pipeline (no match)
-    Given Set Functions FilterByDeviceName, TransformToXML, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, SetOutputData
     When Trigger Function Pipeline With No Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match Empty
@@ -22,7 +22,8 @@ TriggerPOST001 - Trigger pipeline (no match)
 
 TriggerPOST002 - Trigger pipeline (XML)
     [Tags]  SmokeTest
-    Given Set Functions FilterByDeviceName, TransformToXML, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, SetOutputData
+    And Set Transform Type xml
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/xml"
@@ -30,7 +31,8 @@ TriggerPOST002 - Trigger pipeline (XML)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST003 - Trigger pipeline (JSON)
-    Given Set Functions FilterByDeviceName, TransformToJSON, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, SetOutputData
+    And Set Transform Type json
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
@@ -38,14 +40,18 @@ TriggerPOST003 - Trigger pipeline (JSON)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST004 - Trigger pipeline (JSON-GZIP)
-    Given Set Functions FilterByDeviceName, TransformToJSON, CompressWithGZIP, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, Compress, SetOutputData
+    And Set Transform Type json
+    And Set Compress Algorithm gzip
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON-GZIP String
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
-    Given Set Functions FilterByDeviceName, TransformToJSON, CompressWithZLIB, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, Compress, SetOutputData
+    And Set Transform Type json
+    And Set Compress Algorithm zlib
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"
@@ -53,7 +59,10 @@ TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST006 - Trigger pipeline (JSON-ZLIB-AES)
-    Given Set Functions FilterByDeviceName, TransformToXML, CompressWithZLIB, EncryptWithAES, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, Compress, Encrypt, SetOutputData
+    And Set Transform Type json
+    And Set Compress Algorithm zlib
+    And Set Encrypt Algorithm aes
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"
