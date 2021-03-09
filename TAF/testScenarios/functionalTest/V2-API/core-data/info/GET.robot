@@ -36,8 +36,3 @@ InfoGET004 - Query config
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-Test
-    When Query Ping
-    Then Should Return Status Code "200" And timestamp
-    And apiVersion Should be ${API_VERSION}
-    And Response Time Should Be Less Than "100"ms

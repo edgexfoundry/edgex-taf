@@ -198,9 +198,12 @@ Set Response to Test Variables
     ${headers}=  Run keyword if  'Content-Type' in ${resp.headers}  Set variable  ${resp.headers}[Content-Type]
     ...          ELSE  Set variable  None
     Set suite variable  ${headers}  ${headers}
-    ${content}=  Run Keyword If  '${headers}' == 'application/json'  Evaluate  json.loads('''${resp.content}''')  json
-    ...          ELSE  Set variable  ${resp.content}
-    Set suite variable  ${content}  ${content}
+    ${status}  ${value}=  Run Keyword And Ignore Error  Run Keyword If  '${headers}' == 'application/json'
+    ...                                                 Evaluate  json.loads('''${resp.content}''')  json
+    ...                                                 ELSE  Set variable  ${resp.content}
+    Run Keyword If  '${status}' == 'PASS'   Set suite variable  ${content}  ${value}
+    # when fail to deserialize json response content
+    ...       ELSE  Set suite variable  ${content}  ${resp.content}
 
 Query Ping
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
