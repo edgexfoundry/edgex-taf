@@ -14,10 +14,9 @@ trigger_content={
     "JSON-ZLIB String": 'eJyMjzFrwzAUhP/LzRZIsmxszV2ydCglS+nwbD2bB7Zk5NgQSv57aWlLoIRkvu+47z5Aixw5r5IiPHaLAhLg0VruLNta6cE65RoiZYwxKnAbqC+HrtUlCgTepednmhkeLx'
                         'RDmtUhnnjkrJ6+MxRYchpkukelLKNEeFM53VSV1rWr2wKZKUgcV/i3m7LNf1li11/JWn174aEPmde05T/sEE+lffjaTtPGr+flutlJpHw+fiXwcZumAjMHoR/stwUPY0tc3'
                         'i+fAQAA///LG4U1',
-    "JSON-ZLIB-AES String": '+dKkxw4xiGqISkUTODQOzzS3Zjz2+N6L1qwVWeTuhiQ3DcDWLxp1OkO6uvshoKDoxwQCQv+omF8PdFOIO821aLV8ZXAlxud7O7rFhBdi7jvUSFdjNEUF6SVEHxehxz'
-                            'Tyr6eNLodEbCgob+dz1/kOZNIqlLdoAcirFcPuSRYGBNm+U/Txg8/VwN+JpZeOTyV+2ZIu1AYEwvB+QKKtzEPk3xCBvkum/i+2krzsn6NMx7ObSMz37DfkZGC90THvc5'
-                            'FGU2NmwuFot6CPp2M3fSaFm1MOZ6ucqHmdxY4MvRknmmSTN2Q51Ks3nUQnDWGIBTJkDnGZ+Sa2JewH+IkmIUpp4tIk4rulj9bKpFngBhgAcMKXyqoXtYWxXpacBtCA9qc'
-                            '0GWDZvGqIY6OaU+AodcmKkqhA+IWVBx692Gs9FBkW8Oxs7pCw63GQIiQ6wV8Lu/M5'
+    "JSON-ZLIB-AES String": 'Ss/9MqemXnDDXere8IOEuMGx7P86xVV6txGaGcbzQ43/psa841wy81toEc7wtX43zJB11J404mCdBblePwcQXXDcq7r3Udrg+N+9uTbotKlnZFynLe6Q2RPkw45jZ9BD'
+                            'fmxRus3Sp5ksWF+ki5qfrIRs+lct408I+7h8MYfKujtpxr9aaPzF72HaUboV39vpVax5JX8ivL2QscUvNtgZHQIKWSwl+H0JflaNY16beLwpiwwqEtsuWwvtaYc16SJSm'
+                            '4lwWf7UhEe1aafDfJklaLw1dT+drLmeoUKDr7JIvLyGSBbb7fmx6VbM3pFddayFW293CgcwsTGTZXi7Yz8kveN5mBxsEzwStqQE2goACZaWJsMWy7Ajm89hs8Vaurqc'
 
 }
 
