@@ -6,11 +6,8 @@ Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                             AND  Deploy device service  device-virtual
 ...                             AND  Create device  create_device.json
-Suite Teardown   Run keywords   Remove services  device-virtual
-...                             AND  Delete device by name Test-Device
-...                             AND  Delete device profile by name  Sample-Profile
+Suite Teardown   Run keywords   Delete device by name Test-Device
 ...                             AND  Run Teardown Keywords
 
 *** Variables ***
