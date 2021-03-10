@@ -1,22 +1,22 @@
 trigger_content={
     "XML String": '<Event><ApiVersion>v2</ApiVersion><Id>92eb2e26-0f24-48aa-1111-de9dac3fb903</Id><DeviceName>Random-Integer-Device</DeviceName>'
-                  '<ProfileName>Random-Integer-Device</ProfileName><Created>0</Created><Origin>1540855006469</Origin><Readings><ApiVersion>v2</ApiVersion>'
-                  '<Id>82eb2e26-0f24-48aa-ae4c-de9dac3fb920</Id><Created>0</Created><Origin>1540855006469</Origin><DeviceName>Random-Integer-Device</DeviceName>'
-                  '<ResourceName>Int32</ResourceName><ProfileName>Random-Integer-Device</ProfileName><ValueType>Int32</ValueType><BinaryValue></BinaryValue>'
-                  '<MediaType></MediaType><Value>123</Value></Readings></Event>',
+                  '<ProfileName>Random-Integer-Device</ProfileName><SourceName>Int32</SourceName><Created>0</Created><Origin>1540855006469</Origin>'
+                  '<Readings><ApiVersion>v2</ApiVersion><Id>82eb2e26-0f24-48aa-ae4c-de9dac3fb920</Id><Created>0</Created><Origin>1540855006469</Origin>'
+                  '<DeviceName>Random-Integer-Device</DeviceName><ResourceName>Int32</ResourceName><ProfileName>Random-Integer-Device</ProfileName>'
+                  '<ValueType>Int32</ValueType><BinaryValue></BinaryValue><MediaType></MediaType><Value>123</Value></Readings></Event>',
     "JSON String": '{"apiVersion": "v2", "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903", "deviceName": "Random-Integer-Device", "profileName": "Random-Integer-Device", '
-                   '"origin": 1540855006469, "readings": [{"apiVersion": "v2", "id": "82eb2e26-0f24-48aa-ae4c-de9dac3fb920", '
+                   '"sourceName": "Int32", "origin": 1540855006469, "readings": [{"apiVersion": "v2", "id": "82eb2e26-0f24-48aa-ae4c-de9dac3fb920", '
                    '"origin": 1540855006469, "deviceName": "Random-Integer-Device", "resourceName": "Int32", "profileName": "Random-Integer-Device", '
                    '"valueType": "Int32", "binaryValue": null, "mediaType": "", "value": "123"}]}',
-    "JSON-GZIP String": 'H4sIAAAAAAAA/4yPMWvDMBSE/8vNFkiybGzNXbJ0KCVL6fBsPZsHtmTk2BBK/ntpaUughGS+77jvPkCLHDmvkiI8dosCEuDRWu4s21rpwTrlGiJljDEqcBuoL4eu1SUKBN6'
-                        'l52eaGR4vFEOa1SGeeOSsnr4zFFhyGmS6R6Uso0R4UzndVJXWtavbApkpSBxX+Lebss1/WWLXX8lafXvhoQ+Z17TlP+wQT6V9+NpO08av5+W62UmkfD5+JfBxm6YCMwehH+y'
-                        '3BQ9jS1zeL58BAAD//4PojOurAQAA',
-    "JSON-ZLIB String": 'eJyMjzFrwzAUhP/LzRZIsmxszV2ydCglS+nwbD2bB7Zk5NgQSv57aWlLoIRkvu+47z5Aixw5r5IiPHaLAhLg0VruLNta6cE65RoiZYwxKnAbqC+HrtUlCgTepednmhkeLx'
-                        'RDmtUhnnjkrJ6+MxRYchpkukelLKNEeFM53VSV1rWr2wKZKUgcV/i3m7LNf1li11/JWn174aEPmde05T/sEE+lffjaTtPGr+flutlJpHw+fiXwcZumAjMHoR/stwUPY0tc3'
-                        'i+fAQAA///LG4U1',
-    "JSON-ZLIB-AES String": 'Ss/9MqemXnDDXere8IOEuMGx7P86xVV6txGaGcbzQ43/psa841wy81toEc7wtX43zJB11J404mCdBblePwcQXXDcq7r3Udrg+N+9uTbotKlnZFynLe6Q2RPkw45jZ9BD'
-                            'fmxRus3Sp5ksWF+ki5qfrIRs+lct408I+7h8MYfKujtpxr9aaPzF72HaUboV39vpVax5JX8ivL2QscUvNtgZHQIKWSwl+H0JflaNY16beLwpiwwqEtsuWwvtaYc16SJSm'
-                            '4lwWf7UhEe1aafDfJklaLw1dT+drLmeoUKDr7JIvLyGSBbb7fmx6VbM3pFddayFW293CgcwsTGTZXi7Yz8kveN5mBxsEzwStqQE2goACZaWJsMWy7Ajm89hs8Vaurqc'
+    "JSON-GZIP String": 'H4sIAAAAAAAA/4yPwWrzMBCE32XOFkiybGyd/0su/6GUXEoPa2ttFmzJyLEhlLx7SWlLoA3NeWZ2v+8NtMiR8yopwmO3KCABHq3lzrKtlR6sU64hUsYYowK3gfpy6Fpdok'
+                        'DgXXr+TzPD44liSLM6xBOPnNW/jwwFlpwGmf5qrWnL36cO8VReWVKWUSK8qZxuqkrr2tVtgcwUJI4r/Mtdg+anAbHrbwysvv/hIbHMv0I/5rvTtPHzeblddhIpn4/XBD5u0'
+                        '1Rg5iD0WftawcPYEpfXy3sAAAD//6616U3AAQAA',
+    "JSON-ZLIB String": 'eJyMj8Fq8zAQhN9lzhZIsmxsnf9LLv+hlFxKD2trbRZsycixIZS8e0lpS6ANzXlmdr/vDbTIkfMqKcJjtyggAR6t5c6yrZUerFOuIVLGGKMCt4H6cuhaXaJA4F16/k8zw+O'
+                        'JYkizOsQTj5zVv48MBZacBpn+aq1py9+nDvFUXllSllEivKmcbqpK69rVbYHMFCSOK/zLXYPmpwGx628MrL7/4SGxzL9CP+a707Tx83m5XXYSKZ+P1wQ+btNUYOYg9Fn7WsH'
+                        'D2BKX18t7AAAA//8UXovF',
+    "JSON-ZLIB-AES String": 'whuxvusqv5QttopDBEqrTaGTfN2AriRIR5XeG4CDaEDY8Yb0+3/TAiF5S7s01swcX9OHcMGE4QfJTyEf7fqWuGhGHi/bnYKWx1T/yKUPFqB9HWKVZftbNk+lpl5C5H6o'
+                            'ZCCeJ1piFar2lgDqCvRV5t0k8Speu0xmyjbG6UPHShD5zfmiQsXSlozuKO3PRxgH7jwEF0ZIWxe4Na5MdA22FCDyFOcXsBrkJpqMJBf58VlRkZq1ORtiIMsyQQzP2/rjn'
+                            'nlumUoL6Q2qmBdYRSr1vKiPYTz+FzruPV5bU+g8BDehQ0TCEcYYGIkJryqnNgLK4DvKNLpb/eHz2JCUgrDIkcDoIBoMGGUA/8sc9h45GeOE27+29MXFQHUegkXRTmRZ'
 
 }
 
