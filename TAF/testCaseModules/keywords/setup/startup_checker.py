@@ -20,31 +20,31 @@ from TUC.data.SettingsInfo import SettingsInfo
 services = {
         "data": {"composeName": "data",
                  "port": SettingsInfo().constant.CORE_DATA_PORT,
-                 "pingUrl": "/api/v1/ping"},
+                 "pingUrl": "/api/v2/ping"},
         "metadata": {"composeName": "metadata",
                      "port": SettingsInfo().constant.CORE_METADATA_PORT,
-                     "pingUrl": "/api/v1/ping"},
+                     "pingUrl": "/api/v2/ping"},
         "command": {"composeName": "command",
                     "port": SettingsInfo().constant.CORE_COMMAND_PORT,
-                    "pingUrl": "/api/v1/ping"},
+                    "pingUrl": "/api/v2/ping"},
         "support-logging": {"composeName": "logging",
                             "port": SettingsInfo().constant.SUPPORT_LOGGING_PORT,
                             "pingUrl": "/api/v1/ping"},
         "support-notifications": {"composeName": "notifications",
                                   "port": SettingsInfo().constant.SUPPORT_NOTIFICATION_PORT,
-                                  "pingUrl": "/api/v1/ping"},
+                                  "pingUrl": "/api/v2/ping"},
         "support-scheduler": {"composeName": "scheduler",
                               "port": SettingsInfo().constant.SUPPORT_SCHEDULER_PORT,
-                              "pingUrl": "/api/v1/ping"},
+                              "pingUrl": "/api/v2/ping"},
         "support-rulesengine": {"composeName": "rulesengine",
                                 "port": SettingsInfo().constant.SUPPORT_RULESENGINE_PORT,
                                 "pingUrl": "/api/v1/ping"},
         "app-service-http-export": {"composeName": "app-service-http-export",
                                     "port": SettingsInfo().constant.APP_SERVICE_HTTP_EXPORT_PORT,
-                                    "pingUrl": "/api/v1/ping"},
+                                    "pingUrl": "/api/v2/ping"},
         "app-service-mqtt-export": {"composeName": "app-service-mqtt-export",
                                     "port": SettingsInfo().constant.APP_SERVICE_MQTT_EXPORT_PORT,
-                                    "pingUrl": "/api/v1/ping"}
+                                    "pingUrl": "/api/v2/ping"}
     }
 
 httpConnTimeout = 5
