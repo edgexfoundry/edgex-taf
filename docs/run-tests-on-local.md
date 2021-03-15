@@ -86,6 +86,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ###### Run Integration testing:
     `Only support deploying edgex services through docker-compose file.`
     ``` bash
+    python3 -m TUC --exclude Skipped --include deploy-device-service -u deploy.robot -p device-virtual
     python3 -m TUC --exclude Skipped -u integrationTest -p device-virtual
     ```
 4. Shutdown edgex:

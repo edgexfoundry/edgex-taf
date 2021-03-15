@@ -50,6 +50,14 @@ case ${TEST_STRATEGY} in
   ;;
   2)
     # Run integration test
+    ## Only support deploying edgex services through docker-compose file.
+    ## Deploy Device Virtual
+    docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
+            -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+            -e USE_DB=${USE_DB} --security-opt label:disable \
+            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+            --exclude Skipped --include deploy-device-service -u deploy.robot -p device-virtual
+
     docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
             --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
             -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
