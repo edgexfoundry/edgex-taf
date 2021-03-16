@@ -31,7 +31,7 @@ ProfilePUT002 - Update multiple device profiles
     And Create device profile ${deviceProfile}
     And Set To Dictionary  ${deviceProfile}[0][profile]   model=Model_ABC
     And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][1][properties]  valueType=Float64
-    And Set To Dictionary  ${deviceProfile}[2][profile][coreCommands][0]  set=${true}
+    And Set To Dictionary  ${deviceProfile}[2][profile][deviceCommands][0]  isHidden=${true}
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
@@ -39,7 +39,7 @@ ProfilePUT002 - Update multiple device profiles
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Profile Test-Profile-1 Data "model" Should Be Updated
     And Profile Test-Profile-2 Data "deviceResources-properties" Should Be Updated
-    And Profile Test-Profile-3 Data "coreCommands" Should Be Updated
+    And Profile Test-Profile-3 Data "deviceCommands" Should Be Updated
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ProfilePUT003 - Update device profiles by upload file
@@ -60,5 +60,5 @@ Profile ${device_profile_name} Data "${property}" Should Be Updated
     ...    ELSE IF  "${property}" == "model"  Should Be Equal  ${content}[profile][model]  Model_ABC
     ...    ELSE IF  "${property}" == "deviceResources-properties"
     ...             Should Be Equal  ${content}[profile][deviceResources][1][properties][valueType]  Float64
-    ...    ELSE IF  "${property}" == "coreCommands"  Should Be Equal  ${content}[profile][coreCommands][0][set]  ${true}
+    ...    ELSE IF  "${property}" == "deviceCommands"  Should Be Equal  ${content}[profile][deviceCommands][0][isHidden]  ${true}
 

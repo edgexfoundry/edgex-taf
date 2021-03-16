@@ -39,8 +39,8 @@ ErrProfilePOSTUpload003 - Create device profile by upload file with deviceResour
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
-ErrProfilePOSTUpload004 - Create device profile by upload file with PropertyValue validation error
-    # deviceResources > PropertyValue without valueType
+ErrProfilePOSTUpload004 - Create device profile by upload file with ResourceProperties valueType validation error
+    # deviceResources > ResourceProperties without valueType
     Given Generate New Test-Profile-4.yaml With "deviceResources-properties" Property "valueType" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
@@ -48,8 +48,17 @@ ErrProfilePOSTUpload004 - Create device profile by upload file with PropertyValu
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
-ErrProfilePOSTUpload005 - Create device profile by upload file with ProfileResource validation error
-    # deviceCommands > ProfileResource without name
+ErrProfilePOSTUpload005 - Create device profile by upload file with ResourceProperties readWrite validation error
+    # deviceResources > ResourceProperties without readWrite
+    Given Generate New Test-Profile-4.yaml With "deviceResources-properties" Property "readWrite" Value "${EMPTY}"
+    When Upload Device Profile NEW-Test-Profile-4.yaml
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
+
+ErrProfilePOSTUpload006 - Create device profile by upload file with deviceCommand name validation error
+    # deviceCommands > deviceCommand without name
     Given Generate New Test-Profile-4.yaml With "deviceCommands" Property "name" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
@@ -57,22 +66,31 @@ ErrProfilePOSTUpload005 - Create device profile by upload file with ProfileResou
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
-ErrProfilePOSTUpload006 - Create device profile by upload file with coreCommands name validation error
-    # coreCommands without name
-    Given Generate New Test-Profile-4.yaml With "coreCommands" Property "name" Value "${EMPTY}"
+ErrProfilePOSTUpload007 - Create device profile by upload file with deviceCommand readWrite validation error
+    # deviceCommands > deviceCommand without name
+    Given Generate New Test-Profile-4.yaml With "deviceCommands" Property "readWrite" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
 
-ErrProfilePOSTUpload007 - Create device profile by upload file with coreCommands command validation error
-    # coreCommands get and set both are false
-    Given Generate New Test-Profile-4.yaml With "coreCommands" Property "get" Value "${false}"
+ErrProfilePOSTUpload008 - Create device profile by upload file with deviceCommand resourceOperations validation error
+    # resourceOperations without deviceResource
+    Given Generate New Test-Profile-4.yaml With "deviceCommands-resourceOperations" Property "deviceResource" Value "${EMPTY}"
     When Upload Device Profile NEW-Test-Profile-4.yaml
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-4.yaml
+
+ErrProfilePOSTUpload009 - Create device profile by upload file with deviceCommands deviceResource validation error
+    # deviceCommand contains deviceResource that only allows "read"
+    Given Generate New Test-Profile-2.yaml With "deviceCommands" Property "readWrite" Value "W"
+    When Upload Device Profile NEW-Test-Profile-2.yaml
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Profile Files  NEW-Test-Profile-2.yaml
 
 

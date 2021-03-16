@@ -13,6 +13,7 @@ labels:
 deviceResources:
   - name: "DeviceValue_Boolean_RW"
     description: "Generate device boolean value"
+    isHidden: true
     tag: "status"
     properties:
       valueType: "Bool"
@@ -22,6 +23,7 @@ deviceResources:
       defaultValue: "true"
   - name: "DeviceValue_UINT8_R"
     description: "Generate device UINT8 value"
+    isHidden: true
     tag: "temperature"
     properties:
       valueType: "Uint8"
@@ -30,18 +32,18 @@ deviceResources:
 
 deviceCommands:
   - name: "CurrentStatus"
-    get:
-      - deviceResource: "DeviceValue_Boolean_RW"
-    set:
+    isHidden: true
+    readWrite: W
+    resourceOperations:
       - deviceResource: "DeviceValue_Boolean_RW"
   - name: "CurrentTemperature"
-    get:
+    isHidden: false
+    readWrite: R
+    resourceOperations:
       - deviceResource: "DeviceValue_UINT8_R"
-
-coreCommands:
-- name: "CurrentStatus"
-  get: true
-  set: true
-- name: "CurrentTemperature"
-  get: true
-  set: false
+  - name: "CurrentInfo"
+    isHidden: false
+    readWrite: R
+    resourceOperations:
+      - deviceResource: "DeviceValue_Boolean_RW"
+      - deviceResource: "DeviceValue_UINT8_R"

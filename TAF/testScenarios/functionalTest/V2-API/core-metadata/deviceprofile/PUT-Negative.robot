@@ -49,8 +49,8 @@ ErrProfilePUT003 - Update device profile with deviceResources validation error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrProfilePUT004 - Update device profile with PropertyValue validation error
-    # deviceResources > PropertyValue without valueType
+ErrProfilePUT004 - Update device profile with ResourceProperties validation error
+    # deviceResources > ResourceProperties without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
@@ -61,8 +61,8 @@ ErrProfilePUT004 - Update device profile with PropertyValue validation error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrProfilePUT005 - Update device profile with ProfileResource validation error
-    # deviceCommands > ProfileResource without name
+ErrProfilePUT005 - Update device profile with deviceCommands name validation error
+    # deviceCommands > deviceCommand without name
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
@@ -73,26 +73,26 @@ ErrProfilePUT005 - Update device profile with ProfileResource validation error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrProfilePUT006 - Update device profile with coreCommands name validation error
+ErrProfilePUT006 - Update device profile with deviceCommands resourceOperations validation error
     # Contains valid profile body
-    # coreCommands without name
+    # deviceCommands > resourceOperations without deviceResource
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
-    And Set To Dictionary  ${deviceProfile}[1][profile][coreCommands][0]  name=${EMPTY}
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceCommands][0][resourceOperations][0]  deviceResource=${EMPTY}
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrProfilePUT007 - Update device profile with coreCommands command validation error
+ErrProfilePUT007 - Update device profile with deivceCommands deviceResource validation error
     # Contains valid profile body
     # Duplicated device profile name
-    # coreCommands get and set both are false
+    # deviceCommand contains part of deviceResources that only allow "read"
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
     And Set To Dictionary  ${deviceProfile}[1][profile]  name=Test-Profile-1
-    And Set To Dictionary  ${deviceProfile}[1][profile][coreCommands][0]  get=${false}
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceCommands][0]  readWrite=W
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
