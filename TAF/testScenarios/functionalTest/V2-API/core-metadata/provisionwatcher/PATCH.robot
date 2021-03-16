@@ -87,18 +87,18 @@ Create Provision Watchers And Generate Multiple Provision Watchers Sample For Up
     Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     Create Provision Watcher ${provisionwatcher}
     ${labels}=  Create List  provision-watcher-example  provision-watcher-update
-    ${update_labels}=  Create Dictionary  name=Test-Provision-Watcher  labels=${labels}  apiVersion=${api_version}
-    ${update_adminstate}=  Create Dictionary  name=Test-Provision-Watcher-Locked  adminState=UNLOCKED  apiVersion=${api_version}
+    ${update_labels}=  Create Dictionary  name=Test-Provision-Watcher  labels=${labels}
+    ${update_adminstate}=  Create Dictionary  name=Test-Provision-Watcher-Locked  adminState=UNLOCKED
     ${identifiers}=  Load data file "core-metadata/identifiers.json" and get variable "identifiers"
     Set To Dictionary  ${identifiers}  address=0.0.0.0  port=123
-    ${update_identifiers}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  identifiers=${identifiers}  apiVersion=${api_version}
+    ${update_identifiers}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  identifiers=${identifiers}
     ${ports}=  Create List  111  222  333
     ${blockingIdentifiers}=  Load data file "core-metadata/identifiers.json" and get variable "blockingIdentifiers"
     Set To Dictionary  ${blockingIdentifiers}  ports=${ports}
-    ${update_blockingIdentifiers}=  Create Dictionary  name=Test-Provision-Watcher-Locked  blockingIdentifiers=${blockingIdentifiers}  apiVersion=${api_version}
+    ${update_blockingIdentifiers}=  Create Dictionary  name=Test-Provision-Watcher-Locked  blockingIdentifiers=${blockingIdentifiers}
     ${autoEvent}=  Set autoEvents values  24h  false  DeviceValue_Boolean_RW
     ${autoEvents}=  Create List  ${autoEvent}
-    ${update_autoEvents}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  autoEvents=${autoEvents}  apiVersion=${api_version}
+    ${update_autoEvents}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  autoEvents=${autoEvents}
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
     ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
     Generate Provision Watchers  ${update_labels}  ${update_adminstate}  ${update_identifiers}
