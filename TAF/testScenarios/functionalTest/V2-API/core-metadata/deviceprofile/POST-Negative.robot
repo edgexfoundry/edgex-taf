@@ -42,8 +42,8 @@ ErrProfilePOST003 - Create device profile with deviceResources validation error
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST004 - Create device profile with PropertyValue validation error
-    # deviceResources > PropertyValue without valueType
+ErrProfilePOST004 - Create device profile with ResourceProperties valueType validation error
+    # deviceResources > ResourceProperties without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][0][properties]  valueType=${EMPTY}
@@ -51,8 +51,17 @@ ErrProfilePOST004 - Create device profile with PropertyValue validation error
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST005 - Create device profile with ProfileResource validation error
-    # deviceCommands > ProfileResource without name
+ErrProfilePOST005 - Create device profile with ResourceProperties readWrite validation error
+    # deviceResources > ResourceProperties without readWrite
+    # Contains valid profile body
+    Given Generate Multiple Device Profiles Sample
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceResources][0][properties]  readWrite=${EMPTY}
+    When Create Device Profile ${deviceProfile}
+    Then Should Return Status Code "400"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrProfilePOST006 - Create device profile with deviceCommand name validation error
+    # deviceCommands > deviceCommand without name
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Set To Dictionary  ${deviceProfile}[1][profile][deviceCommands][0]  name=${EMPTY}
@@ -60,22 +69,31 @@ ErrProfilePOST005 - Create device profile with ProfileResource validation error
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST006 - Create device profile with coreCommands name validation error
+ErrProfilePOST007 - Create device profile with deviceCommand readWrite validation error
+    # deviceCommands > deviceCommand without readWrite
     # Contains valid profile body
-    # coreCommands without name
     Given Generate Multiple Device Profiles Sample
-    And Set To Dictionary  ${deviceProfile}[1][profile][coreCommands][0]  name=${EMPTY}
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceCommands][0]  readWrite=${EMPTY}
     When Create Device Profile ${deviceProfile}
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST007 - Create device profile with coreCommands command validation error
+ErrProfilePOST008 - Create device profile with deviceCommand resourceOperations validation error
+    # deviceCommands > resourceOperations without deviceResource
+    # Contains valid profile body
+    Given Generate Multiple Device Profiles Sample
+    And Set To Dictionary  ${deviceProfile}[1][profile][deviceCommands][0][resourceOperations][0]  deviceResource=${EMPTY}
+    When Create Device Profile ${deviceProfile}
+    Then Should Return Status Code "400"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrProfilePOST009 - Create device profile with deviceCommands deviceResources validation error
     # Contains valid profile body
     # Duplicated device profile name
-    # coreCommands get and set both are false
+    # deviceCommand contains part of deviceResources that only allow "read"
     Given Generate Multiple Device Profiles Sample
     And Set To Dictionary  ${deviceProfile}[1][profile]  name=Test-Profile-1
-    And Set To Dictionary  ${deviceProfile}[1][profile][coreCommands][0]  get=${false}
+    And Set To Dictionary  ${deviceProfile}[0][profile][deviceCommands][2]  readWrite=RW
     When Create Device Profile ${deviceProfile}
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

@@ -12,6 +12,7 @@ labels:
 deviceResources:
   - name: "DeviceValue_FLOAT32_R"
     description: "Generate device FLOAT32 value"
+    isHidden: true
     tag: "humidity"
     properties:
       valueType: "Float32"
@@ -20,11 +21,9 @@ deviceResources:
 
 deviceCommands:
   - name: "CurrentHumidity"
-    get:
+    isHidden: false
+    readWrite: R
+    resourceOperations:
       - deviceResource: "DeviceValue_FLOAT32_R"
 
-coreCommands:
-- name: "CurrentHumidity"
-  get: true
-  set: false
 

@@ -482,7 +482,7 @@ Generate New ${file} With "${dict}" Property "${property}" Value "${value}"
     Run Keyword IF  "${dict}" == "profile"  Set to Dictionary  ${yaml_dict}  ${property}=${value}
     ...    ELSE IF  "${dict}" == "deviceResources-properties"  Set to Dictionary  ${yaml_dict}[deviceResources][0][properties]  ${property}=${value}
     ...    ELSE IF  "${dict}" == "deviceCommands"  Set to Dictionary  ${yaml_dict}[deviceCommands][0]  ${property}=${value}
-    ...    ELSE IF  "${dict}" == "coreCommands"  Set to Dictionary  ${yaml_dict}[coreCommands][1]  ${property}=${value}
+    ...    ELSE IF  "${dict}" == "deviceCommands-resourceOperations"  Set to Dictionary  ${yaml_dict}[deviceCommands][0][resourceOperations][0]  ${property}=${value}
     ${yaml}=  yaml.Safe Dump  ${yaml_dict}
     Create File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/NEW-${file}  ${yaml}
 

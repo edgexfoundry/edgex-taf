@@ -44,8 +44,8 @@ ErrProfilePUTUpload003 - Update device profile by upload file with deviceResourc
     [Teardown]  Run Keywords  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-1.yaml
 
-ErrProfilePUTUpload004 - Update device profile by upload file with PropertyValue validation error
-    # deviceResources > PropertyValue without valueType
+ErrProfilePUTUpload004 - Update device profile by upload file with ResourceProperties validation error
+    # deviceResources > ResourceProperties without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
@@ -57,8 +57,8 @@ ErrProfilePUTUpload004 - Update device profile by upload file with PropertyValue
     [Teardown]  Run Keywords  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
 
-ErrProfilePUTUpload005 - Update device profile by upload file with ProfileResource validation error
-    # deviceCommands > ProfileResource without name
+ErrProfilePUTUpload005 - Update device profile by upload file with deviceCommand name validation error
+    # deviceCommands > deviceCommand without name
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
@@ -70,12 +70,12 @@ ErrProfilePUTUpload005 - Update device profile by upload file with ProfileResour
     [Teardown]  Run Keywords  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
 
-ErrProfilePUTUpload006 - Update device profile by upload file with coreCommands name validation error
+ErrProfilePUTUpload006 - Update device profile by upload file with deviceCommands resourceOperations validation error
     # Contains valid profile body
-    # coreCommands without name
+    # deviceCommands > resourceOperations without deviceResource
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
-    And Generate New Test-Profile-4.yaml With "coreCommands" Property "name" Value "${EMPTY}"
+    And Generate New Test-Profile-4.yaml With "deviceCommands-resourceOperations" Property "deviceResource" Value "${EMPTY}"
     When Upload File NEW-Test-Profile-4.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -83,16 +83,16 @@ ErrProfilePUTUpload006 - Update device profile by upload file with coreCommands 
     [Teardown]  Run Keywords  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-4.yaml
 
-ErrProfilePUTUpload007 - Update device profile by upload file with coreCommands command validation error
+ErrProfilePUTUpload007 - Update device profile by upload file with deivceCommands deviceResource validation error
     # Contains valid profile body
     # Duplicated device profile name
-    # coreCommands get and set both are false
+    # deviceCommand contains deviceResource that only allows "read"
     Given Generate Multiple Device Profiles Sample
     And Create device profile ${deviceProfile}
-    And Generate New Test-Profile-4.yaml With "coreCommands" Property "get" Value "${false}"
-    When Upload File NEW-Test-Profile-4.yaml To Update Device Profile
+    And Generate New Test-Profile-2.yaml With "deviceCommands" Property "readWrite" Value "RW"
+    When Upload File NEW-Test-Profile-2.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
-    ...                  AND  Delete Profile Files  NEW-Test-Profile-4.yaml
+    ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
