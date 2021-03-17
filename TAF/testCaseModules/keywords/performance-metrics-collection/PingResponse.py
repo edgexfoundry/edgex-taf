@@ -26,7 +26,7 @@ class PingResponse(object):
 
 def send_ping_request(port):
     service_url = "http://{}:{}".format(SettingsInfo().constant.BASE_URL, port)
-    ping_url = "{}/api/v1/ping".format(service_url)
+    ping_url = "{}/api/v2/ping".format(service_url)
     res = requests.get(ping_url)
     logger.info("response body: {}, reponse time: {}".format(res.content, res.elapsed.total_seconds()))
     response = {

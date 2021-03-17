@@ -1,6 +1,6 @@
 # Collect performance metrics
 
-### Clone edgex-taf repository
+### Prerequisites
 Clone the edgex-taf project from EdgeX Foundry as a template:
 
 ``` bash
@@ -8,20 +8,11 @@ cd  /home/$USER
 git clone https://github.com/edgexfoundry/edgex-taf.git
 ```
 
-###  Variables configuration
-Export the following variables that depend on running environment
+###  Variable configuration
+Export the following variables
 
 ```
 export WORK_DIR=/home/$USER/edgex-taf
-
-# x86_64
-export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose:latest
-export TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/docker-edgex-taf-common:latest
-
-# arm64
-export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose-arm64:latest
-export TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/docker-edgex-taf-common-arm64:latest
-
 ```
 
 ### Run scripts
