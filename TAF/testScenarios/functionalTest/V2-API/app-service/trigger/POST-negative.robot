@@ -14,13 +14,13 @@ ${api_version}  v2
 
 *** Test Cases ***
 ErrTriggerPOST001 - Trigger pipeline fails (Invalid Data)
-    Given Set Functions FilterByDeviceName, Transform, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, SetResponseData
     When Trigger Function Pipeline With Invalid Data
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
-    Given Set Functions FilterByDeviceName, Transform, SetOutputData
+    Given Set Functions FilterByDeviceName, Transform, SetResponseData
     And Accept raw data  true
     When Trigger Function Pipeline With Invalid Data
     Then Should Return Status Code "422"
