@@ -54,15 +54,19 @@ Response time is less than threshold setting
     [Arguments]  ${service}  ${response}
     ${response_time}=    evaluate  ${response}[seconds] * 1000
     ${compare_result}  evaluate   ${response_time} < ${PING_RES_THRESHOLD}
-     RUN KEYWORD IF  '${compare_result}' == 'False'
-     ...             Fail  Response time is over than ${PING_RES_THRESHOLD}ms when ping ${service}
+     [Return]  ${compare_result}
 
 Ping API for service
     [Arguments]  ${service_name}  ${service_port}
     @{RES_LIST}=  Create List
+    ${failure_count}  set variable  0
     FOR  ${index}  IN RANGE  0  ${PING_RES_LOOP_TIMES}
         ${res}  Ping api request  ${service_port}
-        Run keyword and continue on failure  Response time is less than threshold setting  ${service_name}  ${res}
+        ${status}  ${value}  run keyword and ignore error  Response time is less than threshold setting  ${service_name}  ${res}
         APPEND TO LIST  ${RES_LIST}     ${res}
+        ${failure_count}  Run Keyword If  ${value} == False  Evaluate  ${failure_count}+1
+                          ...       ELSE  set variable  ${failure_count}
     END
+    Run Keyword If  ${failure_count} > ${ALLOWABLE_OUTLIER}  Run Keyword And Continue On Failure
+    ...             Fail  ${failure_count} times that response time is over than ${PING_RES_THRESHOLD}ms when ping ${service_name}
     [Return]  ${RES_LIST}

@@ -3,6 +3,12 @@
 USE_ARCH=${1:-x86_64}
 USE_SECURITY=${2:--}
 
+# # x86_64 or arm64
+[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
+
+TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/docker-edgex-taf-common${USE_ARM64}:latest
+COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose${USE_ARM64}:latest
+
 # Pull edgex images
 sh get-compose-file-perfermance.sh ${USE_ARCH} ${USE_SECURITY}
 

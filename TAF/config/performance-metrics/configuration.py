@@ -64,10 +64,13 @@ PING_RES_LOOP_TIMES = 100
 # Ping response time threshold value (in milliseconds)
 PING_RES_THRESHOLD = 100
 
+# Allow the failure times for ping response time over than threshold setting
+ALLOWABLE_OUTLIER = 5
+
 
 # Suite: 5_event_exported_time
 # Loop time for sending ping request
 EXPORTED_LOOP_TIMES = 10
 
-# Ping response time threshold value (in milliseconds)
+# Export time threshold value (in milliseconds)
 EXPORT_TIME_THRESHOLD = 1200
