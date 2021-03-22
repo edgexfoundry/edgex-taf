@@ -1,5 +1,4 @@
 {
-   "apiVersion": "v2",
    "name":"Test-Provision-Watcher",
    "description":"Test-Provision-Watcher",
    "adminState":"UNLOCKED",

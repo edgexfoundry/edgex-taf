@@ -11,7 +11,6 @@
       "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903",
       "readings": [
         {
-          "apiVersion" : "v2",
           "resourceName": "Int32",
           "profileName": "Random-Integer-Device",
           "deviceName": "Random-Integer-Device",

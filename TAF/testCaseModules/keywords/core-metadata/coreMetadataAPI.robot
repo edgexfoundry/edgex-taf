@@ -521,10 +521,9 @@ Generate a device service sample
 
 Generate Multiple Device Services Sample For Updating
     ${labels}=  Create List  device-example  device-update
-    ${update_opstate}=  Create Dictionary  name=Device-Service-${index}-1  labels=${labels}  apiVersion=${api_version}
-    ${update_adminstate}=  Create Dictionary  name=Device-Service-${index}-2  adminState=LOCKED  apiVersion=${api_version}
+    ${update_opstate}=  Create Dictionary  name=Device-Service-${index}-1  labels=${labels}
+    ${update_adminstate}=  Create Dictionary  name=Device-Service-${index}-2  adminState=LOCKED
     ${update_baseAddr}=  Create Dictionary  name=Device-Service-${index}-3  baseAddress=http://home-device-service:49991
-    ...                  apiVersion=${api_version}
     Generate Device Services  ${update_opstate}  ${update_adminstate}  ${update_baseAddr}
 
 # Device
@@ -595,12 +594,12 @@ Create Devices And Generate Multiple Devices Sample For Updating ${type}
     Create Multiple Profiles/Services And Generate Multiple Devices Sample
     Create Device With ${Device}
     ${labels}=  Create List  device-example  device-update
-    ${update_labels}=  Create Dictionary  name=Test-Device  labels=${labels}  apiVersion=${api_version}
-    ${update_adminstate}=  Create Dictionary  name=Test-Device-Locked  adminState=UNLOCKED  apiVersion=${api_version}
-    ${update_opstate}=  Create Dictionary  name=Test-Device-Disabled  operatingState=UP  apiVersion=${api_version}
+    ${update_labels}=  Create Dictionary  name=Test-Device  labels=${labels}
+    ${update_adminstate}=  Create Dictionary  name=Test-Device-Locked  adminState=UNLOCKED
+    ${update_opstate}=  Create Dictionary  name=Test-Device-Disabled  operatingState=UP
     ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "device-virtual"
     Set To Dictionary  ${protocols}[other]  Address=simple02
-    ${update_protocols}=  Create Dictionary  name=Test-Device-AutoEvents  protocols=${protocols}  apiVersion=${api_version}
+    ${update_protocols}=  Create Dictionary  name=Test-Device-AutoEvents  protocols=${protocols}
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
     ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_opstate}  operatingState=DOWN
