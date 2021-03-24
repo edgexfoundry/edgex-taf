@@ -70,3 +70,75 @@ Delete Multiple Subscriptions By Names
         Delete Subscription By Name ${subscription}
     END
 
+Query All Subscriptions
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/all  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Subscriptions With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/all  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query Subscription By Name ${name}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/name/${name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Query All Subscriptions By Specified Category
+    [Arguments]  ${category}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/category/${category}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Subscriptions By Specified Category ${category} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/category/${category}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Subscriptions By Specified Label
+    [Arguments]  ${label}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/label/${label}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Subscriptions By Specified Label ${label} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/label/${label}  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Subscriptions By Specified Receiver
+    [Arguments]  ${receiver}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/receiver/${receiver}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Subscriptions By Specified Receiver ${receiver} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/receiver/${receiver}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+
+
