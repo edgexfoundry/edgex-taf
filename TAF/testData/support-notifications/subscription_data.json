@@ -1,0 +1,14 @@
+{
+  "name":"Test-Subscription",
+  "description":"Test data for subscription",
+  "channels": [],
+  "categories":[
+    "health-check"
+  ],
+  "labels":[
+    "simple"
+  ],
+  "receiver": "tafuser",
+  "resendLimit": 0,
+  "resendInterval": "24h"
+}
