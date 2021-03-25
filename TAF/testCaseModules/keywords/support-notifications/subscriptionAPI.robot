@@ -51,11 +51,8 @@ Create Subscription ${entity}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Support Notifications  ${subscriptionUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
-    Run Keyword If  "${api_version}" == "v1"  Run Keywords
-    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
-    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
-    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
 
 Delete Subscription By Name ${subscriptionName}
     Create Session  Support Notification  url=${supportNotificationsUrl}  disable_warnings=true
@@ -63,6 +60,7 @@ Delete Subscription By Name ${subscriptionName}
     ${resp}=  DELETE On Session  Support Notification  ${subscriptionUri}/name/${subscriptionName}  headers=${headers}
     ...       expected_status=any
     run keyword if  ${resp.status_code}!=204  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
 
 Delete Multiple Subscriptions By Names
     [Arguments]  @{subscription_list}
@@ -140,5 +138,10 @@ Query All Subscriptions By Specified Receiver ${receiver} With ${parameter}=${va
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
-
-
+Update Subscriptions ${entity}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH ON Session  Support Notifications  ${subscriptionUri}  json=${entity}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}

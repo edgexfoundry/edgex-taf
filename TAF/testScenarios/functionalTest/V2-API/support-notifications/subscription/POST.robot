@@ -21,7 +21,7 @@ SubscriptionPOST001 - Create subscription
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
+    [Teardown]  Run Keyword And Ignore Error  Delete Multiple Subscriptions By Names  @{subscription_names}
 
 ErrSubscriptionPOST001 - Create subscription with empty name
     Given Generate 3 Subscriptions Sample
@@ -78,7 +78,7 @@ ErrSubscriptionPOST006 - Create subscription with invalid resendInterval
 ErrSubscriptionPOST007 - Create subscription with empty Host for REST channel
     # empty host, port and HTTPMethod
     Given Generate A Subscription Sample With REST Channel
-    And Set To Dictionary  ${subscription}[0][subscription][channels][0]  Host=${EMPTY}
+    And Set To Dictionary  ${subscription}[0][subscription][channels][0]  host=${EMPTY}
     When Create Subscription ${subscription}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -87,7 +87,7 @@ ErrSubscriptionPOST007 - Create subscription with empty Host for REST channel
 ErrSubscriptionPOST008 - Create subscription with empty Port for REST channel
     # empty host, port and HTTPMethod
     Given Generate A Subscription Sample With REST Channel
-    And Remove From Dictionary  ${subscription}[0][subscription][channels][0]  Port
+    And Remove From Dictionary  ${subscription}[0][subscription][channels][0]  port
     When Create Subscription ${subscription}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -96,7 +96,7 @@ ErrSubscriptionPOST008 - Create subscription with empty Port for REST channel
 ErrSubscriptionPOST009 - Create subscription with empty HTTPMethod for REST channel
     # empty host, port and HTTPMethod
     Given Generate A Subscription Sample With REST Channel
-    And Set To Dictionary  ${subscription}[0][subscription][channels][0]  HTTPMethod=${EMPTY}
+    And Set To Dictionary  ${subscription}[0][subscription][channels][0]  httpMethod=${EMPTY}
     When Create Subscription ${subscription}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
