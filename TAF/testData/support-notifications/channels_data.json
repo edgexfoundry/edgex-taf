@@ -1,7 +1,7 @@
 {
   "EMAIL":[
     {
-      "emailAddresses": [
+      "recipients": [
         "123@123.com"
       ],
       "type": "EMAIL"
@@ -9,9 +9,9 @@
   ],
   "REST":[
     {
-      "Host": "http://123.com",
-      "Port": 1234,
-      "HTTPMethod": "POST",
+      "host": "http://123.com",
+      "port": 1234,
+      "httpMethod": "POST",
       "type": "REST"
     }
   ]
