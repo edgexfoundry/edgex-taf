@@ -10,6 +10,7 @@ Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
 *** Variables ***
 ${default_response_time_threshold}  1200
+${api_version}    v2
 
 *** Keywords ***
 Setup Suite
@@ -20,7 +21,7 @@ Run Teardown Keywords
     Delete All Sessions  # Delete http or https request sessions
     Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
-Skip write only commands
+Get All Read Commands
     @{data_types_skip_write_only}=    Create List
     FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
           Continue For Loop If   '${item["readWrite"]}' == 'W'
@@ -35,6 +36,20 @@ Skip read only commands
           Append To List    ${data_types_skip_read_only}    ${item}
     END
     [Return]  ${data_types_skip_read_only}
+
+Get All Write Only Commands
+    @{data_types_write_only}=    Create List
+    FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
+          Run Keyword If  '${item["readWrite"]}' == 'W'  Append To List    ${data_types_write_only}    ${item}
+    END
+    [Return]   ${data_types_write_only}
+
+Get All Write Commands
+    @{data_types_all_write}=    Create List
+    FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
+          Run Keyword If  '${item["readWrite"]}' != 'R'  Append To List    ${data_types_all_write}    ${item}
+    END
+    [Return]   ${data_types_all_write}
 
 Skip data types BOOL and STRING only commands "${SUPPORTED_DATA}"
     @{data_types_skip_bool_string}=    Create List

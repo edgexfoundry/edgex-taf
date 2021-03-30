@@ -1,5 +1,6 @@
 *** Settings ***
 Resource  TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Force Tags  Skipped
 
 *** Variables ***
 ${SUITE}         Create Notification

@@ -10,6 +10,8 @@ Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keywords  Suite Teardown
 ...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+Force Tags  Skipped
+
 
 *** Variables ***
 ${SUITE}                        Add Reading
