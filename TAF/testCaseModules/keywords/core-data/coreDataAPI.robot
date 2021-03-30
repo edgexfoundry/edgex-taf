@@ -250,8 +250,7 @@ Generate event sample
     # event_data: Event, Event With Tags ; readings_type: Simple Reading, Simple Float Reading, Binary Reading
     [arguments]  ${event_data}  ${deviceName}  ${profileName}  ${sourceName}  @{readings_type}
     ${uuid}=  Evaluate  str(uuid.uuid4())
-    ${millisec_epoch_time}=  Get current milliseconds epoch time
-    ${origin}=  Evaluate  int(${millisec_epoch_time}*1000000)
+    ${origin}=  Get current nanoseconds epoch time
     @{readings}=  Create List
     FOR  ${type}  IN  @{readings_type}
         ${reading}=  Load data file "core-data/readings_data.json" and get variable "${type}"
@@ -280,9 +279,9 @@ Create multiple events
   END
 
 Create multiple events twice to get start/end time
-  ${start_time}=  Get current milliseconds epoch time
+  ${start_time}=  Get current nanoseconds epoch time
   Create Multiple Events
-  ${end_time}=  Get current milliseconds epoch time
+  ${end_time}=  Get current nanoseconds epoch time
   Create Multiple Events
   Set Test Variable  ${start_time}  ${start_time}
   Set Test Variable  ${end_time}  ${end_time}

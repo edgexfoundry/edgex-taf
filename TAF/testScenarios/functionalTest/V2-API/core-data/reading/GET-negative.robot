@@ -45,22 +45,22 @@ ErrReadingGET005 - Query all readings with invalid offset range
     [Teardown]  Delete All Events By Age
 
 ErrReadingGET006 - Query readings by start/end time fails (Invalid Start)
-    ${end_time}=  Get current milliseconds epoch time
+    ${end_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Readings By Start/End Time  InvalidStart  ${end_time}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrReadingGET007 - Query readings by start/end time fails (Invalid End)
-    ${start_time}=  Get current milliseconds epoch time
+    ${start_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Readings By Start/End Time  ${start_time}  InvalidEnd
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrReadingGET008 - Query readings by start/end time fails (Start>End)
-    ${start_time}=  Get current milliseconds epoch time
-    ${end_time}=  Get current milliseconds epoch time
+    ${start_time}=  Get current nanoseconds epoch time
+    ${end_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Readings By Start/End Time  ${end_time}  ${start_time}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"

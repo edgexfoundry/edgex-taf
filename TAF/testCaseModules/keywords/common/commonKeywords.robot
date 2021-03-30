@@ -129,6 +129,11 @@ Get current milliseconds epoch time
     ${millisec_epoch_time}=    evaluate   int(${current_epoch_time}*1000)
     [Return]  ${millisec_epoch_time}
 
+Get current nanoseconds epoch time
+    ${current_epoch_time}=  Get current epoch time
+    ${nonosec_epoch_time}=    evaluate   int(${current_epoch_time}*1000*1000000)
+    [Return]  ${nonosec_epoch_time}
+
 Get current epoch time
     ${data}=  get current date
     ${current_epoch_time}=  convert date    ${data}  epoch

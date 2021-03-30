@@ -89,5 +89,5 @@ Readings Should Be Created Between ${start} And ${end}
   ${count}=  Get Length  ${content}[readings]
   Should Be Equal As Integers  ${count}  9
   FOR  ${index}  IN RANGE  0  9
-    Should Be True  ${end} >= ${content}[readings][${index}][created] >=${start}
+    Should Be True  ${end} >= ${content}[readings][${index}][origin] >=${start}
   END
