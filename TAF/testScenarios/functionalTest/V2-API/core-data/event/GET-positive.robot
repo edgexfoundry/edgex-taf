@@ -83,5 +83,5 @@ Events Should Be Created Between ${start} And ${end}
   ${count}=  Get Length  ${content}[events]
   Should Be Equal As Integers  ${count}  6
   FOR  ${index}  IN RANGE  0  6
-    Should Be True  ${end} >= ${content}[events][${index}][created] >=${start}
+    Should Be True  ${end} >= ${content}[events][${index}][origin] >=${start}
   END

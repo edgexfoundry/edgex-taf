@@ -27,22 +27,22 @@ ErrEventGET002 - Query event by ID fails (Not UUID)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventGET003 - Query events by start/end time fails (Invalid Start)
-    ${end_time}=  Get current milliseconds epoch time
+    ${end_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Events By Start/End Time  InvalidStart  ${end_time}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventGET004 - Query events by start/end time fails (Invalid End)
-    ${start_time}=  Get current milliseconds epoch time
+    ${start_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Events By Start/End Time  ${start_time}  InvalidEnd
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventGET005 - Query events by start/end time fails (Start>End)
-    ${start_time}=  Get current milliseconds epoch time
-    ${end_time}=  Get current milliseconds epoch time
+    ${start_time}=  Get current nanoseconds epoch time
+    ${end_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Events By Start/End Time  ${end_time}  ${start_time}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
