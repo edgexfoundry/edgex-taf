@@ -1,7 +1,7 @@
 trigger_content={
     "XML String": '<Event><ApiVersion>v2</ApiVersion><Id>92eb2e26-0f24-48aa-1111-de9dac3fb903</Id><DeviceName>Random-Integer-Device</DeviceName>'
-                  '<ProfileName>Random-Integer-Device</ProfileName><SourceName>Int32</SourceName><Created>0</Created><Origin>1540855006469</Origin>'
-                  '<Readings><Id>82eb2e26-0f24-48aa-ae4c-de9dac3fb920</Id><Created>0</Created><Origin>1540855006469</Origin>'
+                  '<ProfileName>Random-Integer-Device</ProfileName><SourceName>Int32</SourceName><Origin>1540855006469</Origin>'
+                  '<Readings><Id>82eb2e26-0f24-48aa-ae4c-de9dac3fb920</Id><Origin>1540855006469</Origin>'
                   '<DeviceName>Random-Integer-Device</DeviceName><ResourceName>Int32</ResourceName><ProfileName>Random-Integer-Device</ProfileName>'
                   '<ValueType>Int32</ValueType><BinaryValue></BinaryValue><MediaType></MediaType><Value>123</Value></Readings></Event>',
     "JSON String": '{"apiVersion": "v2", "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903", "deviceName": "Random-Integer-Device", "profileName": "Random-Integer-Device", '
