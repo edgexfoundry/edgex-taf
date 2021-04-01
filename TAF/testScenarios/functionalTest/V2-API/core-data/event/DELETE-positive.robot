@@ -58,6 +58,7 @@ Events With Specified Device Should Be Deleted
 Create Multiple Events For Deleting By Age
   Create Multiple Events
   ${before_time}=  Get current nanoseconds epoch time
+  sleep  1s
   Create Multiple Events
   ${after_time}=  Get current nanoseconds epoch time
   ${age}=  Evaluate  ${after_time} - ${before_time}
