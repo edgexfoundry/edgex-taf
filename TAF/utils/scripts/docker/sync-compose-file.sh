@@ -14,7 +14,7 @@ PRE_RELEASE="-pre-release"
 # Handle TAF specific compose files
 [ "$TAF" = "-taf" ] && TAF_SUB_FOLDER="/taf" && PRE_RELEASE=""
 
-NIGHTLY_BUILD_URL="https://raw.githubusercontent.com/edgexfoundry/edgex-compose/${USE_SHA1}/releases/pre-release${TAF_SUB_FOLDER}"
+NIGHTLY_BUILD_URL="https://raw.githubusercontent.com/edgexfoundry/edgex-compose/${USE_SHA1}${TAF_SUB_FOLDER}"
 
 COMPOSE_FILE="docker-compose${PRE_RELEASE}${TAF}${TAF_PERF}${USE_NO_SECURITY}${USE_ARM64}.yml"
 curl -o ${COMPOSE_FILE} "${NIGHTLY_BUILD_URL}/${COMPOSE_FILE}"
