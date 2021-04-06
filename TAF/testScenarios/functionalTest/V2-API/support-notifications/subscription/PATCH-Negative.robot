@@ -59,7 +59,8 @@ ErrSubscriptionPATCH005 - Update subscription with empty labels and categories
     And Set To Dictionary  ${subscription}[0][subscription]  labels=@{EMPTY}
     And Set To Dictionary  ${subscription}[0][subscription]  categories=@{EMPTY}
     When Update Subscriptions ${subscription}
-    Then Should Return Status Code "400"
+    Then Should Return Status Code "207"
+    And Item Index 0 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
