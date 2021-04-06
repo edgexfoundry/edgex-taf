@@ -30,7 +30,7 @@ ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
 *** Keywords ***
 Accept raw data
     [arguments]  ${bool}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/1.0/AppService-functional-tests/Writable/Pipeline/UseTargetTypeOfByteArray
+    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/AppService-functional-tests/Writable/Pipeline/UseTargetTypeOfByteArray
     Modify consul config  ${path}  ${bool}
     sleep  1
 

@@ -47,7 +47,7 @@ Readings should contain the value descriptor and device id and value
     END
 
 The config MetaDataCheck set to ${boolVal}
-    Modify consul config  /v1/kv/edgex/core/1.0/edgex-core-data/Writable/MetaDataCheck  ${boolVal}
+    Modify consul config  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/edgex-core-data/Writable/MetaDataCheck  ${boolVal}
     sleep  2
 
 *** Test Cases ***
