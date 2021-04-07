@@ -18,7 +18,7 @@ ${LOG_FILE_PATH}      ${WORK_DIR}/TAF/testArtifacts/logs/modbus_scalability_test
 
 *** Test Cases ***
 Test Modbus scalability
-     Given Modify consul config  /v1/kv/edgex/core/1.0/edgex-core-data/Writable/PersistData  false
+     Given Modify consul config  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/edgex-core-data/Writable/PersistData  false
      And Deploy services  scalability-test-mqtt-export
      sleep  30
      ${report_info}  ${records} =  When run scalability testing

@@ -2,6 +2,9 @@ import os
 
 LOG_LEVEL = "INFO"
 
+# Version in the Consul path for all services
+CONSUL_CONFIG_VERSION = "2.0"
+
 # Deploy type: docker, manual
 DEPLOY_TYPE = "docker"
 SERVICE_STARTUP_RECHECK_TIMES = 5

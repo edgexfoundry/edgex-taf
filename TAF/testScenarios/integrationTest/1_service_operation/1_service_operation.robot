@@ -48,12 +48,12 @@ DS should log "${msg}"
     Stop services  ${service_name}
 
 DS try to startup
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/${SERVICE_NAME}/Service/ConnectRetries  1
+    Modify consul config  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${SERVICE_NAME}/${SERVICE_NAME}/Service/ConnectRetries  1
     Remove device service logs
     # Device service should restart failed because matadata service is unavailable
     Restart services  ${SERVICE_NAME}
     Sleep	20
-    Modify consul config  /v1/kv/edgex/devices/1.0/${SERVICE_NAME}/${SERVICE_NAME}/Service/ConnectRetries  3
+    Modify consul config  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${SERVICE_NAME}/${SERVICE_NAME}/Service/ConnectRetries  3
 
 DS should log "${error_msg}" after timeout
     Send GET request "/api/v1/logs/originServices/${SERVICE_NAME}/0/0/100" to "${LOGGING_SERVICE_URL}"
