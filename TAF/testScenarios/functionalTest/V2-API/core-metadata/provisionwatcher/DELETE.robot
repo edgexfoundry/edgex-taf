@@ -9,7 +9,6 @@ Force Tags  v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Provision Watcher DELETE Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatcher-delete.log
-${api_version}    v2
 
 *** Test Cases ***
 ProWatcherDELETE001 - Delete provision watcher

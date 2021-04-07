@@ -11,7 +11,6 @@ Force Tags      Skipped
 *** Variables ***
 ${SUITE}          Core-Command GET Positive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-command-get-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 CommandGET001 - Query all DeviceCoreCommands

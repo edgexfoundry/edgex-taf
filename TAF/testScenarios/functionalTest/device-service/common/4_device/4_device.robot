@@ -9,7 +9,6 @@ Suite Teardown  Run Teardown Keywords
 *** Variables ***
 ${SUITE}              Verify adminState and operatingState
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/device-sdk-command.log
-${api_version}    v2
 
 *** Test Cases ***
 Device_TC0001a - Invoke GET command when device adminState is LOCKED

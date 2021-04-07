@@ -9,7 +9,6 @@ Force Tags  v2-api
 *** Variables ***
 ${SUITE}          Support Notifications Subscription PATCH Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-notifications-subscription-patch.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrSubscriptionPATCH001 - Update subscription with non-existed name
