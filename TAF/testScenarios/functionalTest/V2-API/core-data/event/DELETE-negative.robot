@@ -10,7 +10,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Event DELETE Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-delete-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrEventDELETE001 - Delete event by ID fails (Non-existent ID)

@@ -9,9 +9,9 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
 ${coreDataUrl}  ${URI_SCHEME}://${BASE_URL}:${CORE_DATA_PORT}
-${coreDataEventUri}    /api/${api_version}/event
-${coreDataReadingUri}  /api/${api_version}/reading
-${coreDataValueDescriptorUri}  /api/${api_version}/valuedescriptor
+${coreDataEventUri}    /api/${API_VERSION}/event
+${coreDataReadingUri}  /api/${API_VERSION}/reading
+${coreDataValueDescriptorUri}  /api/${API_VERSION}/valuedescriptor
 
 *** Keywords ***
 Query all readings
@@ -165,7 +165,7 @@ Generate event sample
         Append to List  ${readings}  ${reading}
     END
     ${event}=  Load data file "core-data/event_data.json" and get variable "${event_data}"
-    Set to dictionary  ${event}         apiVersion=${api_version}
+    Set to dictionary  ${event}         apiVersion=${API_VERSION}
     Set to dictionary  ${event}[event]  deviceName=${deviceName}
     Set to dictionary  ${event}[event]  profileName=${profileName}
     Set to dictionary  ${event}[event]  sourceName=${sourceName}

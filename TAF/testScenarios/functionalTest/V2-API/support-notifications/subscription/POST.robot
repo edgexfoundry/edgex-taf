@@ -10,7 +10,6 @@ Force Tags  v2-api
 ${SUITE}          Support Notifications Subscription POST Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-notifications-subscription-post.log
 ${url}            ${supportNotificationsUrl}
-${api_version}    v2
 
 *** Test Cases ***
 SubscriptionPOST001 - Create subscription

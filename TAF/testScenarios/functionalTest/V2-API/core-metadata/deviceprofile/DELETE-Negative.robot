@@ -10,7 +10,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile DELETE Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-delete-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrProfileDELETE001 - Delete device profile by non-existent name

@@ -6,8 +6,8 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
 ${deviceServiceUrl}  ${URI_SCHEME}://${BASE_URL}:${SERVICE_PORT}
-${dsCallBack}    /api/${api_version}/callback
-${dsDeviceUri}   /api/${api_version}/device
+${dsCallBack}    /api/${API_VERSION}/callback
+${dsDeviceUri}   /api/${API_VERSION}/device
 
 
 *** Keywords ***

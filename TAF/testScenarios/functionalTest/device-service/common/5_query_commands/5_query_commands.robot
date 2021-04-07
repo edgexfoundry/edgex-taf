@@ -8,11 +8,9 @@ Resource  TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags
 
 *** Variables ***
 ${SUITE}              Query Commands
-${api_version}    v2
 
 *** Test Cases ***
 Get001 - Test Retrieve device reading by name and the data is sent to Core Data with multiple data type

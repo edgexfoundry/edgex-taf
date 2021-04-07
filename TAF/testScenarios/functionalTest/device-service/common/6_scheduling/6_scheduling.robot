@@ -8,7 +8,6 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags  
 
 *** Variables ***
 ${SUITE}              Scheduling

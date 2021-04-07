@@ -9,10 +9,10 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
 ${coreMetadataUrl}   ${URI_SCHEME}://${BASE_URL}:${CORE_METADATA_PORT}
-${deviceProfileUri}  /api/${api_version}/deviceprofile
-${deviceServiceUri}  /api/${api_version}/deviceservice
-${deviceUri}         /api/${api_version}/device
-${provisionWatcherUri}  /api/${api_version}/provisionwatcher
+${deviceProfileUri}  /api/${API_VERSION}/deviceprofile
+${deviceServiceUri}  /api/${API_VERSION}/deviceservice
+${deviceUri}         /api/${API_VERSION}/device
+${provisionWatcherUri}  /api/${API_VERSION}/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
 
 *** Keywords ***
@@ -373,7 +373,7 @@ Generate Device Profiles
     ${profile_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  profile=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${profile_list}  ${json}
     END
     Set Test Variable  ${deviceProfile}  ${profile_list}
@@ -408,7 +408,7 @@ Generate Device Services
     ${service_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  service=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${service_list}  ${json}
     END
     Set Test Variable  ${deviceService}  ${service_list}
@@ -444,7 +444,7 @@ Generate Devices
     ${device_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  device=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${device_list}  ${json}
     END
     Set Test Variable  ${Device}  ${device_list}
@@ -532,7 +532,7 @@ Generate Provision Watchers
     ${provisionwatcher_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  provisionwatcher=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${provisionwatcher_list}  ${json}
     END
     Set Test Variable  ${provisionwatcher}  ${provisionwatcher_list}

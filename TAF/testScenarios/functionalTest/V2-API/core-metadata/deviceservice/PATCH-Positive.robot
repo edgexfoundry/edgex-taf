@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Service PATCH Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-patch-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 DevicePATCH001 - Update device services

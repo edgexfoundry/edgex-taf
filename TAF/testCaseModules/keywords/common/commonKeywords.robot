@@ -10,7 +10,6 @@ Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
 *** Variables ***
 ${default_response_time_threshold}  1200
-${api_version}    v2
 
 *** Keywords ***
 Setup Suite
@@ -112,9 +111,9 @@ Should Return Status Code "${status_code}" And ${element}
     Should return status code "${status_code}"
     Should contain "${element}"
 
-apiVersion Should be ${api_version}
+apiVersion Should be ${API_VERSION}
     Should contain "apiVersion"
-    Should be true  '${content}[apiVersion]' == '${api_version}'
+    Should be true  '${content}[apiVersion]' == '${API_VERSION}'
 
 Item Index ${index} Should Contain Status Code "${status_code}"
     ${content_type}=  Evaluate  type($content).__name__
@@ -206,25 +205,25 @@ Set Response to Test Variables
 Query Ping
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Ping  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Ping  api/${api_version}/ping  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Ping  api/${API_VERSION}/ping  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Config
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Config  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Config  api/${api_version}/config  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Config  api/${API_VERSION}/config  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Version
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Version  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Version  api/${api_version}/version  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Version  api/${API_VERSION}/version  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Metrics
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Metrics  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Metrics  api/${api_version}/metrics  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Metrics  api/${API_VERSION}/metrics  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 

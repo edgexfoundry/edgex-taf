@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Event GET Postive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-get-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 EventGET001 - Query all events

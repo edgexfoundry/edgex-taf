@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile GET Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-get-positive-ll.log
-${api_version}    v2
 
 *** Test Cases ***
 ProfileGET009 - Query device profiles by manufacturer's model

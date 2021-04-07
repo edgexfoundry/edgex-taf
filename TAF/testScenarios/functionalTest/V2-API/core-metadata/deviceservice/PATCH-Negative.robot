@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Service PATCH Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-patch-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrDevicePATCH001 - Update device service with non-existent name and service name not match id
