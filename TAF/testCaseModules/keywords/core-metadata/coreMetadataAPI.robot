@@ -9,11 +9,10 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
 ${coreMetadataUrl}   ${URI_SCHEME}://${BASE_URL}:${CORE_METADATA_PORT}
-${api_version}       v1  # default value is v1, set "${api_version}  v2" in testsuite Variables section for v2 api
-${deviceProfileUri}  /api/${api_version}/deviceprofile
-${deviceServiceUri}  /api/${api_version}/deviceservice
-${deviceUri}         /api/${api_version}/device
-${provisionWatcherUri}  /api/v2/provisionwatcher
+${deviceProfileUri}  /api/${API_VERSION}/deviceprofile
+${deviceServiceUri}  /api/${API_VERSION}/deviceservice
+${deviceUri}         /api/${API_VERSION}/device
+${provisionWatcherUri}  /api/${API_VERSION}/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
 
 *** Keywords ***
@@ -33,11 +32,8 @@ Create device profile ${entity}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Core Metadata  ${deviceProfileUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
-    Run Keyword If  "${api_version}" == "v1"  Run Keywords
-    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
-    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
-    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
 
 Upload file ${file} to update device profile
     ${yaml}=  Get Binary File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${file}
@@ -146,52 +142,13 @@ Delete multiple device profiles by names
     END
 
 # Device
-# v1 only: in functionalTest/device-service/common/ and integrationTest
-Create device
-    [Arguments]  ${device_file}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${deviceServiceProtocol}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
-    ${protocol_str}=  convert to string  ${deviceServiceProtocol}
-    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/${device_file}  encoding=UTF-8
-    ${newdata_protocol}=  replace string    ${data}   %DeviceServiceProtocal%   ${protocol_str}
-    ${newdata_protocol}=  replace string    ${newdata_protocol}   '   \"
-    ${newdata}=  replace string  ${newdata_protocol}   %DeviceServiceName%    ${SERVICE_NAME}
-    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
-    ...       expected_status=any
-    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
-    set suite variable  ${device_id}   ${resp.content}
-    sleep  500ms
-
 Create device with ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Core Metadata    ${deviceUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
-    Run Keyword If  "${api_version}" == "v1"  Run Keywords
-    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
-    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
-    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
-
-# v1 only: in functionalTest/device-service/common/
-Creat device with autoEvents parameter
-    [Arguments]  ${frequency_time}  ${onChange_value}  ${reading_name}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${deviceServiceProtocol}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
-    ${protocol_str}=  convert to string  ${deviceServiceProtocol}
-    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/create_autoevent_device.json  encoding=UTF-8
-    ${newdata_protocol}=  replace string    ${data}   %DeviceServiceProtocal%   ${protocol_str}
-    ${newdata_protocol}=  replace string    ${newdata_protocol}   '   \"
-    ${newdata}=  replace string  ${newdata_protocol}   %DeviceServiceName%    ${SERVICE_NAME}
-    ${newdata}=  replace string  ${newdata}   %frequency%    ${frequency_time}
-    ${newdata}=  replace string  ${newdata}   %onChangeValue%   ${onChange_value}
-    ${newdata}=  replace string  ${newdata}   %ReadingName%    ${reading_name}
-    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Metadata  ${deviceUri}  data=${newdata}  headers=${headers}
-    ...       expected_status=any
-    run keyword if  ${resp.status_code}!=200  fail  ${resp.status_code}!=200: ${resp.content}
-    set test variable  ${device_id}   ${resp.content}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
 
 Update devices ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -199,18 +156,6 @@ Update devices ${entity}
     ${resp}=  PATCH ON Session  Core Metadata  ${deviceUri}  json=${entity}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
-
-# v1 only: in keywords/core-data and functionTest/device-service/common/
-Query device by id and return device name
-    # output device name
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata    ${deviceUri}/${device_id}  headers=${headers}
-    ...       expected_status=200
-    ${resp_length}=    get length  ${resp.content}
-    run keyword if  ${resp_length} == 3   fail  "No device found"
-    ${deviceResponseBody}=  evaluate  json.loads('''${resp.content}''')  json
-    [Return]    ${deviceResponseBody}[name]
 
 Query all devices
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -271,15 +216,6 @@ Check existence of device by name
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
 
-# v1 only: in functionalTest/device-service/common/
-Delete device by name
-    ${deviceName}=    Query device by id and return device name
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Core Metadata  ${deviceUri}/name/${deviceName}  headers=${headers}
-    ...       expected_status=any
-    run keyword if  ${resp.status_code}!=200  Fail  ${resp.status_code}!=200: ${resp.content}
-
 Delete device by name ${deviceName}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
@@ -294,35 +230,14 @@ Delete multiple devices by names
         Delete device by name ${device}
     END
 
-# Addressable
-# v1 only: in functionalTest/core-data/UC_readings/add_reading.robot
-Create addressable ${entity}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Metadata    /api/v1/addressable  json=${entity}   headers=${headers}
-    ...       expected_status=any
-    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    Set test variable  ${response}  ${resp.status_code}
-
-# v1 only: in functionalTest/core-data/UC_readings/add_reading.robot
-Delete addressable by name ${addressableName}
-    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Core Metadata  api/v1/addressable/name/${addressableName}  headers=${headers}
-    ...       expected_status=any
-    run keyword if  ${resp.status_code}!=200  Fail  ${resp.status_code}!=200: ${resp.content}
-
 # Device service
 Create device service ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Core Metadata  ${deviceServiceUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
-    Run Keyword If  "${api_version}" == "v1"  Run Keywords
-    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
-    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
-    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
 
 Update device service ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -377,11 +292,8 @@ Create provision watcher ${entity}
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Core Metadata    ${provisionWatcherUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
-    Run Keyword If  "${api_version}" == "v1"  Run Keywords
-    ...             Run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
-    ...             AND  Set Test Variable  ${response}  ${resp.status_code}
-    ...    ELSE IF  "${api_version}" == "v2"  Run Keywords  Set Response to Test Variables  ${resp}
-    ...             AND  Run keyword if  ${response} != 207  log to console  ${content}
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
 
 Delete provision watcher by name ${provisionWatcherName}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -461,7 +373,7 @@ Generate Device Profiles
     ${profile_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  profile=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${profile_list}  ${json}
     END
     Set Test Variable  ${deviceProfile}  ${profile_list}
@@ -496,7 +408,7 @@ Generate Device Services
     ${service_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  service=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${service_list}  ${json}
     END
     Set Test Variable  ${deviceService}  ${service_list}
@@ -532,7 +444,7 @@ Generate Devices
     ${device_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  device=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${device_list}  ${json}
     END
     Set Test Variable  ${Device}  ${device_list}
@@ -572,7 +484,7 @@ Create A Device Sample With Associated Test-Device-Service And ${device_profile_
 
 Set device values
     [Arguments]  ${device_service_name}  ${device_profile_name}
-    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/V2-device/device_data.json  encoding=UTF-8
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/device_data.json  encoding=UTF-8
     ${device}=  Evaluate  json.loads('''${data}''')  json
     ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
     Set To Dictionary  ${device}  protocols=${protocols}
@@ -582,7 +494,7 @@ Set device values
 
 Set autoEvents values
     [Arguments]  ${frequency}  ${onChange}  ${sourceName}
-    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/V2-device/auto_events_data.json  encoding=UTF-8
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/auto_events_data.json  encoding=UTF-8
     ${autoEvent}=  Evaluate  json.loads('''${data}''')  json
     Set To Dictionary  ${autoEvent}  frequency=${frequency}
     ${onChange}=  Convert To Boolean  ${onChange}
@@ -602,7 +514,7 @@ Create Devices And Generate Multiple Devices Sample For Updating ${type}
     ${update_protocols}=  Create Dictionary  name=Test-Device-AutoEvents  protocols=${protocols}
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
     ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
-    Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_opstate}  operatingState=DOWN
+    ...        AND  Set To Dictionary  ${update_opstate}  operatingState=DOWN
     ...        AND  Set To Dictionary  ${update_opstate}  profileName=Test-Profile-3
     Generate Devices  ${update_labels}  ${update_adminstate}  ${update_opstate}  ${update_protocols}
 
@@ -620,7 +532,7 @@ Generate Provision Watchers
     ${provisionwatcher_list}=  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  provisionwatcher=${data}
-        Set to dictionary  ${json}       apiVersion=${api_version}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
         Append To List  ${provisionwatcher_list}  ${json}
     END
     Set Test Variable  ${provisionwatcher}  ${provisionwatcher_list}

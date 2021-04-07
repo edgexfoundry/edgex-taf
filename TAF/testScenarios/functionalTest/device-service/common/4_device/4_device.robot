@@ -7,49 +7,43 @@ Suite Setup  Run Keywords  Setup Suite
 Suite Teardown  Run Teardown Keywords
 
 *** Variables ***
-${SUITE}              Device
+${SUITE}              Verify adminState and operatingState
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/device-sdk-command.log
 
 *** Test Cases ***
 Device_TC0001a - Invoke GET command when device adminState is LOCKED
-    @{data_types_skip_write_only}=  Skip write only commands
-    ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
-    Given Create device  create_locked_device.json
-    sleep  500ms
-    When Invoke Get command by device id "${device_id}" and command name "${command_name}"
+    Given Get A Read Command
+    And Create Device Locked-Device And Set adminState To LOCKED
+    When Invoke Get command by device Locked-Device and command ${command}
     Then Should return status code "423"
-    [Teardown]  Delete device by name
+    [Teardown]  Delete device by name Locked-Device
 
-Device_TC0001b - Invoke PUT command when device adminState is LOCKED
-    @{data_types_skip_write_only}=  Skip write only commands
-    ${data_type}=     set variable  ${data_types_skip_write_only}[0][dataType]
-    ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
-    ${reading_name}=     set variable  ${data_types_skip_write_only}[0][readingName]
-    ${random_value}=    Get reading value with data type "${data_type}"
-    ${set_reading_value}=   convert to string  ${random_value}
-    Given Create device  create_locked_device.json
-    sleep  500ms
-    When Invoke Put command by device id "${device_id}" and command name "${command_name}" with request body "${reading_name}":"${set_reading_value}"
+Device_TC0001b - Invoke SET command when device adminState is LOCKED
+    Given Get A Read Command
+    And Create Device Locked-Device And Set adminState To LOCKED
+    When Invoke SET command by device Locked-Device and command ${command} with request body ${reading_name}:${set_reading_value}
     Then Should return status code "423"
-    [Teardown]  Delete device by name
+    [Teardown]  Delete device by name Locked-Device
 
-Device_TC0002a - Invoke GET command when device operatingState is DISABLED
-    @{data_types_skip_write_only}=  Skip write only commands
-    ${command_name}=     set variable  ${data_types_skip_write_only}[0][commandName]
-    Given Create device  create_disabled_device.json
-     sleep  500ms
-    When Invoke Get command by device id "${device_id}" and command name "${command_name}"
+Device_TC0002a - Invoke GET command when device operatingState is DOWN
+    Given Get A Read Command
+    And Create Device Down-Device And Set operatingState To DOWN
+    When Invoke Get command by device Down-Device and command ${command}
     Then Should return status code "423"
-    [Teardown]  Delete device by name
+    [Teardown]  Delete device by name Down-Device
 
-Device_TC0002b - Invoke PUT command when device operatingState is DISABLED
-    @{data_types_skip_write_only}=  Skip write only commands
-    ${data_type}=     set variable  ${data_types_skip_write_only}[0][dataType]
-    ${commandName}=     set variable  ${data_types_skip_write_only}[0][commandName]
-    ${reading_name}=     set variable  ${data_types_skip_write_only}[0][readingName]
-    ${random_value}=    Get reading value with data type "${data_type}"
-    ${set_reading_value}=   convert to string  ${random_value}
-    Given Create device  create_disabled_device.json
-    sleep  500ms
-    When Invoke Put command by device id "${device_id}" and command name "${command_name}" with request body "${reading_name}":"${set_reading_value}"
+Device_TC0002b - Invoke SET command when device operatingState is DISABLED
+    Given Get A Read Command
+    And Create Device Down-Device And Set operatingState To DOWN
+    When Invoke SET command by device Down-Device and command ${command} with request body ${reading_name}:${set_reading_value}
     Then Should return status code "423"
-    [Teardown]  Delete device by name
+    [Teardown]  Delete device by name Down-Device
+
+*** Keywords ***
+Create Device ${name} And Set ${field} To ${field_value}
+    ${device}=  Set device values  ${SERVICE_NAME}  Sample-Profile
+    Set To Dictionary  ${device}  name=${name}
+    Set To Dictionary  ${device}  ${field}=${field_value}
+    Generate Devices  ${device}
+    Create Device With ${Device}
+    sleep  500ms

@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Service POST Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-post-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 ServicePOST001 - Create device service

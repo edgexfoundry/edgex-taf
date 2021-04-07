@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile PUT Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-put-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrProfilePUT001 - Update device profile with invalid profile name

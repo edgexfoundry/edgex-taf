@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Event POST Positive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-post-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 EventPOST001 - Create event

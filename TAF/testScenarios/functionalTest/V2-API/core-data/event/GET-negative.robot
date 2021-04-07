@@ -10,7 +10,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Event GET Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-get-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrEventGET001 - Query event by ID fails (Non-existent ID)

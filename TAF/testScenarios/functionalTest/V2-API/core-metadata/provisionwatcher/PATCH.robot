@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Provision Watcher PATCH Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatcher-patch.log
-${api_version}    v2
 
 *** Test Cases ***
 ProWatcherPATCH001 - Update provision watcher

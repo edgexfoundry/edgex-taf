@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Provision Watcher POST Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatcher-post-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrProWatcherPOST001 - Create provision watcher with empty name

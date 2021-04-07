@@ -20,7 +20,7 @@ Run Teardown Keywords
     Delete All Sessions  # Delete http or https request sessions
     Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
 
-Skip write only commands
+Get All Read Commands
     @{data_types_skip_write_only}=    Create List
     FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
           Continue For Loop If   '${item["readWrite"]}' == 'W'
@@ -35,6 +35,20 @@ Skip read only commands
           Append To List    ${data_types_skip_read_only}    ${item}
     END
     [Return]  ${data_types_skip_read_only}
+
+Get All Write Only Commands
+    @{data_types_write_only}=    Create List
+    FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
+          Run Keyword If  '${item["readWrite"]}' == 'W'  Append To List    ${data_types_write_only}    ${item}
+    END
+    [Return]   ${data_types_write_only}
+
+Get All Write Commands
+    @{data_types_all_write}=    Create List
+    FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
+          Run Keyword If  '${item["readWrite"]}' != 'R'  Append To List    ${data_types_all_write}    ${item}
+    END
+    [Return]   ${data_types_all_write}
 
 Skip data types BOOL and STRING only commands "${SUPPORTED_DATA}"
     @{data_types_skip_bool_string}=    Create List
@@ -97,9 +111,9 @@ Should Return Status Code "${status_code}" And ${element}
     Should return status code "${status_code}"
     Should contain "${element}"
 
-apiVersion Should be ${api_version}
+apiVersion Should be ${API_VERSION}
     Should contain "apiVersion"
-    Should be true  '${content}[apiVersion]' == '${api_version}'
+    Should be true  '${content}[apiVersion]' == '${API_VERSION}'
 
 Item Index ${index} Should Contain Status Code "${status_code}"
     ${content_type}=  Evaluate  type($content).__name__
@@ -191,25 +205,25 @@ Set Response to Test Variables
 Query Ping
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Ping  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Ping  api/${api_version}/ping  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Ping  api/${API_VERSION}/ping  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Config
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Config  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Config  api/${api_version}/config  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Config  api/${API_VERSION}/config  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Version
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Version  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Version  api/${api_version}/version  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Version  api/${API_VERSION}/version  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 Query Metrics
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     Create Session  Metrics  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Metrics  api/${api_version}/metrics  headers=${headers}  expected_status=200
+    ${resp}=  GET On Session  Metrics  api/${API_VERSION}/metrics  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
 

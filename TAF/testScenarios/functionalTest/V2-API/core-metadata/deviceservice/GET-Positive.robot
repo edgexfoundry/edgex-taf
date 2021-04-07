@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Service GET Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice-get-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 ServiceGET001 - Query all device services

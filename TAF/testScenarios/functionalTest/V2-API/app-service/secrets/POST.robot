@@ -9,7 +9,6 @@ Force Tags       v2-api
 *** Variables ***
 ${SUITE}          App-Service Secrets POST Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-secrets.log
-${api_version}  v2
 
 *** Test Cases ***
 SecretsPOST001 - Stores secrets to the secret client with Path

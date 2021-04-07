@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile PUT Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-put-upload-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrProfilePUTUpload001 - Update device profile by upload file and profile name is not existed

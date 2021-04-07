@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Event DELETE Positive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-delete-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 EventDELETE001 - Delete event by ID

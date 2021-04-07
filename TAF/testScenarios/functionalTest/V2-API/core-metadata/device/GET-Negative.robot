@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device GET Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-get-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrDeviceGET001 - Query device by non-existent device name

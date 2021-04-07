@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile DELETE Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-delete-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 ProfileDELETE001 - Delete device profile by name

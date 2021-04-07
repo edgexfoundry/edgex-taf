@@ -9,7 +9,6 @@ Force Tags   v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Provision Watcher GET Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatcher-get-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 # /provisionwatcher/all

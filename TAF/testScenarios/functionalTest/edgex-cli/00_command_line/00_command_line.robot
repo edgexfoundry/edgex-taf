@@ -5,6 +5,7 @@ Library          TAF/testCaseModules/keywords/edgex_cli/Cli.py
 Library          Collections
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
+Force Tags  skipped
 
 *** Variables ***
 ${SUITE}         EdgeX deployment

@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile POST For Upload File Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-upload-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrProfilePOSTUpload001 - Create device profile by upload file with duplicate profile name

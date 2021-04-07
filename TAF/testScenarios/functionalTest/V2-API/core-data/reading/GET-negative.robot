@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Reading GET Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-get-reading-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrReadingGET001 - Query all readings with non-int value on offset

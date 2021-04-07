@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core-Data Event POST Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-post-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrEventPOST001 - Create events fails (Event ID Conflict)

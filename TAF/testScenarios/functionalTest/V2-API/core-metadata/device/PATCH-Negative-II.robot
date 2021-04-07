@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device PATCH Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-patch-negative-ll.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrDevicePATCH0011 - Update device with non-existent serviceName

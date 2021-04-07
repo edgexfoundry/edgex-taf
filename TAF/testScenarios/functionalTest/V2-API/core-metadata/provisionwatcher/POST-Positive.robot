@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Provision Watcher POST Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatcher-post-positive.log
-${api_version}    v2
 
 *** Test Cases ***
 ProWatcherPOST001 - Create provision watcher with same device service

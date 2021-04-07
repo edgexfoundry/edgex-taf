@@ -9,7 +9,6 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile GET Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile-get-negative.log
-${api_version}    v2
 
 *** Test Cases ***
 ErrProfileGET001 - Query device profile by non-existent name

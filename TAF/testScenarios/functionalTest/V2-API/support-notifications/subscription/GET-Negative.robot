@@ -10,7 +10,6 @@ Force Tags  v2-api
 ${SUITE}          Support Notifications Subscription GET Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-notifications-subscription-get-negative.log
 ${url}            ${supportNotificationsUrl}
-${api_version}    v2
 
 *** Test Cases ***
 # /subscription/all
