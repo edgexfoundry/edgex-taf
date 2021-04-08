@@ -1,16 +1,15 @@
 *** Settings ***
+Library         TAF/testCaseModules/keywords/setup/edgex.py
 Resource        TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource        TAF/testCaseModules/keywords/core-command/coreCommandAPI.robot
 Suite Setup     Run Keywords  Setup Suite
 ...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                           AND  Deploy device service  device-virtual
-Suite Teardown  Run keywords  Remove services  device-virtual
-...                           AND  Run Teardown Keywords
-Force Tags      Skipped
+Suite Teardown  Run Teardown Keywords
+Force Tags      v2-api
 
 *** Variables ***
-${SUITE}          Core-Command GET Testcases
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-command-get-info.log
+${SUITE}          Core-Command Info GET Testcases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-command-info.log
 ${url}            ${coreCommandUrl}
 
 *** Test Cases ***
