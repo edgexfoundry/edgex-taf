@@ -28,18 +28,24 @@ ErrSET001 - Test DS actuates commands to device/sensor by name with invalid requ
     And Create Device For ${SERVICE_NAME} With Name Update-Command-Device
     When Invoke SET command by device ${device_name} and command ${command} with request body ${reading_name}:invalid_value
     Then Should return status code "500"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
 ErrSET002 - Test DS actuates commands to device/sensor by name with invalid device
     Given Get A Write Command
     When Invoke SET command by device invalid_device and command ${command} with request body ${reading_name}:${reading_value}
     Then Should return status code "404"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrSET003 - Test DS actuates commands to device/sensor by name with invalid command
     Given Get A Write Command
     And Create Device For ${SERVICE_NAME} With Name Update-Command-Device
     When Invoke Set command by device ${device_name} and command invalid_command with request body ${reading_name}:${reading_value}
     Then Should return status code "404"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
 
@@ -51,6 +57,8 @@ DS actuates commands to device/sensor by name
     ${set_reading_value}  convert to string  ${random_value}
     When Invoke SET command by device ${device_name} and command ${command} with request body ${reading_name}:${set_reading_value}
     Then Should return status code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 Get A Write Command
     @{data_types_all_write}  Get All Write Commands

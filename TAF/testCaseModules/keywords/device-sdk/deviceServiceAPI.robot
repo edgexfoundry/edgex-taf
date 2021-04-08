@@ -8,6 +8,7 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 ${deviceServiceUrl}  ${URI_SCHEME}://${BASE_URL}:${SERVICE_PORT}
 ${dsCallBack}    /api/${API_VERSION}/callback
 ${dsDeviceUri}   /api/${API_VERSION}/device
+${dsDiscoveryeUri}   /api/${API_VERSION}/discovery
 
 
 *** Keywords ***
@@ -15,6 +16,15 @@ Invoke Get command by device ${device_name} and command ${command}
     Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Device Service    ${dsDeviceUri}/name/${device_name}/${command}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  log to console  ${content}
+    ...       ELSE  Set Test variable   ${get_reading_value}  ${content}[event][readings][0][value]
+
+Invoke Get command with params ${parameter}=${value} by device ${device_name} and command ${command}
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Device Service    ${dsDeviceUri}/name/${device_name}/${command}
+    ...    params=${parameter}=${value}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
     ...       ELSE  Set Test variable   ${get_reading_value}  ${content}[event][readings][0][value]
@@ -52,3 +62,12 @@ Create Device For ${SERVICE_NAME} With Name ${name}
     Create Device With ${Device}
     sleep  500ms
     Set Test Variable  ${device_name}  ${name}
+
+Run Discovery Request For Device Service
+    Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  POST On Session  Device Service    ${dsDiscoveryeUri}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  log to console  ${content}
+
+
