@@ -23,22 +23,22 @@ Suite Teardown for App Service
     Run Teardown Keywords
 
 Set Functions ${functions}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/AppService-functional-tests/Writable/Pipeline/ExecutionOrder
+    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/ExecutionOrder
     Modify consul config  ${path}  ${functions}
     sleep  1
 
 Set Transform Type ${type}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/AppService-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
+    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
     Modify consul config  ${path}  ${type}
     sleep  1
 
 Set Compress Algorithm ${algorithm}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/AppService-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
+    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
     Modify consul config  ${path}  ${algorithm}
     sleep  1
 
 Set Encrypt Algorithm ${algorithm}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/AppService-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
+    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
     Modify consul config  ${path}  ${algorithm}
     sleep  1
 
