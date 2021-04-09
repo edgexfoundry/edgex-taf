@@ -4,8 +4,8 @@ Library     String
 
 *** Variables ***
 ${supportSchedulerUrl}  ${URI_SCHEME}://${BASE_URL}:${SUPPORT_SCHEDULER_PORT}
-${intervalUri}    /api/v1/interval
-${intervalActionUri}    /api/v1/intervalaction
+${intervalUri}    /api/${API_VERSION}/interval
+${intervalActionUri}    /api/${API_VERSION}/intervalaction
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/supportSchedulerAPI.log
 
 *** Keywords ***
