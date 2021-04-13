@@ -52,10 +52,21 @@ ErrSubscriptionPATCH004 - Update subscription with empty receiver
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH005 - Update subscription with empty labels and categories
+ErrSubscriptionPATCH005 - Update subscription when request body contains empty labels and categories
     Given Generate A Subscription Sample With EMAIL Channel
     And Create Subscription ${subscription}
     And Set To Dictionary  ${subscription}[0][subscription]  labels=@{EMPTY}
+    And Set To Dictionary  ${subscription}[0][subscription]  categories=@{EMPTY}
+    When Update Subscriptions ${subscription}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
+
+ErrSubscriptionPATCH006 - Update subscription with both empty labels and categories to db
+    Given Generate A Subscription Sample With EMAIL Channel
+    And Remove From Dictionary  ${subscription}[0][subscription]  labels
+    And Create Subscription ${subscription}
     And Set To Dictionary  ${subscription}[0][subscription]  categories=@{EMPTY}
     When Update Subscriptions ${subscription}
     Then Should Return Status Code "207"
@@ -64,7 +75,7 @@ ErrSubscriptionPATCH005 - Update subscription with empty labels and categories
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH006 - Update subscription with invalid resendInterval
+ErrSubscriptionPATCH007 - Update subscription with invalid resendInterval
     Given Generate A Subscription Sample With EMAIL Channel
     And Create Subscription ${subscription}
     And Set To Dictionary  ${subscription}[0][subscription]  resendInterval=999
@@ -74,7 +85,7 @@ ErrSubscriptionPATCH006 - Update subscription with invalid resendInterval
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH007 - Update subscription for REST channel with empty Host
+ErrSubscriptionPATCH008 - Update subscription for REST channel with empty Host
     Given Generate A Subscription Sample With REST Channel
     And Create Subscription ${subscription}
     And Set To Dictionary  ${subscription}[0][subscription][channels][0]  host=${EMPTY}
@@ -84,7 +95,7 @@ ErrSubscriptionPATCH007 - Update subscription for REST channel with empty Host
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH008 - Update subscription for REST channel with empty Port
+ErrSubscriptionPATCH009 - Update subscription for REST channel with empty Port
     Given Generate A Subscription Sample With REST Channel
     And Create Subscription ${subscription}
     And Remove From Dictionary  ${subscription}[0][subscription][channels][0]  port
@@ -94,7 +105,7 @@ ErrSubscriptionPATCH008 - Update subscription for REST channel with empty Port
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH009 - Update subscription for REST channel with empty httpMethod
+ErrSubscriptionPATCH010 - Update subscription for REST channel with empty httpMethod
     Given Generate A Subscription Sample With REST Channel
     And Create Subscription ${subscription}
     And Set To Dictionary  ${subscription}[0][subscription][channels][0]  httpMethod=${EMPTY}
@@ -104,7 +115,7 @@ ErrSubscriptionPATCH009 - Update subscription for REST channel with empty httpMe
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH010 - Update subscription for EMAL channel with empty recipients
+ErrSubscriptionPATCH011 - Update subscription for EMAL channel with empty recipients
     Given Generate A Subscription Sample With EMAIL Channel
     And Create Subscription ${subscription}
     And Set To Dictionary  ${subscription}[0][subscription][channels][0]  recipients=@{EMPTY}
@@ -114,7 +125,7 @@ ErrSubscriptionPATCH010 - Update subscription for EMAL channel with empty recipi
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-ErrSubscriptionPATCH011 - Update subscription for EMAL channel with invalid format recipients
+ErrSubscriptionPATCH012 - Update subscription for EMAL channel with invalid format recipients
     ${recipients}  Create List  123  456
     Given Generate A Subscription Sample With EMAIL Channel
     And Create Subscription ${subscription}
