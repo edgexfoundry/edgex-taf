@@ -21,11 +21,11 @@ Export001 - Export events/readings to HTTP Server
     [Tags]  SmokeTest
     ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
     Given Deploy services  app-service-http-export
-    And Create device  create_device.json
-    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT8_RW"
-    Then HTTP Server received event is the same with exported from service "app-service-http-export"
-    [Teardown]  Run keywords  Delete device by name Test-Device
-                ...           AND  Remove all events
+    And Create Device For device-virtual With Name http-export-device
+    When Get device data by device http-export-device and command GenerateDeviceValue_INT8_RW
+    Then HTTP Server received event is the same with exported from service app-http-export
+    [Teardown]  Run keywords  Delete device by name http-export-device
+                ...           AND  Delete all events by age
                 ...           AND  remove services  app-service-http-export
                 ...           AND  Terminate Process  ${handle}  kill=True
 
@@ -35,35 +35,35 @@ Export002 - Export events/readings to MQTT Server
     And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Deploy services  app-service-mqtt-export
-    And Create device  create_device.json
-    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT16_RW"
+    And Create Device For device-virtual With Name mqtt-export-device
+    When Get device data by device mqtt-export-device and command GenerateDeviceValue_INT16_RW
     Then Device data has recevied by mqtt subscriber
-    And Found "Sent data to MQTT Broker" in service "app-service-mqtt-export" log
-    [Teardown]  Run keywords  Delete device by name Test-Device
-                ...           AND  Remove all events
+    And Found "Sent data to MQTT Broker" in service "app-mqtt-export" log
+    [Teardown]  Run keywords  Delete device by name mqtt-export-device
+                ...           AND  Delete all events by age
                 ...           AND  remove services  app-service-mqtt-export  mqtt-broker
 
 ExportErr001 - Export events/readings to unreachable HTTP backend
     Given Deploy services  app-service-http-export
-    And Create device  create_device.json
-    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT32_RW"
-    Then No exported logs found on configurable application service  app-service-http-export
-    [Teardown]  Run keywords  Delete device by name Test-Device
-                ...           AND  Remove all events
+    And Create Device For device-virtual With Name http-export-error-device
+    When Get device data by device http-export-error-device and command GenerateDeviceValue_INT32_RW
+    Then No exported logs found on configurable application service  app-http-export
+    [Teardown]  Run keywords  Delete device by name http-export-error-device
+                ...           AND  Delete all events by age
                 ...           AND  remove services  app-service-http-export
 
 ExportErr002 - Export events/readings to unreachable MQTT backend
     Given Deploy services  app-service-mqtt-export
-    And Create device  create_device.json
-    When Get device data by device "Test-Device" and command "GenerateDeviceValue_INT64_RW"
-    Then No exported logs found on configurable application service  app-service-mqtt-export
-    [Teardown]  Run keywords  Delete device by name Test-Device
-                ...           AND  Remove all events
+    And Create Device For device-virtual With Name mqtt-export-error-device
+    When Get device data by device mqtt-export-error-device and command GenerateDeviceValue_INT64_RW
+    Then No exported logs found on configurable application service  app-mqtt-export
+    [Teardown]  Run keywords  Delete device by name mqtt-export-error-device
+                ...           AND  Delete all events by age
                 ...           AND  remove services  app-service-mqtt-export
 
 
 *** Keywords ***
-HTTP Server received event is the same with exported from service "${app_service}"
+HTTP Server received event is the same with exported from service ${app_service}
     ${export_data_app_service}=  Get exported data from "${app_service}" service log
     run keyword if  '${export_data_app_service}' == '${EMPTY}'  fail  No export log found on application service
     ${http_server_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/httpd-server.log  origin
@@ -85,8 +85,8 @@ Get exported data from "${app_service}" service log
     ${export_data}=  replace string  ${fetch_export_data}  ]}"  ]}
     [Return]  ${export_data}
 
-Get device data by device "${device_name}" and command "${command_name}"
-    Invoke Get command by device name "${device_name}" and command name "${command_name}"
+Get device data by device ${device_name} and command ${command}
+    Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${command}
     Should return status code "200"
     sleep  500ms
 
@@ -100,10 +100,7 @@ No exported logs found on configurable application service
     [Arguments]  ${app_service_name}
     ${current_timestamp}=  get current epoch time
     ${log_timestamp}=  evaluate  ${current_timestamp}-1
-    ${app_service_log}=  run keyword if  '${app_service_name}'=='app-service-http-export'
-                         ...             Get service logs since timestamp  ${app_service_name}  ${log_timestamp}
-                         ...   ELSE IF   '${app_service_name}'=='app-service-mqtt-export'
-                         ...             Get service logs since timestamp  ${app_service_name}  ${log_timestamp}
+    ${app_service_log}=  Get service logs since timestamp  ${app_service_name}  ${log_timestamp}
     log  ${app_service_log}
     ${app_service_str}=  convert to string  ${app_service_log}
     should not contain  ${app_service_str}  Sent data
