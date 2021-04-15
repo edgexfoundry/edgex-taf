@@ -16,6 +16,8 @@ Device_TC0001a - Invoke GET command when device adminState is LOCKED
     And Create Device Locked-Device And Set adminState To LOCKED
     When Invoke Get command by device Locked-Device and command ${command}
     Then Should return status code "423"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name Locked-Device
 
 Device_TC0001b - Invoke SET command when device adminState is LOCKED
@@ -23,6 +25,8 @@ Device_TC0001b - Invoke SET command when device adminState is LOCKED
     And Create Device Locked-Device And Set adminState To LOCKED
     When Invoke SET command by device Locked-Device and command ${command} with request body ${reading_name}:${set_reading_value}
     Then Should return status code "423"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name Locked-Device
 
 Device_TC0002a - Invoke GET command when device operatingState is DOWN
@@ -30,6 +34,8 @@ Device_TC0002a - Invoke GET command when device operatingState is DOWN
     And Create Device Down-Device And Set operatingState To DOWN
     When Invoke Get command by device Down-Device and command ${command}
     Then Should return status code "423"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name Down-Device
 
 Device_TC0002b - Invoke SET command when device operatingState is DISABLED
@@ -37,6 +43,8 @@ Device_TC0002b - Invoke SET command when device operatingState is DISABLED
     And Create Device Down-Device And Set operatingState To DOWN
     When Invoke SET command by device Down-Device and command ${command} with request body ${reading_name}:${set_reading_value}
     Then Should return status code "423"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name Down-Device
 
 *** Keywords ***

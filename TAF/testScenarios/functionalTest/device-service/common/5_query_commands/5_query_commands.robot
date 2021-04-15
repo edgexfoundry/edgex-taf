@@ -25,11 +25,15 @@ ErrGet001 - Test Retrieve device reading by name but the device does not exist
     Given Get A Read Command
     When Invoke Get command by device Invalid-device-Name and command ${command}
     Then Should return status code "404"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrGet002 - Test Retrieve device reading by name but the command does not exist
     Given Create Device For ${SERVICE_NAME} With Name Invalid-Command-Device
     When Invoke Get command by device ${device_name} and command Invalid-Command
     Then Should return status code "404"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
 ErrGet003 - Test Retrieve device reading by name but the command is write only
@@ -37,6 +41,8 @@ ErrGet003 - Test Retrieve device reading by name but the command is write only
     And Create Device For ${SERVICE_NAME} With Name Write-Command-Device
     When Invoke Get command by device ${device_name} and command ${command}
     Then Should return status code "405"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
 *** Keywords ***
@@ -44,8 +50,10 @@ ErrGet003 - Test Retrieve device reading by name but the command is write only
 Retrieve reading by device name and the data is sent to Core Data
     [Arguments]    ${dataType}    ${command_name}    ${reading_name}
     ${start_time}=  Get current milliseconds epoch time
-    When Invoke Get command by device ${device_name} and command ${command_name}
+    When Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${command_name}
     Then Should return status code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Value should be "${dataType}"
     sleep  500ms
     ${end_time}=  Get current milliseconds epoch time
