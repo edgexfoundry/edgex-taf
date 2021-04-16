@@ -17,7 +17,7 @@ Scheduling001 - Test Resource and Frequency for autoEvent
     @{data_types_all_read}  Get All Read Commands
     ${last_reading}  Get last support reading
     ${reading_name}  Set Variable  ${data_types_all_read}[${last_reading}][readingName]
-    When Create AutoEvent Device With Parameters  8s  true  ${reading_name}
+    When Create AutoEvent Device With Parameters  8s  false  ${reading_name}
     Then Device autoEvents with ${reading_name} send by frequency setting 8s
     [Teardown]  Delete device by name ${device_name}
 

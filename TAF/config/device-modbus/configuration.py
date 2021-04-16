@@ -1,6 +1,13 @@
+import os
+
 # Service for testing
 SERVICE_NAME = "edgex-device-modbus"
-SERVICE_PORT = 49991
+
+SECURITY_SERVICE_NEEDED = os.getenv("SECURITY_SERVICE_NEEDED")
+if SECURITY_SERVICE_NEEDED == 'true':
+    SERVICE_PORT = "8443/modbusdevice"
+else:
+    SERVICE_PORT = 49991
 
 SUPPORTED_DATA_TYPES = [
     #     Boolean

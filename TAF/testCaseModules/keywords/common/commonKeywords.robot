@@ -169,11 +169,6 @@ Get Token
     ${jwt_token} =  Access Token  -useradd
     Should Not Be Empty  ${jwt_token}
     Set Global Variable  ${jwt_token}  ${jwt_token}
-    ${SERVICE_NAME}=  Get Variable Value  ${SERVICE_NAME}
-    ${SERVICE_PORT}=  Get Variable Value  ${SERVICE_PORT}
-    Run Keyword if  $SERVICE_NAME == "device-virtual"
-    ...  Set Global Variable  ${deviceServiceUrl}  https://localhost:8443/virtualdevice
-    ...  ELSE IF  $SERVICE_NAME != None  Set Global Variable  ${deviceServiceUrl}  http://${BASE_URL}:${SERVICE_PORT}
 
 Remove Token
     ${jwt_token} =  Access Token  -userdel

@@ -3,7 +3,9 @@
         "modbus-tcp": {
             "Address": "edgex-modbus-simulator",
             "Port": "1502",
-            "UnitID": "1"
+            "UnitID": "1",
+            "Timeout":"60",
+            "IdleTimeout":"60"
         }
     },
     "device-virtual": {
