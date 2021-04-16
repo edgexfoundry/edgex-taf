@@ -5,6 +5,7 @@ Library   Collections
 Library   String
 Library   DateTime
 Library   yaml
+Library   Process
 Library   TAF/testCaseModules/keywords/setup/edgex.py
 Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
@@ -229,4 +230,17 @@ Query Metrics
     ${resp}=  GET On Session  Metrics  api/${API_VERSION}/metrics  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
+Update Service Configuration On Consul
+    [Arguments]  ${path}  ${value}
+    Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Get Consul Token
+    ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
+    ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
+    Create Session  Consul  url=${url}  disable_warnings=true
+    ${resp}=  PUT On Session  Consul  ${path}  data=${value}  headers=${headers}  expected_status=200
+    Set Response to Test Variables  ${resp}
 
+Get Consul Token
+    ${command}  Set Variable  docker exec edgex-core-consul cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
+    ${result}  Run Process  ${command}  shell=True  output_encoding=UTF-8
+    ${token}  Evaluate  json.loads('''${result.stdout}''')  json
+    Set Test Variable  ${consul_token}  ${token}[SecretID]

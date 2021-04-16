@@ -20,7 +20,8 @@ BASE_URL = "localhost"
 APP_HTTP_EXPORT_PORT = 48101
 APP_MQTT_EXPORT_PORT = 48103
 REGISTRY_PORT = 8500
-jwt_token=''
+jwt_token = ''
+consul_token = ''
 SECURITY_SERVICE_NEEDED=os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
     URI_SCHEME = "https"
