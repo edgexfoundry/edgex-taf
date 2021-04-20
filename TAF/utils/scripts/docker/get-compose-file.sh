@@ -28,6 +28,11 @@ if [ "$USE_RELEASE" = "pre-release" ]; then
   sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose.yaml
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose.yaml
   sed -i 's/\device-modbus:/edgex-device-modbus:/g' docker-compose.yaml
+  sed -i 's/\,device-modbus/,edgex-device-modbus/g' docker-compose.yaml
+  if [ "$USE_SECURITY" = "-security-" ]; then
+    sed -i "/ROUTES_RULES-ENGINE_HOST/a \ \ \ \ \ \ ADD_PROXY_ROUTE: 'modbusdevice.http://edgex-device-modbus:49991'" \
+    docker-compose.yaml
+  fi
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_NO_SECURITY}${USE_ARM64}.yml"
   curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/edgex-compose/${USE_RELEASE}/${COMPOSE_FILE}"

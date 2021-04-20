@@ -2,7 +2,7 @@ name: "Sample-Profile"
 manufacturer: "Company"
 model: "Device-01"
 labels:
-- "device-example"
+- "device-virtual"
 description: "Example of Device"
 
 deviceResources:
@@ -227,15 +227,6 @@ deviceResources:
   properties:
     valueType: "Uint16"
     readWrite: "R"
-    minimum: "0"
-    maximum: "65535"
-    defaultValue: "0"
--
-  name: "EnableRandomization_DeviceValue_UINT16_W"
-  description: "Generate device UINT16 value"
-  properties:
-    valueType: "Uint16"
-    readWrite: "W"
     minimum: "0"
     maximum: "65535"
     defaultValue: "0"
