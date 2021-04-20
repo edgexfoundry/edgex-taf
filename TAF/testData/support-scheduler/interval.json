@@ -1,7 +1,6 @@
 {
-    "interval_frequency": {
-        "name" : "frequency_%interval_time%s",
-        "start": "20200101T000000",
-        "frequency": "PT%interval_time%S"
-    }
+    "name" : "interval_test",
+    "start": "20200101T000000",
+    "frequency": "30s",
+    "runOnce": false
 }

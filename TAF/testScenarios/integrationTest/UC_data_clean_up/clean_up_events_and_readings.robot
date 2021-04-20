@@ -6,9 +6,7 @@ Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                             AND  Create device  create_device.json
-Suite Teardown   Run keywords   Delete device by name Test-Device
-...                             AND  Run Teardown Keywords
+Suite Teardown   Run Teardown Keywords
 
 *** Variables ***
 ${SUITE}         Clean Up Events/Readings By Scheduler
@@ -16,60 +14,59 @@ ${SUITE}         Clean Up Events/Readings By Scheduler
 *** Test Cases ***
 Scheduler001-Set scheduler for each 30s to clean up events
     [Tags]  SmokeTest
-    Given Create Interval and set frequency to "30"s
-    And Create interval action with interval "30"s delete events for core-data
+    Given Create Device For device-virtual With Name set-scheduler-30s-device
+    And Create Interval and set frequency to 30s
+    And Create interval action with interval delete events for core-data
     And Create events by get device command
     When sleep  30s
     Then Query device events after exeucting deletion, and no event found
-    [Teardown]  run keywords  Delete intervalAction by name "delete_events_30s"
-    ...                       AND  Delete interval by name "frequency_30s"
+    [Teardown]  run keywords  Delete intervalAction by name ${intervalAction_name}
+    ...                       AND  Delete interval by name ${interval_name}
+    ...                       AND  Delete device by name ${device_name}
 
 Scheduler002-Set scheduler for each 60s to clean up events
-    Given Create Interval and set frequency to "60"s
-    And Create interval action with interval "60"s delete events for core-data
+    Given Create Device For device-virtual With Name set-scheduler-60s-device
+    And Create Interval and set frequency to 60s
+    And Create interval action with interval delete events for core-data
     And Create events by get device command
     When sleep  60s
     Then Query device events after exeucting deletion, and no event found
-    [Teardown]  run keywords  Delete intervalAction by name "delete_events_60s"
-    ...                       AND  Delete interval by name "frequency_60s"
+    [Teardown]  run keywords  Delete intervalAction by name ${intervalAction_name}
+    ...                       AND  Delete interval by name ${interval_name}
+    ...                       AND  Delete device by name ${device_name}
 
 
 *** Keywords ***
-Create Interval and set frequency to "${interval_time}"s
-    ${interval_frequency}=  Load data file "support-scheduler/interval.json" and get variable "interval_frequency"
-    ${interval_frequency_str}=  convert to string  ${interval_frequency}
-    ${interval_delete_replace_qoute}=  replace string    ${interval_frequency_str}   '   \"
-    ${interval_frequency}=  replace string  ${interval_delete_replace_qoute}  %interval_time%  ${interval_time}
-    Create interval  ${interval_frequency}
-    Should return status code "200"
+Create Interval and set frequency to ${interval_time}
+    General A Interval Sample
+    Set To Dictionary  ${intervals}[0][interval]  frequency=${interval_time}
+    Create interval  ${intervals}
+    Should Return Status Code "207"
+    Item Index 0 Should Contain Status Code "201" And id
 
-Create interval action with interval "${interval_time}"s delete events for core-data
-    ${interval_delete_events}=  Load data file "support-scheduler/interval_action.json" and get variable "interval_delete_events"
-    ${interval_delete_events_str}=  convert to string  ${interval_delete_events}
-    ${interval_delete_replace_qoute}=  replace string    ${interval_delete_events_str}   '   \"
-    ${delete_events_replace_interval_time}=  replace string  ${interval_delete_replace_qoute}  %interval_time%  ${interval_time}
-    ${delete_events}=  replace string  ${delete_events_replace_interval_time}  "%CORE_DATA_PORT%"  48080
-    Create intervalAction  ${delete_events}
-    Should return status code "200"
-
-Get random command and skip write only data
-    @{data_type_skip_write_only}=  Get All Read Commands
-    ${random_command}=  Get random "commandName" from "${data_type_skip_write_only}"
-    [Return]  ${random_command}
+Create interval action with interval delete events for core-data
+    General A IntervalAction Sample
+    Set To Dictionary  ${intervalActions}[0][action]  intervalName=${interval_name}
+    Set To Dictionary  ${intervalActions}[0][action][address]  host=edgex-core-data
+    Set To Dictionary  ${intervalActions}[0][action][address]  path=${coreDataEventUri}/age/0
+    Create intervalAction  ${intervalActions}
+    Should Return Status Code "207"
+    Item Index 0 Should Contain Status Code "201" And id
 
 Create events by get device command
     FOR  ${INDEX}  IN RANGE  0  5
-          ${random_command}=  Get random command and skip write only data
-          Invoke Get command by device id "${device_id}" and command name "${random_command}"
+        @{data_type_skip_write_only}  Get All Read Commands
+        ${random_command}  Get random "commandName" from "${data_type_skip_write_only}"
+        Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${random_command}
     END
-    ${status_code}  ${response_content}   Query events
-    should be equal as integers  ${status_code}  200
-    ${events_length}=   GET LENGTH  ${response_content}
-    run keyword if  ${events_length} <= 3  fail  Events didn't create before clean up
+    Query all events
+    should be equal as integers  ${response}  200
+    ${events_length}=   GET LENGTH  ${content}[events]
+    run keyword if  ${events_length} == 0  fail  Events didn't create before clean up
 
 Query device events after exeucting deletion, and no event found
-    ${status_code}  ${response_content}   Query events
-    should be equal as integers  ${status_code}  200
-    ${events_length}=   GET LENGTH  ${response_content}
-    run keyword if  ${events_length} > 3  fail  Found events after executing deletion
+    Query all events
+    should be equal as integers  ${response}  200
+    ${events_length}=   GET LENGTH  ${content}[events]
+    run keyword if  ${events_length} != 0  fail  Found events after executing deletion
 

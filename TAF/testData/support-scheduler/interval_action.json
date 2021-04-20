@@ -1,12 +1,23 @@
 {
-    "interval_delete_events": {
-        "name" :"delete_events_%interval_time%s",
-        "interval":"frequency_%interval_time%s",
-        "target":"core-data",
-        "protocol": "http",
-        "httpMethod": "DELETE",
-        "address": "edgex-core-data",
-        "path":"/api/v1/event/removeold/age/0",
-        "port": "%CORE_DATA_PORT%"
+    "RESTAddress": {
+        "name" :"RESTAddress",
+        "intervalName":"interval",
+        "address":{
+            "type": "REST",
+            "host": "localhost",
+            "port": 48080,
+            "httpMethod": "DELETE"
+        }
+    },
+    "MQTTAddress": {
+        "name" :"MQTTAddress",
+        "intervalName":"interval",
+        "address":{
+            "type": "MQTT",
+            "host": "http://123.com",
+            "port": 1883,
+            "publisher": "publisher",
+            "topic": "events"
+        }
     }
 }

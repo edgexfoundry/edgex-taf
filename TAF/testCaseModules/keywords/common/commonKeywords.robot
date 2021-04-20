@@ -153,6 +153,11 @@ Get current epoch time
     ${current_epoch_time}=  convert date    ${data}  epoch
     [Return]  ${current_epoch_time}
 
+Get current ISO 8601 time
+    ${current_date}  get current date
+    ${current_ISO_8601_time}  Convert Date  ${current_date}  result_format=%Y%m%dT%H%M%S
+    [Return]  ${current_ISO_8601_time}
+
 Catch logs for service "${service_name}" with keyword "${keyword}"
     ${current_timestamp}=  Get current epoch time
     ${log_timestamp}=  evaluate   int(${current_timestamp}-1)
