@@ -34,10 +34,10 @@ services = {
                               "port": SettingsInfo().constant.SUPPORT_SCHEDULER_PORT,
                               "pingUrl": "/api/v2/ping"},
         "app-service-http-export": {"composeName": "app-service-http-export",
-                                    "port": SettingsInfo().constant.APP_SERVICE_HTTP_EXPORT_PORT,
+                                    "port": SettingsInfo().constant.APP_HTTP_EXPORT_PORT,
                                     "pingUrl": "/api/v2/ping"},
         "app-service-mqtt-export": {"composeName": "app-service-mqtt-export",
-                                    "port": SettingsInfo().constant.APP_SERVICE_MQTT_EXPORT_PORT,
+                                    "port": SettingsInfo().constant.APP_MQTT_EXPORT_PORT,
                                     "pingUrl": "/api/v2/ping"}
     }
 
