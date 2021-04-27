@@ -13,7 +13,7 @@ ${url}            ${supportSchedulerUrl}
 
 *** Test Cases ***
 IntervalDELETE001 - Delete interval by name
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Set To Dictionary  ${intervals}[0][interval]  name=interval-test
     And Create Interval  ${intervals}
     When Delete Interval By Name interval-test
@@ -29,7 +29,7 @@ ErrIntervalDELETE001 - Delete interval with non-existed name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrIntervalDELETE002 - Delete interval that is using by intervalaction
-    Given Create A Interval And Generate A Intervalaction Sample
+    Given Create An Interval And Generate An Intervalaction Sample
     And Create Intervalaction  ${intervalActions}
     When Delete Interval By Name ${interval_name}
     Then Should Return Status Code "409"
@@ -48,8 +48,3 @@ Interval ${name} Should Be Found
     Query Interval By Name ${name}
     Should Return Status Code "200"
 
-Create A Interval And Generate A Intervalaction Sample
-    General A Interval Sample
-    Create Interval  ${intervals}
-    General A IntervalAction Sample
-    Set To Dictionary  ${intervalActions}[0][action]  intervalName=${interval_name}

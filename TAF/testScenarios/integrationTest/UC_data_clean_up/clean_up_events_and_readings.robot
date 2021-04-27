@@ -38,14 +38,14 @@ Scheduler002-Set scheduler for each 60s to clean up events
 
 *** Keywords ***
 Create Interval and set frequency to ${interval_time}
-    General A Interval Sample
+    General An Interval Sample
     Set To Dictionary  ${intervals}[0][interval]  frequency=${interval_time}
     Create interval  ${intervals}
     Should Return Status Code "207"
     Item Index 0 Should Contain Status Code "201" And id
 
 Create interval action with interval delete events for core-data
-    General A IntervalAction Sample
+    General An IntervalAction Sample
     Set To Dictionary  ${intervalActions}[0][action]  intervalName=${interval_name}
     Set To Dictionary  ${intervalActions}[0][action][address]  host=edgex-core-data
     Set To Dictionary  ${intervalActions}[0][action][address]  path=${coreDataEventUri}/age/0

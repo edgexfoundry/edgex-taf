@@ -63,7 +63,7 @@ IntervalGET005 - Query all Intervals by limit = -1
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
 IntervalGET006 - Query Interval by name
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Set To Dictionary  ${intervals}[0][interval]  name=interval-test
     And Create Interval  ${intervals}
     When Query Interval By Name interval-test

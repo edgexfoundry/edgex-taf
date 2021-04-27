@@ -19,5 +19,13 @@
             "publisher": "publisher",
             "topic": "events"
         }
+    },
+    "EmailAddress": {
+        "name": "EmailAddress",
+        "intervalName": "interval",
+        "address": {
+            "type": "EMAIL",
+            "recipients": ["test-1@email.com", "test-2@email.com"]
+        }
     }
 }

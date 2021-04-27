@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags  Skipped
+Force Tags  v2-api
 
 *** Variables ***
 ${SUITE}          Support Scheduler Intervalaction DELETE Test Cases
@@ -14,17 +14,22 @@ ${url}            ${supportSchedulerUrl}
 *** Test Cases ***
 # /subscription/name/{name}
 IntervalactionDELETE001 - Delete intervalaction by name
-    Given Create Interval And Intervalaction
-    When Delete Intervalaction By Name
+    Given Create An Interval And Generate An Intervalaction Sample
+    And Create Intervalaction  ${intervalActions}
+    When Delete intervalAction by name ${intervalAction_name}
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Intervalaction Should Not Be Found
-    [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
+    [Teardown]  Delete interval by name ${Interval_name}
 
 ErrIntervalactionDELETE001 - Delete Intervalaction with non-existed name
-    When Delete Intervalaction By Non-existed Name
+    When Delete Intervalaction By Name Non-existed
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
+*** Keywords ***
+Intervalaction Should Not Be Found
+  Query IntervalAction By Name ${intervalAction_name}
+  Should return status code "404"

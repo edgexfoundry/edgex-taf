@@ -11,7 +11,7 @@ ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/supportSchedulerAPI.log
 
 *** Keywords ***
 ##  Interval
-General A Interval Sample
+General An Interval Sample
     ${index}=  Get current milliseconds epoch time
     ${start}  Get current ISO 8601 time
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/support-scheduler/interval.json  encoding=UTF-8
@@ -106,21 +106,47 @@ Query All Intervals With ${parameter}=${value}
     Run keyword if  ${response}!=200  fail
 
 ##  Interval Action
-General A IntervalAction Sample
+General An IntervalAction Sample
+    [Arguments]  ${address}=RESTAddress
     ${index}=  Get current milliseconds epoch time
-    ${intervalAction}=  Load data file "support-scheduler/interval_action.json" and get variable "RESTAddress"
+    ${intervalAction}=  Load data file "support-scheduler/interval_action.json" and get variable "${address}"
     Set To Dictionary  ${intervalAction}  name=intervalAction_${index}
     Generate IntervalActions  ${intervalAction}
     Set Test Variable  ${intervalAction_name}  ${intervalAction}[name]
 
+Create An Interval And Generate An Intervalaction Sample
+    [Arguments]  ${address}=RESTAddress
+    General An Interval Sample
+    Create Interval  ${intervals}
+    General An IntervalAction Sample  ${address}
+    Set To Dictionary  ${intervalActions}[0][action]  intervalName=${interval_name}
+
+Generate ${number} Invervals And IntervalActions Sample
+    Generate ${number} Intervals Sample
+    Create Interval  ${intervals}
+    ${intervalAction_list}  Create List
+    FOR  ${INDEX}  IN RANGE  0  ${number}
+        ${index}=  Get current milliseconds epoch time
+        ${address}=  Evaluate  random.choice(['RESTAddress', 'MQTTAddress', 'EmailAddress'])
+        ${interval}=  Evaluate  random.choice(@{interval_names})
+        ${intervalAction}=  Load data file "support-scheduler/interval_action.json" and get variable "${address}"
+        Set To Dictionary  ${intervalAction}  name=intervalAction_${index}
+        Set To Dictionary  ${intervalAction}  intervalName=${interval}
+        Append To List  ${intervalAction_list}  ${intervalAction}
+    END
+    Generate IntervalActions  @{intervalAction_list}
+
 Generate IntervalActions
     [Arguments]  @{data_list}
     ${intervalAction_list}=  Create List
+    ${name_list}  Create List
     FOR  ${data}  IN  @{data_list}
         ${json}=  Create Dictionary  action=${data}  apiVersion=${API_VERSION}
         Append To List  ${intervalAction_list}  ${json}
+        Append To List  ${name_list}  ${data}[name]
     END
     Set Test Variable  ${intervalActions}  ${intervalAction_list}
+    Set Test Variable  ${intervalAction_names}  ${name_list}
 
 Create intervalAction
     [Arguments]  ${entity}
@@ -139,3 +165,15 @@ Delete intervalAction by name ${intervalAction_name}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 200  log to console  ${content}
 
+Delete Multiple IntervalActions By Names
+    [Arguments]  @{intervalAction_list}
+    FOR  ${intervalAction}  IN  @{intervalAction_list}
+         Delete intervalAction by name ${intervalAction}
+    END
+
+Query IntervalAction By Name ${name}
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Scheduler  ${intervalActionUri}/name/${name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
