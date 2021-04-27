@@ -7,6 +7,7 @@ Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource         TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
+Resource         TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Remove services  app-service-http-export
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
@@ -35,6 +36,7 @@ Export002 - Export events/readings to MQTT Server
     And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Deploy services  app-service-mqtt-export
+    And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With MQTT Export To Vault
     And Create Device For device-virtual With Name mqtt-export-device
     When Get device data by device mqtt-export-device and command GenerateDeviceValue_INT16_RW
     Then Device data has recevied by mqtt subscriber
@@ -105,3 +107,6 @@ No exported logs found on configurable application service
     ${app_service_str}=  convert to string  ${app_service_log}
     should not contain  ${app_service_str}  Sent data
 
+Store Secret With MQTT Export To Vault
+    Set Test Variable  ${url}  http://${BASE_URL}:${APP_MQTT_EXPORT_PORT}
+    Store Secret Data With MQTT Export Auth
