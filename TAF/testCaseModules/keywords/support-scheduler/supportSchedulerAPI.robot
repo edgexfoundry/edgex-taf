@@ -61,6 +61,14 @@ Create interval
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 
+Update Intervals
+    [Arguments]  ${entity}
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH ON Session  Support Scheduler  ${intervalUri}  json=${entity}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
 Delete interval by name ${interval_name}
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
@@ -81,6 +89,21 @@ Query Interval By Name ${name}
     ${resp}=  GET On Session  Support Scheduler  ${intervalUri}/name/${name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
+
+Query All Intervals
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Scheduler  ${intervalUri}/all  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Intervals With ${parameter}=${value}
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Scheduler  ${intervalUri}/all  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
 
 ##  Interval Action
 General A IntervalAction Sample
