@@ -23,25 +23,27 @@ IntervalPATCH001 - Update interval
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
 ErrIntervalPATCH001 - Update interval with empty name
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  name=${EMPTY}
     When Update Intervals  ${intervals}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete interval by name ${Interval_name}
 
 ErrIntervalPATCH002 - Update interval with invalid name
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  name=invalid name
     When Update Intervals  ${intervals}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete interval by name ${Interval_name}
 
 ErrIntervalPATCH003 - Update interval with empty frequency
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  frequency=${EMPTY}
     When Update Intervals  ${intervals}
@@ -51,7 +53,7 @@ ErrIntervalPATCH003 - Update interval with empty frequency
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
 ErrIntervalPATCH004 - Update interval with invalid frequency
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  frequency=99
     When Update Intervals  ${intervals}
@@ -61,7 +63,7 @@ ErrIntervalPATCH004 - Update interval with invalid frequency
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
 ErrIntervalPATCH005 - Update interval with invalid start
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  start=12345678000
     When Update Intervals  ${intervals}
@@ -71,7 +73,7 @@ ErrIntervalPATCH005 - Update interval with invalid start
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
 ErrIntervalPATCH006 - Update interval with invalid end
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  end=99h
     When Update Intervals  ${intervals}
@@ -81,7 +83,7 @@ ErrIntervalPATCH006 - Update interval with invalid end
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
 ErrIntervalPATCH007 - Update interval with invalid runOnce
-    Given General A Interval Sample
+    Given General An Interval Sample
     And Create Interval  ${intervals}
     And Set To Dictionary  ${intervals}[0][interval]  runOnce=invalid
     When Update Intervals  ${intervals}
