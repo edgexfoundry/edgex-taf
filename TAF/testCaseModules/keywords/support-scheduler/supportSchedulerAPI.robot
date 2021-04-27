@@ -75,6 +75,13 @@ Delete Multiple Intervals By Names
         Delete Interval By Name ${interval}
     END
 
+Query Interval By Name ${name}
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Scheduler  ${intervalUri}/name/${name}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+
 ##  Interval Action
 General A IntervalAction Sample
     ${index}=  Get current milliseconds epoch time
