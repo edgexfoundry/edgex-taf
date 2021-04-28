@@ -1,7 +1,6 @@
 *** Settings ***
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
-Library   TAF/testCaseModules/keywords/consul/consul.py
 Suite Setup  Setup Suite for App Service  ${AppServiceUrl_functional}
 Suite Teardown   Suite Teardown for App Service
 Force Tags       v2-api
@@ -28,8 +27,8 @@ ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
 
 *** Keywords ***
 Accept raw data
-    [arguments]  ${bool}
+    [Arguments]  ${bool}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/UseTargetTypeOfByteArray
-    Modify consul config  ${path}  ${bool}
+    Update Service Configuration On Consul  ${path}  ${bool}
     sleep  1
 

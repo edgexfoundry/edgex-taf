@@ -166,7 +166,6 @@ Put the ROBOT based Test Application code under "use case" folder prefixed with 
 Documentation    DS Ping Testing
 Library          TAF/testCaseModules/keywords/setup/setup_teardown.py
 Library          TAF/testCaseModules/keywords/setup/edgex.py
-Library          TAF/testCaseModules/keywords/setup/consul.py
 Suite Setup      Setup Suite
 Suite Teardown   Suite Teardown
     

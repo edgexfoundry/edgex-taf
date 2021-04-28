@@ -1,7 +1,6 @@
 *** Settings ***
 Library    TAF/testCaseModules/keywords/scalabilityTest/modbus/run.py
 Library    TAF/testCaseModules/keywords/scalabilityTest/modbus/report.py
-Library    TAF/testCaseModules/keywords/common/consul.py
 Library    TAF/testCaseModules/keywords/setup/edgex.py
 Resource   TAF/testCaseModules/keywords/common/commonKeywords.robot
 Variables  TAF/config/modbus_scalability_test/configuration.py
@@ -18,7 +17,7 @@ ${LOG_FILE_PATH}      ${WORK_DIR}/TAF/testArtifacts/logs/modbus_scalability_test
 
 *** Test Cases ***
 Test Modbus scalability
-     Given Modify consul config  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/edgex-core-data/Writable/PersistData  false
+     Given Update Service Configuration On Consul  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/edgex-core-data/Writable/PersistData  false
      And Deploy services  scalability-test-mqtt-export
      sleep  30
      ${report_info}  ${records} =  When run scalability testing

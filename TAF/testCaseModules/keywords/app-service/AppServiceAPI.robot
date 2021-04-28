@@ -3,7 +3,6 @@ Library   RequestsLibrary
 Library   OperatingSystem
 Library   TAF/testCaseModules/keywords/setup/edgex.py
 Library   TAF/testCaseModules/keywords/setup/startup_checker.py
-Library   TAF/testCaseModules/keywords/consul/consul.py
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Keywords ***
@@ -24,22 +23,22 @@ Suite Teardown for App Service
 
 Set Functions ${functions}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/ExecutionOrder
-    Modify consul config  ${path}  ${functions}
+    Update Service Configuration On Consul  ${path}  ${functions}
     sleep  1
 
 Set Transform Type ${type}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
-    Modify consul config  ${path}  ${type}
+    Update Service Configuration On Consul  ${path}  ${type}
     sleep  1
 
 Set Compress Algorithm ${algorithm}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
-    Modify consul config  ${path}  ${algorithm}
+    Update Service Configuration On Consul  ${path}  ${algorithm}
     sleep  1
 
 Set Encrypt Algorithm ${algorithm}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
-    Modify consul config  ${path}  ${algorithm}
+    Update Service Configuration On Consul  ${path}  ${algorithm}
     sleep  1
 
 Trigger Function Pipeline With ${data}
