@@ -28,7 +28,6 @@ services = {
     "edgex-sys-mgmt-agent": {"binary": "/sys-mgmt-agent"},
     "edgex-device-virtual": {"binary": "/device-virtual"},
     "edgex-device-rest": {"binary": "/device-rest-go"},
-    "edgex-kuiper": {"binary": ""},
     "edgex-redis": {"binary": ""},
 }
 
@@ -43,7 +42,6 @@ prior_rel_image_footprint = {
     "edgex-sys-mgmt-agent": {"imagesize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_IMAGE)},
     "edgex-device-virtual": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_IMAGE)},
     "edgex-device-rest": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_IMAGE)},
-    "edgex-kuiper": {"imagesize": "{}".format(SettingsInfo().profile_constant.KUIPER_IMAGE)},
     "edgex-redis": {"imagesize": "{}".format(SettingsInfo().profile_constant.REDIS_IMAGE)},
 }
 
@@ -58,7 +56,6 @@ prior_rel_binary_footprint = {
     "edgex-sys-mgmt-agent": {"binarysize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_BINARY)},
     "edgex-device-virtual": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_BINARY)},
     "edgex-device-rest": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_BINARY)},
-    "edgex-kuiper": {"binarysize": "{}".format(SettingsInfo().profile_constant.KUIPER_BINARY)},
     "edgex-redis": {"binarysize": "{}".format(SettingsInfo().profile_constant.REDIS_BINARY)},
 }
 
