@@ -11,7 +11,7 @@ USE_SECURITY=${2:--}
 
 # # first sync standard docker-compose file from edgex-compose repo
 ./sync-compose-file.sh master "${USE_NO_SECURITY}" "${USE_ARM64}"
-cp docker-compose-pre-release${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
+cp docker-compose${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
 # # Then sync TAF performance specific docker-compose file from edgex-compose repo and replace the placeholders
 ./sync-compose-file.sh master "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "-perf"
