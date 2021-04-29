@@ -177,3 +177,26 @@ Query IntervalAction By Name ${name}
     ${resp}=  GET On Session  Support Scheduler  ${intervalActionUri}/name/${name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
+
+Query All IntervalActions
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Scheduler  ${intervalActionUri}/all  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All IntervalActions With ${parameter}=${value}
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Scheduler  ${intervalActionUri}/all  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Update IntervalActions
+    [Arguments]  ${entity}
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH ON Session  Support Scheduler  ${intervalActionUri}  json=${entity}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
