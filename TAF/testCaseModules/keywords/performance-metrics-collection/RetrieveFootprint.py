@@ -28,6 +28,7 @@ services = {
     "edgex-sys-mgmt-agent": {"binary": "/sys-mgmt-agent"},
     "edgex-device-virtual": {"binary": "/device-virtual"},
     "edgex-device-rest": {"binary": "/device-rest-go"},
+    "edgex-kuiper": {"binary": ""},
     "edgex-redis": {"binary": ""},
 }
 
@@ -42,6 +43,7 @@ prior_rel_image_footprint = {
     "edgex-sys-mgmt-agent": {"imagesize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_IMAGE)},
     "edgex-device-virtual": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_IMAGE)},
     "edgex-device-rest": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_IMAGE)},
+    "edgex-kuiper": {"imagesize": "{}".format(SettingsInfo().profile_constant.KUIPER_IMAGE)},
     "edgex-redis": {"imagesize": "{}".format(SettingsInfo().profile_constant.REDIS_IMAGE)},
 }
 
@@ -56,8 +58,11 @@ prior_rel_binary_footprint = {
     "edgex-sys-mgmt-agent": {"binarysize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_BINARY)},
     "edgex-device-virtual": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_BINARY)},
     "edgex-device-rest": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_BINARY)},
+    "edgex-kuiper": {"binarysize": "{}".format(SettingsInfo().profile_constant.KUIPER_BINARY)},
     "edgex-redis": {"binarysize": "{}".format(SettingsInfo().profile_constant.REDIS_BINARY)},
 }
+
+exclude_services = {"edgex-kuiper", "edgex-redis", "edgex-core-consul"}
 
 
 class RetrieveFootprint(object):
@@ -68,7 +73,6 @@ class RetrieveFootprint(object):
     def fetch_image_binary_footprint(self):
         global resource_usage
         resource_usage = {}
-
         for k in services:
             resource_usage[k] = fetch_footprint_by_service(k)
 
@@ -124,22 +128,23 @@ def fetch_footprint_by_service(service):
 def compare_image_footprint_size_with_prior_release(usages):
     isfailed = 0
     for k in usages:
-        threshold_limit = float(usages[k]["priorImageFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
-        try:
-            if float(usages[k]["priorImageFootprint"]) != 0.0:
-                if float(usages[k]["imageFootprint"]) >= threshold_limit:
-                    logger.error("{} image size {} > Prior release size {} * {}".
-                                    format(k, str(usages[k]["imageFootprint"]), str(usages[k]["priorImageFootprint"]),
-                                           str(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)))
-                    isfailed = 1
+        if k not in exclude_services:
+            threshold_limit = float(usages[k]["priorImageFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
+            try:
+                if float(usages[k]["priorImageFootprint"]) != 0.0:
+                    if float(usages[k]["imageFootprint"]) >= threshold_limit:
+                        logger.error("{} image size {} > Prior release size {} * {}".
+                                        format(k, str(usages[k]["imageFootprint"]), str(usages[k]["priorImageFootprint"]),
+                                               str(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)))
+                        isfailed = 1
 
-            else:
-                # Failure if no prior release image and current image size is over than 100MB
-                if float(usages[k]["imageFootprint"]) >= 100.0:
-                    logger.error("{} image size is over than 100MB".format(k))
-                    isfailed = 1
-        except:
-            pass
+                else:
+                    # Failure if no prior release image and current image size is over than 100MB
+                    if float(usages[k]["imageFootprint"]) >= 100.0:
+                        logger.error("{} image size is over than 100MB".format(k))
+                        isfailed = 1
+            except:
+                pass
 
     if isfailed == 1:
         raise Exception("One of container image size is abnormal")
@@ -148,21 +153,22 @@ def compare_image_footprint_size_with_prior_release(usages):
 def compare_binary_footprint_size_with_prior_release(usages):
     isfailed = 0
     for k in usages:
-        threshold_limit = float(usages[k]["priorBinaryFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
-        try:
-            if float(usages[k]["priorBinaryFootprint"]) != 0.0:
-                if float(usages[k]["binaryFootprint"]) >= threshold_limit:
-                    logger.error("{} binary size {} > Prior release size {} * {}".
-                                 format(k, str(usages[k]["binaryFootprint"]), str(usages[k]["priorBinaryFootprint"]),
-                                        str(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)))
-                    isfailed = 1
-            else:
-                # Failure if prior release is no binary file and current binary size is over than 50MB
-                if float(usages[k]["binaryFootprint"]) >= 50.0:
-                    logger.error("{} binary size is over than 50MB".format(k))
-                    isfailed = 1
-        except:
-            pass
+        if k not in exclude_services:
+            threshold_limit = float(usages[k]["priorBinaryFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
+            try:
+                if float(usages[k]["priorBinaryFootprint"]) != 0.0:
+                    if float(usages[k]["binaryFootprint"]) >= threshold_limit:
+                        logger.error("{} binary size {} > Prior release size {} * {}".
+                                     format(k, str(usages[k]["binaryFootprint"]), str(usages[k]["priorBinaryFootprint"]),
+                                            str(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)))
+                        isfailed = 1
+                else:
+                    # Failure if prior release is no binary file and current binary size is over than 50MB
+                    if float(usages[k]["binaryFootprint"]) >= 50.0:
+                        logger.error("{} binary size is over than 50MB".format(k))
+                        isfailed = 1
+            except:
+                pass
 
     if isfailed == 1:
         raise Exception("One of container binary size is abnormal")

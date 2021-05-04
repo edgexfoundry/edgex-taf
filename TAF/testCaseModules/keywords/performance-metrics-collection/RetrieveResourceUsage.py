@@ -23,7 +23,7 @@ global services
 services = {
     "edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
     "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-service-configurable-rules",
-    "edgex-sys-mgmt-agent", "edgex-device-virtual", "edgex-device-rest", "edgex-redis"
+    "edgex-sys-mgmt-agent", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"
 }
 
 
