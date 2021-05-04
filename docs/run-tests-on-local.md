@@ -79,8 +79,44 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ```
 3. Run Test
     ###### Run V2 API Functional testing:
+    
+    - For Core Command: Not supported. The script will auto deploy device-virtual through compose file.
+    - For Core Data, Core Metadata, Support Notifications, and Support Scheduler:
     ``` bash
-    python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API -p default
+    # ${ServiceDir}: Please use the directory name under TAF/testScenarios/functionalTest/V2-API
+    
+    # Run Test Command
+    python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API/${ServiceDir} -p default
+    ``` 
+    - For APP Service:
+    ``` bash
+    # Consul is required. Scripts will modify the APP Service configuration.
+    # Used 2 profiles, funcational-tests and http-export.
+   
+    # Before launching APP Service, please export the following variables.
+    export EDGEX_SECURITY_SECRET_STORE=false
+    export SERVICE_PORT=48105 (For functional-tests)
+    export SERVICE_PORT=48101 (For http-export)
+   
+    # Run Test Command
+    export SECURITY_SERVICE_NEEDED=false  # Otherwise, will get test ErrSecretsPOST004 failed.
+    python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API/app-service -p default
+    ```
+    - Device Service:
+    ``` bash
+    # Before launching Device Service, please export the following variables.
+    export EDGEX_SECURITY_SECRET_STORE=false
+   
+    # Modify the ProfilesDir value on configuration.toml under ${HOME}/edgex-taf/TAF/config/${profile}
+    ProfilesDir = ${HOME}/edgex-taf/TAF/config/${profile}
+   
+    # Launch device service with the confdir parameter 
+    --confdir=${HOME}/edgex-taf/TAF/config/${profile}
+   
+    # Run Test Command
+    python3 -m TUC --exclude Skipped -u functionalTest/device-service -p ${profile}
+    
+    # ${profile}: Use the directory name under TAF/config which depends on what service to test. Examples, device-virtual or device-modbus
     ```
 
     ###### Run Integration testing:

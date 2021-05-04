@@ -155,7 +155,7 @@ Get current epoch time
     [Return]  ${current_epoch_time}
 
 Get current ISO 8601 time
-    ${current_date}  get current date
+    ${current_date}  get current date  UTC
     ${current_ISO_8601_time}  Convert Date  ${current_date}  result_format=%Y%m%dT%H%M%S
     [Return]  ${current_ISO_8601_time}
 
