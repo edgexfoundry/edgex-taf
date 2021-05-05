@@ -5,7 +5,7 @@ SERVICE_NAME = "device-virtual"
 
 SECURITY_SERVICE_NEEDED = os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
-    SERVICE_PORT = "8100/devicevirtual"
+    SERVICE_PORT = "8443/devicevirtual"
 else:
     SERVICE_PORT = 49990
 
