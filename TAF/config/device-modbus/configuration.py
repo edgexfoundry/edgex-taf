@@ -5,7 +5,7 @@ SERVICE_NAME = "edgex-device-modbus"
 
 SECURITY_SERVICE_NEEDED = os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
-    SERVICE_PORT = "8100/modbusdevice"
+    SERVICE_PORT = "8443/modbusdevice"
 else:
     SERVICE_PORT = 49991
 
