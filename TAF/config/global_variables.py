@@ -25,13 +25,13 @@ consul_token = ''
 SECURITY_SERVICE_NEEDED=os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
     URI_SCHEME = "https"
-    CORE_DATA_PORT = "8443/coredata"
-    CORE_METADATA_PORT = "8443/metadata"
-    CORE_COMMAND_PORT = "8443/command"
-    SUPPORT_LOGGING_PORT = "8443/logging"
-    SUPPORT_NOTIFICATION_PORT = "8443/notifications"
-    SUPPORT_SCHEDULER_PORT = "8443/scheduler"
-    SUPPORT_RULESENGINE_PORT = "8443/rulesengine"
+    CORE_DATA_PORT = "8100/coredata"
+    CORE_METADATA_PORT = "8100/metadata"
+    CORE_COMMAND_PORT = "8100/command"
+    SUPPORT_LOGGING_PORT = "8100/logging"
+    SUPPORT_NOTIFICATION_PORT = "8100/notifications"
+    SUPPORT_SCHEDULER_PORT = "8100/scheduler"
+    SUPPORT_RULESENGINE_PORT = "8100/rulesengine"
 else:
     URI_SCHEME = "http"
     CORE_DATA_PORT = 48080
