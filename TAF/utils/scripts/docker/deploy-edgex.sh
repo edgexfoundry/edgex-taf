@@ -19,30 +19,25 @@ else
   if [ "$SECURITY_SERVICE_NEEDED" = true ]; then
     docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d security-bootstrapper vault
-
-    sleep 10
-
-    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-          --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d secretstore-setup kong-db consul database
-
-    sleep 10
-
-    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-          --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d kong
-
-    sleep 20
-
-    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-          --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d proxy-setup
+          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d \
+          security-bootstrapper \
+          vault \
+          secretstore-setup \
+          kong-db \
+          consul \
+          database \
+          kong\
+          proxy-setup
   fi
 
   docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable ${COMPOSE_IMAGE} \
-          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up \
-          -d data metadata command notifications scheduler app-service-functional-tests \
+          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d \
+          data \
+          metadata \
+          command \
+          notifications \
+          scheduler \
+          app-service-functional-tests \
           app-service-http-export
 fi
