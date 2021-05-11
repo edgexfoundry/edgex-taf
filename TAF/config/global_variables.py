@@ -19,6 +19,7 @@ BASE_URL = "localhost"
 # Service port
 APP_HTTP_EXPORT_PORT = 48101
 APP_MQTT_EXPORT_PORT = 48103
+APP_FUNCTIOAL_TESTS_PORT = 48105
 REGISTRY_PORT = 8500
 jwt_token = ''
 consul_token = ''

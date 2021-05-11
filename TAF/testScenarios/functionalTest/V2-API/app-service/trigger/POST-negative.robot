@@ -8,7 +8,7 @@ Force Tags       v2-api
 *** Variables ***
 ${SUITE}          App-Service Trigger POST Negative Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-trigger-negative.log
-${AppServiceUrl_functional}  http://${BASE_URL}:48105
+${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIOAL_TESTS_PORT}
 
 *** Test Cases ***
 ErrTriggerPOST001 - Trigger pipeline fails (Invalid Data)

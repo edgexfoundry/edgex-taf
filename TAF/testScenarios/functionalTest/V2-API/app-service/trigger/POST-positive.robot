@@ -9,7 +9,7 @@ Force Tags       v2-api
 *** Variables ***
 ${SUITE}          App-Service Trigger POST Positive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-trigger-positive.log
-${AppServiceUrl_functional}  http://${BASE_URL}:48105
+${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIOAL_TESTS_PORT}
 
 *** Test Cases ***
 TriggerPOST001 - Trigger pipeline (no match)
