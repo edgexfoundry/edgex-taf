@@ -11,6 +11,7 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 ${coreMetadataUrl}   ${URI_SCHEME}://${BASE_URL}:${CORE_METADATA_PORT}
 ${deviceProfileUri}  /api/${API_VERSION}/deviceprofile
 ${deviceServiceUri}  /api/${API_VERSION}/deviceservice
+${deviceResourceUri}  /api/${API_VERSION}/deviceresource
 ${deviceUri}         /api/${API_VERSION}/device
 ${provisionWatcherUri}  /api/${API_VERSION}/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
@@ -125,6 +126,15 @@ Query device profile by name
     ${resp_length}=  get length  ${resp.content}  #bytes dict: length of empty list ("[]") is 3
     run keyword if  ${response} != 200 or ${resp_length} == 3  fail  "The device profile ${device_profile_name} is not found"
     [Return]  ${resp.content}
+
+Query device resource by resourceName and profileName
+    [Arguments]   ${resource_name}  ${profile_name}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceResourceUri}/profile/${profile_name}/resource/${resource_name}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
 
 Delete device profile by name
     [Arguments]   ${device_profile_name}
