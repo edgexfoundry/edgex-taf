@@ -167,3 +167,13 @@ ErrIntervalactionPATCH014 - Update intervalaction with empty recipients for EMAI
     And Should Return Content-Type "application/json"
     [Teardown]  Run Keywords  Delete IntervalAction By Name ${intervalAction_name}
     ...         AND  Delete interval by name ${Interval_name}
+
+ErrIntervalactionPATCH015 - Update intervalaction with invalid adminState
+    Given Create An Interval And Generate An Intervalaction Sample  EmailAddress
+    And Create Intervalaction  ${intervalActions}
+    And Set To Dictionary  ${intervalActions}[0][action]  adminState=Invalid
+    When Update IntervalActions  ${intervalActions}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    [Teardown]  Run Keywords  Delete IntervalAction By Name ${intervalAction_name}
+    ...         AND  Delete interval by name ${Interval_name}

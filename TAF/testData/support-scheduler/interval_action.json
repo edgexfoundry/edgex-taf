@@ -7,7 +7,8 @@
             "host": "localhost",
             "port": 48080,
             "httpMethod": "DELETE"
-        }
+        },
+        "AdminState": "UNLOCKED"
     },
     "MQTTAddress": {
         "name" :"MQTTAddress",
@@ -18,7 +19,8 @@
             "port": 1883,
             "publisher": "publisher",
             "topic": "events"
-        }
+        },
+        "AdminState": "UNLOCKED"
     },
     "EmailAddress": {
         "name": "EmailAddress",
@@ -26,6 +28,7 @@
         "address": {
             "type": "EMAIL",
             "recipients": ["test-1@email.com", "test-2@email.com"]
-        }
+        },
+        "AdminState": "UNLOCKED"
     }
 }
