@@ -104,6 +104,16 @@ ProfileGET016 - Query device profiles by empty model value
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
+ProfileGET017 - Query device resource by resourceName and profileName
+    Given Generate A Device Profile Sample  Test-Profile-1
+    And Create Device Profile ${deviceProfile}
+    When Query Device Resource By resourceName And profileName  DeviceValue_Boolean_RW  Test-Profile-1
+    Then Should Return Status Code "200" And resource
+    And Should Be True  "${content}[resource][name]" == "DeviceValue_Boolean_RW"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Device Profile By Name  Test-Profile-1
+
 *** Keywords ***
 Create Multiple Device Profiles Sample With Different Device Info
     Generate Multiple Device Profiles Sample
