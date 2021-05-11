@@ -135,3 +135,13 @@ ErrSubscriptionPATCH012 - Update subscription for EMAL channel with invalid form
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
+
+ErrSubscriptionPATCH013 - Update subscription with invalid adminState
+    Given Generate A Subscription Sample With EMAIL Channel
+    And Create Subscription ${subscription}
+    And Set To Dictionary  ${subscription}[0][subscription]  adminState=Invalid
+    When Update Subscriptions ${subscription}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}

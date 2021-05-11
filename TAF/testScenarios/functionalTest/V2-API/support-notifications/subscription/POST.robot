@@ -101,3 +101,11 @@ ErrSubscriptionPOST009 - Create subscription with empty HTTPMethod for REST chan
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
+ErrSubscriptionPOST010 - Create subscription with invalid adminState
+    Given Generate A Subscription Sample With REST Channel
+    And Set To Dictionary  ${subscription}[0][subscription]  adminState=invalid
+    When Create Subscription ${subscription}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+

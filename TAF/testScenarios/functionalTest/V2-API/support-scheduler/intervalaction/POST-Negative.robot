@@ -140,3 +140,11 @@ ErrIntervalactionPOST014 - Create intervalaction with empty recipients for EMAIL
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     [Teardown]  Delete interval by name ${Interval_name}
+
+ErrIntervalactionPOST015 - Create intervalaction with invalid adminState
+    Given Create An Interval And Generate An Intervalaction Sample  EmailAddress
+    And Set To Dictionary  ${intervalActions}[0][action]  adminState=Invalid
+    When Create Intervalaction  ${intervalActions}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    [Teardown]  Delete interval by name ${Interval_name}
