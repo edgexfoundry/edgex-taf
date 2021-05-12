@@ -29,7 +29,7 @@ if [ "$USE_RELEASE" = "pre-release" ]; then
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose.yaml
   sed -i 's/\ device-modbus:/ edgex-device-modbus:/g' docker-compose.yaml
   if [ "$USE_SECURITY" = "-security-" ]; then
-    sed -i "/ROUTES_RULES-ENGINE_HOST/a \ \ \ \ \ \ ADD_PROXY_ROUTE: 'modbusdevice.http://edgex-device-modbus:49991'" \
+    sed -i "/ROUTES_RULES-ENGINE_HOST/a \ \ \ \ \ \ ADD_PROXY_ROUTE: 'modbusdevice.http://device-modbus:49991'" \
     docker-compose.yaml
   fi
 else

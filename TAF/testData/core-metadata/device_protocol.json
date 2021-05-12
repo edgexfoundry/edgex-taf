@@ -1,5 +1,5 @@
 {
-    "edgex-device-modbus": {
+    "device-modbus": {
         "modbus-tcp": {
             "Address": "edgex-modbus-simulator",
             "Port": "1502",

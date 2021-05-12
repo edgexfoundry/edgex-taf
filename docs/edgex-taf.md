@@ -145,8 +145,8 @@ To write the automation testing for virtual device service, complete the followi
           - edgex-network
         environment:
           REGISTRY_HOST: edgex-core-consul
-          CLIENTS_DATA_HOST: edgex-core-data
-          CLIENTS_METADATA_HOST: edgex-core-metadata
+          CLIENTS_CORE_DATA_HOST: edgex-core-data
+          CLIENTS_CORE_METADATA_HOST: edgex-core-metadata
           Service_Host: edgex-device-virtual
         entrypoint: ["/device-virtual"]
         command: ["--registry","--confdir=${CONF_DIR}"]
