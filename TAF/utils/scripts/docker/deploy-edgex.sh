@@ -39,5 +39,6 @@ else
           notifications \
           scheduler \
           app-service-functional-tests \
-          app-service-http-export
+          app-service-http-export \
+          system
 fi
