@@ -13,7 +13,7 @@ DEPLOY_SERVICES=${4:-} # no-deployment or empty
 USE_DB=-redis
 USE_RELEASE=pre-release
 USE_SHA1=master  # edgex-compose branch or SHA1
-TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/docker-edgex-taf-common${USE_ARM64}:latest
+TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common${USE_ARM64}:latest
 COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose${USE_ARM64}:latest
 
 if [ "$SECURITY_SERVICE_NEEDED" = true ]; then
