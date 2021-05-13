@@ -12,7 +12,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "COILS", startingAddress: "1" }
+    { primaryTable: "COILS", startingAddress: 0 }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -24,7 +24,7 @@ deviceResources:
   name: "DeviceValue_Boolean_R"
   description: "Generate device boolean value"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "2" }
+    { primaryTable: "DISCRETES_INPUT", startingAddress: 1 }
   properties:
     valueType: "BOOL"
     readWrite: "R"
@@ -36,7 +36,7 @@ deviceResources:
   name: "DeviceValue_Boolean_W"
   description: "Generate device boolean value"
   attributes:
-    { primaryTable: "COILS", startingAddress: "3" }
+    { primaryTable: "COILS", startingAddress: 2 }
   properties:
     valueType: "BOOL"
     readWrite: "W"
@@ -48,7 +48,7 @@ deviceResources:
   name: "DeviceValue_Float32_RW"
   description: "Generate device float32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "4" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 3 }
   properties:
     valueType: "FLOAT32"
     readWrite: "RW"
@@ -57,7 +57,7 @@ deviceResources:
   name: "DeviceValue_Float32_R"
   description: "Generate device float32 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "6" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 5 }
   properties:
     valueType: "FLOAT32"
     readWrite: "R"
@@ -66,7 +66,7 @@ deviceResources:
   name: "DeviceValue_Float32_W"
   description: "Generate device float32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "8" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 7 }
   properties:
     valueType: "FLOAT32"
     readWrite: "W"
@@ -75,7 +75,7 @@ deviceResources:
   name: "DeviceValue_Float64_RW"
   description: "Generate device float64 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "10" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 9 }
   properties:
     valueType: "FLOAT64"
     readWrite: "RW"
@@ -84,7 +84,7 @@ deviceResources:
   name: "DeviceValue_Float64_R"
   description: "Generate device float64 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "14" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 13 }
   properties:
     valueType: "FLOAT64"
     readWrite: "R"
@@ -93,7 +93,7 @@ deviceResources:
   name: "DeviceValue_Float64_W"
   description: "Generate device float64 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "18" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 17 }
   properties:
     valueType: "FLOAT64"
     readWrite: "W"
@@ -102,7 +102,7 @@ deviceResources:
   name: "DeviceValue_INT16_RW"
   description: "Generate device INT16 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "22" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 21 }
   properties:
     valueType: "INT16"
     readWrite: "RW"
@@ -113,7 +113,7 @@ deviceResources:
   name: "DeviceValue_INT16_R"
   description: "Generate device INT16 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "22" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 21 }
   properties:
     valueType: "INT16"
     readWrite: "R"
@@ -124,7 +124,7 @@ deviceResources:
   name: "DeviceValue_INT16_W"
   description: "Generate device INT16 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "22" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 21 }
   properties:
     valueType: "INT16"
     readWrite: "W"
@@ -135,7 +135,7 @@ deviceResources:
   name: "DeviceValue_INT32_RW"
   description: "Generate device INT32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "24" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 23 }
   properties:
     valueType: "INT32"
     readWrite: "RW"
@@ -146,7 +146,7 @@ deviceResources:
   name: "DeviceValue_INT32_R"
   description: "Generate device INT32 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "24" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 23 }
   properties:
     valueType: "INT32"
     readWrite: "R"
@@ -157,7 +157,7 @@ deviceResources:
   name: "DeviceValue_INT32_W"
   description: "Generate device INT32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "26" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 23 }
   properties:
     valueType: "INT32"
     readWrite: "W"
@@ -168,7 +168,7 @@ deviceResources:
   name: "DeviceValue_INT64_RW"
   description: "Generate device INT64 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "28" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 27 }
   properties:
     valueType: "INT64"
     readWrite: "RW"
@@ -179,7 +179,7 @@ deviceResources:
   name: "DeviceValue_INT64_R"
   description: "Generate device INT64 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "32" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 31 }
   properties:
     valueType: "INT64"
     readWrite: "R"
@@ -190,7 +190,7 @@ deviceResources:
   name: "DeviceValue_INT64_W"
   description: "Generate device INT64 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "36" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 35 }
   properties:
     valueType: "INT64"
     readWrite: "W"
@@ -201,7 +201,7 @@ deviceResources:
   name: "DeviceValue_UINT16_RW"
   description: "Generate device uINT16 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "40" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 39 }
   properties:
     valueType: "UINT16"
     readWrite: "RW"
@@ -212,7 +212,7 @@ deviceResources:
   name: "DeviceValue_UINT16_R"
   description: "Generate device uINT16 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "42" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 41 }
   properties:
     valueType: "UINT16"
     readWrite: "R"
@@ -223,7 +223,7 @@ deviceResources:
   name: "DeviceValue_UINT16_W"
   description: "Generate device uINT16 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "44" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 43 }
   properties:
     valueType: "UINT16"
     readWrite: "W"
@@ -234,7 +234,7 @@ deviceResources:
   name: "DeviceValue_UINT32_RW"
   description: "Generate device uINT32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "46" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 45 }
   properties:
     valueType: "UINT32"
     readWrite: "RW"
@@ -245,7 +245,7 @@ deviceResources:
   name: "DeviceValue_UINT32_R"
   description: "Generate device uINT32 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "48" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 47 }
   properties:
     valueType: "UINT32"
     readWrite: "R"
@@ -256,7 +256,7 @@ deviceResources:
   name: "DeviceValue_UINT32_W"
   description: "Generate device uINT32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "50" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 49 }
   properties:
     valueType: "UINT32"
     readWrite: "W"
@@ -267,7 +267,7 @@ deviceResources:
   name: "DeviceValue_UINT64_RW"
   description: "Generate device UINT64 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "52" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 51 }
   properties:
     valueType: "UINT64"
     readWrite: "RW"
@@ -278,7 +278,7 @@ deviceResources:
   name: "DeviceValue_UINT64_R"
   description: "Generate device UINT64 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: "56" }
+    { primaryTable: "INPUT_REGISTERS", startingAddress: 55 }
   properties:
     valueType: "UINT64"
     readWrite: "R"
@@ -289,7 +289,7 @@ deviceResources:
   name: "DeviceValue_UINT64_W"
   description: "Generate device UINT64 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: "60" }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 59 }
   properties:
     valueType: "UINT64"
     readWrite: "W"

@@ -75,13 +75,13 @@ docker run -d --rm --name broker -p 1883:1883 eclipse-mosquitto
 # x86_64
 export ARCH=x86_64
 export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose
-export EDGEX_TAF_IMAGE=nexus3.edgexfoundry.org:10003/docker-edgex-taf-common
+export EDGEX_TAF_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common
 export SECURITY_SERVICE_NEEDED=false
 
 # arm64
 export ARCH=arm64
 export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose-arm64:latest
-export EDGEX_TAF_IMAGE=nexus3.edgexfoundry.org:10003/docker-edgex-taf-common-arm64:latest
+export EDGEX_TAF_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common-arm64:latest
 export SECURITY_SERVICE_NEEDED=false
 ```
 
