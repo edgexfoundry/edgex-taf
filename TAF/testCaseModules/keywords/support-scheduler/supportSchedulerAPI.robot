@@ -23,18 +23,18 @@ General An Interval Sample
 
 Generate ${number} Intervals Sample
     ${interval_list}  Create List
-    ${frequency_list}  Create List  24h  60m  60s  3600ms
+    ${interval_value_list}  Create List  24h  60m  60s  3600ms
     FOR  ${INDEX}  IN RANGE  0  ${number}
         ${index}=  Get current milliseconds epoch time
         ${start}  Get current ISO 8601 time
-        ${frequency}  Evaluate  random.choice(@{frequency_list})  random
+        ${interval_value}  Evaluate  random.choice(@{interval_value_list})  random
         ${runOnce_str}  Evaluate  random.choice(['true', 'false'])  modules=random
         ${runOnce}=  Convert To Boolean  ${runOnce_str}
         ${data}=  Get File  ${WORK_DIR}/TAF/testData/support-scheduler/interval.json  encoding=UTF-8
         ${interval}=  Evaluate  json.loads('''${data}''')  json
         Set To Dictionary  ${interval}  name=interval-${index}
         Set To Dictionary  ${interval}  start=${start}
-        Set To Dictionary  ${interval}  frequency=${frequency}
+        Set To Dictionary  ${interval}  interval=${interval_value}
         Set To Dictionary  ${interval}  runOnce=${runOnce}
         Append To List  ${interval_list}  ${interval}
     END

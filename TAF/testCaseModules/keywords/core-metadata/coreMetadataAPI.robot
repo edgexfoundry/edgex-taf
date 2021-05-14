@@ -503,10 +503,10 @@ Set device values
     [Return]  ${device}
 
 Set autoEvents values
-    [Arguments]  ${frequency}  ${onChange}  ${sourceName}
+    [Arguments]  ${interval}  ${onChange}  ${sourceName}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/auto_events_data.json  encoding=UTF-8
     ${autoEvent}=  Evaluate  json.loads('''${data}''')  json
-    Set To Dictionary  ${autoEvent}  frequency=${frequency}
+    Set To Dictionary  ${autoEvent}  interval=${interval}
     ${onChange}=  Convert To Boolean  ${onChange}
     Set To Dictionary  ${autoEvent}  onChange=${onChange}
     Set To Dictionary  ${autoEvent}  sourceName=${sourceName}

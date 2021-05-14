@@ -42,20 +42,20 @@ ErrIntervalPATCH002 - Update interval with invalid name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete interval by name ${Interval_name}
 
-ErrIntervalPATCH003 - Update interval with empty frequency
+ErrIntervalPATCH003 - Update interval with empty interval value
     Given General An Interval Sample
     And Create Interval  ${intervals}
-    And Set To Dictionary  ${intervals}[0][interval]  frequency=${EMPTY}
+    And Set To Dictionary  ${intervals}[0][interval]  interval=${EMPTY}
     When Update Intervals  ${intervals}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
-ErrIntervalPATCH004 - Update interval with invalid frequency
+ErrIntervalPATCH004 - Update interval with invalid interval value
     Given General An Interval Sample
     And Create Interval  ${intervals}
-    And Set To Dictionary  ${intervals}[0][interval]  frequency=99
+    And Set To Dictionary  ${intervals}[0][interval]  interval=99
     When Update Intervals  ${intervals}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -100,19 +100,19 @@ Create Intervals And Generate Multiple Intervals Sample For Updating Data
     ${runOnce}  Run Keyword If  "runOnce" in "${intervals}[2][interval]"  Convert To Boolean  false
                  ...       ELSE  Convert To Boolean  true
     ${end}  Get current ISO 8601 time
-    Set Test Variable  ${frequency_value}  8h
+    Set Test Variable  ${interval_value}  8h
     Set Test Variable  ${end_value}  ${end}
     Set Test Variable  ${runOnce_value}  ${runOnce}
-    ${update_frequency}  Create Dictionary  name=${intervals}[0][interval][name]  frequency=${frequency_value}
+    ${update_interval}  Create Dictionary  name=${intervals}[0][interval][name]  interval=${interval_value}
     ${update_start}  Create Dictionary  name=${intervals}[1][interval][name]  end=${end_value}
     ${update_runOnce}  Create Dictionary  name=${intervals}[2][interval][name]  runOnce=${runOnce_value}
-    Generate Intervals  ${update_frequency}  ${update_start}  ${update_runOnce}
+    Generate Intervals  ${update_interval}  ${update_start}  ${update_runOnce}
 
 Intervals Should Be Updated
     FOR  ${name}  IN  @{interval_names}
         Query Interval By Name ${name}
         Run Keyword If  "${name}" == "${intervals}[0][interval][name]"
-        ...             Should Be Equal  ${content}[interval][frequency]  ${frequency_value}
+        ...             Should Be Equal  ${content}[interval][interval]  ${interval_value}
         ...    ELSE IF  "${name}" == "${intervals}[1][interval][name]"
         ...             Should Be Equal  ${content}[interval][end]  ${end_value}
         ...    ELSE IF  "${name}" == "${intervals}[2][interval][name]" and ${runOnce_value} == True

@@ -1,6 +1,6 @@
 {
     "name" : "interval_test",
     "start": "20200101T000000",
-    "frequency": "30s",
+    "interval": "30s",
     "runOnce": false
 }
