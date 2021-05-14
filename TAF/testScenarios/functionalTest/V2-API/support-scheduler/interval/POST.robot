@@ -37,9 +37,9 @@ ErrIntervalPOST002 - Create interval with invalid name
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrIntervalPOST003 - Create interval with empty frequency
+ErrIntervalPOST003 - Create interval with empty interval value
     Given Generate 3 Intervals Sample
-    And Set To Dictionary  ${intervals}[1][interval]  frequency=${EMPTY}
+    And Set To Dictionary  ${intervals}[1][interval]  interval=${EMPTY}
     When Create Interval  ${intervals}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"

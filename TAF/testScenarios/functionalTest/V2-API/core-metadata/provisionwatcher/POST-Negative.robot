@@ -75,9 +75,9 @@ ErrProWatcherPOST005 - Create provision watcher with non-existent service name
     ...                  AND  Delete multiple device profiles by names
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrProWatcherPOST006 - Create provision watcher with autoEvents but no frequency
+ErrProWatcherPOST006 - Create provision watcher with autoEvents but no interval
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][autoEvents][0]  frequency=${EMPTY}
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][autoEvents][0]  interval=${EMPTY}
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"

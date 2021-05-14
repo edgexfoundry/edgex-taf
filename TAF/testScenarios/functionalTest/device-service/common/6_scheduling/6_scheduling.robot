@@ -13,12 +13,12 @@ Suite Teardown  Run Teardown Keywords
 ${SUITE}              Scheduling
 
 *** Test Cases ***
-Scheduling001 - Test Resource and Frequency for autoEvent
+Scheduling001 - Test Resource and Interval for autoEvent
     @{data_types_all_read}  Get All Read Commands
     ${last_reading}  Get last support reading
     ${reading_name}  Set Variable  ${data_types_all_read}[${last_reading}][readingName]
     When Create AutoEvent Device With Parameters  8s  false  ${reading_name}
-    Then Device autoEvents with ${reading_name} send by frequency setting 8s
+    Then Device autoEvents with ${reading_name} send by interval setting 8s
     [Teardown]  Delete device by name ${device_name}
 
 
@@ -30,10 +30,10 @@ Get last support reading
     [Return]   ${last_reading}
 
 Create AutoEvent Device With Parameters
-    [Arguments]  ${frequency_value}  ${onChange_value}  ${sourceName}
+    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
     ${index}  Get current milliseconds epoch time
     ${device}  Set device values  ${SERVICE_NAME}  Sample-Profile
-    ${autoEvent}  Set autoEvents values  ${frequency_value}  ${onChange_value}  ${sourceName}
+    ${autoEvent}  Set autoEvents values  ${interval_value}  ${onChange_value}  ${sourceName}
     ${autoEvents}=  Create List  ${autoEvent}
     Set To Dictionary  ${device}  name=Device-${index}
     Set To Dictionary  ${device}  autoEvents=${autoEvents}
@@ -42,8 +42,8 @@ Create AutoEvent Device With Parameters
     sleep  500ms
     Set Test Variable  ${device_name}  ${device}[0][device][name]
 
-Device autoEvents with ${reading_name} send by frequency setting ${frequency_value}s
-    ${sleep_time}=  evaluate  ${frequency_value}
+Device autoEvents with ${reading_name} send by interval setting ${interval_value}s
+    ${sleep_time}=  evaluate  ${interval_value}
     ${start_time}=   Get current milliseconds epoch time
     # Sleep 2 seconds for first auto event of C DS because it will execute auto event after creating the device without schedule time
     sleep  2

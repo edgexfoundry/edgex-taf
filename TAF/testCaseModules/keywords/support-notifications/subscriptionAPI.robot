@@ -58,7 +58,7 @@ Delete Subscription By Name ${subscriptionName}
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  DELETE On Session  Support Notification  ${subscriptionUri}/name/${subscriptionName}  headers=${headers}
     ...       expected_status=any
-    run keyword if  ${resp.status_code}!=204  log to console  ${resp.content}
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
 Delete Multiple Subscriptions By Names

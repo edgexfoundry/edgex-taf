@@ -15,7 +15,7 @@ ${SUITE}         Clean Up Events/Readings By Scheduler
 Scheduler001-Set scheduler for each 30s to clean up events
     [Tags]  SmokeTest
     Given Create Device For device-virtual With Name set-scheduler-30s-device
-    And Create Interval and set frequency to 30s
+    And Create Interval and set interval value to 30s
     And Create interval action with interval delete events for core-data
     And Create events by get device command
     When sleep  30s
@@ -26,7 +26,7 @@ Scheduler001-Set scheduler for each 30s to clean up events
 
 Scheduler002-Set scheduler for each 60s to clean up events
     Given Create Device For device-virtual With Name set-scheduler-60s-device
-    And Create Interval and set frequency to 60s
+    And Create Interval and set interval value to 60s
     And Create interval action with interval delete events for core-data
     And Create events by get device command
     When sleep  60s
@@ -37,9 +37,9 @@ Scheduler002-Set scheduler for each 60s to clean up events
 
 
 *** Keywords ***
-Create Interval and set frequency to ${interval_time}
+Create Interval and set interval value to ${interval_time}
     General An Interval Sample
-    Set To Dictionary  ${intervals}[0][interval]  frequency=${interval_time}
+    Set To Dictionary  ${intervals}[0][interval]  interval=${interval_time}
     Create interval  ${intervals}
     Should Return Status Code "207"
     Item Index 0 Should Contain Status Code "201" And id

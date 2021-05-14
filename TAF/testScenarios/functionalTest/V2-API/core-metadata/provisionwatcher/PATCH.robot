@@ -51,7 +51,7 @@ ErrProWatcherPATCH003 - Update provision watcher with empty identifiers
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
-ErrProWatcherPATCH004 - Update provision watcher with autoEvents but no frequency
+ErrProWatcherPATCH004 - Update provision watcher with autoEvents but no interval
     ${autoEvents}=  Set autoEvents values  ${EMPTY}  false  DeviceValue_Boolean_RW
     Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
     And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  autoEvents=${autoEvents}
@@ -120,6 +120,6 @@ Provision Watcher ${type} Should Be Updated
         ...             Should Be Equal  ${content}[provisionWatcher][serviceName]  Device-Service-${index}-3
         Run Keyword If  "${type}" == "Data" and "${provisionwatcher}" == "Test-Provision-Watcher-AutoEvents"  Run Keywords
         ...             Should Be Equal  ${content}[provisionWatcher][identifiers][address]  0.0.0.0
-        ...        AND  Should Be Equal  ${content}[provisionWatcher][autoEvents][0][frequency]  24h
+        ...        AND  Should Be Equal  ${content}[provisionWatcher][autoEvents][0][interval]  24h
     END
 
