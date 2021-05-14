@@ -32,7 +32,7 @@ Get last support reading
 Create AutoEvent Device With Parameters
     [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
     ${index}  Get current milliseconds epoch time
-    ${device}  Set device values  ${SERVICE_NAME}  Sample-Profile
+    ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
     ${autoEvent}  Set autoEvents values  ${interval_value}  ${onChange_value}  ${sourceName}
     ${autoEvents}=  Create List  ${autoEvent}
     Set To Dictionary  ${device}  name=Device-${index}

@@ -6,7 +6,7 @@
    "operatingState": "UP",
    "protocols": "%DeviceServiceProtocal%",
    "labels":[
-      "device-example"
+      "device-sample"
    ],
    "location": "{lat:45.45,long:47.80}",
    "serviceName": "",

@@ -77,7 +77,7 @@ ErrProfileGET010 - Query device resource by non-existent resourceName
     [Teardown]  Delete Device Profile By Name  Test-Profile-2
 
 ErrProfileGET011 - Query device resource by non-existent profileName
-    When Run Keyword And Expect Error  *  Query Device Resource By resourceName And profileName  DeviceValue_UINT16_RW  Non-Existent
+    When Run Keyword And Expect Error  *  Query Device Resource By resourceName And profileName  ${PREFIX}_DeviceValue_UINT16_RW  Non-Existent
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

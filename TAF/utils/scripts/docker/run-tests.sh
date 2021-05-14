@@ -3,7 +3,8 @@
 USE_ARCH=${1:-x86_64}
 SECURITY_SERVICE_NEEDED=${2:-false}
 TEST_STRATEGY=${3:-1}  # 1: functional-test, 2: integration-test
-DEPLOY_SERVICES=${4:-} # no-deployment or empty
+TEST_SERVICE=${4:-all}
+DEPLOY_SERVICES=${5:-} # no-deployment or empty
 
 
 # # x86_64 or arm64
@@ -41,22 +42,44 @@ fi
 case ${TEST_STRATEGY} in
   1)
     # Run functional test
-    docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
-            --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
-            -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
-            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-            --exclude Skipped --include v2-api -u functionalTest/V2-API -p default
-    cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
+    case ${TEST_SERVICE} in
+      device-virtual)
+        docker run --rm --network host --name taf-common -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
+              --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+              -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+              -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+              --exclude Skipped -u functionalTest/device-service -p device-virtual
+        cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/virtual.html
+      ;;
+      device-modbus)
+        docker run --rm --network host --name taf-common -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
+              --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+              -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+              -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+              --exclude Skipped -u functionalTest/device-service -p device-modbus
+        cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/modbus.html
+      ;;
+      all)
+        docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
+                --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+                -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+                -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+                --exclude Skipped --include v2-api -u functionalTest/V2-API -p default
+        cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
+      ;;
+      *)
+        docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
+                --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
+                -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
+                -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+                --exclude Skipped --include v2-api -u functionalTest/V2-API/${TEST_SERVICE} -p default
+        cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/${TEST_SERVICE}-test.html
+      ;;
+    esac
   ;;
   2)
     # Run integration test
     ## Only support deploying edgex services through docker-compose file.
-    ## Deploy Device Virtual
-    docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
-            -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
-            -e USE_DB=${USE_DB} --security-opt label:disable \
-            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-            --exclude Skipped --include deploy-device-service -u deploy.robot -p device-virtual
 
     docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
             --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \

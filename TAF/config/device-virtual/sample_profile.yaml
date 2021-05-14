@@ -1,13 +1,36 @@
-name: "Sample-Profile"
+name: "Virtual-Sample-Profile"
 manufacturer: "Company"
 model: "Device-01"
 labels:
 - "device-virtual"
-description: "Example of Device"
+description: "Example of device-virtual"
 
 deviceResources:
+-  ### Binary ###
+  name: "Virtual_DeviceValue_Binary_RW"
+  description: "Generate device binary value"
+  isHidden: true
+  tag: "status"
+  properties:
+    valueType: "Binary"
+    readWrite: "RW"
+    mediaType: "random"
+-
+  name: "Virtual_DeviceValue_Binary_R"
+  description: "Generate device binary value"
+  properties:
+    valueType: "Binary"
+    readWrite: "R"
+    mediaType: "random"
+-
+  name: "Virtual_DeviceValue_Binary_W"
+  description: "Generate device binary value"
+  properties:
+    valueType: "Binary"
+    readWrite: "W"
+    mediaType: "random"
 -  ### Boolean ###
-  name: "DeviceValue_Boolean_RW"
+  name: "Virtual_DeviceValue_Boolean_RW"
   description: "Generate device boolean value"
   isHidden: true
   tag: "status"
@@ -18,7 +41,7 @@ deviceResources:
     maximum: "1"
     defaultValue: "true"
 -
-  name: "DeviceValue_Boolean_R"
+  name: "Virtual_DeviceValue_Boolean_R"
   description: "Generate device boolean value"
   properties:
     valueType: "BOOL"
@@ -27,7 +50,7 @@ deviceResources:
     maximum: "1"
     defaultValue: "true"
 -
-  name: "DeviceValue_Boolean_W"
+  name: "Virtual_DeviceValue_Boolean_W"
   description: "Generate device boolean value"
   properties:
     valueType: "BOOL"
@@ -36,49 +59,49 @@ deviceResources:
     maximum: "1"
     defaultValue: "true"
 -  ### FLOAT32 ###
-  name: "DeviceValue_FLOAT32_RW"
+  name: "Virtual_DeviceValue_FLOAT32_RW"
   description: "Generate device FLOAT32 value"
   properties:
     valueType: "Float32"
     readWrite: "RW"
     defaultValue: "0"
 -
-  name: "DeviceValue_FLOAT32_R"
+  name: "Virtual_DeviceValue_FLOAT32_R"
   description: "Generate device FLOAT32 value"
   properties:
     valueType: "Float32"
     readWrite: "R"
     defaultValue: "0"
 -
-  name: "DeviceValue_FLOAT32_W"
+  name: "Virtual_DeviceValue_FLOAT32_W"
   description: "Generate device FLOAT32 value"
   properties:
     valueType: "Float32"
     readWrite: "W"
     defaultValue: "0"
 -  ### FLOAT64 ###
-  name: "DeviceValue_FLOAT64_RW"
+  name: "Virtual_DeviceValue_FLOAT64_RW"
   description: "Generate device FLOAT64 value"
   properties:
     valueType: "Float64"
     readWrite: "RW"
     defaultValue: "0"
 -
-  name: "DeviceValue_FLOAT64_R"
+  name: "Virtual_DeviceValue_FLOAT64_R"
   description: "Generate device FLOAT64 value"
   properties:
     valueType: "Float64"
     readWrite: "R"
     defaultValue: "0"
 -
-  name: "DeviceValue_FLOAT64_W"
+  name: "Virtual_DeviceValue_FLOAT64_W"
   description: "Generate device FLOAT64 value"
   properties:
     valueType: "Float64"
     readWrite: "W"
     defaultValue: "0"
 -  ### INT8 ###
-  name: "DeviceValue_INT8_RW"
+  name: "Virtual_DeviceValue_INT8_RW"
   description: "Generate device INT8 value"
   properties:
     valueType: "Int8"
@@ -87,7 +110,7 @@ deviceResources:
     maximum: "127"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT8_R"
+  name: "Virtual_DeviceValue_INT8_R"
   description: "Generate device INT8 value"
   properties:
     valueType: "Int8"
@@ -96,7 +119,7 @@ deviceResources:
     maximum: "127"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT8_W"
+  name: "Virtual_DeviceValue_INT8_W"
   description: "Generate device INT8 value"
   properties:
     valueType: "Int8"
@@ -105,7 +128,7 @@ deviceResources:
     maximum: "127"
     defaultValue: "0"
 -  ### INT16 ###
-  name: "DeviceValue_INT16_RW"
+  name: "Virtual_DeviceValue_INT16_RW"
   description: "Generate device INT16 value"
   properties:
     valueType: "Int16"
@@ -114,7 +137,7 @@ deviceResources:
     maximum: "32767"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT16_R"
+  name: "Virtual_DeviceValue_INT16_R"
   description: "Generate device INT16 value"
   properties:
     valueType: "Int16"
@@ -123,7 +146,7 @@ deviceResources:
     maximum: "32767"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT16_W"
+  name: "Virtual_DeviceValue_INT16_W"
   description: "Generate device INT16 value"
   properties:
     valueType: "Int16"
@@ -132,7 +155,7 @@ deviceResources:
     maximum: "32767"
     defaultValue: "0"
 -  ### INT32 ###
-  name: "DeviceValue_INT32_RW"
+  name: "Virtual_DeviceValue_INT32_RW"
   description: "Generate device INT32 value"
   properties:
     valueType: "Int32"
@@ -141,7 +164,7 @@ deviceResources:
     maximum: "2147483647"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT32_R"
+  name: "Virtual_DeviceValue_INT32_R"
   description: "Generate device INT32 value"
   properties:
     valueType: "Int32"
@@ -150,7 +173,7 @@ deviceResources:
     maximum: "2147483647"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT32_W"
+  name: "Virtual_DeviceValue_INT32_W"
   description: "Generate device INT32 value"
   properties:
     valueType: "Int32"
@@ -159,7 +182,7 @@ deviceResources:
     maximum: "2147483647"
     defaultValue: "0"
 -  ### INT64 ###
-  name: "DeviceValue_INT64_RW"
+  name: "Virtual_DeviceValue_INT64_RW"
   description: "Generate device INT64 value"
   properties:
     valueType: "Int64"
@@ -168,7 +191,7 @@ deviceResources:
     maximum: "9223372036854775807"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT64_R"
+  name: "Virtual_DeviceValue_INT64_R"
   description: "Generate device INT64 value"
   properties:
     valueType: "Int64"
@@ -177,7 +200,7 @@ deviceResources:
     maximum: "9223372036854775807"
     defaultValue: "0"
 -
-  name: "DeviceValue_INT64_W"
+  name: "Virtual_DeviceValue_INT64_W"
   description: "Generate device INT64 value"
   properties:
     valueType: "Int64"
@@ -186,7 +209,7 @@ deviceResources:
     maximum: "9223372036854775807"
     defaultValue: "0"
 -  ### UINT8 ###
-  name: "DeviceValue_UINT8_RW"
+  name: "Virtual_DeviceValue_UINT8_RW"
   description: "Generate device UINT8 value"
   properties:
     valueType: "Uint8"
@@ -195,7 +218,7 @@ deviceResources:
     maximum: "255"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT8_R"
+  name: "Virtual_DeviceValue_UINT8_R"
   description: "Generate device UINT8 value"
   properties:
     valueType: "Uint8"
@@ -204,7 +227,7 @@ deviceResources:
     maximum: "255"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT8_W"
+  name: "Virtual_DeviceValue_UINT8_W"
   description: "Generate device UINT8 value"
   properties:
     valueType: "Uint8"
@@ -213,7 +236,7 @@ deviceResources:
     maximum: "255"
     defaultValue: "0"
 -  ### UINT16 ###
-  name: "DeviceValue_UINT16_RW"
+  name: "Virtual_DeviceValue_UINT16_RW"
   description: "Generate device UINT16 value"
   properties:
     valueType: "Uint16"
@@ -222,7 +245,7 @@ deviceResources:
     maximum: "65535"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT16_R"
+  name: "Virtual_DeviceValue_UINT16_R"
   description: "Generate device UINT16 value"
   properties:
     valueType: "Uint16"
@@ -231,7 +254,7 @@ deviceResources:
     maximum: "65535"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT16_W"
+  name: "Virtual_DeviceValue_UINT16_W"
   description: "Generate device UINT16 value"
   properties:
     valueType: "Uint16"
@@ -240,7 +263,7 @@ deviceResources:
     maximum: "65535"
     defaultValue: "0"
 -  ### UINT32 ###
-  name: "DeviceValue_UINT32_RW"
+  name: "Virtual_DeviceValue_UINT32_RW"
   description: "Generate device UINT32 value"
   properties:
     valueType: "Uint32"
@@ -249,7 +272,7 @@ deviceResources:
     maximum: "4294967295"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT32_R"
+  name: "Virtual_DeviceValue_UINT32_R"
   description: "Generate device UINT32 value"
   properties:
     valueType: "Uint32"
@@ -258,7 +281,7 @@ deviceResources:
     maximum: "4294967295"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT32_W"
+  name: "Virtual_DeviceValue_UINT32_W"
   description: "Generate device UINT32 value"
   properties:
     valueType: "Uint32"
@@ -267,7 +290,7 @@ deviceResources:
     maximum: "4294967295"
     defaultValue: "0"
 -  ### UINT64 ###
-  name: "DeviceValue_UINT64_RW"
+  name: "Virtual_DeviceValue_UINT64_RW"
   description: "Generate device UINT64 value"
   properties:
     valueType: "Uint64"
@@ -276,7 +299,7 @@ deviceResources:
     maximum: "18446744073709551615"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT64_R"
+  name: "Virtual_DeviceValue_UINT64_R"
   description: "Generate device UINT64 value"
   properties:
     valueType: "Uint64"
@@ -285,7 +308,7 @@ deviceResources:
     maximum: "18446744073709551615"
     defaultValue: "0"
 -
-  name: "DeviceValue_UINT64_W"
+  name: "Virtual_DeviceValue_UINT64_W"
   description: "Generate device UINT64 value"
   properties:
     valueType: "Uint64"
@@ -295,199 +318,217 @@ deviceResources:
     defaultValue: "0"
 
 deviceCommands:
+-  ### Binary ###
+  name: "Virtual_GenerateDeviceValue_Binary_RW"
+  isHidden: false
+  readWrite: "RW"
+  resourceOperations:
+    - deviceResource: "Virtual_DeviceValue_Binary_RW"
+-
+  name: "Virtual_GenerateDeviceValue_Binary_R"
+  isHidden: false
+  readWrite: "R"
+  resourceOperations:
+    - deviceResource: "Virtual_DeviceValue_Binary_R"
+-
+  name: "Virtual_GenerateDeviceValue_Binary_W"
+  isHidden: false
+  readWrite: "W"
+  resourceOperations:
+    - deviceResource: "Virtual_DeviceValue_Binary_W"
 -  ### Boolean ###
-  name: "GenerateDeviceValue_Boolean_RW"
+  name: "Virtual_GenerateDeviceValue_Boolean_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_Boolean_RW"
-- name: "GenerateDeviceValue_Boolean_R"
+    - deviceResource: "Virtual_DeviceValue_Boolean_RW"
+- name: "Virtual_GenerateDeviceValue_Boolean_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_Boolean_R"
-- name: "GenerateDeviceValue_Boolean_W"
+    - deviceResource: "Virtual_DeviceValue_Boolean_R"
+- name: "Virtual_GenerateDeviceValue_Boolean_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_Boolean_W"
+    - deviceResource: "Virtual_DeviceValue_Boolean_W"
 -  ### FLOAT32 ###
-  name: "GenerateDeviceValue_FLOAT32_RW"
+  name: "Virtual_GenerateDeviceValue_FLOAT32_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_FLOAT32_RW"
+    - deviceResource: "Virtual_DeviceValue_FLOAT32_RW"
 -
-  name: "GenerateDeviceValue_FLOAT32_R"
+  name: "Virtual_GenerateDeviceValue_FLOAT32_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_FLOAT32_R"
+    - deviceResource: "Virtual_DeviceValue_FLOAT32_R"
 -
-  name: "GenerateDeviceValue_FLOAT32_W"
+  name: "Virtual_GenerateDeviceValue_FLOAT32_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_FLOAT32_W"
+    - deviceResource: "Virtual_DeviceValue_FLOAT32_W"
 -  ### FLOAT64 ###
-  name: "GenerateDeviceValue_FLOAT64_RW"
+  name: "Virtual_GenerateDeviceValue_FLOAT64_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_FLOAT64_RW"
+    - deviceResource: "Virtual_DeviceValue_FLOAT64_RW"
 -
-  name: "GenerateDeviceValue_FLOAT64_R"
+  name: "Virtual_GenerateDeviceValue_FLOAT64_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_FLOAT64_R"
+    - deviceResource: "Virtual_DeviceValue_FLOAT64_R"
 -
-  name: "GenerateDeviceValue_FLOAT64_W"
+  name: "Virtual_GenerateDeviceValue_FLOAT64_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_FLOAT64_W"
+    - deviceResource: "Virtual_DeviceValue_FLOAT64_W"
 -  ### INT8 ###
-  name: "GenerateDeviceValue_INT8_RW"
+  name: "Virtual_GenerateDeviceValue_INT8_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT8_RW"
+    - deviceResource: "Virtual_DeviceValue_INT8_RW"
 -
-  name: "GenerateDeviceValue_INT8_R"
+  name: "Virtual_GenerateDeviceValue_INT8_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT8_R"
+    - deviceResource: "Virtual_DeviceValue_INT8_R"
 -
-  name: "GenerateDeviceValue_INT8_W"
+  name: "Virtual_GenerateDeviceValue_INT8_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT8_W"
+    - deviceResource: "Virtual_DeviceValue_INT8_W"
 -  ### INT16 ###
-  name: "GenerateDeviceValue_INT16_RW"
+  name: "Virtual_GenerateDeviceValue_INT16_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT16_RW"
+    - deviceResource: "Virtual_DeviceValue_INT16_RW"
 -
-  name: "GenerateDeviceValue_INT16_R"
+  name: "Virtual_GenerateDeviceValue_INT16_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT16_R"
+    - deviceResource: "Virtual_DeviceValue_INT16_R"
 -
-  name: "GenerateDeviceValue_INT16_W"
+  name: "Virtual_GenerateDeviceValue_INT16_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT16_W"
+    - deviceResource: "Virtual_DeviceValue_INT16_W"
 -  ### INT32 ###
-  name: "GenerateDeviceValue_INT32_RW"
+  name: "Virtual_GenerateDeviceValue_INT32_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT32_RW"
+    - deviceResource: "Virtual_DeviceValue_INT32_RW"
 -
-  name: "GenerateDeviceValue_INT32_R"
+  name: "Virtual_GenerateDeviceValue_INT32_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT32_R"
+    - deviceResource: "Virtual_DeviceValue_INT32_R"
 -
-  name: "GenerateDeviceValue_INT32_W"
+  name: "Virtual_GenerateDeviceValue_INT32_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT32_W"
+    - deviceResource: "Virtual_DeviceValue_INT32_W"
 -  ### INT64 ###
-  name: "GenerateDeviceValue_INT64_RW"
+  name: "Virtual_GenerateDeviceValue_INT64_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT64_RW"
+    - deviceResource: "Virtual_DeviceValue_INT64_RW"
 -
-  name: "GenerateDeviceValue_INT64_R"
+  name: "Virtual_GenerateDeviceValue_INT64_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT64_R"
+    - deviceResource: "Virtual_DeviceValue_INT64_R"
 -
-  name: "GenerateDeviceValue_INT64_W"
+  name: "Virtual_GenerateDeviceValue_INT64_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT64_W"
+    - deviceResource: "Virtual_DeviceValue_INT64_W"
 -  ### UINT8 ###
-  name: "GenerateDeviceValue_UINT8_RW"
+  name: "Virtual_GenerateDeviceValue_UINT8_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT8_RW"
+    - deviceResource: "Virtual_DeviceValue_UINT8_RW"
 -
-  name: "GenerateDeviceValue_UINT8_R"
+  name: "Virtual_GenerateDeviceValue_UINT8_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT8_R"
+    - deviceResource: "Virtual_DeviceValue_UINT8_R"
 -
-  name: "GenerateDeviceValue_UINT8_W"
+  name: "Virtual_GenerateDeviceValue_UINT8_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT8_W"
+    - deviceResource: "Virtual_DeviceValue_UINT8_W"
 -  ### UINT16 ###
-  name: "GenerateDeviceValue_UINT16_RW"
+  name: "Virtual_GenerateDeviceValue_UINT16_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT16_RW"
+    - deviceResource: "Virtual_DeviceValue_UINT16_RW"
 -
-  name: "GenerateDeviceValue_UINT16_R"
+  name: "Virtual_GenerateDeviceValue_UINT16_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT16_R"
+    - deviceResource: "Virtual_DeviceValue_UINT16_R"
 -
-  name: "GenerateDeviceValue_UINT16_W"
+  name: "Virtual_GenerateDeviceValue_UINT16_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT16_W"
+    - deviceResource: "Virtual_DeviceValue_UINT16_W"
 -  ### UINT32 ###
-  name: "GenerateDeviceValue_UINT32_RW"
+  name: "Virtual_GenerateDeviceValue_UINT32_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT32_RW"
+    - deviceResource: "Virtual_DeviceValue_UINT32_RW"
 -
-  name: "GenerateDeviceValue_UINT32_R"
+  name: "Virtual_GenerateDeviceValue_UINT32_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT32_R"
+    - deviceResource: "Virtual_DeviceValue_UINT32_R"
 -
-  name: "GenerateDeviceValue_UINT32_W"
+  name: "Virtual_GenerateDeviceValue_UINT32_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT32_W"
+    - deviceResource: "Virtual_DeviceValue_UINT32_W"
 -  ### UINT64 ###
-  name: "GenerateDeviceValue_UINT64_RW"
+  name: "Virtual_GenerateDeviceValue_UINT64_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT64_RW"
+    - deviceResource: "Virtual_DeviceValue_UINT64_RW"
 -
-  name: "GenerateDeviceValue_UINT64_R"
+  name: "Virtual_GenerateDeviceValue_UINT64_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT64_R"
+    - deviceResource: "Virtual_DeviceValue_UINT64_R"
 -
-  name: "GenerateDeviceValue_UINT64_W"
+  name: "Virtual_GenerateDeviceValue_UINT64_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT64_W"
+    - deviceResource: "Virtual_DeviceValue_UINT64_W"

@@ -17,7 +17,7 @@ ServiceGET001 - Query all device services
     And Create Device Service ${deviceService}
     When Query All Device Services
     Then Should Return Status Code "200" And services
-    And Should Be True  len(${content}[services]) == 3
+    And Should Be True  len(${content}[services]) == 6  # Contain 3 profiles of device-service
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
@@ -28,7 +28,7 @@ ServiceGET002 - Query all device services by offset
     And Create Device Service ${deviceService}
     When Query All Device Services With offset=2
     Then Should Return Status Code "200" And services
-    And Should Be True  len(${content}[services]) == 1
+    And Should Be True  len(${content}[services]) == 4  # Contain 3 profiles of device-service
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2

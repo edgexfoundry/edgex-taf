@@ -99,6 +99,6 @@ ErrIntervalactionGET001 - Query Intervalaction by not existed name
 
 *** Keywords ***
 Set MaxResultCount=${number} For Support-Scheduler On Consul
-   ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/edgex-support-scheduler/Service/MaxResultCount
+   ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-scheduler/Service/MaxResultCount
    Update Service Configuration On Consul  ${path}  ${number}
    Restart Services  scheduler

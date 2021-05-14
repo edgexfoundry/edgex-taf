@@ -71,3 +71,4 @@ Update device ${deviceName} with ${property}=${value}
   ${update_dict}=  Create Dictionary  name=${deviceName}  ${property}=${value}
   Generate Devices  ${update_dict}
   Update devices ${Device}
+

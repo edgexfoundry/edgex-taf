@@ -1,13 +1,13 @@
-name: "Sample-Profile"
+name: "Modbus-Sample-Profile"
 manufacturer: "Company"
 model: "Device-01"
 labels:
 - "device-modbus"
-description: "Example of Device"
+description: "Example of device-modbus"
 
 deviceResources:
 -  ### Boolean ###
-  name: "DeviceValue_Boolean_RW"
+  name: "Modbus_DeviceValue_Boolean_RW"
   description: "Generate device boolean value"
   isHidden: true
   tag: "status"
@@ -21,7 +21,7 @@ deviceResources:
     maximum: "1"
     defaultValue: "0"
 -
-  name: "DeviceValue_Boolean_R"
+  name: "Modbus_DeviceValue_Boolean_R"
   description: "Generate device boolean value"
   attributes:
     { primaryTable: "DISCRETES_INPUT", startingAddress: 1 }
@@ -33,7 +33,7 @@ deviceResources:
     maximum: "1"
     defaultValue: "0"
 -
-  name: "DeviceValue_Boolean_W"
+  name: "Modbus_DeviceValue_Boolean_W"
   description: "Generate device boolean value"
   attributes:
     { primaryTable: "COILS", startingAddress: 2 }
@@ -45,7 +45,7 @@ deviceResources:
     maximum: "1"
     defaultValue: "0"
 -  ### Float32 ###
-  name: "DeviceValue_Float32_RW"
+  name: "Modbus_DeviceValue_Float32_RW"
   description: "Generate device float32 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 3 }
@@ -54,7 +54,7 @@ deviceResources:
     readWrite: "RW"
     defaultValue: "device float32 value"
 -
-  name: "DeviceValue_Float32_R"
+  name: "Modbus_DeviceValue_Float32_R"
   description: "Generate device float32 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 5 }
@@ -63,7 +63,7 @@ deviceResources:
     readWrite: "R"
     defaultValue: "device float32 value"
 -
-  name: "DeviceValue_Float32_W"
+  name: "Modbus_DeviceValue_Float32_W"
   description: "Generate device float32 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 7 }
@@ -72,7 +72,7 @@ deviceResources:
     readWrite: "W"
     defaultValue: "device float32 value"
 -  ### Float64 ###
-  name: "DeviceValue_Float64_RW"
+  name: "Modbus_DeviceValue_Float64_RW"
   description: "Generate device float64 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 9 }
@@ -81,7 +81,7 @@ deviceResources:
     readWrite: "RW"
     defaultValue: "device float64 value"
 -
-  name: "DeviceValue_Float64_R"
+  name: "Modbus_DeviceValue_Float64_R"
   description: "Generate device float64 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 13 }
@@ -90,7 +90,7 @@ deviceResources:
     readWrite: "R"
     defaultValue: "device float64 value"
 -
-  name: "DeviceValue_Float64_W"
+  name: "Modbus_DeviceValue_Float64_W"
   description: "Generate device float64 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 17 }
@@ -99,7 +99,7 @@ deviceResources:
     readWrite: "W"
     defaultValue: "device float64 value"
 -  ### INT16 ###
-  name: "DeviceValue_INT16_RW"
+  name: "Modbus_DeviceValue_INT16_RW"
   description: "Generate device INT16 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 21 }
@@ -110,7 +110,7 @@ deviceResources:
     maximum: "32767"
     defaultValue: "device INT16 value"
 -
-  name: "DeviceValue_INT16_R"
+  name: "Modbus_DeviceValue_INT16_R"
   description: "Generate device INT16 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 21 }
@@ -121,7 +121,7 @@ deviceResources:
     maximum: "32767"
     defaultValue: "device INT16 value"
 -
-  name: "DeviceValue_INT16_W"
+  name: "Modbus_DeviceValue_INT16_W"
   description: "Generate device INT16 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 21 }
@@ -132,7 +132,7 @@ deviceResources:
     maximum: "32767"
     defaultValue: "device INT16 value"
 -  ### INT32 ###
-  name: "DeviceValue_INT32_RW"
+  name: "Modbus_DeviceValue_INT32_RW"
   description: "Generate device INT32 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 23 }
@@ -143,7 +143,7 @@ deviceResources:
     maximum: "2147483647"
     defaultValue: "device INT32 value"
 -
-  name: "DeviceValue_INT32_R"
+  name: "Modbus_DeviceValue_INT32_R"
   description: "Generate device INT32 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 23 }
@@ -154,7 +154,7 @@ deviceResources:
     maximum: "2147483647"
     defaultValue: "device INT32 value"
 -
-  name: "DeviceValue_INT32_W"
+  name: "Modbus_DeviceValue_INT32_W"
   description: "Generate device INT32 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 23 }
@@ -165,7 +165,7 @@ deviceResources:
     maximum: "2147483647"
     defaultValue: "device INT32 value"
 -  ### INT64 ###
-  name: "DeviceValue_INT64_RW"
+  name: "Modbus_DeviceValue_INT64_RW"
   description: "Generate device INT64 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 27 }
@@ -176,7 +176,7 @@ deviceResources:
     maximum: "9223372036854775807"
     defaultValue: "device INT64 value"
 -
-  name: "DeviceValue_INT64_R"
+  name: "Modbus_DeviceValue_INT64_R"
   description: "Generate device INT64 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 31 }
@@ -187,7 +187,7 @@ deviceResources:
     maximum: "9223372036854775807"
     defaultValue: "device INT64 value"
 -
-  name: "DeviceValue_INT64_W"
+  name: "Modbus_DeviceValue_INT64_W"
   description: "Generate device INT64 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 35 }
@@ -198,7 +198,7 @@ deviceResources:
     maximum: "9223372036854775807"
     defaultValue: "device INT64 value"
 -  ### UINT16 ###
-  name: "DeviceValue_UINT16_RW"
+  name: "Modbus_DeviceValue_UINT16_RW"
   description: "Generate device uINT16 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 39 }
@@ -209,7 +209,7 @@ deviceResources:
     maximum: "65535"
     defaultValue: "device uINT16 value"
 -
-  name: "DeviceValue_UINT16_R"
+  name: "Modbus_DeviceValue_UINT16_R"
   description: "Generate device uINT16 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 41 }
@@ -220,7 +220,7 @@ deviceResources:
     maximum: "65535"
     defaultValue: "device uINT16 value"
 -
-  name: "DeviceValue_UINT16_W"
+  name: "Modbus_DeviceValue_UINT16_W"
   description: "Generate device uINT16 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 43 }
@@ -231,7 +231,7 @@ deviceResources:
     maximum: "65535"
     defaultValue: "device uINT16 value"
 -  ### UINT32 ###
-  name: "DeviceValue_UINT32_RW"
+  name: "Modbus_DeviceValue_UINT32_RW"
   description: "Generate device uINT32 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 45 }
@@ -242,7 +242,7 @@ deviceResources:
     maximum: "4294967295"
     defaultValue: "device uINT32 value"
 -
-  name: "DeviceValue_UINT32_R"
+  name: "Modbus_DeviceValue_UINT32_R"
   description: "Generate device uINT32 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 47 }
@@ -253,7 +253,7 @@ deviceResources:
     maximum: "4294967295"
     defaultValue: "device uINT32 value"
 -
-  name: "DeviceValue_UINT32_W"
+  name: "Modbus_DeviceValue_UINT32_W"
   description: "Generate device uINT32 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 49 }
@@ -264,7 +264,7 @@ deviceResources:
     maximum: "4294967295"
     defaultValue: "device uINT32 value"
 -  ### UINT64 ###
-  name: "DeviceValue_UINT64_RW"
+  name: "Modbus_DeviceValue_UINT64_RW"
   description: "Generate device UINT64 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 51 }
@@ -275,7 +275,7 @@ deviceResources:
     maximum: "18446744073709551615"
     defaultValue: "device UINT64 value"
 -
-  name: "DeviceValue_UINT64_R"
+  name: "Modbus_DeviceValue_UINT64_R"
   description: "Generate device UINT64 value"
   attributes:
     { primaryTable: "INPUT_REGISTERS", startingAddress: 55 }
@@ -286,7 +286,7 @@ deviceResources:
     maximum: "18446744073709551615"
     defaultValue: "device UINT64 value"
 -
-  name: "DeviceValue_UINT64_W"
+  name: "Modbus_DeviceValue_UINT64_W"
   description: "Generate device UINT64 value"
   attributes:
     { primaryTable: "HOLDING_REGISTERS", startingAddress: 59 }
@@ -299,162 +299,162 @@ deviceResources:
 
 deviceCommands:
 -  ### Boolean ###
-  name: "GenerateDeviceValue_Boolean_RW"
+  name: "Modbus_GenerateDeviceValue_Boolean_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_Boolean_RW"
-- name: "GenerateDeviceValue_Boolean_R"
+    - deviceResource: "Modbus_DeviceValue_Boolean_RW"
+- name: "Modbus_GenerateDeviceValue_Boolean_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_Boolean_R"
-- name: "GenerateDeviceValue_Boolean_W"
+    - deviceResource: "Modbus_DeviceValue_Boolean_R"
+- name: "Modbus_GenerateDeviceValue_Boolean_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_Boolean_W"
+    - deviceResource: "Modbus_DeviceValue_Boolean_W"
 -  ### Float32 ###
-  name: "GenerateDeviceValue_Float32_RW"
+  name: "Modbus_GenerateDeviceValue_Float32_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_Float32_RW"
+    - deviceResource: "Modbus_DeviceValue_Float32_RW"
 -
-  name: "GenerateDeviceValue_Float32_R"
+  name: "Modbus_GenerateDeviceValue_Float32_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_Float32_R"
+    - deviceResource: "Modbus_DeviceValue_Float32_R"
 -
-  name: "GenerateDeviceValue_Float32_W"
+  name: "Modbus_GenerateDeviceValue_Float32_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_Float32_W"
+    - deviceResource: "Modbus_DeviceValue_Float32_W"
 -  ### Float64 ###
-  name: "GenerateDeviceValue_Float64_RW"
+  name: "Modbus_GenerateDeviceValue_Float64_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_Float64_RW"
+    - deviceResource: "Modbus_DeviceValue_Float64_RW"
 -
-  name: "GenerateDeviceValue_Float64_R"
+  name: "Modbus_GenerateDeviceValue_Float64_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_Float64_R"
+    - deviceResource: "Modbus_DeviceValue_Float64_R"
 -
-  name: "GenerateDeviceValue_Float64_W"
+  name: "Modbus_GenerateDeviceValue_Float64_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_Float64_W"
+    - deviceResource: "Modbus_DeviceValue_Float64_W"
 -  ### INT16 ###
-  name: "GenerateDeviceValue_INT16_RW"
+  name: "Modbus_GenerateDeviceValue_INT16_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT16_RW"
+    - deviceResource: "Modbus_DeviceValue_INT16_RW"
 -
-  name: "GenerateDeviceValue_INT16_R"
+  name: "Modbus_GenerateDeviceValue_INT16_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT16_R"
+    - deviceResource: "Modbus_DeviceValue_INT16_R"
 -
-  name: "GenerateDeviceValue_INT16_W"
+  name: "Modbus_GenerateDeviceValue_INT16_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT16_W"
+    - deviceResource: "Modbus_DeviceValue_INT16_W"
 -  ### INT32 ###
-  name: "GenerateDeviceValue_INT32_RW"
+  name: "Modbus_GenerateDeviceValue_INT32_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT32_RW"
+    - deviceResource: "Modbus_DeviceValue_INT32_RW"
 -
-  name: "GenerateDeviceValue_INT32_R"
+  name: "Modbus_GenerateDeviceValue_INT32_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT32_R"
+    - deviceResource: "Modbus_DeviceValue_INT32_R"
 -
-  name: "GenerateDeviceValue_INT32_W"
+  name: "Modbus_GenerateDeviceValue_INT32_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT32_W"
+    - deviceResource: "Modbus_DeviceValue_INT32_W"
 -  ### INT64 ###
-  name: "GenerateDeviceValue_INT64_RW"
+  name: "Modbus_GenerateDeviceValue_INT64_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT64_RW"
+    - deviceResource: "Modbus_DeviceValue_INT64_RW"
 -
-  name: "GenerateDeviceValue_INT64_R"
+  name: "Modbus_GenerateDeviceValue_INT64_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT64_R"
+    - deviceResource: "Modbus_DeviceValue_INT64_R"
 -
-  name: "GenerateDeviceValue_INT64_W"
+  name: "Modbus_GenerateDeviceValue_INT64_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_INT64_W"
+    - deviceResource: "Modbus_DeviceValue_INT64_W"
 -  ### UINT16 ###
-  name: "GenerateDeviceValue_UINT16_RW"
+  name: "Modbus_GenerateDeviceValue_UINT16_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT16_RW"
+    - deviceResource: "Modbus_DeviceValue_UINT16_RW"
 -
-  name: "GenerateDeviceValue_UINT16_R"
+  name: "Modbus_GenerateDeviceValue_UINT16_R"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT16_RW"
+    - deviceResource: "Modbus_DeviceValue_UINT16_RW"
 -
-  name: "GenerateDeviceValue_UINT16_W"
+  name: "Modbus_GenerateDeviceValue_UINT16_W"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT16_RW"
+    - deviceResource: "Modbus_DeviceValue_UINT16_RW"
 -  ### UINT32 ###
-  name: "GenerateDeviceValue_UINT32_RW"
+  name: "Modbus_GenerateDeviceValue_UINT32_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT32_RW"
+    - deviceResource: "Modbus_DeviceValue_UINT32_RW"
 -
-  name: "GenerateDeviceValue_UINT32_R"
+  name: "Modbus_GenerateDeviceValue_UINT32_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT32_R"
+    - deviceResource: "Modbus_DeviceValue_UINT32_R"
 -
-  name: "GenerateDeviceValue_UINT32_W"
+  name: "Modbus_GenerateDeviceValue_UINT32_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT32_W"
+    - deviceResource: "Modbus_DeviceValue_UINT32_W"
 -  ### UINT64 ###
-  name: "GenerateDeviceValue_UINT64_RW"
+  name: "Modbus_GenerateDeviceValue_UINT64_RW"
   isHidden: false
   readWrite: "RW"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT64_RW"
+    - deviceResource: "Modbus_DeviceValue_UINT64_RW"
 -
-  name: "GenerateDeviceValue_UINT64_R"
+  name: "Modbus_GenerateDeviceValue_UINT64_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT64_R"
+    - deviceResource: "Modbus_DeviceValue_UINT64_R"
 -
-  name: "GenerateDeviceValue_UINT64_W"
+  name: "Modbus_GenerateDeviceValue_UINT64_W"
   isHidden: false
   readWrite: "W"
   resourceOperations:
-    - deviceResource: "DeviceValue_UINT64_W"
+    - deviceResource: "Modbus_DeviceValue_UINT64_W"

@@ -2,12 +2,10 @@
 Library         TAF/testCaseModules/keywords/setup/edgex.py
 Resource        TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource        TAF/testCaseModules/keywords/core-command/coreCommandAPI.robot
+Resource        TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup     Run Keywords  Setup Suite
 ...                           AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                           AND  Deploy Device Service  device-virtual  service_default
-Suite Teardown  Run keywords  Remove Services  device-virtual
-...                           AND  Delete Device Virtual Pre-define Devices
-...                           AND  Run Teardown Keywords
+Suite Teardown  Run Teardown Keywords
 Force Tags      v2-api
 
 *** Variables ***
@@ -64,18 +62,22 @@ ErrCommandGET008 - Get specified device read command with invalid ds-pushevent
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrCommandGET009 - Get specified device read command when device AdminState is locked
-    Given Update Device Random-Boolean-Device With adminState=LOCKED
+    ${device_name}  Set Variable  Random-Boolean-Device
+    Given Create Device For device-virtual With Name ${device_name}
+    And Update Device ${device_name} With adminState=LOCKED
     When Run Keyword And Expect Error  *  Get Specified Device Random-Boolean-Device Read Command BoolArray
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Update Device Random-Boolean-Device With adminState=UNLOCKED
+    [Teardown]  Delete device by name ${device_name}
 
 ErrCommandGET010 - Get specified device read command when device OperatingState is down
-    Given Update Device Random-Binary-Device With operatingState=DOWN
+    ${device_name}  Set Variable  Random-Binary-Device
+    Given Create Device For device-virtual With Name ${device_name}
+    And Update Device ${device_name} With operatingState=DOWN
     When Run Keyword And Expect Error  *  Get Specified Device Random-Binary-Device Read Command Binary
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Update Device Random-Binary-Device With operatingState=UP
+    [Teardown]  Delete device by name ${device_name}
 

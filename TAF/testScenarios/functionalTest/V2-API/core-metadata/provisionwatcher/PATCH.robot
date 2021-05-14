@@ -95,7 +95,7 @@ Create Provision Watchers And Generate Multiple Provision Watchers Sample For Up
     ${blockingIdentifiers}=  Load data file "core-metadata/identifiers.json" and get variable "blockingIdentifiers"
     Set To Dictionary  ${blockingIdentifiers}  ports=${ports}
     ${update_blockingIdentifiers}=  Create Dictionary  name=Test-Provision-Watcher-Locked  blockingIdentifiers=${blockingIdentifiers}
-    ${autoEvent}=  Set autoEvents values  24h  false  DeviceValue_Boolean_RW
+    ${autoEvent}=  Set autoEvents values  24h  false  ${PREFIX}_DeviceValue_Boolean_RW
     ${autoEvents}=  Create List  ${autoEvent}
     ${update_autoEvents}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  autoEvents=${autoEvents}
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
