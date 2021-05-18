@@ -1,7 +1,7 @@
 import os
 
 WORK_DIR = os.getenv('WORK_DIR')
-SERVICE_NAME = "edgex-device-modbus"
+SERVICE_NAME = "device-modbus"
 DEVICE_PROFILE_NAME = "test-device-profile"
 SIMULATOR_HOST = "192.168.x.x"
 MQTT_BROKER_IP = "192.168.x.x"

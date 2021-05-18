@@ -21,12 +21,12 @@ Port = 8500
 Type = 'consul'
 
 [Clients]
-  [Clients.edgex-core-data]
+  [Clients.core-data]
   Protocol = 'http'
   Host = 'localhost'
   Port = 48080
 
-  [Clients.edgex-core-metadata]
+  [Clients.core-metadata]
   Protocol = 'http'
   Host = 'localhost'
   Port = 48081
@@ -61,7 +61,7 @@ Path = '/v1/secret/edgex/device-modbus/'
 Protocol = 'http'
 RootCaCertPath = ''
 ServerName = ''
-TokenFile = '/tmp/edgex/secrets/edgex-device-modbus/secrets-token.json'
+TokenFile = '/tmp/edgex/secrets/device-modbus/secrets-token.json'
 AdditionalRetryAttempts = 10
 RetryWaitPeriod = "1s"
   [SecretStore.Authentication]

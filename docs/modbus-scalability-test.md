@@ -39,7 +39,7 @@ docker run -d --rm --name broker -p 1883:1883 eclipse-mosquitto
 
 * Open configuration file and modify, the file path is `/path/to/edgex-taf/TAF/config/modbus_scalability_test/configuration.py`.
     ```
-    SERVICE_NAME = "edgex-device-modbus"
+    SERVICE_NAME = "device-modbus"
     DEVICE_PROFILE_NAME = "test-device-profile"
     SIMULATOR_HOST = "${replace-with-simulator-ip}"
     MQTT_BROKER_IP = "${replace-with-broker-ip}"
