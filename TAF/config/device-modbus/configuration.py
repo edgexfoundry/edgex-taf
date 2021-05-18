@@ -1,7 +1,7 @@
 import os
 
 # Service for testing
-SERVICE_NAME = "edgex-device-modbus"
+SERVICE_NAME = "device-modbus"
 
 SECURITY_SERVICE_NEEDED = os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
