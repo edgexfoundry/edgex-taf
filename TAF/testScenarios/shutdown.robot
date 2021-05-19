@@ -26,4 +26,4 @@ Shutdown EdgeX
 Shutdown Device Service
     [Tags]  shutdown-device-service
     Remove services  ${SERVICE_NAME}
-    Delete device profile by name  Sample-Profile
+    Delete device profile by name  ${PREFIX}-Sample-Profile

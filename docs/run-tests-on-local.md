@@ -20,6 +20,7 @@ export WORK_DIR=${HOME}/edgex-taf
 ${ARCH}: x86_64 | arm64
 ${SECURITY_SERVICE_NEEDED}: false | true
 ${TEST_STRATEGY}: 1 (functional)
+${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/V2-API 
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
 
 cd ${WORK_DIR}/TAF/utils/scripts/docker
@@ -80,7 +81,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 3. Run Test
     ###### Run V2 API Functional testing:
     
-    - For Core Command: Not supported. The script will auto deploy device-virtual through compose file.
+    - Notice: Run Functional Test will get case: IntervalactionGET006 failure. The case needs to restart service.
     - For Core Data, Core Metadata, Support Notifications, and Support Scheduler:
     ``` bash
     # ${ServiceDir}: Please use the directory name under TAF/testScenarios/functionalTest/V2-API
@@ -122,7 +123,6 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ###### Run Integration testing:
     `Only support deploying edgex services through docker-compose file.`
     ``` bash
-    python3 -m TUC --exclude Skipped --include deploy-device-service -u deploy.robot -p device-virtual
     python3 -m TUC --exclude Skipped -u integrationTest -p device-virtual
     ```
 4. Shutdown edgex:

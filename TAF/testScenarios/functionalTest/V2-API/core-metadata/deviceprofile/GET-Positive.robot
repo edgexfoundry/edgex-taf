@@ -17,7 +17,7 @@ ProfileGET001 - Query all device profiles
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles
     Then Should Return Status Code "200" And profiles
-    And Should Be True  len(${content}[profiles]) == 3
+    And Should Be True  len(${content}[profiles]) == 8  # 3 created on this test, 3 for device-rest, 1 for virtual, 1 for modbus
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
@@ -27,7 +27,7 @@ ProfileGET002 - Query all device profiles by offset
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles With offset=2
     Then Should Return Status Code "200" And profiles
-    And Should Be True  len(${content}[profiles]) == 1
+    And Should Be True  len(${content}[profiles]) == 6  # 3 created on this test, 3 for device-rest, 1 for virtual, 1 for modbus
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3

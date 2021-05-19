@@ -14,16 +14,22 @@ USE_SHA1=${5:-master}
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
 # # pre-release or other release
-mkdir temp
+mkdir -p temp
 if [ "$USE_RELEASE" = "pre-release" ]; then
   # generate single file docker-compose.yml for target configuration without
   # default device services, i.e. no device-virtual service
   ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
   cp docker-compose-taf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yaml
 
+  for profile in device-virtual device-modbus; do
+    sed -n "/ ${profile}:/,/ - PROFILE_VOLUME_PLACE_HOLDER/ p" docker-compose.yaml > temp/${profile}.yml  # print device-service
+    sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' temp/${profile}.yml
+    sed -i "s/\PROFILE_VOLUME_PLACE_HOLDER/\${WORK_DIR}\/TAF\/config\/${profile}/g" temp/${profile}.yml
+    sed -i "/ ${profile}:/,/ - PROFILE_VOLUME_PLACE_HOLDER/d" docker-compose.yaml
+    sed -i "/services:/ r temp/${profile}.yml" docker-compose.yaml
+  done
+
   sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' docker-compose.yaml
-  sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' docker-compose.yaml
-  sed -i 's/\PROFILE_VOLUME_PLACE_HOLDER/${WORK_DIR}\/TAF\/config\/${PROFILE}/g' docker-compose.yaml
   sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose.yaml
   sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose.yaml
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose.yaml

@@ -49,7 +49,7 @@ Device_TC0002b - Invoke SET command when device operatingState is DISABLED
 
 *** Keywords ***
 Create Device ${name} And Set ${field} To ${field_value}
-    ${device}=  Set device values  ${SERVICE_NAME}  Sample-Profile
+    ${device}=  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
     Set To Dictionary  ${device}  name=${name}
     Set To Dictionary  ${device}  ${field}=${field_value}
     Generate Devices  ${device}

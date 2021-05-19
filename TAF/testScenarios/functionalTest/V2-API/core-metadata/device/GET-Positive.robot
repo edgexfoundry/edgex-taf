@@ -17,7 +17,7 @@ DeviceGET001 - Query all devices
     And Create Device With ${Device}
     When Query All Devices
     Then Should Return Status Code "200" And devices
-    And Should Be True  len(${content}[devices]) == 4
+    And Should Be True  len(${content}[devices]) == 7  # 3 for device-rest
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
@@ -27,7 +27,7 @@ DeviceGET002 - Query all devices with offset
     And Create Device With ${Device}
     When Query All Devices With offset=2
     Then Should Return Status Code "200" And devices
-    And Should Be True  len(${content}[devices]) == 2
+    And Should Be True  len(${content}[devices]) == 5  # 3 for device-rest
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
@@ -47,10 +47,10 @@ DeviceGET004 - Query all devices with specified labels
     And Set To Dictionary  ${Device}[1][device]  labels=@{EMPTY}
     And Append To List  ${Device}[2][device][labels]  new_label
     And Create Device With ${Device}
-    When Query All Devices With labels=device-example
+    When Query All Devices With labels=device-sample
     Then Should Return Status Code "200" And devices
     And Should Be True  len(${content}[devices]) == 3
-    And Devices Should Be Linked To Specified Label: device-example
+    And Devices Should Be Linked To Specified Label: device-sample
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample

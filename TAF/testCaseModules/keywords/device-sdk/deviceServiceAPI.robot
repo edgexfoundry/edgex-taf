@@ -56,7 +56,7 @@ Get A Read Command
     Set Test Variable  ${set_reading_value}  ${set_reading_value}
 
 Create Device For ${SERVICE_NAME} With Name ${name}
-    ${device}  Set device values  ${SERVICE_NAME}  Sample-Profile
+    ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
     Set To Dictionary  ${device}  name=${name}
     Generate Devices  ${device}
     Create Device With ${Device}

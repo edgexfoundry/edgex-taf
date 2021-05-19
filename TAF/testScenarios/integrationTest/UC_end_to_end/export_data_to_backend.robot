@@ -9,7 +9,6 @@ Resource         TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource         TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
-...                             AND  Remove services  app-service-http-export
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
 
@@ -21,47 +20,40 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 Export001 - Export events/readings to HTTP Server
     [Tags]  SmokeTest
     ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
-    Given Deploy services  app-service-http-export
-    And Create Device For device-virtual With Name http-export-device
-    When Get device data by device http-export-device and command GenerateDeviceValue_INT8_RW
+    Given Create Device For device-virtual With Name http-export-device
+    When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then HTTP Server received event is the same with exported from service app-http-export
     [Teardown]  Run keywords  Delete device by name http-export-device
                 ...           AND  Delete all events by age
-                ...           AND  remove services  app-service-http-export
                 ...           AND  Terminate Process  ${handle}  kill=True
 
 Export002 - Export events/readings to MQTT Server
     [Tags]  SmokeTest
-    Given Deploy services  mqtt-broker
-    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
+    Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
-    And Deploy services  app-service-mqtt-export
     And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With MQTT Export To Vault
     And Create Device For device-virtual With Name mqtt-export-device
-    When Get device data by device mqtt-export-device and command GenerateDeviceValue_INT16_RW
+    When Get device data by device mqtt-export-device and command ${PREFIX}_GenerateDeviceValue_INT16_RW
     Then Device data has recevied by mqtt subscriber
     And Found "Sent data to MQTT Broker" in service "app-mqtt-export" log
     [Teardown]  Run keywords  Delete device by name mqtt-export-device
                 ...           AND  Delete all events by age
-                ...           AND  remove services  app-service-mqtt-export  mqtt-broker
 
 ExportErr001 - Export events/readings to unreachable HTTP backend
-    Given Deploy services  app-service-http-export
-    And Create Device For device-virtual With Name http-export-error-device
-    When Get device data by device http-export-error-device and command GenerateDeviceValue_INT32_RW
+    Given Create Device For device-virtual With Name http-export-error-device
+    When Get device data by device http-export-error-device and command ${PREFIX}_GenerateDeviceValue_INT32_RW
     Then No exported logs found on configurable application service  app-http-export
     [Teardown]  Run keywords  Delete device by name http-export-error-device
                 ...           AND  Delete all events by age
-                ...           AND  remove services  app-service-http-export
 
 ExportErr002 - Export events/readings to unreachable MQTT backend
-    Given Deploy services  app-service-mqtt-export
+    Given Stop Services  mqtt-broker
     And Create Device For device-virtual With Name mqtt-export-error-device
-    When Get device data by device mqtt-export-error-device and command GenerateDeviceValue_INT64_RW
+    When Get device data by device mqtt-export-error-device and command ${PREFIX}_GenerateDeviceValue_INT64_RW
     Then No exported logs found on configurable application service  app-mqtt-export
     [Teardown]  Run keywords  Delete device by name mqtt-export-error-device
                 ...           AND  Delete all events by age
-                ...           AND  remove services  app-service-mqtt-export
+                ...           AND  Restart Services  mqtt-broker
 
 
 *** Keywords ***
