@@ -9,8 +9,8 @@ USER="gateway"
 GROUP="gateway-group"
 
 # JWT File
-JWT_FILE=/tmp/edgex/secrets/edgex-security-proxy-setup/kong-admin-jwt
-JWT_VOLUME=/tmp/edgex/secrets/edgex-security-proxy-setup
+JWT_FILE=/tmp/edgex/secrets/security-proxy-setup/kong-admin-jwt
+JWT_VOLUME=/tmp/edgex/secrets/security-proxy-setup
 
 if [ ! -f "${WORK_DIR}/${USER}.pub" ];
 then
