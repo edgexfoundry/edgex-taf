@@ -70,4 +70,3 @@ Run Discovery Request For Device Service
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
 
-

@@ -1,0 +1,3 @@
+{
+    "sql": "create stream %stream%() WITH (FORMAT=\"JSON\", TYPE=\"edgex\")"
+}

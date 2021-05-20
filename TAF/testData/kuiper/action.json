@@ -1,0 +1,21 @@
+{
+  "MQTT": [
+    {
+      "mqtt": {
+        "server": "tcp://edgex-mqtt-broker:1883",
+        "topic": "rules-events",
+        "clientId": "kuiper_mqtt"
+      }
+    }
+  ],
+  "REST": [
+    {
+      "rest": {
+        "url": "",
+        "method": "PUT",
+        "dataTemplate": "",
+        "bodyType": "json"
+      }
+    }
+  ]
+}
