@@ -340,7 +340,7 @@ def query_simulator_reading_count():
 
 
 def update_device_service_admin_state(admin_state):
-    conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=48081, timeout=5)
+    conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=59881, timeout=5)
     conn.request(method="PUT",
                  url="/api/v1/deviceservice/name/{}/adminstate/{}".format(configuration.SERVICE_NAME, admin_state))
     try:

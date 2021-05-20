@@ -445,7 +445,7 @@ Generate Multiple Device Services Sample For Updating
     ${labels}=  Create List  device-example  device-update
     ${update_opstate}=  Create Dictionary  name=Device-Service-${index}-1  labels=${labels}
     ${update_adminstate}=  Create Dictionary  name=Device-Service-${index}-2  adminState=LOCKED
-    ${update_baseAddr}=  Create Dictionary  name=Device-Service-${index}-3  baseAddress=http://home-device-service:49991
+    ${update_baseAddr}=  Create Dictionary  name=Device-Service-${index}-3  baseAddress=http://home-device-service:59901
     Generate Device Services  ${update_opstate}  ${update_adminstate}  ${update_baseAddr}
 
 # Device

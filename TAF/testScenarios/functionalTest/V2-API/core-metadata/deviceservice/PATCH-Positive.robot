@@ -38,6 +38,6 @@ Service Data Should Be Updated
         ...    ELSE IF  "${service}" == "Device-Service-${index}-2"
         ...             Should Be Equal  ${content}[service][adminState]  LOCKED
         ...    ELSE IF  "${service}" == "Device-Service-${index}-3"
-        ...             Should Be Equal  ${content}[service][baseAddress]  http://home-device-service:49991
+        ...             Should Be Equal  ${content}[service][baseAddress]  http://home-device-service:59901
     END
 
