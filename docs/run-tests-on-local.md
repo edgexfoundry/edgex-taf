@@ -96,8 +96,8 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
    
     # Before launching APP Service, please export the following variables.
     export EDGEX_SECURITY_SECRET_STORE=false
-    export SERVICE_PORT=48105 (For functional-tests)
-    export SERVICE_PORT=48101 (For http-export)
+    export SERVICE_PORT=59705 (For functional-tests)
+    export SERVICE_PORT=59704 (For http-export)
    
     # Run Test Command
     export SECURITY_SERVICE_NEEDED=false  # Otherwise, will get test ErrSecretsPOST004 failed.

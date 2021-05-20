@@ -83,7 +83,7 @@ To write the automation testing for virtual device service, complete the followi
     [TAF/config/device-virtual/configuration.py]
 
     SERVICE_NAME = "device-virtual"
-    SERVICE_PORT = 49990
+    SERVICE_PORT = 59900
     ```
 
 3. Provide the configuration.toml file and modify the ProfilesDir property value to "/custom-config":
@@ -138,7 +138,7 @@ To write the automation testing for virtual device service, complete the followi
       device-virtual:
         image: edgexfoundry/docker-device-virtual-go:master
         ports:
-        - "49990:49990"
+        - "59900:59900"
         container_name: edgex-device-virtual
         hostname: edgex-device-virtual
         networks:
@@ -221,7 +221,7 @@ Define constant in the configuration.py:
 # configuration.py
     # Service for testing
     SERVICE_NAME = "device-virtual"
-    SERVICE_PORT = 49990
+    SERVICE_PORT = 59900
 ```
     
 Pass the constant to the robot file or python code:

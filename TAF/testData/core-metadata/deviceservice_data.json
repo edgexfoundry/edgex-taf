@@ -5,5 +5,5 @@
    "labels":[
       "device-example"
    ],
-   "baseAddress":"http://home-device-service:49990"
+   "baseAddress":"http://home-device-service:59900"
 }

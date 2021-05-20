@@ -5,7 +5,7 @@
         "address":{
             "type": "REST",
             "host": "localhost",
-            "port": 48080,
+            "port": 59880,
             "httpMethod": "DELETE"
         },
         "AdminState": "UNLOCKED"
