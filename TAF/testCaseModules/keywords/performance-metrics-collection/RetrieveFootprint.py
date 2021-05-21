@@ -27,7 +27,7 @@ services = {
     "edgex-app-service-configurable-rules": {"binary": "/app-service-configurable"},
     "edgex-sys-mgmt-agent": {"binary": "/sys-mgmt-agent"},
     "edgex-device-virtual": {"binary": "/device-virtual"},
-    "edgex-device-rest": {"binary": "/device-rest-go"},
+    "edgex-device-rest": {"binary": "/device-rest"},
     "edgex-kuiper": {"binary": ""},
     "edgex-redis": {"binary": ""},
 }
