@@ -3,6 +3,7 @@ Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+...                        AND  Delete all events by age
 Suite Teardown  Run Teardown Keywords
 Force Tags      v2-api
 
