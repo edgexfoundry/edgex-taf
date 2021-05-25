@@ -6,7 +6,7 @@ PREFIX = "Modbus"
 
 SECURITY_SERVICE_NEEDED = os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
-    SERVICE_PORT = "8443/modbusdevice"
+    SERVICE_PORT = "8443/device-modbus"
 else:
     SERVICE_PORT = 59901
 
