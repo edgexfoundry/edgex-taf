@@ -153,7 +153,7 @@ Delete events by device name
 # generate data for core-data
 Generate event sample
     # event_data: Event, Event With Tags ; readings_type: Simple Reading, Simple Float Reading, Binary Reading
-    [arguments]  ${event_data}  ${deviceName}  ${profileName}  ${sourceName}  @{readings_type}
+    [Arguments]  ${event_data}  ${deviceName}  ${profileName}  ${sourceName}  @{readings_type}
     ${uuid}=  Evaluate  str(uuid.uuid4())
     ${origin}=  Get current nanoseconds epoch time
     @{readings}=  Create List

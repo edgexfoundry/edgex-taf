@@ -29,6 +29,7 @@ Export001 - Export events/readings to HTTP Server
 
 Export002 - Export events/readings to MQTT Server
     [Tags]  SmokeTest
+    [Setup]  Stop Services  scalability-test-mqtt-export
     Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With MQTT Export To Vault
