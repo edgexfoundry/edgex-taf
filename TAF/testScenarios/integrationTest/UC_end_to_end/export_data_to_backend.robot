@@ -32,12 +32,13 @@ Export002 - Export events/readings to MQTT Server
     [Setup]  Stop Services  scalability-test-mqtt-export
     Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
+    And Set Test Variable  ${device_name}  mqtt-export-device
     And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With MQTT Export To Vault
-    And Create Device For device-virtual With Name mqtt-export-device
-    When Get device data by device mqtt-export-device and command ${PREFIX}_GenerateDeviceValue_INT16_RW
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW
     Then Device data has recevied by mqtt subscriber
     And Found "Sent data to MQTT Broker" in service "app-mqtt-export" log
-    [Teardown]  Run keywords  Delete device by name mqtt-export-device
+    [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
 ExportErr001 - Export events/readings to unreachable HTTP backend
@@ -60,18 +61,10 @@ ExportErr002 - Export events/readings to unreachable MQTT backend
 *** Keywords ***
 HTTP Server received event is the same with exported from service ${app_service}
     ${export_data_app_service}=  Get exported data from "${app_service}" service log
-    run keyword if  '${export_data_app_service}' == '${EMPTY}'  fail  No export log found on application service
+    run keyword if  """${export_data_app_service}""" == '${EMPTY}'  fail  No export log found on application service
     ${http_server_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/httpd-server.log  origin
-    run keyword if  '${http_server_received}' == '${EMPTY}'  fail  No export log found on http-server
+    run keyword if  """${http_server_received}""" == '${EMPTY}'  fail  No export log found on http-server
     should contain  ${export_data_app_service}  ${http_server_received}  HTTP Server received data matched exported data
-
-MQTT broker received event is the same with exported from service "${app_service}"
-    ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log  origin
-    run keyword if  '${mqtt_broker_received}' == '${EMPTY}' or '${mqtt_broker_received}' == 'None'
-    ...             fail  No export log found on mqtt subscriber
-    ${export_data_app_service}=  Get exported data from "${app_service}" service log
-    run keyword if  '${export_data_app_service}' == '${EMPTY}'  fail  No export log found on MQTT application service
-    should contain  ${export_data_app_service}  ${mqtt_broker_received}  MQTT broker received data matched exported data
 
 Get exported data from "${app_service}" service log
     ${app_service_log}=  Catch logs for service "${app_service}" with keyword "origin"
@@ -87,7 +80,7 @@ Get device data by device ${device_name} and command ${command}
 
 Device data has recevied by mqtt subscriber
     ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log  origin
-    run keyword if  '${mqtt_broker_received}' == '${EMPTY}' or '${mqtt_broker_received}' == 'None'
+    run keyword if  "${device_name}" not in """${mqtt_broker_received}"""
     ...             fail  No export log found on mqtt subscriber
     [Return]    ${mqtt_broker_received}
 
