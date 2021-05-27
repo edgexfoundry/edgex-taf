@@ -6,7 +6,7 @@ PREFIX = "Virtual"
 
 SECURITY_SERVICE_NEEDED = os.getenv("SECURITY_SERVICE_NEEDED")
 if SECURITY_SERVICE_NEEDED == 'true':
-    SERVICE_PORT = "8443/virtualdevice"
+    SERVICE_PORT = "8443/device-virtual"
 else:
     SERVICE_PORT = 59900
 

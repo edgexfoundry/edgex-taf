@@ -7,3 +7,4 @@ TAF-Common/*
 TAF/utils/scripts/docker/*.yml*
 TAF/utils/scripts/docker/docker-compose*yaml*
 TAF/utils/scripts/docker/common.env
+TAF/config/*/configuration.toml
