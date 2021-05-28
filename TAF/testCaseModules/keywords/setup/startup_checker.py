@@ -28,7 +28,7 @@ services = {
                     "port": SettingsInfo().constant.CORE_COMMAND_PORT,
                     "pingUrl": "/api/v2/ping"},
         "support-notifications": {"composeName": "notifications",
-                                  "port": SettingsInfo().constant.SUPPORT_NOTIFICATION_PORT,
+                                  "port": SettingsInfo().constant.SUPPORT_NOTIFICATIONS_PORT,
                                   "pingUrl": "/api/v2/ping"},
         "support-scheduler": {"composeName": "scheduler",
                               "port": SettingsInfo().constant.SUPPORT_SCHEDULER_PORT,

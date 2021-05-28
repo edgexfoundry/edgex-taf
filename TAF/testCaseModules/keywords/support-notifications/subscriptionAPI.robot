@@ -4,9 +4,9 @@ Library   OperatingSystem
 Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
-${supportNotificationsUrl}   ${URI_SCHEME}://${BASE_URL}:${SUPPORT_NOTIFICATION_PORT}
+${supportNotificationsUrl}   ${URI_SCHEME}://${BASE_URL}:${SUPPORT_NOTIFICATIONS_PORT}
 ${subscriptionUri}         /api/${API_VERSION}/subscription
-${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/supportNotificaionsSubscriptionAPI.log
+#${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/supportNotificaions-SubscriptionAPI.log
 
 *** Keywords ***
 Generate Subscriptions
