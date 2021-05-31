@@ -7,57 +7,57 @@ Suite Teardown  Run Teardown Keywords
 Force Tags  skipped
 
 *** Variables ***
-${SUITE}          Support Notifications Notification GET Negative Test Cases
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-notifications-notification-get-negative.log
+${SUITE}          Support Notifications Transmission GET Negative Test Cases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-notifications-transmission-get-negative.log
 ${url}            ${supportNotificationsUrl}
 
 *** Test Cases ***
-# /notification/id/{id}
-ErrNotificationGET010 - Query notification with invalid id
-    When Query Notification By invalid Id
+# /transmission/id/{id}
+ErrTransmissionGET010 - Query transmission with invalid id
+    When Query Transmission By invalid Id
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrNotificationGET011 - Query notification with non-existed id
-    When Query Notification By Non-existed Id
+ErrTransmissionGET011 - Query transmission with non-existed id
+    When Query Transmission By Non-existed Id
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-# /notification/start/{start}/end/{end}
-ErrNotificationGET012 - Query notifications by start/end time fails (Invalid Start)
-    When Query Notifications By Invalid Start And End Time
+# /transmission/start/{start}/end/{end}
+ErrTransmissionGET012 - Query transmissions by start/end time fails (Invalid Start)
+    When Query Transmissions By Invalid Start And End Time
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrNotificationGET013 - Query notifications by start/end time fails (Invalid End)
-    When Query Notifications By Start And Invalid End Time
+ErrTransmissionGET013 - Query transmissions by start/end time fails (Invalid End)
+    When Query Transmissions By Start And Invalid End Time
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrNotificationGET014 - Query notifications by start/end time fails (Start>End)
-    When Query Notifications By Start And End Time
+ErrTransmissionGET014 - Query transmissions by start/end time fails (Start>End)
+    When Query Transmissions By Start And End Time
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrNotificationGET015 - Query notifications by start/end time with invalid offset range
-    When Query Notifications By Start And End Time With Invalid Offset Range
+ErrTransmissionGET015 - Query transmissions by start/end time with invalid offset range
+    When Query Transmissions By Start And End Time With Invalid Offset Range
     Then Should Return Status Code "416"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrNotificationGET016 - Query notifications by start/end time with non-int value on offset
-    When  Query Notifications By Start And End Time With Invalid Offset
+ErrTransmissionGET016 - Query transmissions by start/end time with non-int value on offset
+    When  Query Transmissions By Start And End Time With Invalid Offset
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrNotificationGET017 - Query notifications by start/end time with non-int value on limit
-    When Query Notifications By Start And End Time With Invalid Limit
+ErrTransmissionGET017 - Query transmissions by start/end time with non-int value on limit
+    When Query Transmissions By Start And End Time With Invalid Limit
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
