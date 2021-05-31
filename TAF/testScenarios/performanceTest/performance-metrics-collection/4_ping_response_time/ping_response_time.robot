@@ -28,7 +28,7 @@ Measure the ping response time
     ${SCHEDULER_RES_LIST}=  Ping API for service  support-scheduler  ${SUPPORT_SCHEDULER_PORT}
     Record response   edgex-support-scheduler      ${SCHEDULER_RES_LIST}
 
-    ${NOTIFICATIONS_RES_LIST}=  Ping API for service  support-notifications  ${SUPPORT_NOTIFICATION_PORT}
+    ${NOTIFICATIONS_RES_LIST}=  Ping API for service  support-notifications  ${SUPPORT_NOTIFICATIONS_PORT}
     Record response   edgex-support-notifications  ${NOTIFICATIONS_RES_LIST}
 
     ${SYS_MGMT_RES_LIST}=  Ping API for service  sys-mgmt-agent  58890

@@ -35,7 +35,6 @@ ErrSubscriptionPOST002 - Create subscription with invalid name
     Given Generate 3 Subscriptions Sample
     And Set To Dictionary  ${subscription}[1][subscription]  name=invalid name
     When Create Subscription ${subscription}
-    When Create Subscription With Invalid Name
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -44,7 +43,6 @@ ErrSubscriptionPOST003 - Create subscription with empty channels
     Given Generate 3 Subscriptions Sample
     And Set To Dictionary  ${subscription}[1][subscription]  channels=@{EMPTY}
     When Create Subscription ${subscription}
-    When Create Subscription With Empty Channels
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
