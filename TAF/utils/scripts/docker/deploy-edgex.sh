@@ -31,5 +31,10 @@ else
           --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
           --env WORK_DIR=${WORK_DIR} --env CONF_DIR=${CONF_DIR} --security-opt label:disable ${COMPOSE_IMAGE} \
           -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d
-  sleep 10
+
+  if [ "$SECURITY_SERVICE_NEEDED" = "true" ]; then
+    sleep 15
+  else
+    sleep 5
+  fi
 fi
