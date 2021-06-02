@@ -1,0 +1,12 @@
+{
+  "description": "Test data for notification",
+  "category": "health-check",
+  "labels":[
+    "simple"
+  ],
+  "contentType": "string",
+  "content": "This is a test notification",
+  "sender": "taf-admin",
+  "severity": "",
+  "status": "NEW"
+}

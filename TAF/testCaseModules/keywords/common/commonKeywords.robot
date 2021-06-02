@@ -200,7 +200,7 @@ Set Response to Test Variables
     ...          ELSE  Set variable  None
     Set suite variable  ${headers}  ${headers}
     ${status}  ${value}=  Run Keyword And Ignore Error  Run Keyword If  '${headers}' == 'application/json'
-    ...                                                 Evaluate  json.loads('''${resp.content}''')  json
+    ...                                                 Evaluate  json.loads(r'''${resp.content}''')  json
     ...                                                 ELSE  Set variable  ${resp.content}
     Run Keyword If  '${status}' == 'PASS'   Set suite variable  ${content}  ${value}
     # when fail to deserialize json response content
