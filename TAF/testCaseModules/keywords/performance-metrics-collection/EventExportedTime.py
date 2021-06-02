@@ -22,7 +22,7 @@ class EventExportedTime(object):
         device_bool = []
         device_uint = []
 
-        full_subscriber_logs = subprocess.check_output("python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py perf",
+        full_subscriber_logs = subprocess.check_output("python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin perf",
                                                        shell=True)
         subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with result code 0", "")
         events = subscriber_logs.split('Got mqtt export data!!')
