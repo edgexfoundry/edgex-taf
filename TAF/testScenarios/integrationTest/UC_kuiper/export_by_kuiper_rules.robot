@@ -14,7 +14,7 @@ Suite Teardown   Run Keywords   Delete Stream
 *** Variables ***
 ${SUITE}         Export By Kuiper Rules
 ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_by_kuiper_rules.log
-${kuiperUrl}     http://${BASE_URL}:${RULESENGINE_PORT}
+${kuiperUrl}     ${URI_SCHEME}://${BASE_URL}:${RULESENGINE_PORT}
 
 *** Test Cases ***
 Kuiper001 - Add a new rule and export to MQTT
