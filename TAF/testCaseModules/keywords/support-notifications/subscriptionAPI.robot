@@ -45,6 +45,18 @@ Generate ${number} Subscriptions Sample
     END
     Generate Subscriptions  @{subscription_list}
 
+Create ESCALATION Subscription Sample With ${type} Channel
+    ${data}=  Get File  ${WORK_DIR}/TAF/testData/support-notifications/subscription_data.json  encoding=UTF-8
+    ${subscription}=  Evaluate  json.loads('''${data}''')  json
+    ${channel}=  Load data file "support-notifications/channels_data.json" and get variable "${type}"
+    ${categories}=  Create List  admin
+    Set To Dictionary  ${subscription}  name=ESCALATION
+    Set To Dictionary  ${subscription}  channels=${channel}
+    Set To Dictionary  ${subscription}  categories=${categories}
+    Remove From Dictionary  ${subscription}  labels
+    Generate Subscriptions  ${subscription}
+    Create Subscription ${subscription}
+
 Create Subscription ${entity}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}

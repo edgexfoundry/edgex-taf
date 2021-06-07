@@ -55,9 +55,9 @@ Retrieve Notification IDs
     Set Test Variable  ${notification_ids}  ${notification_ids}
 
 Delete Notification By ID ${notificationId}
-    Create Session  Support Notification  url=${supportNotificationsUrl}  disable_warnings=true
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  DELETE On Session  Support Notification  ${notificationUri}/id/${notificationId}  headers=${headers}
+    ${resp}=  DELETE On Session  Support Notifications  ${notificationUri}/id/${notificationId}  headers=${headers}
     ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
@@ -86,9 +86,81 @@ Query Notifications By Start/End Time
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
 
+Query Notifications Between Time ${start} And ${end} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/start/${start}/end/${end}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
+
 Query Notification By ID ${notificationId}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Support Notifications  ${notificationUri}/id/${notificationId}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
+
+Query All Notifications By Specified Category
+    [Arguments]  ${category}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/category/${category}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Notifications By Specified Category ${category} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/category/${category}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Notifications By Specified Label
+    [Arguments]  ${label}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/label/${label}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Notifications By Specified Label ${label} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/label/${label}  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Notifications By Specified Subscription Name
+    [Arguments]  ${subscription_name}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/subscription/name/${subscription_name}
+    ...       headers=${headers}  expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Notifications By Specified Subscription Name ${subscription_name} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/subscription/name/${subscription_name}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
+Query All Notifications By Status
+    [Arguments]  ${status}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/status/${status}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Query All Notifications By Status ${status} With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}/status/${status}  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
