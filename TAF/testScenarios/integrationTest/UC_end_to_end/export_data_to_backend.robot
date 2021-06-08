@@ -12,6 +12,7 @@ Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
 
+
 *** Variables ***
 ${SUITE}         Export data to backend
 ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_backend.log
@@ -20,7 +21,8 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 Export001 - Export events/readings to HTTP Server
     [Tags]  SmokeTest
     ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
-    Given Create Device For device-virtual With Name http-export-device
+    Given Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With HTTP Export To Vault
+    And Create Device For device-virtual With Name http-export-device
     When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then HTTP Server received event is the same with exported from service app-http-export
     [Teardown]  Run keywords  Delete device by name http-export-device
@@ -60,18 +62,20 @@ ExportErr002 - Export events/readings to unreachable MQTT backend
 
 *** Keywords ***
 HTTP Server received event is the same with exported from service ${app_service}
-    ${export_data_app_service}=  Get exported data from "${app_service}" service log
-    run keyword if  """${export_data_app_service}""" == '${EMPTY}'  fail  No export log found on application service
+    ${sent_data_length}=  Get exported data length from "${app_service}" service log
+    run keyword if  '${sent_data_length}' == '${EMPTY}'  fail  No export log found on application service
     ${http_server_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/httpd-server.log  origin
-    run keyword if  """${http_server_received}""" == '${EMPTY}'  fail  No export log found on http-server
-    should contain  ${export_data_app_service}  ${http_server_received}  HTTP Server received data matched exported data
+    ${http_received_length}  run keyword if  r'''${http_server_received}''' == '${EMPTY}'  fail  No export log found on http-server
+                             ...       ELSE  Get Length  ${http_server_received}
+    should be equal  ${sent_data_length}  ${http_received_length}
+    ...              The lengths are equal between HTTP Server received and app-service exported data
 
-Get exported data from "${app_service}" service log
-    ${app_service_log}=  Catch logs for service "${app_service}" with keyword "origin"
-    ${app_service_log}=  remove string  ${app_service_log}  \\
-    ${fetch_export_data}=  fetch from right  ${app_service_log}  Sent data:
-    ${export_data}=  replace string  ${fetch_export_data}  ]}"  ]}
-    [Return]  ${export_data}
+Get exported data length from "${app_service}" service log
+    ${app_service_log}=  Catch logs for service "${app_service}" with keyword "Response status"
+    ${app_service_log}=  Fetch From Right  ${app_service_log}  int=
+    ${sent_data_length}=  Fetch From Left  ${app_service_log}  )
+    ${sent_data_length}  convert to number  ${sent_data_length}
+    [Return]  ${sent_data_length}
 
 Get device data by device ${device_name} and command ${command}
     Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${command}
@@ -93,6 +97,8 @@ No exported logs found on configurable application service
     ${app_service_str}=  convert to string  ${app_service_log}
     should not contain  ${app_service_str}  Sent data
 
-Store Secret With MQTT Export To Vault
-    Set Test Variable  ${url}  http://${BASE_URL}:${APP_MQTT_EXPORT_PORT}
-    Store Secret Data With MQTT Export Auth
+Store Secret With ${service} Export To Vault
+    ${APP_SERVICE_PORT}  Run Keyword If  '${service}' == 'MQTT'  Set Variable  ${APP_MQTT_EXPORT_PORT}
+                         ...    ELSE IF  '${service}' == 'HTTP'  Set Variable  ${APP_HTTP_EXPORT_PORT}
+    Set Test Variable  ${url}  http://${BASE_URL}:${APP_SERVICE_PORT}
+    Store Secret Data With ${service} Export Auth
