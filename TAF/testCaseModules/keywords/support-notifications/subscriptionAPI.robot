@@ -156,3 +156,17 @@ Update Subscriptions ${entity}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
+
+# Used by transmission
+Generate ${number} Subscriptions Sample With REST Channel
+    ${subscription_list}  Create List
+    FOR  ${INDEX}  IN RANGE  0  ${number}
+        ${index}=  Get current milliseconds epoch time
+        ${data}=  Get File  ${WORK_DIR}/TAF/testData/support-notifications/subscription_data.json  encoding=UTF-8
+        ${subscription}=  Evaluate  json.loads('''${data}''')  json
+        ${channel}=  Load data file "support-notifications/channels_data.json" and get variable "REST"
+        Set To Dictionary  ${subscription}  name=Subscription-${index}
+        Set To Dictionary  ${subscription}  channels=${channel}
+        Append To List  ${subscription_list}  ${subscription}
+    END
+    Generate Subscriptions  @{subscription_list}

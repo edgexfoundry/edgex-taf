@@ -9,8 +9,8 @@
   ],
   "REST":[
     {
-      "host": "http://123.com",
-      "port": 1234,
+      "host": "localhost",
+      "port": 7770,
       "httpMethod": "POST",
       "type": "REST"
     }

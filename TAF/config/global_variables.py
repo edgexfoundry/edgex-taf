@@ -16,14 +16,20 @@ SERVICE_STARTUP_WAIT_TIME = 3
 # EdgeX host
 BASE_URL = "localhost"
 
+# OS environment variables
+SECURITY_SERVICE_NEEDED=os.getenv("SECURITY_SERVICE_NEEDED")
+DOCKER_HOST_IP=os.getenv("DOCKER_HOST_IP")
+
+# Token related variables
+jwt_token = ''
+consul_token = ''
+
 # Service port
 APP_HTTP_EXPORT_PORT = 59704
 APP_MQTT_EXPORT_PORT = 59703
 APP_FUNCTIOAL_TESTS_PORT = 59705
 REGISTRY_PORT = 8500
-jwt_token = ''
-consul_token = ''
-SECURITY_SERVICE_NEEDED=os.getenv("SECURITY_SERVICE_NEEDED")
+
 if SECURITY_SERVICE_NEEDED == 'true':
     URI_SCHEME = "https"
     CORE_DATA_PORT = "8443/core-data"
@@ -42,4 +48,3 @@ else:
     SUPPORT_SCHEDULER_PORT = 59861
     RULESENGINE_PORT = 59720
     SYS_MGMT_AGENT_PORT = 58890
-
