@@ -11,4 +11,4 @@ docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docke
         --security-opt label:disable \
         --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
         --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} -e SECURITY_ENABLED=${SECURITY_ENABLED} \
-        ${COMPOSE_IMAGE} -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" up -d $*
+        ${COMPOSE_IMAGE} -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" up -d $*

@@ -1,4 +1,5 @@
 import requests
+import requests.packages.urllib3
 from robot.api import logger
 import data_utils
 from TUC.data.SettingsInfo import SettingsInfo
@@ -13,8 +14,8 @@ class PingResponse(object):
         ping_res_result[service] = res
         logger.info("ping_res_result: {}".format(ping_res_result))
 
-    def ping_api_request(self, port):
-        response = send_ping_request(port)
+    def ping_api_request(self, port, token):
+        response = send_ping_request(port, token)
         return response
 
     def show_the_aggregation_report(self):
@@ -24,10 +25,15 @@ class PingResponse(object):
         show_the_summary_table_in_html()
 
 
-def send_ping_request(port):
-    service_url = "http://{}:{}".format(SettingsInfo().constant.BASE_URL, port)
+def send_ping_request(port, token):
+    if "8443" not in str(port):
+        service_url = "http://{}:{}".format(SettingsInfo().constant.BASE_URL, port)
+    else:
+        service_url = "{}://{}:{}".format(SettingsInfo().constant.URI_SCHEME, SettingsInfo().constant.BASE_URL, port)
+        requests.packages.urllib3.disable_warnings()  # disable ssl-warning
     ping_url = "{}/api/v2/ping".format(service_url)
-    res = requests.get(ping_url)
+    header = {"Authorization": "Bearer {}".format(token)}
+    res = requests.get(ping_url, headers=header, verify=False)
     logger.info("response body: {}, reponse time: {}".format(res.content, res.elapsed.total_seconds()))
     response = {
                 "body": res.content.decode("utf-8"),

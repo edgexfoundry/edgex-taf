@@ -22,16 +22,20 @@ StartupTime001 - Get service startup time with creating containers
     show full startup time report  Full startup time with creating containers  ${services_startup_time_list}
     show startup time with avg max min  Startup time aggregations with creating containers  ${service_aggregations}
     set global variable  ${startup_time_with_create_container}  ${service_aggregations}
+    [Teardown]  Run Keyword If Test Failed  Run Keywords  set global variable  ${startup_time_without_create_container}  None
+                                            ...      AND  Shutdown services
 
 StartupTime002 - Get service startup time without creating containers
-    [Setup]  Run keywords   Deploy EdgeX  PerformanceMetrics
-             ...            AND  Stop services
+    [Setup]  Run Keywords  Deploy EdgeX  PerformanceMetrics
+             ...      AND  Stop Services
+             ...      AND  Check service is stopped or not
     ${services_startup_time_list}=  Deploy edgex without creating containers and get startup time
     ${service_aggregations}=  Get startup time and add to dictionary  ${services_startup_time_list}
     show full startup time report  Full startup time without creating containers  ${services_startup_time_list}
     show startup time with avg max min  Startup time aggregations without creating containers  ${service_aggregations}
     set global variable  ${startup_time_without_create_container}  ${service_aggregations}
-    [Teardown]  Shutdown services
+    [Teardown]  Run Keywords  Run Keyword If Test Failed  set global variable  ${startup_time_without_create_container}  None
+                ...      AND  Run Keyword And Ignore Error  Shutdown services
 
 
 *** Keywords ***
@@ -57,10 +61,10 @@ Deploy edgex without creating containers and get startup time
         ${result}=  Run Process  ${clear_mem_cache}  shell=True
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem_cache.log
         Start time is recorded
-        Restart Services  PerformanceMetrics
+        Start Services
         ${services_startup_time}=  Run keyword and continue on failure  fetch services startup time without creating containers
-        Stop services
         Append to list  ${service_startup_time_list}  ${services_startup_time}
+        Stop services
         Check service is stopped or not
     END
     log  ${service_startup_time_list}
@@ -108,3 +112,14 @@ Convert milliseconds to seconds
                        ...    ELSE IF  ${check_time_µs} == True  EVALUATE  ${time_num} / 1000000
                        ...    ELSE     SET VARIABLE  ${time_num}
     [Return]  ${startup_value}
+
+Start Services
+  ${command}=  Catenate
+  ...          docker run --rm -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
+  ...          --env WORK_DIR=${WORK_DIR}  --security-opt label:disable ${COMPOSE_IMAGE} \
+  ...          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" start
+  Run Process  ${command}  shell=True
+  sleep  5s
+  ${result}=  Run Process  docker ps -a | grep Exited  shell=True
+  Should Not Be Equal As Integers  ${result.rc}  0  >>> Start Services Fail <<<
+  Run Keyword If  ${result.rc} == 0  log  ${result.stdout}

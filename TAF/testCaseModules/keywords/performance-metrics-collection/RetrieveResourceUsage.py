@@ -9,10 +9,9 @@
 
 """
 
-import platform
+import os
 import traceback
 import data_utils
-from datetime import datetime
 from TUC.data.SettingsInfo import SettingsInfo
 import docker
 from robot.api import logger
@@ -20,11 +19,11 @@ from robot.api import logger
 client = docker.from_env()
 
 global services
-services = {
-    "edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
-    "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-rules-engine",
-    "edgex-sys-mgmt-agent", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"
-}
+services = ["edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
+            "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-rules-engine",
+            "edgex-sys-mgmt-agent", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"]
+
+secty_services = ["edgex-security-secretstore-setup", "edgex-kong", "edgex-kong-db", "edgex-vault", "edgex-security-bootstrapper"]
 
 
 class RetrieveResourceUsage(object):
@@ -32,10 +31,18 @@ class RetrieveResourceUsage(object):
     def __init__(self):
         self._result = ""
 
-    def retrieve_cpu_and_memory_usage(self):
+    def get_test_services(self):
+        # Add security services when security enabled
+        security_enabled = os.getenv("SECURITY_SERVICE_NEEDED")
+        if security_enabled == 'true':
+            services.extend(secty_services)
+        return services
+
+    def retrieve_cpu_and_memory_usage(self, test_services):
         global resource_usage
         resource_usage = {}
-        for k in services:
+
+        for k in test_services:
             resource_usage[k] = fetch_by_service(k)
         return resource_usage
 
