@@ -166,3 +166,22 @@ def check_service_is_stopped_or_not():
             SettingsInfo().TestLog.info("All services are stopped")
             return True
     raise Exception("Not all services are stopped")
+
+def check_services_stopped(*services):
+    RETRY_TIMES=3
+    WAIT_TIME=5
+    for s in services:
+        count=0
+        for i in range(RETRY_TIMES):
+            logs = subprocess.check_output("docker ps -f name={}".format(s), shell=True)
+            keyword = "Up ".encode('utf-8')
+            if keyword in logs:
+                SettingsInfo().TestLog.info("Waiting for {} to stop".format(s))
+                time.sleep(WAIT_TIME)
+                count+=1
+                continue
+            else:
+                SettingsInfo().TestLog.info("{} is stopped".format(s))
+                break
+        if count == RETRY_TIMES:
+            raise Exception("Not all targeted services are stopped")

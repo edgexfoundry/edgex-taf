@@ -33,6 +33,7 @@ if [ "$USE_RELEASE" = "pre-release" ]; then
   sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' docker-compose.yaml
   sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_IP}/g' docker-compose.yaml
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose.yaml
+  sed -i '/METRICSMECHANISM/d' docker-compose.yaml  # remove METRICSMECHANISM env variable to allow change on Consul
 else
   COMPOSE_FILE="docker-compose-${USE_RELEASE}${USE_NO_SECURITY}${USE_ARM64}.yml"
   curl -o ${COMPOSE_FILE} "https://raw.githubusercontent.com/edgexfoundry/edgex-compose/${USE_RELEASE}/${COMPOSE_FILE}"
