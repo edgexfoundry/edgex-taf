@@ -82,31 +82,17 @@ ErrIntervalPATCH006 - Update interval with invalid end
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
-ErrIntervalPATCH007 - Update interval with invalid runOnce
-    Given General An Interval Sample
-    And Create Interval  ${intervals}
-    And Set To Dictionary  ${intervals}[0][interval]  runOnce=invalid
-    When Update Intervals  ${intervals}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
-
 *** Keywords ***
 Create Intervals And Generate Multiple Intervals Sample For Updating Data
     Generate 3 Intervals Sample
     Create Interval  ${intervals}
     Query Interval By Name ${intervals}[2][interval][name]
-    ${runOnce}  Run Keyword If  "runOnce" in "${intervals}[2][interval]"  Convert To Boolean  false
-                 ...       ELSE  Convert To Boolean  true
     ${end}  Get current ISO 8601 time
     Set Test Variable  ${interval_value}  8h
     Set Test Variable  ${end_value}  ${end}
-    Set Test Variable  ${runOnce_value}  ${runOnce}
     ${update_interval}  Create Dictionary  name=${intervals}[0][interval][name]  interval=${interval_value}
     ${update_start}  Create Dictionary  name=${intervals}[1][interval][name]  end=${end_value}
-    ${update_runOnce}  Create Dictionary  name=${intervals}[2][interval][name]  runOnce=${runOnce_value}
-    Generate Intervals  ${update_interval}  ${update_start}  ${update_runOnce}
+    Generate Intervals  ${update_interval}  ${update_start}
 
 Intervals Should Be Updated
     FOR  ${name}  IN  @{interval_names}
@@ -115,7 +101,4 @@ Intervals Should Be Updated
         ...             Should Be Equal  ${content}[interval][interval]  ${interval_value}
         ...    ELSE IF  "${name}" == "${intervals}[1][interval][name]"
         ...             Should Be Equal  ${content}[interval][end]  ${end_value}
-        ...    ELSE IF  "${name}" == "${intervals}[2][interval][name]" and ${runOnce_value} == True
-        ...             Should Be Equal  ${content}[interval][runOnce]  ${runOnce_value}
-        ...       ELSE  Should Not Contain  ${content}[interval]  runOnce
     END

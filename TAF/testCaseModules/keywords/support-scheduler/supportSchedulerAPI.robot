@@ -28,14 +28,11 @@ Generate ${number} Intervals Sample
         ${index}=  Get current milliseconds epoch time
         ${start}  Get current ISO 8601 time
         ${interval_value}  Evaluate  random.choice(@{interval_value_list})  random
-        ${runOnce_str}  Evaluate  random.choice(['true', 'false'])  modules=random
-        ${runOnce}=  Convert To Boolean  ${runOnce_str}
         ${data}=  Get File  ${WORK_DIR}/TAF/testData/support-scheduler/interval.json  encoding=UTF-8
         ${interval}=  Evaluate  json.loads('''${data}''')  json
         Set To Dictionary  ${interval}  name=interval-${index}
         Set To Dictionary  ${interval}  start=${start}
         Set To Dictionary  ${interval}  interval=${interval_value}
-        Set To Dictionary  ${interval}  runOnce=${runOnce}
         Append To List  ${interval_list}  ${interval}
     END
     Generate Intervals  @{interval_list}
