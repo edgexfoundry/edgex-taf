@@ -5,6 +5,7 @@ Library      TAF/testCaseModules/keywords/setup/edgex.py
 Library      TAF/testCaseModules/keywords/setup/startup_checker.py
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+...                        AND  Update MetricsMechanism To executor On Consul
 Suite Teardown  Run Teardown Keywords
 Force Tags      v2-api
 
