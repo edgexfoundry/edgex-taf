@@ -3,6 +3,7 @@ Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/system-agent/systemAgentAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+...                        AND  Update MetricsMechanism To executor On Consul
 Suite Teardown  Run Teardown Keywords
 Force Tags      v2-api
 
@@ -40,6 +41,6 @@ All Requested Services Should Return ${property}
     ${count}=  Evaluate  len(${content})
     FOR  ${index}  IN RANGE  0  ${count}
         List Should Contain Value  ${service_list}  ${content}[${index}][serviceName]
-        Run Keyword If  "${property}"=="metrics"  Should Be Equal As Strings  ${content}[${index}][metrics][Success]  True
+        Run Keyword If  "${property}"=="metrics"  Should Be True  ${content}[${index}][metrics]
         ...    ELSE IF  "${property}"=="config"  Should Be True  ${content}[${index}][config][config]
     END

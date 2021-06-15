@@ -102,4 +102,3 @@ Set MaxResultCount=${number} For Support-Scheduler On Consul
    ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-scheduler/Service/MaxResultCount
    Update Service Configuration On Consul  ${path}  ${number}
    Restart Services  scheduler
-   sleep  2s

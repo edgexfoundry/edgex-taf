@@ -42,3 +42,8 @@ System Agent Controls Services
     ${resp}=  POST On Session  System Agent  api/${API_VERSION}/system/operation  json=${requests}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
+
+Update MetricsMechanism To ${value} On Consul
+    ${mechanism_path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/sys-mgmt-agent/MetricsMechanism
+    Update Service Configuration On Consul  ${mechanism_path}  ${value}
+    Restart Services  system

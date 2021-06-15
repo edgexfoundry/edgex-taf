@@ -20,4 +20,10 @@ else
         --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable \
         --env CONF_DIR=${CONF_DIR} ${COMPOSE_IMAGE} \
         -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yaml" restart $*
+
+fi
+
+# Waiting for kong cache released
+if [ "$SECURITY_SERVICE_NEEDED" = "true" ]; then
+  sleep 2
 fi
