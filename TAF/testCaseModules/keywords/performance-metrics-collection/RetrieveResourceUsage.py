@@ -22,7 +22,7 @@ client = docker.from_env()
 global services
 services = {
     "edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
-    "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-service-configurable-rules",
+    "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-rules-engine",
     "edgex-sys-mgmt-agent", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"
 }
 

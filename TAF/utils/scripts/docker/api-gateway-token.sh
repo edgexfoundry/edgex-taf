@@ -1,8 +1,8 @@
 #!/bin/sh
 
 option=${1}
-PROXY_IMAGE=$(docker inspect --format='{{.Config.Image}}' edgex-proxy-setup)
-PROXY_NETWORK_ID=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' edgex-proxy-setup)
+PROXY_IMAGE=$(docker inspect --format='{{.Config.Image}}' edgex-security-proxy-setup)
+PROXY_NETWORK_ID=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' edgex-security-proxy-setup)
 
 # Command vars
 USER="gateway"
@@ -22,19 +22,19 @@ case ${option} in
   -useradd)
     # Create a user in Kong
     ID=`cat /proc/sys/kernel/random/uuid 2> /dev/null` || ID=`uuidgen`
-    docker run --rm -e KONGURL_SERVER=kong -e "ID=${ID}" -e "JWT_FILE=${JWT_FILE}" -e "USER=${USER}" \
+    docker run --rm -e KONGURL_SERVER=edgex-kong -e "ID=${ID}" -e "JWT_FILE=${JWT_FILE}" -e "USER=${USER}" \
            -e "GROUP=${GROUP}" --network=${PROXY_NETWORK_ID} --entrypoint "" -v ${WORK_DIR}:/keys -v ${JWT_VOLUME}:${JWT_VOLUME} ${PROXY_IMAGE} \
            /bin/sh -c 'JWT=`cat ${JWT_FILE}`; /edgex/secrets-config proxy adduser --jwt ${JWT} --token-type jwt --id ${ID} \
            --algorithm ES256 --public_key /keys/${USER}.pub --user ${USER} --group ${GROUP} > /dev/null'
 
     # Create JWT and associate with Kong user in previous step
-    docker run --rm -e KONGURL_SERVER=kong -e "ID=${ID}" -e "USER=${USER}" --network=${PROXY_NETWORK_ID} --entrypoint "" \
+    docker run --rm -e KONGURL_SERVER=edgex-kong -e "ID=${ID}" -e "USER=${USER}" --network=${PROXY_NETWORK_ID} --entrypoint "" \
            -v ${WORK_DIR}:/keys ${PROXY_IMAGE} /bin/sh -c '/edgex/secrets-config proxy \
            jwt --algorithm ES256 --id ${ID} --private_key /keys/${USER}.key'
   ;;
   -userdel)
     # Remove a user from Kong
-    docker run --rm -e KONGURL_SERVER=kong -e "JWT_FILE=${JWT_FILE}" -e "USER=${USER}" --network=${PROXY_NETWORK_ID} --entrypoint "" \
+    docker run --rm -e KONGURL_SERVER=edgex-kong -e "JWT_FILE=${JWT_FILE}" -e "USER=${USER}" --network=${PROXY_NETWORK_ID} --entrypoint "" \
            -v ${WORK_DIR}:/keys -v ${JWT_VOLUME}:${JWT_VOLUME} ${PROXY_IMAGE} /bin/sh -c 'JWT=`cat ${JWT_FILE}`; /edgex/secrets-config proxy \
            deluser --user ${USER} --jwt ${JWT} > /dev/null'
   ;;
