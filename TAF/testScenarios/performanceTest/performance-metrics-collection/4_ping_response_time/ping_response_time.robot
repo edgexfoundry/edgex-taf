@@ -38,7 +38,7 @@ Measure the ping response time
     Record response   edgex-device-rest             ${DEVICE_REST_RES_LIST}
 
     ${APP_SERVICE_RES_LIST}=  Ping API for service  app-service  59701
-    Record response   edgex-app-service-configurable-rules        ${APP_SERVICE_RES_LIST}
+    Record response   edgex-app-rules-engine        ${APP_SERVICE_RES_LIST}
 
     ${DEVICE_VIRTUAL_RES_LIST}=  Ping API for service  device-virtual  59900
     Record response   edgex-device-virtual           ${DEVICE_VIRTUAL_RES_LIST}

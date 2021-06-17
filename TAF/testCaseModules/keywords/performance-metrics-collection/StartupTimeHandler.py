@@ -34,7 +34,7 @@ services = {
     "sys-mgmt-agent": {"containerName": "edgex-sys-mgmt-agent",
                           "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
                           "binaryStartupTimeRegex": binaryStartupTimeRegex},
-    "app-service": {"containerName": "edgex-app-service-configurable-rules",
+    "app-service": {"containerName": "edgex-app-rules-engine",
                     "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
                     "binaryStartupTimeRegex": binaryStartupTimeRegex},
     "device-virtual": {"containerName": "edgex-device-virtual",
