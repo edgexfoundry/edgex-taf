@@ -8,7 +8,7 @@
  @description
 
 """
-
+import os
 import traceback
 import docker
 from robot.api import logger
@@ -30,6 +30,12 @@ services = {
     "edgex-device-rest": {"binary": "/device-rest"},
     "edgex-kuiper": {"binary": ""},
     "edgex-redis": {"binary": ""},
+    "edgex-security-proxy-setup": {"binary": ""},
+    "edgex-security-secretstore-setup": {"binary": ""},
+    "edgex-kong": {"binary": ""},
+    "edgex-kong-db": {"binary": ""},
+    "edgex-vault": {"binary": ""},
+    "edgex-security-bootstrapper": {"binary": ""}
 }
 
 prior_rel_image_footprint = {
@@ -45,6 +51,12 @@ prior_rel_image_footprint = {
     "edgex-device-rest": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_IMAGE)},
     "edgex-kuiper": {"imagesize": "{}".format(SettingsInfo().profile_constant.KUIPER_IMAGE)},
     "edgex-redis": {"imagesize": "{}".format(SettingsInfo().profile_constant.REDIS_IMAGE)},
+    "edgex-security-proxy-setup": {"imagesize": "{}".format(SettingsInfo().profile_constant.PROXY_IMAGE)},
+    "edgex-security-secretstore-setup": {"imagesize": "{}".format(SettingsInfo().profile_constant.SECRETSTORE_IMAGE)},
+    "edgex-kong": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_IMAGE)},
+    "edgex-kong-db": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_DB_IMAGE)},
+    "edgex-vault": {"imagesize": "{}".format(SettingsInfo().profile_constant.VAULT_IMAGE)},
+    "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE)}
 }
 
 prior_rel_binary_footprint = {
@@ -60,9 +72,17 @@ prior_rel_binary_footprint = {
     "edgex-device-rest": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_BINARY)},
     "edgex-kuiper": {"binarysize": "{}".format(SettingsInfo().profile_constant.KUIPER_BINARY)},
     "edgex-redis": {"binarysize": "{}".format(SettingsInfo().profile_constant.REDIS_BINARY)},
+    "edgex-security-proxy-setup": {"binarysize": "{}".format(SettingsInfo().profile_constant.PROXY_BINARY)},
+    "edgex-security-secretstore-setup": {"binarysize": "{}".format(SettingsInfo().profile_constant.SECRETSTORE_BINARY)},
+    "edgex-kong": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_BINARY)},
+    "edgex-kong-db": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_DB_BINARY)},
+    "edgex-vault": {"binarysize": "{}".format(SettingsInfo().profile_constant.VAULT_BINARY)},
+    "edgex-security-bootstrapper": {"binarysize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_BINARY)}
 }
 
-exclude_services = {"edgex-kuiper", "edgex-redis", "edgex-core-consul"}
+exclude_services = ["edgex-kuiper", "edgex-redis", "edgex-core-consul"]
+exclude_secty_services = ["edgex-security-proxy-setup", "edgex-security-secretstore-setup", "edgex-kong", "edgex-kong-db", "edgex-vault",
+                          "edgex-security-bootstrapper"]
 
 
 class RetrieveFootprint(object):
@@ -73,7 +93,9 @@ class RetrieveFootprint(object):
     def fetch_image_binary_footprint(self):
         global resource_usage
         resource_usage = {}
-        for k in services:
+        test_services = get_services(services)
+
+        for k in test_services:
             resource_usage[k] = fetch_footprint_by_service(k)
 
     def show_the_summary_table(self):
@@ -84,6 +106,15 @@ class RetrieveFootprint(object):
 
     def binary_footprint_is_less_than_threshold_value(self):
         compare_binary_footprint_size_with_prior_release(resource_usage)
+
+
+def get_services(services_dict):
+    security_enabled = os.getenv("SECURITY_SERVICE_NEEDED")
+    if security_enabled != 'true':
+        for k in list(services_dict):
+            if k in exclude_secty_services:
+                services_dict.pop(k)
+    return services_dict
 
 
 def fetch_footprint_by_service(service):
@@ -128,7 +159,7 @@ def fetch_footprint_by_service(service):
 def compare_image_footprint_size_with_prior_release(usages):
     isfailed = 0
     for k in usages:
-        if k not in exclude_services:
+        if k not in exclude_services and k not in exclude_secty_services:
             threshold_limit = float(usages[k]["priorImageFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
             try:
                 if float(usages[k]["priorImageFootprint"]) != 0.0:
@@ -153,7 +184,7 @@ def compare_image_footprint_size_with_prior_release(usages):
 def compare_binary_footprint_size_with_prior_release(usages):
     isfailed = 0
     for k in usages:
-        if k not in exclude_services:
+        if k not in exclude_services and k not in exclude_secty_services:
             threshold_limit = float(usages[k]["priorBinaryFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
             try:
                 if float(usages[k]["priorBinaryFootprint"]) != 0.0:

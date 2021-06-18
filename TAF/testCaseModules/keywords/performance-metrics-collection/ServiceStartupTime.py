@@ -1,6 +1,7 @@
 from robot.api import logger
 import time
 import StartupTimeHandler
+import os
 from TUC.data.SettingsInfo import SettingsInfo
 import data_utils
 
@@ -18,13 +19,20 @@ class ServiceStartupTime(object):
 
     def fetch_services_startup_time(self):
         global all_up_time
-        time.sleep(10)
+
         all_up_time = get_services_startup_time(self.start_time, StartupTimeHandler.services)
         return all_up_time
 
     def fetch_services_startup_time_without_creating_containers(self):
         global all_up_time_without_recreate
-        time.sleep(10)
+
+        # Wait for all services startup
+        security_enabled = os.getenv("SECURITY_SERVICE_NEEDED")
+        if security_enabled == 'true':
+            time.sleep(15)
+        else:
+            time.sleep(5)
+
         all_up_time_without_recreate = get_services_startup_time(self.start_time,
                                                                   StartupTimeHandler.services)
         return all_up_time_without_recreate

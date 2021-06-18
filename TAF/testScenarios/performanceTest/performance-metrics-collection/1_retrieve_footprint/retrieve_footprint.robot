@@ -18,4 +18,4 @@ Footprint001 - Verify Image and Binary Footprint
     Then Show the summary table
     And Run keyword and continue on failure  Image footprint is less than threshold value
     And Run keyword and continue on failure  Binary footprint is less than threshold value
-    [Teardown]  Shutdown services
+    [Teardown]  Run Keyword And Ignore Error  Shutdown services

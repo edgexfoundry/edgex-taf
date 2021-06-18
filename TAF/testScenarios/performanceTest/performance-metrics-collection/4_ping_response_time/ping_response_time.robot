@@ -7,7 +7,9 @@ Library         TAF/testCaseModules/keywords/performance-metrics-collection//Pin
 Resource        TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup     Run keywords    Setup Suite
                 ...             AND  Deploy EdgeX  PerformanceMetrics
-Suite Teardown  Shutdown services
+                ...             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run Keywords  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Remove Token
+                ...      AND  Run Keyword And Ignore Error  Shutdown services
 
 *** Variables ***
 ${SUITE}          Measure the ping response time
@@ -31,16 +33,16 @@ Measure the ping response time
     ${NOTIFICATIONS_RES_LIST}=  Ping API for service  support-notifications  ${SUPPORT_NOTIFICATIONS_PORT}
     Record response   edgex-support-notifications  ${NOTIFICATIONS_RES_LIST}
 
-    ${SYS_MGMT_RES_LIST}=  Ping API for service  sys-mgmt-agent  58890
+    ${SYS_MGMT_RES_LIST}=  Ping API for service  sys-mgmt-agent  ${SYS_MGMT_AGENT_PORT}
     Record response   edgex-sys-mgmt-agent          ${SYS_MGMT_RES_LIST}
 
-    ${DEVICE_REST_RES_LIST}=  Ping API for service  device-rest  59986
+    ${DEVICE_REST_RES_LIST}=  Ping API for service  device-rest  ${DEVICE_REST_PORT}
     Record response   edgex-device-rest             ${DEVICE_REST_RES_LIST}
 
-    ${APP_SERVICE_RES_LIST}=  Ping API for service  app-service  59701
+    ${APP_SERVICE_RES_LIST}=  Ping API for service  app-service  ${APP_SERVICE_RULES_PORT}
     Record response   edgex-app-rules-engine        ${APP_SERVICE_RES_LIST}
 
-    ${DEVICE_VIRTUAL_RES_LIST}=  Ping API for service  device-virtual  59900
+    ${DEVICE_VIRTUAL_RES_LIST}=  Ping API for service  device-virtual  ${DEVICE_VIRTUAL_PORT}
     Record response   edgex-device-virtual           ${DEVICE_VIRTUAL_RES_LIST}
 
 Show all services response time
@@ -61,7 +63,7 @@ Ping API for service
     @{RES_LIST}=  Create List
     ${failure_count}  set variable  0
     FOR  ${index}  IN RANGE  0  ${PING_RES_LOOP_TIMES}
-        ${res}  Ping api request  ${service_port}
+        ${res}  Ping api request  ${service_port}  ${jwt_token}
         ${status}  ${value}  run keyword and ignore error  Response time is less than threshold setting  ${service_name}  ${res}
         APPEND TO LIST  ${RES_LIST}     ${res}
         ${failure_count}  Run Keyword If  ${value} == False  Evaluate  ${failure_count}+1

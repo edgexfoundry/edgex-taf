@@ -18,15 +18,16 @@ Resource001 - Get CPU and Memory Usage while sending autoevent
     Show the summary table  ${CPU_MEM_USAGE_LIST}
     Show the cpu aggregation table  ${cpu_usage}
     Show the mem aggregation table  ${mem_usage}
-    [Teardown]  Shutdown services
+    [Teardown]  Run Keyword And Ignore Error  Shutdown services
 
 *** Keywords ***
 Retrieve CPU and memory usage and loop "${GET_CPU_MEM_LOOP_TIMES}" times per "${ GET_CPU_MEM_INTERVAL}"s
     @{CPU_MEM_USAGE_LIST}=  Create List
     sleep  30
+    ${test_services}  Get Test Services
     FOR  ${index}  IN RANGE  0  ${GET_CPU_MEM_LOOP_TIMES}
         sleep  ${ GET_CPU_MEM_INTERVAL}
-        ${resource_usage}=  Retrieve CPU and memory usage
+        ${resource_usage}=  Retrieve CPU and memory usage  ${test_services}
         Run keyword and continue on failure  CPU usage is over than threshold setting
         Run keyword and continue on failure  Memory usage is over than threshold setting
         Append to list  ${CPU_MEM_USAGE_LIST}  ${resource_usage}
