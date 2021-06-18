@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/system-agent-get-positive.l
 *** Test Cases ***
 SysMgmtGET001 - Query metrics of the given services
     Set Test Variable  ${default_response_time_threshold}  3500   # normally exceed default 1200ms
-    When Query Service Metrics  edgex-core-data  edgex-core-metadata  edgex-support-notifications
+    When Query Service Metrics  core-data  core-metadata  support-notifications
     Then Should Return Status Code "207"
     And Item Index All Should Contain Status Code "200" And metrics
     And All Requested Services Should Return metrics

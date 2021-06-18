@@ -17,7 +17,7 @@ ${default_response_time_threshold}  10000
 *** Test Cases ***
 SysMgmtPOST001 - Start services by system management agent
     ${service_name_list}=  Create List  notifications  scheduler  # service names in compose file
-    ${container_name_list}=  Create List  edgex-support-notifications  edgex-support-scheduler
+    ${container_name_list}=  Create List  support-notifications  support-scheduler
     Given Stop Services  @{service_name_list}   # docker stop services (keyword in edgex.py)
     And Check Services Stopped  @{container_name_list}
     And Generate Multiple Operation Requests  start  @{container_name_list}
@@ -30,7 +30,7 @@ SysMgmtPOST001 - Start services by system management agent
 
 SysMgmtPOST002 - Stop services by system management agent
     ${service_name_list}=  Create List  data  metadata  command
-    ${container_name_list}=  Create List  edgex-core-data  edgex-core-metadata  edgex-core-command
+    ${container_name_list}=  Create List  core-data  core-metadata  core-command
     Given Services Have Been Started  @{service_name_list}
     And Generate Multiple Operation Requests  stop  @{container_name_list}
     When System Agent Controls Services  ${requests}
@@ -42,22 +42,22 @@ SysMgmtPOST002 - Stop services by system management agent
     [Teardown]  Restart Services  @{service_name_list}  # docker restart services (keyword in edgex.py)
 
 SysMgmtPOST003 - Restart services by system management agent
-    ${service_name_list}=  Create List  app-service-http-export  device-rest
-    ${container_name_list}=  Create List  app-http-export  edgex-device-rest
-    ${app_path}=  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-http-export/Service/StartupMsg
+    ${service_name_list}=  Create List  app-service-rules  device-rest
+    ${container_name_list}=  Create List  app-rules-engine  device-rest
+    ${app_path}=  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-rules-engine/Service/StartupMsg
     ${device_path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/device-rest/Service/StartupMsg
     ${keyword}=  Set Variable  service has been restart
     Given Update Service Configuration On Consul  ${app_path}  ${keyword}
     And Update Service Configuration On Consul  ${device_path}  ${keyword}
     And Generate Multiple Operation Requests  restart  @{container_name_list}
-    And Sleep  5s  # to avoid time issue
     When System Agent Controls Services  ${requests}
+    And Sleep  5s  # to avoid time issue
     Then Should Return Status Code "207"
     And Item Index All Should Contain Status Code "200"
     And Should Return Content-Type "application/json"
     And Services Have Been Restarted  ${keyword}  @{container_name_list}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${app_path}  app-http-export has Started
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${app_path}  app-rules-engine has Started
     ...         AND  Update Service Configuration On Consul  ${device_path}  device rest started
     ...         AND  Restart Services  @{service_name_list}  # docker restart services (keyword in edgex.py)
 
@@ -80,9 +80,9 @@ Services Have Been Started
 Services Have Been Restarted
     [Arguments]  ${keyword}  @{service_list}
     ${current_timestamp}=  Get current epoch time
-    ${log_timestamp}=  evaluate   int(${current_timestamp})-2
+    ${log_timestamp}=  evaluate   int(${current_timestamp})-10
     FOR  ${service}  IN  @{service_list}
-        ${service_log}=  Get service logs since timestamp  ${service}  ${log_timestamp}
+        ${service_log}=  Get service logs since timestamp  edgex-${service}  ${log_timestamp}
         ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
         Should Not Be Empty  ${return_log}
     END

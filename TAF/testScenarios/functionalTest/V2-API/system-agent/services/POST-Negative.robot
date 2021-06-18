@@ -39,14 +39,14 @@ ErrSysMgmtPOST002 - Control services containing invalid request by system manage
 *** Keywords ***
 Stop Core Data And Reset Core Metadata StartupMsg
     Stop Services  data
-    Check Services Stopped  edgex-core-data
+    Check Services Stopped  core-data
     Update Service Configuration On Consul  ${metadata_path}  ${keyword}
     Restart Services  metadata
 
 Generate Multiple Operation Requests Containing Undefined Services
-    ${start_request}=  Create Dictionary  apiVersion=v2  action=start  serviceName=edgex-core-data
-    ${stop_request}=  Create Dictionary  apiVersion=v2  action=stop  serviceName=edgex-core-command
-    ${restart_request}=  Create Dictionary  apiVersion=v2  action=restart  serviceName=edgex-core-metadata
+    ${start_request}=  Create Dictionary  apiVersion=v2  action=start  serviceName=core-data
+    ${stop_request}=  Create Dictionary  apiVersion=v2  action=stop  serviceName=core-command
+    ${restart_request}=  Create Dictionary  apiVersion=v2  action=restart  serviceName=core-metadata
     ${unknown_start_request}=  Create Dictionary  apiVersion=v2  action=start  serviceName=Unknown-Service-1
     ${unknown_stop_request}=  Create Dictionary  apiVersion=v2  action=stop  serviceName=Unknown-Service-2
     ${unknown_restart_request}=  Create Dictionary  apiVersion=v2  action=stop  serviceName=Unknown-Service-3
@@ -64,12 +64,12 @@ Should Retrun 200 For Existent Services And 404 For Unknown Services
 Some Services Have Been Started/Stopped/Restarted
     Found "${keyword}" in service "edgex-core-metadata" log
     Check Services Startup  data
-    Check Services Stopped  edgex-core-command
+    Check Services Stopped  core-command
 
 Generate multiple operation requests containing invalid requests
-    ${start_request}=  Create Dictionary  apiVersion=v2  action=start  serviceName=edgex-core-data
-    ${stop_request}=  Create Dictionary  apiVersion=v2  action=stop  serviceName=edgex-core-command
-    ${restart_request}=  Create Dictionary  apiVersion=v2  action=restart  serviceName=edgex-core-metadata
-    ${invalid_request}=  Create Dictionary  apiVersion=v2  action=Invalid  serviceName=edgex-support-notifications
+    ${start_request}=  Create Dictionary  apiVersion=v2  action=start  serviceName=core-data
+    ${stop_request}=  Create Dictionary  apiVersion=v2  action=stop  serviceName=core-command
+    ${restart_request}=  Create Dictionary  apiVersion=v2  action=restart  serviceName=core-metadata
+    ${invalid_request}=  Create Dictionary  apiVersion=v2  action=Invalid  serviceName=support-notifications
     ${request_list}=  Create List  ${start_request}  ${stop_request}  ${restart_request}  ${invalid_request}
     Set Test Variable  ${requests}  ${request_list}
