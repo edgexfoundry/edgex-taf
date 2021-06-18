@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/system-agent-get-negative.l
 *** Test Cases ***
 ErrSysMgmtGET001 - Query metrics of the given services containing non-existent services
     Set Test Variable  ${default_response_time_threshold}  3500   # normally exceed default 1200ms
-    When Query Service Metrics  edgex-core-data  non-existent-service  edgex-support-notifications
+    When Query Service Metrics  core-data  non-existent-service  support-notifications
     Then Should Return Status Code "207"
     And Should Retrun 200 and metrics For Existent Services And 500 And metrics=None For Non-Existent Services
     And Should Return Content-Type "application/json"
