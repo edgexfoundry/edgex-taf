@@ -29,7 +29,7 @@ fi
 
 # Waiting for all services startup
 if [ "$SECURITY_SERVICE_NEEDED" = "true" ]; then
-  sleep 15
+  sleep 20
 else
   sleep 5
 fi

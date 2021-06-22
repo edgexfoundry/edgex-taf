@@ -79,10 +79,10 @@ Services Have Been Started
 
 Services Have Been Restarted
     [Arguments]  ${keyword}  @{service_list}
-    ${current_timestamp}=  Get current epoch time
-    ${log_timestamp}=  evaluate   int(${current_timestamp})-10
     FOR  ${service}  IN  @{service_list}
-        ${service_log}=  Get service logs since timestamp  edgex-${service}  ${log_timestamp}
+        Run Keyword If  '${service}' == 'device-rest'  sleep  3s
+        ${service_log}=  Get service logs since timestamp  edgex-${service}  0
+        Log  ${service_log}  # For error debug
         ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
         Should Not Be Empty  ${return_log}
     END
