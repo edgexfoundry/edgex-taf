@@ -9,12 +9,10 @@
 - Add changing `device-modbus:` to `edgex-device-modbus:` and setting URL to master ([#6610122](https://github.com/edgexfoundry/edgex-taf/commits/6610122))
 - Fixed TAF Perf to proply also pull the standard compose file ([#8d68d5e](https://github.com/edgexfoundry/edgex-taf/commits/8d68d5e))
 - Switch to use edgex-mqtt-broker and removed EXPORT_HOST_PLACE_HOLDER replacement ([#405d454](https://github.com/edgexfoundry/edgex-taf/commits/405d454))
-- Removed unneed sed subsitutions ([#2e10d08](https://github.com/edgexfoundry/edgex-taf/commits/2e10d08))
 - Changed output of docker-compose-end-mqtt.yaml to docker-compose-mqtt.yaml ([#dfbd838](https://github.com/edgexfoundry/edgex-taf/commits/dfbd838))
 - Removed references to the ${ARCH}.env files ([#6f07626](https://github.com/edgexfoundry/edgex-taf/commits/6f07626))
 - Add Modbus scalability testing ([#b80dbeb](https://github.com/edgexfoundry/edgex-taf/commits/b80dbeb))
 ### Bug Fixes 🐛
-- Remove retry items of SecretStore config and update secret path - go-mod-bootstrap has implemented the addition of prefix /v1/secret/edgex/ for the Path property of SecretStore config section, so we just use the service specific secret path in Toml files - also retry related item in SecretStore config no longer needed and hence removed ([#20a6503](https://github.com/edgexfoundry/edgex-taf/commits/20a6503))
 - Update service key name in token path to new name ([#f998962](https://github.com/edgexfoundry/edgex-taf/commits/f998962))
 - Update gateway token generation ([#038becc](https://github.com/edgexfoundry/edgex-taf/commits/038becc))
 ### Code Refactoring ♻
