@@ -41,10 +41,10 @@ Get specified device ${device} read command ${command}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
-Get device ${device} read command ${command} with ${parameter}=${value}
+Get device ${device} read command ${command} with ${params}
     Create Session  Core Command  url=${coreCommandUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Command  ${deviceUri}/name/${device}/${command}  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Command  ${deviceUri}/name/${device}/${command}  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail

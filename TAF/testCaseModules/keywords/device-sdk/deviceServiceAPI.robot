@@ -1,8 +1,11 @@
 *** Settings ***
-Library  RequestsLibrary
-Library  OperatingSystem
-Library  TAF/testCaseModules/keywords/common/value_checker.py
-Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
+Library     Process
+Library     RequestsLibrary
+Library     OperatingSystem
+Library     TAF/testCaseModules/keywords/common/value_checker.py
+Resource    TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource    TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Resource    TAF/testCaseModules/keywords/core-command/coreCommandAPI.robot
 
 *** Variables ***
 ${deviceServiceUrl}  ${URI_SCHEME}://${BASE_URL}:${SERVICE_PORT}
@@ -70,3 +73,32 @@ Run Discovery Request For Device Service
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
 
+## Used by device-service of integration-test
+Event Is Not Pushed To Core Data
+    Query all events
+    ${number}  Get Length  ${content}[events]
+    Should Be Equal As Integers  ${number}  0
+
+Event Has Been Pushed To Core Data
+    Query all events
+    Should Return Status Code "200" And events
+    Should Be Equal As Strings  ${content}[events][0][deviceName]  ${device_name}
+
+Run Redis Subscriber Progress And Output
+    ${current_time}  get current epoch time
+    ${secty}  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Set Variable  true
+              ...       ELSE  Set Variable  false
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py edgex.events.device.* ${device_name} ${secty} &
+    ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/subscriber-${current_time}.log
+    ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/error-${current_time}.log
+    Set Test Variable  ${subscriber_file}  subscriber-${current_time}.log
+    [Return]  ${handle}
+
+Get device data by device ${device} and command ${command} with ${params}
+    Get device ${device} read command ${command} with ${params}
+    Should return status code "200"
+    sleep  500ms
+
+Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${filename}
+    ${redis_subscriber}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
+    Should Be Empty  ${redis_subscriber}
