@@ -21,7 +21,7 @@ ErrSysMgmtGET001 - Query metrics of the given services containing non-existent s
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrSysMgmtGET002 - Query config of the given services containing non-existent services
-    When Query Service Config  support-scheduler  non-existent-service-1  non-existent-service-2
+    When Query Service Config  support-notifications  non-existent-service-1  non-existent-service-2
     Then Should Return Status Code "207"
     And Should Retrun 200 And config For Existent Services And 404 And config=None For Non-Existent Services
     And Should Return Content-Type "application/json"

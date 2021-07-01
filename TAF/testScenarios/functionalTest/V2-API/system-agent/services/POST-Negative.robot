@@ -62,7 +62,7 @@ Should Retrun 200 For Existent Services And 404 For Unknown Services
     END
 
 Some Services Have Been Started/Stopped/Restarted
-    Found "${keyword}" in service "edgex-core-metadata" log
+    Found "${keyword}" in service "core-metadata" log
     Check Services Startup  data
     Check Services Stopped  core-command
 
