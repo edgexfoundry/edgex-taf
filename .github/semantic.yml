@@ -1,0 +1,11 @@
+allowMergeCommits: true
+# Always validate the PR title AND all the commits
+titleAndCommits: true
+types:
+    - feat
+    - fix
+    - docs
+    - refactor  # A code change that neither fixes a bug nor adds a feature
+    - build     # Changes that affect the CI/CD pipeline or build system or external dependencies
+    - ci        # Changes provided by DevOps for CI purposes.
+    - revert
