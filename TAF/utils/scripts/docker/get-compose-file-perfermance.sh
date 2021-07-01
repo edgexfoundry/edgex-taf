@@ -2,6 +2,7 @@
 # # set default values
 USE_ARCH=${1:-x86_64}
 USE_SECURITY=${2:--}
+USE_SHA1=${3:-master}
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
@@ -10,7 +11,7 @@ USE_SECURITY=${2:--}
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
 # # first sync standard docker-compose file from edgex-compose repo
-./sync-compose-file.sh master "${USE_NO_SECURITY}" "${USE_ARM64}"
+./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}"
 
 if [ "$USE_SECURITY" != '-security-' ] || [ "$USE_ARCH" = "arm64" ]; then
   cp docker-compose${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yml
