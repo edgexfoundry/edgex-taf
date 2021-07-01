@@ -100,7 +100,7 @@ def deploy_services(*args):
 
 def get_service_logs_since_timestamp(service, timestamp):
     SettingsInfo().TestLog.info("Get services {} logs".format(service))
-    logs = subprocess.check_output("docker logs {} --since {}".format(service, timestamp), shell=True)
+    logs = subprocess.check_output("docker logs edgex-{} --since {}".format(service, timestamp), shell=True)
     return logs
 
 

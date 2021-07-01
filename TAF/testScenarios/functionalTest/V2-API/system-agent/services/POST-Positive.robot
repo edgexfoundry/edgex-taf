@@ -81,7 +81,7 @@ Services Have Been Restarted
     [Arguments]  ${keyword}  @{service_list}
     FOR  ${service}  IN  @{service_list}
         Run Keyword If  '${service}' == 'device-rest'  sleep  3s
-        ${service_log}=  Get service logs since timestamp  edgex-${service}  0
+        ${service_log}=  Get service logs since timestamp  ${service}  0
         Log  ${service_log}  # For error debug
         ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
         Should Not Be Empty  ${return_log}
