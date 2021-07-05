@@ -9,6 +9,7 @@
 
 """
 import os
+import platform
 import traceback
 import docker
 from robot.api import logger
@@ -59,6 +60,27 @@ prior_rel_image_footprint = {
     "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE)}
 }
 
+prior_rel_image_footprint_arm64 = {
+    "edgex-core-consul": {"imagesize": "{}".format(SettingsInfo().profile_constant.CONSUL_IMAGE_ARM64)},
+    "edgex-core-data": {"imagesize": "{}".format(SettingsInfo().profile_constant.DATA_IMAGE_ARM64)},
+    "edgex-core-metadata": {"imagesize": "{}".format(SettingsInfo().profile_constant.METADATA_IMAGE_ARM64)},
+    "edgex-core-command": {"imagesize": "{}".format(SettingsInfo().profile_constant.COMMAND_IMAGE_ARM64)},
+    "edgex-support-notifications": {"imagesize": "{}".format(SettingsInfo().profile_constant.NOTIFICATIONS_IMAGE_ARM64)},
+    "edgex-support-scheduler": {"imagesize": "{}".format(SettingsInfo().profile_constant.SCHEDULER_IMAGE_ARM64)},
+    "edgex-app-rules-engine": {"imagesize": "{}".format(SettingsInfo().profile_constant.APP_SERVICE_CONFIGURABLE_IMAGE_ARM64)},
+    "edgex-sys-mgmt-agent": {"imagesize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_IMAGE_ARM64)},
+    "edgex-device-virtual": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_IMAGE_ARM64)},
+    "edgex-device-rest": {"imagesize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_IMAGE_ARM64)},
+    "edgex-kuiper": {"imagesize": "{}".format(SettingsInfo().profile_constant.KUIPER_IMAGE_ARM64)},
+    "edgex-redis": {"imagesize": "{}".format(SettingsInfo().profile_constant.REDIS_IMAGE_ARM64)},
+    "edgex-security-proxy-setup": {"imagesize": "{}".format(SettingsInfo().profile_constant.PROXY_IMAGE_ARM64)},
+    "edgex-security-secretstore-setup": {"imagesize": "{}".format(SettingsInfo().profile_constant.SECRETSTORE_IMAGE_ARM64)},
+    "edgex-kong": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_IMAGE_ARM64)},
+    "edgex-kong-db": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_DB_IMAGE_ARM64)},
+    "edgex-vault": {"imagesize": "{}".format(SettingsInfo().profile_constant.VAULT_IMAGE_ARM64)},
+    "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE_ARM64)}
+}
+
 prior_rel_binary_footprint = {
     "edgex-core-consul": {"binarysize": "{}".format(SettingsInfo().profile_constant.CONSUL_BINARY)},
     "edgex-core-data": {"binarysize": "{}".format(SettingsInfo().profile_constant.DATA_BINARY)},
@@ -70,6 +92,27 @@ prior_rel_binary_footprint = {
     "edgex-sys-mgmt-agent": {"binarysize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_BINARY)},
     "edgex-device-virtual": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_BINARY)},
     "edgex-device-rest": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_BINARY)},
+    "edgex-kuiper": {"binarysize": "{}".format(SettingsInfo().profile_constant.KUIPER_BINARY)},
+    "edgex-redis": {"binarysize": "{}".format(SettingsInfo().profile_constant.REDIS_BINARY)},
+    "edgex-security-proxy-setup": {"binarysize": "{}".format(SettingsInfo().profile_constant.PROXY_BINARY)},
+    "edgex-security-secretstore-setup": {"binarysize": "{}".format(SettingsInfo().profile_constant.SECRETSTORE_BINARY)},
+    "edgex-kong": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_BINARY)},
+    "edgex-kong-db": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_DB_BINARY)},
+    "edgex-vault": {"binarysize": "{}".format(SettingsInfo().profile_constant.VAULT_BINARY)},
+    "edgex-security-bootstrapper": {"binarysize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_BINARY)}
+}
+
+prior_rel_binary_footprint_arm64 = {
+    "edgex-core-consul": {"binarysize": "{}".format(SettingsInfo().profile_constant.CONSUL_BINARY)},
+    "edgex-core-data": {"binarysize": "{}".format(SettingsInfo().profile_constant.DATA_BINARY_ARM64)},
+    "edgex-core-metadata": {"binarysize": "{}".format(SettingsInfo().profile_constant.METADATA_BINARY_ARM64)},
+    "edgex-core-command": {"binarysize": "{}".format(SettingsInfo().profile_constant.COMMAND_BINARY_ARM64)},
+    "edgex-support-notifications": {"binarysize": "{}".format(SettingsInfo().profile_constant.NOTIFICATIONS_BINARY_ARM64)},
+    "edgex-support-scheduler": {"binarysize": "{}".format(SettingsInfo().profile_constant.SCHEDULER_BINARY_ARM64)},
+    "edgex-app-rules-engine": {"binarysize": "{}".format(SettingsInfo().profile_constant.APP_SERVICE_CONFIGURABLE_BINARY_ARM64)},
+    "edgex-sys-mgmt-agent": {"binarysize": "{}".format(SettingsInfo().profile_constant.SYS_MGMT_AGENT_BINARY_ARM64)},
+    "edgex-device-virtual": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_VIRTUAL_BINARY_ARM64)},
+    "edgex-device-rest": {"binarysize": "{}".format(SettingsInfo().profile_constant.DEVICE_REST_BINARY_ARM64)},
     "edgex-kuiper": {"binarysize": "{}".format(SettingsInfo().profile_constant.KUIPER_BINARY)},
     "edgex-redis": {"binarysize": "{}".format(SettingsInfo().profile_constant.REDIS_BINARY)},
     "edgex-security-proxy-setup": {"binarysize": "{}".format(SettingsInfo().profile_constant.PROXY_BINARY)},
@@ -127,8 +170,14 @@ def fetch_footprint_by_service(service):
         imageSize = image.attrs["Size"]
 
         # prior release image and binary size
-        priorImageSize = prior_rel_image_footprint[containerName]["imagesize"]
-        priorBinarySize = prior_rel_binary_footprint[containerName]["binarysize"]
+        arch = platform.machine()
+        print("arch:"+arch)
+        if arch == "x86_64":
+            priorImageSize = prior_rel_image_footprint[containerName]["imagesize"]
+            priorBinarySize = prior_rel_binary_footprint[containerName]["binarysize"]
+        else:
+            priorImageSize = prior_rel_image_footprint_arm64[containerName]["imagesize"]
+            priorBinarySize = prior_rel_binary_footprint_arm64[containerName]["binarysize"]
 
         if not services[containerName]["binary"]:
             binarySize = 0
