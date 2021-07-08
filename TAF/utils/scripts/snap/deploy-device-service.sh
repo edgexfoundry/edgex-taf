@@ -1,1 +1,3 @@
-#!/bin/sh
+#!/bin/bash
+
+logger "[snap] deploy-device-service: $@"

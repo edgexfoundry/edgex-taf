@@ -8,8 +8,8 @@ CONSUL_CONFIG_VERSION = "2.0"
 # API Version
 API_VERSION = "v2"
 
-# Deploy type: docker, manual
-DEPLOY_TYPE = "docker"
+# Deploy type: docker, manual, snap
+DEPLOY_TYPE = "snap"
 SERVICE_STARTUP_RECHECK_TIMES = 5
 SERVICE_STARTUP_WAIT_TIME = 3
 
