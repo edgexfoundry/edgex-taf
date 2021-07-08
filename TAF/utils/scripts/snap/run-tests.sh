@@ -1,0 +1,112 @@
+#!/bin/bash -e
+
+
+help()
+{
+    printf --  "Run TAF tests using snaps\n\n"
+    printf --  "Usage:\n"
+    printf --  "  run-tests.sh [OPTIONS]\n\n"
+    printf --  "Available options:\n"
+    printf -- "  -s [filename] Test using specified local edgexfoundry snap [instead of --channel=2.0/stable]\n"
+    printf -- "  -a [filename] Test using specified local edgex-app-service-configurable snap [instead of --channel=2.0/stable]\n"
+    printf -- "  -t [test]     Run V2 functional tests [all/app-service/core-command/core-data/core-metadata/support-notifications/support-scheduler/system-agent]\n"
+    printf -- "  -d [test]     Run V2 device tests [all/device-virtual/device-modbus]\n"
+    printf -- "  -i            Run integration tests\n"
+    exit 0 
+
+}
+
+if [[ $# -eq 0 ]]; then
+    help
+fi
+ 
+
+if [ "$(id -u)" != "0" ]; then
+    echo "script must be run as root"
+    exit 1
+fi
+
+# load the utils
+# shellcheck source=/dev/null 
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+source "$SCRIPT_DIR/snap-taf-tests.sh"
+ 
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -h|--help)
+            help
+             ;;
+        -s)
+            export LOCAL_SNAP="$2" # used in deploy-edgex
+            shift # past argument
+            shift # past value
+            ;;
+        -a)
+            export LOCAL_ASC_SNAP="$2" # used in deploy-edgex
+            shift # past argument
+            shift # past value
+            ;;
+        -d)
+            V2_DEVICE_TESTS="$2"
+            shift # past argument
+            shift # past value
+            ;;
+       -t|--test)
+            V2_FUNCTIONAL_TESTS="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        -i)
+            INTEGRATION_TESTS=1
+            shift # past argument            
+            ;;
+        
+        *)    # unknown option
+            help 
+            ;;
+    esac
+done 
+
+ 
+
+
+export ARCH=x86_64
+export SECURITY_SERVICE_NEEDED=true 
+
+# constants
+BASEDIR=$(pwd)
+export WORK_DIR=${BASEDIR}/../../../..
+cd ${WORK_DIR}
+
+snap_taf_install_prerequisites
+
+snap_taf_enable_snap_testing
+snap_taf_deploy_edgex
+
+
+ 
+
+if [ ! -z "$V2_FUNCTIONAL_TESTS" ]; then
+    echo "INFO:snap-TAF: running V2 API functional tests: $V2_FUNCTIONAL_TESTS ..." 
+    snap_taf_run_functional_tests $V2_FUNCTIONAL_TESTS
+fi
+
+if [ ! -z "$V2_DEVICE_TESTS" ]; then
+
+    if [ $V2_DEVICE_TESTS = "all" ]; then
+        V2_DEVICE_TESTS="device-virtual device-modbus" 
+    fi
+
+    echo "INFO:snap-TAF: running V2 API device tests: $V2_DEVICE_TESTS ..."
+    snap_taf_run_functional_device_tests $V2_DEVICE_TESTS
+fi
+
+
+if [ ! -z "$INTEGRATION_TESTS" ]; then
+    echo "INFO:snap-TAF: running integration tests"
+    snap_taf_run_integration_tests
+fi
+
+snap_taf_shutdown
