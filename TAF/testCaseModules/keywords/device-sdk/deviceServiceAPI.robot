@@ -92,6 +92,7 @@ Run Redis Subscriber Progress And Output
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/subscriber-${current_time}.log
     ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/error-${current_time}.log
     Set Test Variable  ${subscriber_file}  subscriber-${current_time}.log
+    sleep  2s
     [Return]  ${handle}
 
 Get device data by device ${device} and command ${command} with ${params}
