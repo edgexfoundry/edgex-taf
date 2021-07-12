@@ -3,7 +3,7 @@ Documentation   Measure the ping response time
 ...             Measure the ping response time of ping API for each edgex service
 ...             Measure the ping execution time from creating event by device-virtual until export-distro send event to a MQTT broker
 Library         TAF/testCaseModules/keywords/setup/edgex.py
-Library         TAF/testCaseModules/keywords/performance-metrics-collection//PingResponse.py
+Library         TAF/testCaseModules/keywords/performance-metrics-collection/PingResponse.py
 Resource        TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup     Run keywords    Setup Suite
                 ...             AND  Deploy EdgeX  PerformanceMetrics
@@ -62,13 +62,26 @@ Ping API for service
     [Arguments]  ${service_name}  ${service_port}
     @{RES_LIST}=  Create List
     ${failure_count}  set variable  0
-    FOR  ${index}  IN RANGE  0  ${PING_RES_LOOP_TIMES}
+    ${TOTAL_PING_LOOP_TIMES}=  Evaluate  ${PING_RES_LOOP_TIMES}+2
+    FOR  ${index}  IN RANGE  0  ${TOTAL_PING_LOOP_TIMES}
         ${res}  Ping api request  ${service_port}  ${jwt_token}
         ${status}  ${value}  run keyword and ignore error  Response time is less than threshold setting  ${service_name}  ${res}
         APPEND TO LIST  ${RES_LIST}     ${res}
         ${failure_count}  Run Keyword If  ${value} == False  Evaluate  ${failure_count}+1
                           ...       ELSE  set variable  ${failure_count}
     END
+    ${RES_LIST}=  Eliminate max and min values from ${RES_LIST}
     Run Keyword If  ${failure_count} > ${ALLOWABLE_OUTLIER}  Run Keyword And Continue On Failure
     ...             Fail  ${failure_count} times that response time is over than ${PING_RES_THRESHOLD}ms when ping ${service_name}
     [Return]  ${RES_LIST}
+
+Eliminate max and min values from ${res_list}
+    @{response_time_list}=  Create List
+    FOR  ${index}  IN RANGE  0  len(${res_list})
+        ${response_time}=  Evaluate  ${res_list}[${index}][seconds] * 1000
+        Append To List  ${response_time_list}  ${response_time}
+    END
+    ${max}=  Evaluate  ${response_time_list}.index(max(${response_time_list}))
+    ${min}=  Evaluate  ${response_time_list}.index(min(${response_time_list}))
+    Remove Values From List  ${res_list}  ${res_list}[${max}]  ${res_list}[${min}]
+    [Return]  ${res_list}
