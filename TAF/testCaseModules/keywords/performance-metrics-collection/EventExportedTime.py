@@ -17,7 +17,8 @@ devices = ["Random-Integer-Device", "Random-Boolean-Device", "Random-UnsignedInt
 class EventExportedTime(object):
     def retrieve_events_from_subscriber(self):
         SettingsInfo().TestLog.info("Run Subscriber And Get Events")
-        times = SettingsInfo().profile_constant.EXPORTED_LOOP_TIMES
+        # run EXPORTED_LOOP_TIMES + 2 times and remove max and min values
+        times = SettingsInfo().profile_constant.EXPORTED_LOOP_TIMES + 2
         device_int = []
         device_bool = []
         device_uint = []
@@ -47,12 +48,27 @@ class EventExportedTime(object):
 
     def fetch_the_exported_time(self):
         events = []
+        global events_exported_time_list
+        events_exported_time_list = {}
         for device in result["devices"]:
+            events_exported_time_list[device] = []
             for event in result["devices"][device]:
                 event["origin"] = get_origin_time(event["origin"])
                 event["exported"] = event["received"] - event["origin"]
                 events.append(event)
-
+                events_exported_time_list[device].append(event["exported"])
+            # eliminate the max and main values from events_exported_time_list, events and result
+            max_index = events_exported_time_list[device].index(max(events_exported_time_list[device]))
+            min_index = events_exported_time_list[device].index(min(events_exported_time_list[device]))
+            max_item = result["devices"][device][max_index]
+            min_item = result["devices"][device][min_index]
+            events_exported_time_list[device].remove(max(events_exported_time_list[device]))
+            events_exported_time_list[device].remove(max(events_exported_time_list[device]))
+            events.remove(max_item)
+            events.remove(min_item)
+            result["devices"][device].remove(max_item)
+            result["devices"][device].remove(min_item)
+            
         total_exported_time = 0
         for e in events:
             total_exported_time += e["exported"]
@@ -134,7 +150,7 @@ def show_the_aggregation_table_in_html(devices_aggregate_list):
     html = """ 
     <h3 style="margin:0px">Event exported time aggregate values:</h3>
     <h4 style="margin:0px;color:blue">Export Time Threshold: {}ms, Retrieve events: {}</h4>
-    <div style="margin:0px">Average = (Retrieved exported time of device events - max - min) / (Retrieve events - 2) </div>
+    <div style="margin:0px">Average = (Retrieved exported time of device events) / (Retrieve events) </div>
     <table style="border: 1px solid black;white-space: initial;"> 
         <tr style="border: 1px solid black;">
             <th style="border: 1px solid black;">
@@ -176,28 +192,10 @@ def show_the_aggregation_table_in_html(devices_aggregate_list):
     logger.info(html, html=True)
     return html
 
-
-def get_device_export_time_list(device):
-    exported_time_list = []
-    for event in result["devices"][device]:
-        exported_time_list.append(event["exported"])
-    return exported_time_list
-
-
 def get_device_export_time_aggregate_value(device):
-    exported_time_list = get_device_export_time_list(device)
-
-    # Get aggregate value without removing max and min
-    org_aggregate_value = data_utils.calculate_avg_max_min_from_list(exported_time_list)
-    del org_aggregate_value["avg"]
-
-    # Remove max and min and get average value
-    exported_time_list.remove(max(exported_time_list))
-    exported_time_list.remove(min(exported_time_list))
+    global events_exported_time_list
+    exported_time_list = events_exported_time_list[device]
     aggregate_value = data_utils.calculate_avg_max_min_from_list(exported_time_list)
-
-    # Update the aggregate value to use the original max and min
-    aggregate_value.update(org_aggregate_value)
 
     return aggregate_value
 
