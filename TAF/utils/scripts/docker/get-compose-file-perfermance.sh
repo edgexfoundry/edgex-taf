@@ -18,12 +18,12 @@ if [ "$USE_SECURITY" != '-security-' ] || [ "$USE_ARCH" = "arm64" ]; then
 fi
 
 if [ "$USE_SECURITY" = '-security-' ]; then
-    sed -i "/ROUTES_RULES_ENGINE_HOST/a \ \ \ \ \ \ ADD_PROXY_ROUTE: 'device-rest.http://device-rest:59986'" \
-    docker-compose.yml
+    KONG_ROUTE="device-rest.http:\/\/device-rest:59986,app-rules-engine.http:\/\/app-service-rules:59701"
+    sed -i "/ADD_PROXY_ROUTE: / s/''/'${KONG_ROUTE}'/" docker-compose.yml
 fi
 
 # # Then sync TAF performance specific docker-compose file from edgex-compose repo and replace the placeholders
-./sync-compose-file.sh master "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "-perf"
+./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "-perf"
 cp docker-compose-taf-perf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose-mqtt.yml
 sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/edgex-mqtt-broker/g' docker-compose-mqtt.yml
 sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose-mqtt.yml
