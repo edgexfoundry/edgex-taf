@@ -55,6 +55,23 @@ Query readings by start/end time
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response}!=200  fail  ${response}!=200: ${content}
 
+Query readings by resource and start/end time
+    [Arguments]  ${resource}  ${start_time}   ${end_time}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data
+    ...       ${coreDataReadingUri}/resourceName/${resource}/start/${start_time}/end/${end_time}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Query readings by resource ${resource} and start ${start_time}/end ${end_time} with ${parameter}=${value}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data
+    ...       ${coreDataReadingUri}/resourceName/${resource}/start/${start_time}/end/${end_time}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+
 Query all readings count
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}

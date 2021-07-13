@@ -66,3 +66,34 @@ ErrReadingGET008 - Query readings by start/end time fails (Start>End)
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
+ErrReadingGET09 - Query readings by rsource and start/end time fails (Invalid Start)
+    ${end_time}=  Get current nanoseconds epoch time
+    When Query Readings By Resource And Start/End Time  Test_Resource  InvalidStart  ${end_time}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrReadingGET010 - Query readings by rsource and start/end time fails (Invalid End)
+    ${start_time}=  Get current nanoseconds epoch time
+    When Query Readings By Resource And Start/End Time  Test_Resource  ${start_time}  InvalidEnd
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrReadingGET011 - Query readings by rsource and start/end time fails (Start>End)
+    ${start_time}=  Get current nanoseconds epoch time
+    ${end_time}=  Get current nanoseconds epoch time
+    When Query Readings By Resource And Start/End Time  Test_Resource  ${end_time}  ${start_time}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrReadingGET012 - Query readings by rsource and start/end time with invalid offset range
+    ${start_time}=  Get current nanoseconds epoch time
+    ${end_time}=  Evaluate  ${start_time}+100000000
+    Given Create Multiple Events
+    When Query readings by resource Simple-Reading and start ${start_time}/end ${end_time} with offset=10
+    Then Should Return Status Code "416"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete All Events By Age
