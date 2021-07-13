@@ -1,9 +1,12 @@
 *** Settings ***
 Resource         TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
-Suite Setup      Run keywords   Setup Suite
-...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-Suite Teardown   Run Teardown Keywords
-Force Tags  skipped
+Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
+Suite Setup      Run keywords  Setup Suite
+...                       AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+...                       AND  Modify PersistOnError to true On Consul
+Suite Teardown   Run keywords  Run Teardown Keywords
+...                       AND  Modify PersistOnError to false On Consul
 
 
 *** Variables ***
@@ -13,45 +16,107 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_store_and_fo
 *** Test Cases ***
 # PersistOnError=true and StoreAndForward.Enable=true
 StoreAndForward001 - Stored data is exported after connecting to http server
-    Given Set RetryInterval = 3s, MaxRetryCount=3 For app-http-export On Consul
-    And Create Device
-    When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
-    And Sleep  6s  # wait until retry fails
-    And Start HTTP Server
-    Then HTTP Server Received Exported Data
-    And Found Retry Log In app-http-export Logs
+    ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
+    ${device_name}  Set Variable  store-device-1
+    ${timestamp}  get current epoch time
+    Given Set ${configurations} For app-http-export On Consul
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
+    Sleep  5s  # wait until retry fails
+    Then Found Retry Log 2 Times In app-http-export Logs From ${timestamp}
+    And Start HTTP Server And Received Exported Data Contains ${PREFIX}_GenerateDeviceValue_UINT8_RW
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
+                ...           AND  Terminate Process  ${handle}  kill=True
 
 StoreAndForward002 - Stored data is cleared after the maximum configured retires
-    Given Set RetryInterval = 3s, MaxRetryCount=3 For app-http-export On Consul
-    And Create Device For device-virtual With Name http-export-device
-    When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
-    And Sleep  12s  # wait until retry fails
-    And Start HTTP Server
-    Then HTTP Server Didn't Received Exported Data
+    ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
+    ${device_name}  Set Variable  store-device-2
+    ${timestamp}  get current epoch time
+    Given Set ${configurations} For app-http-export On Consul
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW with ds-pushevent=yes
+    Sleep  12s  # wait until retry fails
+    Then Found Retry Log 3 Times In app-http-export Logs From ${timestamp}
+    And Found Remove Log In app-http-export Logs From ${timestamp}
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
 
 StoreAndForward003 - Exporting data didn't retry when Writeable.StoreAndForward.Enabled is false
-    Given Set StoreAndForward.Enable=false, RetryInterval = 1s, MaxRetryCount=3 For app-http-export On Consul
-    And Create Device For device-virtual With Name http-export-device
-    When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
-    And Sleep  3s
-    And Start HTTP Server
-    Then HTTP Server Didn't Received Exported Data
-    And No Retry Log Found In app-http-export Logs
+    ${configurations}  Create Dictionary  Enabled=false  RetryInterval=1s  MaxRetryCount=3
+    ${device_name}  Set Variable  store-device-3
+    ${timestamp}  get current epoch time
+    Given Set ${configurations} For app-http-export On Consul
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT32_RW with ds-pushevent=yes
+    Sleep  6s
+    Then Found Retry Log 0 Times In app-http-export Logs From ${timestamp}
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
 
 StoreAndForward004 - Retry loop interval is set by the Writeable.StoreAndForward.RetryInterval config setting
-    Given Set RetryInterval = 2s, MaxRetryCount=4 For app-http-export On Consul
-    And Create Device
-    When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
-    And Sleep  10s  # wait until retry fails
-    Then Found 4 times retry log In app-http-export Logs
+    ${configurations}  Create Dictionary  Enabled=true  RetryInterval=2s  MaxRetryCount=4
+    ${device_name}  Set Variable  store-device-4
+    ${timestamp}  get current epoch time
+    Given Set ${configurations} For app-http-export On Consul
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ds-pushevent=yes
+    Sleep  12s  # wait until retry fails
+    Then Found Retry Log 4 Times In app-http-export Logs From ${timestamp}
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
 
 
 StoreAndForward005 - Export retries will resume after application service is restarted
-    Given Set RetryInterval = 3s, MaxRetryCount=4 For app-http-export On Consul
-    And Create Device For device-virtual With Name http-export-device
-    When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
-    And Sleep  7s  # Wait reties
-    And Restart Services  app-http-export
-    Then HTTP Exporting retried 2 times After Restarting app-http-export
+    ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=4
+    ${device_name}  Set Variable  store-device-5
+    Given Set ${configurations} For app-http-export On Consul
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=yes
+    Sleep  5s  # Wait reties
+    And Restart Services  app-service-http-export
+    ${timestamp}  get current epoch time
+    Sleep  7s
+    Then Found Retry Log 2 Times In app-http-export Logs From ${timestamp}
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
 
 
+*** Keywords ***
+Set ${configurations} For ${service_name} On Consul
+    ${config_key}  Get Dictionary Keys  ${configurations}  sort_keys=false
+    ${config_value}  Get Dictionary Values  ${configurations}  sort_keys=false
+    FOR  ${key}  ${value}  IN ZIP  ${config_key}  ${config_value}
+        ${path}=  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/StoreAndForward/${key}
+        Update Service Configuration On Consul  ${path}  ${value}
+        Sleep  500ms
+    END
+
+Start HTTP Server And Received Exported Data Contains ${keyword}
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True
+    Set Test Variable  ${handle}  ${handle}
+    Sleep  3s
+    ${http_server_received}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/httpd-server.log  ${keyword}
+    ${http_received_length}  run keyword if  r'''${http_server_received}''' == '${EMPTY}'  fail  No export log found on http-server
+                             ...       ELSE  Get Line Count  ${http_server_received}
+    Should Be Equal As Integers  1  ${http_received_length}
+
+Found Retry Log ${number} Times In app-http-export Logs From ${timestamp}
+    ${logs}  Get Service Logs Since Timestamp  app-http-export  ${timestamp}
+    Log  ${logs}
+    ${retry_lines}  Get Lines Containing String  ${logs}.encode()  1 stored data items found for retrying
+    ${retry_times}  Get Line Count  ${retry_lines}
+    Should Be Equal As Integers  ${retry_times}  ${number}
+
+Found Remove Log In app-http-export Logs From ${timestamp}
+    ${logs}  Get Service Logs Since Timestamp  app-http-export  ${timestamp}
+    Log  ${logs}
+    ${retry_lines}  Get Lines Containing String  ${logs}.encode()  1 stored data items will be removed post retry
+    ${retry_times}  Get Line Count  ${retry_lines}
+    Should Be Equal As Integers  ${retry_times}  1
+
+Modify PersistOnError to ${value} On Consul
+    ${path}  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
+    Update Service Configuration On Consul  ${path}  ${value}
+    Restart Services  app-service-http-export
+    Sleep  4s
