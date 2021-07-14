@@ -72,12 +72,12 @@ StoreAndForward005 - Export retries will resume after application service is res
     ${device_name}  Set Variable  store-device-5
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=yes
-    Sleep  5s  # Wait reties
+    When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=yes
+    And Waiting For Retrying Export
     And Restart Services  app-service-http-export
     ${timestamp}  get current epoch time
     Sleep  7s
-    Then Found Retry Log 2 Times In app-http-export Logs From ${timestamp}
+    Then Found Retry Log After Restarting App Service  ${timestamp}
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
@@ -120,3 +120,13 @@ Modify PersistOnError to ${value} On Consul
     Update Service Configuration On Consul  ${path}  ${value}
     Restart Services  app-service-http-export
     Sleep  4s
+
+Waiting For Retrying Export
+    Run Keyword If  "${ARCH}" == "x86_64"  Sleep  5s
+
+Found Retry Log After Restarting App Service
+    [Arguments]  ${timestamp}
+    ${logs}  Get Service Logs Since Timestamp  app-http-export  ${timestamp}
+    Log  ${logs}
+    ${retry_lines}  Get Lines Containing String  ${logs}.encode()  1 stored data items found for retrying
+    Should Not Be Empty   ${retry_lines}
