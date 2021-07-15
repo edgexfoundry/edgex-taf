@@ -46,6 +46,15 @@ Query readings by device name
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
+Query Readings By deviceName And resourceName
+    [Arguments]  ${device_name}   ${resource_name}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/device/name/${device_name}/resourceName/${resource_name}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
 Query readings by start/end time
     [Arguments]  ${start_time}   ${end_time}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
@@ -69,6 +78,23 @@ Query readings by resource ${resource} and start ${start_time}/end ${end_time} w
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Data
     ...       ${coreDataReadingUri}/resourceName/${resource}/start/${start_time}/end/${end_time}
+    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Query readings by device and resource between start/end time
+    [Arguments]  ${device}  ${resource}  ${start_time}   ${end_time}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data
+    ...       ${coreDataReadingUri}/device/name/${device}/resourceName/${resource}/start/${start_time}/end/${end_time}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Query readings by device ${device} and resource ${resource} between ${start_time}/${end_time} with ${parameter}=${value}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data
+    ...       ${coreDataReadingUri}/device/name/${device}/resourceName/${resource}/start/${start_time}/end/${end_time}
     ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
