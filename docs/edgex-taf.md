@@ -261,11 +261,11 @@ import startup_checker as checker
 ```
 
 ## Use different deploy type
-Default deploy type set to "docker" which means deploy edgex by docker. If user deploy edgex using snap. Modify the following files.
-1. globle_variables.py
-    ```
-    # Deploy type: docker, manual, snap
-    DEPLOY_TYPE = "docker"
-    ```
-2. Files on TAF/utils/scripts/snap
-There are empty files in the snap folder, please add the related snap command into files.
+The default deploy type is set to "docker" so the testing is done using a docker deployment. 
+It's also possible to test a deployment of EdgeX using snaps. To use snaps, modify `TAF/config/global_variables.py`
+
+```
+# Deploy type: docker, manual, snap
+DEPLOY_TYPE = "snap"
+```
+The deployment will then use the scripts in `TAF/utils/scripts/snap` which install the EdgeX snaps from the Snap Store.
