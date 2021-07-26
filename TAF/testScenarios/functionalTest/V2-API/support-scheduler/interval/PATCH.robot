@@ -20,7 +20,7 @@ IntervalPATCH001 - Update interval
     And Item Index All Should Contain Status Code "200"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Intervals Should Be Updated
-    [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
+    [Teardown]  Delete Multiple Intervals By Names  @{all_interval_names}
 
 ErrIntervalPATCH001 - Update interval with empty name
     Given General An Interval Sample
@@ -85,6 +85,7 @@ ErrIntervalPATCH006 - Update interval with invalid end
 *** Keywords ***
 Create Intervals And Generate Multiple Intervals Sample For Updating Data
     Generate 3 Intervals Sample
+    Set Test Variable  ${all_interval_names}  ${interval_names}
     Create Interval  ${intervals}
     Query Interval By Name ${intervals}[2][interval][name]
     ${end}  Get current ISO 8601 time
