@@ -55,8 +55,10 @@ TransmissionGET011 - Query transmissions By Id
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be Equal  ${content}[transmission][id]  ${transmission_id}
+    And Should Be Equal As Integers  ${content}[transmission][resendCount]  1
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
+                ...      AND  Set Writable configs: resendInterval=5s and resendLimit=2
 
 # /transmission/subscription/name/{name}
 TransmissionGET012 - Query transmissions by subscription
@@ -93,10 +95,20 @@ Transmission Count Should Be ${number} And Are Created Between ${start} And ${en
     END
 
 Create A Subscriptions And Notifications
+    Set Writable configs: resendInterval=2s and resendLimit=1
     Generate A Subscription Sample With REST Channel
+    Remove From Dictionary  ${subscription}[0][subscription]  resendLimit  resendInterval  # use Writable configs
     Create Subscription ${subscription}
     Generate 1 Notifications Sample
+    Set To Dictionary  ${notification}[0][notification]  severity=CRITICAL
     Create Notification ${notification}
+    sleep  3s  # Waiting for the resend process to finish
+
+Set Writable configs: resendInterval=${resendInterval} and resendLimit=${resendLimit}
+    ${path}=  Set variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-notifications/Writable
+    Update Service Configuration On Consul  ${path}/ResendInterval  ${resendInterval}
+    Update Service Configuration On Consul  ${path}/ResendLimit  ${resendLimit}
+    Sleep  1s  # Waiting for the configuration updating
 
 Get Transmission Id
     Query All Transmissions

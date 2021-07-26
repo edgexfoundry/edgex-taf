@@ -67,20 +67,7 @@ IntervalactionGET005 - Query all Intervalactions by limit = -1
     [Teardown]  Run Keywords  Delete Multiple IntervalActions By Names  @{intervalAction_names}
     ...         AND  Delete Multiple Intervals By Names  @{Interval_names}
 
-IntervalactionGET006 - Query all Intervalactions by limit = -1 and MaxResultCount= 5
-    Given Set MaxResultCount=5 For Support-Scheduler On Consul
-    And Generate 6 Invervals And IntervalActions Sample
-    And Create Intervalaction  ${intervalActions}
-    When Query All Intervalactions With limit=-1
-    Then Should Return Status Code "200" And actions
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Should Be True  len(${content}[actions]) == 5
-    [Teardown]  Run Keywords  Delete Multiple IntervalActions By Names  @{intervalAction_names}
-    ...         AND  Delete Multiple Intervals By Names  @{Interval_names}
-    ...         AND  Set MaxResultCount=50000 For Support-Scheduler On Consul
-
-IntervalactionGET007 - Query Intervalaction by name
+IntervalactionGET006 - Query Intervalaction by name
     Given Create An Interval And Generate An Intervalaction Sample
     And Create Intervalaction  ${intervalActions}
     When Query Intervalaction By Name ${intervalAction_name}
@@ -97,8 +84,3 @@ ErrIntervalactionGET001 - Query Intervalaction by not existed name
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-*** Keywords ***
-Set MaxResultCount=${number} For Support-Scheduler On Consul
-   ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-scheduler/Service/MaxResultCount
-   Update Service Configuration On Consul  ${path}  ${number}
-   Restart Services  scheduler
