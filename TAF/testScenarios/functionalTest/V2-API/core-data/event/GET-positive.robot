@@ -15,12 +15,23 @@ EventGET001 - Query all events
     Given Create Multiple Events
     When Query All Events
     Then Should Return Status Code "200"
-    And Should Return All Events
+    And Should Return 6 Events
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
-EventGET002 - Query event by ID
+EventGET002 - Query all events by limit = -1 and MaxResultCount= 5
+    Given Set MaxResultCount=5 For Core-Data On Consul
+    And Create Multiple Events
+    When Query All Events With limit=-1
+    Then Should Return Status Code "200"
+    And Should Return 5 Events
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete All Events By Age
+    ...         AND  Set MaxResultCount=50000 For Core-Data On Consul
+
+EventGET003 - Query event by ID
     [Tags]  SmokeTest
     Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
     And Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001
@@ -30,7 +41,7 @@ EventGET002 - Query event by ID
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
-EventGET003 - Query all events with specified device by device name
+EventGET004 - Query all events with specified device by device name
     Given Create Multiple Events
     When Query Events By Device Name  Device-Test-001
     Then Should Return Status Code "200"
@@ -39,7 +50,7 @@ EventGET003 - Query all events with specified device by device name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
-EventGET004 - Query events by start/end time
+EventGET005 - Query events by start/end time
     Given Create Multiple Events Twice To Get Start/End Time
     When Query Events By Start/End Time  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
@@ -48,7 +59,7 @@ EventGET004 - Query events by start/end time
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
-EventGET005 - Query a count of all of events
+EventGET006 - Query a count of all of events
     Given Create Multiple Events
     When Query All Events Count
     Then Should Return Status Code "200"
@@ -57,7 +68,7 @@ EventGET005 - Query a count of all of events
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
-EventGET006 - Query a count of all of events with specified device by device name
+EventGET007 - Query a count of all of events with specified device by device name
     Given Create Multiple Events
     When Query Events Count By Device Name  Device-Test-002
     Then Should Return Status Code "200"
@@ -67,20 +78,25 @@ EventGET006 - Query a count of all of events with specified device by device nam
     [Teardown]  Delete All Events By Age
 
 *** Keywords ***
-Should Return All Events
+Should Return ${number} Events
   ${count}=  Get Length  ${content}[events]
-  Should Be Equal As Integers  ${count}  6
+  Should Be Equal As Integers  ${count}  ${number}
 
 Events Should Be Linked To Specified Device
-  ${count}=  Get Length  ${content}[events]
-  Should Be Equal As Integers  ${count}  3
-  FOR  ${index}  IN RANGE  0  3
+  ${number}=  Set Variable  3
+  Should Return ${number} Events
+  FOR  ${index}  IN RANGE  0  ${number}
     Should Be Equal  ${content}[events][${index}][deviceName]  Device-Test-001
   END
 
 Events Should Be Created Between ${start} And ${end}
-  ${count}=  Get Length  ${content}[events]
-  Should Be Equal As Integers  ${count}  6
-  FOR  ${index}  IN RANGE  0  6
+  ${number}=  Set Variable  6
+  Should Return ${number} Events
+  FOR  ${index}  IN RANGE  0  ${number}
     Should Be True  ${end} >= ${content}[events][${index}][origin] >=${start}
   END
+
+Set MaxResultCount=${number} For Core-Data On Consul
+   ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-data/Service/MaxResultCount
+   Update Service Configuration On Consul  ${path}  ${number}
+   Restart Services  data

@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                        AND  Stop Services  scalability-test-mqtt-export  app-service-mqtt-export  # No data received from the both services
+...                        AND  Run Keyword And Ignore Error  Stop Services  scalability-test-mqtt-export  app-service-mqtt-export  # No data received from the both services
 Suite Teardown  Run Teardown Keywords
 Force Tags   MessageQueue=MQTT
 

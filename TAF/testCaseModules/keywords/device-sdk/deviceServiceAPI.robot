@@ -104,3 +104,8 @@ Get device data by device ${device} and command ${command} with ${params}
 Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${filename}
     ${redis_subscriber}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
     Should Be Empty  ${redis_subscriber}
+
+Event With Device ${device_name} Should Be Received by Redis Subscriber ${filename}
+    ${redis_subscriber}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
+    run keyword if  "${device_name}" not in """${redis_subscriber}"""
+    ...             fail  No data received by redis subscriber
