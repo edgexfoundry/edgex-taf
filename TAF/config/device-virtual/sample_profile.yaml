@@ -271,6 +271,7 @@ deviceResources:
     minimum: "0"
     maximum: "4294967295"
     defaultValue: "0"
+    shift: "-16"
 -
   name: "Virtual_DeviceValue_UINT32_R"
   description: "Generate device UINT32 value"
