@@ -10,6 +10,7 @@ Suite Setup      Run keywords   Setup Suite
 ...                             AND  Create A Stream With Edgex Type
 Suite Teardown   Run Keywords   Delete Stream
 ...                             AND  Run Teardown Keywords
+Force Tags       MessageQueue=redis
 
 *** Variables ***
 ${SUITE}         Export By Kuiper Rules

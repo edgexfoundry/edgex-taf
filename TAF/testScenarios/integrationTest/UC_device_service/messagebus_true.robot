@@ -5,6 +5,7 @@ Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run keywords   Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
+Force Tags      MessageQueue=redis
 
 *** Variables ***
 ${SUITE}          Device Service Test When MessageBus Set To True
