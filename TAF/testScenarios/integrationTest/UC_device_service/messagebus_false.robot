@@ -8,6 +8,7 @@ Suite Setup  Run keywords   Setup Suite
 ...                   AND  Set UseMessageBus=false For device-virtual On Consul
 Suite Teardown  Run keywords  Set UseMessageBus=true For device-virtual On Consul
 ...                      AND  Run Teardown Keywords
+Force Tags      MessageQueue=redis
 
 *** Variables ***
 ${SUITE}          Device Service Test When MessageBus Set To False
