@@ -85,10 +85,11 @@ Event Has Been Pushed To Core Data
     Should Be Equal As Strings  ${content}[events][0][deviceName]  ${device_name}
 
 Run Redis Subscriber Progress And Output
+    [Arguments]  ${topic}
     ${current_time}  get current epoch time
     ${secty}  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Set Variable  true
               ...       ELSE  Set Variable  false
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py edgex.events.device.* ${device_name} ${secty} &
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py ${topic} ${device_name} ${secty} &
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/subscriber-${current_time}.log
     ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/error-${current_time}.log
     Set Test Variable  ${subscriber_file}  subscriber-${current_time}.log
