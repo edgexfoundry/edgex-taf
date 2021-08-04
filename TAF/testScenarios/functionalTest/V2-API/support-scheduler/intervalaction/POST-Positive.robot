@@ -42,7 +42,7 @@ Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Confi
     Set Test Variable  ${intervalAction_name}  PingScheduler
     ${interval}=  Create Dictionary  Name=${interval_name}  Interval=500ms  Start=20200101T000000
     ${intervalAction}=  Create Dictionary  Name=${intervalAction_name}  Interval=${interval_name}  Method=GET  Port=59861
-    ...                 Host=edgex-support-scheduler  path=/api/${API_VERSION}/ping
+    ...                 Host=edgex-support-scheduler  Path=/api/${API_VERSION}/ping  AdminState=UNLOCKED
     FOR  ${kv}  IN  &{interval}
         Update Service Configuration On Consul  ${consul_path}/Intervals/${interval_name}/${kv}[0]  ${kv}[1]
     END
@@ -67,7 +67,7 @@ Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
     Restart Services  scheduler
 
 Pre-Created Interval And IntervalAction Should Be Created
-    Sleep  3000ms  # wait for service restart
+    Sleep  3s  # wait for service restart
     Query Interval By Name ${interval_name}
     Should Return Status Code "200"
     Query IntervalAction By Name ${intervalAction_name}
