@@ -21,10 +21,17 @@ else
 
   done
 
-  docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
+  if [ "$TEST_STRATEGY" = "MQTTMessageBus" ]; then
+    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
+          --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
+          --env WORK_DIR=${WORK_DIR} --env CONF_DIR=${CONF_DIR} --security-opt label:disable ${COMPOSE_IMAGE} \
+          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose-mqtt-bus.yml" up -d
+  else
+    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
           --env WORK_DIR=${WORK_DIR} --env CONF_DIR=${CONF_DIR} --security-opt label:disable ${COMPOSE_IMAGE} \
           -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" up -d
+  fi
 fi
 
 # Waiting for all services startup
