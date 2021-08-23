@@ -20,6 +20,10 @@ Deploy EdgeX
     [Tags]  deploy-base-service
     Deploy edgex
 
+Deploy EdgeX With MQTT Bus
+    [Tags]  mqtt-bus
+    Deploy edgex  MQTTMessageBus
+
 Deploy Device Service
     [Tags]  deploy-device-service
     Deploy device service  ${SERVICE_NAME}
