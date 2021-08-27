@@ -7,4 +7,4 @@ docker run --rm -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} -v /var/run/docker.soc
         ${COMPOSE_IMAGE} -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" restart $*
 
 # Waiting for service started
-sleep 3
+sleep 2
