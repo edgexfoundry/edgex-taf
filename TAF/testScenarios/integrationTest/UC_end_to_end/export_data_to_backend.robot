@@ -72,8 +72,8 @@ HTTP Server received event is the same with exported from service ${app_service}
 
 Get exported data length from "${app_service}" service log
     ${app_service_log}=  Catch logs for service "${app_service}" with keyword "Response status"
-    ${app_service_log}=  Fetch From Right  ${app_service_log}  int=
-    ${sent_data_length}=  Fetch From Left  ${app_service_log}  )
+    ${app_service_log}=  Fetch From Right  ${app_service_log}  Sent
+    ${sent_data_length}=  Fetch From Left  ${app_service_log}   bytes
     ${sent_data_length}  convert to number  ${sent_data_length}
     [Return]  ${sent_data_length}
 
