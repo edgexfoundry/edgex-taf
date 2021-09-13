@@ -33,7 +33,12 @@ snap_taf_enable_snap_testing()
     sed -i -e ':a;N;$!ba;s@:\n    Check@:\n    Set Environment Variable  SNAP_APP_SERVICE_PORT  ${port}[2]\n    Check@' $WORK_DIR/TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
    
 
-
+    # modify TAF/testCaseModules/keywords/setup/edgex.py
+    sed -i -e 's@"docker logs edgex-{} --since {}"@"snap logs edgexfoundry.{} #{}"@' $WORK_DIR/TAF/testCaseModules/keywords/setup/edgex.py
+   
+   # modify TAF/testCaseModules/keywords/setup/startup_checker.py
+    sed -i -e 's@"docker logs {}"@"snap logs edgex-{}"@' $WORK_DIR/TAF/testCaseModules/keywords/setup/startup_checker.py
+ 
 
 }
 
