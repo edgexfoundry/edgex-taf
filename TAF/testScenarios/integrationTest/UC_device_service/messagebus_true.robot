@@ -84,11 +84,6 @@ DeviceService005-Customize PublishTopicPrefix works correctly when using Redis m
                 ...           AND  Set SubscribeTopic=edgex/events/device/# For core-data On Consul
 
 *** Keywords ***
-Event With Device ${device_name} Should Be Received by Redis Subscriber ${filename}
-    ${redis_subscriber}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
-    run keyword if  "${device_name}" not in """${redis_subscriber}"""
-    ...             fail  No data received by redis subscriber
-
 Set ${config}=${value} For ${service_name} On Consul
     ${service_layer}  Set Variable If  'device' in """${service_name}"""  devices
                       ...              'core' in """${service_name}"""  core

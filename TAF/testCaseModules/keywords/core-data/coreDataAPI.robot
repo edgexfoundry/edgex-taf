@@ -135,6 +135,14 @@ Query all events
     ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/all   headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
+Query all events with ${parameter}=${value}
+    Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Data  ${coreDataEventUri}/all  params=${parameter}=${value}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
 Query events by device name
     [Arguments]  ${device_name}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true

@@ -70,8 +70,21 @@ DeviceService009-Send get command with parameters ds-pushevent=yes and ds-return
                 ...           AND  Delete all events by age
                 ...           AND  Terminate Process  ${handle}  kill=True
 
+DeviceService010-Create Events by REST API when messagebus is disabled
+    Set Test Variable  ${device_name}  messagebus-false-device-10
+    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.core.*
+    Given Create Device For device-virtual With Name ${device_name}
+    And Generate Event Sample  Event  ${device_name}  ${PREFIX}-Sample-Profile  ${PREFIX}_GenerateDeviceValue_UINT8_RW  Simple Reading  
+    When Create Event With ${device_name} And ${PREFIX}-Sample-Profile And ${PREFIX}_GenerateDeviceValue_UINT8_RW
+    Then Should Return Status Code "201" And id
+    And Event With Device ${device_name} Should Be Received by Redis Subscriber ${subscriber_file}
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
+                ...           AND  Terminate Process  ${handle}  kill=True
+
 *** Keywords ***
 Set UseMessageBus=${value} For device-virtual On Consul
    ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/device-virtual/Device/UseMessageBus
    Update Service Configuration On Consul  ${path}  ${value}
    Restart Services  device-virtual
+
