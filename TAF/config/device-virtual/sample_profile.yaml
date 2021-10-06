@@ -6,28 +6,12 @@ labels:
 description: "Example of device-virtual"
 
 deviceResources:
--  ### Binary ###
-  name: "Virtual_DeviceValue_Binary_RW"
-  description: "Generate device binary value"
-  isHidden: true
-  tag: "status"
-  properties:
-    valueType: "Binary"
-    readWrite: "RW"
-    mediaType: "random"
--
+-  ### Binary ###  # not support write
   name: "Virtual_DeviceValue_Binary_R"
   description: "Generate device binary value"
   properties:
     valueType: "Binary"
     readWrite: "R"
-    mediaType: "random"
--
-  name: "Virtual_DeviceValue_Binary_W"
-  description: "Generate device binary value"
-  properties:
-    valueType: "Binary"
-    readWrite: "W"
     mediaType: "random"
 -  ### Boolean ###
   name: "Virtual_DeviceValue_Boolean_RW"
@@ -320,23 +304,11 @@ deviceResources:
 
 deviceCommands:
 -  ### Binary ###
-  name: "Virtual_GenerateDeviceValue_Binary_RW"
-  isHidden: false
-  readWrite: "RW"
-  resourceOperations:
-    - deviceResource: "Virtual_DeviceValue_Binary_RW"
--
   name: "Virtual_GenerateDeviceValue_Binary_R"
   isHidden: false
   readWrite: "R"
   resourceOperations:
     - deviceResource: "Virtual_DeviceValue_Binary_R"
--
-  name: "Virtual_GenerateDeviceValue_Binary_W"
-  isHidden: false
-  readWrite: "W"
-  resourceOperations:
-    - deviceResource: "Virtual_DeviceValue_Binary_W"
 -  ### Boolean ###
   name: "Virtual_GenerateDeviceValue_Boolean_RW"
   isHidden: false
