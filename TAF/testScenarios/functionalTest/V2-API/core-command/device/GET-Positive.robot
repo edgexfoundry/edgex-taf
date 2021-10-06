@@ -58,7 +58,7 @@ CommandGET004 - Query DeviceCoreCommand by device name
 
 CommandGET005 - Get specified device read command
     ${device_name}  Set Variable  Random-Binary-Device
-    ${source_name}  Set Variable  Virtual_GenerateDeviceValue_Binary_RW
+    ${source_name}  Set Variable  Virtual_GenerateDeviceValue_Binary_R
     Given Create Device For device-virtual With Name ${device_name}
     When Get Specified Device ${device_name} Read Command ${source_name}
     Then Should Return Status Code "200" And event
