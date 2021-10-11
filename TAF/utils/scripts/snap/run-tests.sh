@@ -11,6 +11,7 @@ help()
     printf -- "  -a [filename] Test using specified local edgex-app-service-configurable snap [instead of --channel=2.0/stable]\n"
     printf -- "  -t [test]     Run V2 functional tests [all/app-service/core-command/core-data/core-metadata/support-notifications/support-scheduler/system-agent]\n"
     printf -- "  -d [test]     Run V2 device tests [all/device-virtual/device-modbus]\n"
+    printf -- "  -n            Do not use security/API gateway\n"
     printf -- "  -i            Run integration tests\n"
     exit 0 
 
@@ -29,9 +30,13 @@ fi
 # load the utils
 # shellcheck source=/dev/null 
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source "$SCRIPT_DIR/snap-taf-tests.sh"
  
+
+export ARCH=x86_64
+export SECURITY_SERVICE_NEEDED=true
+
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
@@ -58,6 +63,10 @@ while [[ $# -gt 0 ]]; do
             shift # past argument
             shift # past value
             ;;
+        -n)
+            export SECURITY_SERVICE_NEEDED=false
+            shift # past argument     
+            ;;
         -i)
             INTEGRATION_TESTS=1
             shift # past argument            
@@ -72,8 +81,6 @@ done
  
 
 
-export ARCH=x86_64
-export SECURITY_SERVICE_NEEDED=true 
 
 # constants
 BASEDIR=$(pwd)

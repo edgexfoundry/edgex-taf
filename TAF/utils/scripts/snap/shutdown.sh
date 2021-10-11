@@ -1,11 +1,10 @@
 #!/bin/bash
+logger "INFO:snap-TAF: shutdown.sh"
 
-snap remove --purge edgex-device-mqtt
-snap remove --purge edgex-device-modbus
-snap remove --purge edgex-device-camera
-snap remove --purge edgex-device-rest
-snap remove --purge edgex-app-service-configurable
-snap remove --purge edgexfoundry
+
+. "$SCRIPT_DIR/snap-utils.sh"
+
+snap_remove_all
 
 >&2 echo "INFO:snap: All EdgeX snaps removed"
 logger "INFO:snap-TAF: shutdown"

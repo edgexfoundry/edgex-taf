@@ -5,7 +5,7 @@ option=${1}
 USER="gateway"
 GROUP="gateway-group"
 
-logger "INFO:snap-TAF: api-gateway-token: $* with $SNAP_APP_SERVICE_PORT"
+logger "INFO:snap-TAF: api-gateway-token: $*"
 
 # This script gets called at the beginning of each test suite. It's therefore the
 # best location to check if we should use a different app-service-configurable profile
@@ -16,22 +16,24 @@ logger "INFO:snap-TAF: api-gateway-token: $* with $SNAP_APP_SERVICE_PORT"
 #    Check service is available  ${port}[2]   /api/v2/ping
 
 # also - this script should not write anything but the token to stdout
-case ${SNAP_APP_SERVICE_PORT} in
-  59704)
-    logger "INFO:snap-TAF: api-gateway-token: http-export"
-    snap set edgex-app-service-configurable profile=http-export > null
-    snap restart edgex-app-service-configurable > null
-  ;;
-  59705)
-    logger "INFO:snap-TAF: api-gateway-token: functional-tests"
-    snap set edgex-app-service-configurable profile=functional-tests > null
-    snap restart edgex-app-service-configurable > null
-  ;;
-  *)
-  logger "INFO:snap-TAF: api-gateway-token: other"
-  ;;
-esac
+if [ ! -z "$SNAP_APP_SERVICE_PORT" ]; then
 
+  case ${SNAP_APP_SERVICE_PORT} in
+    59704)
+      logger "INFO:snap-TAF: api-gateway-token: http-export"
+      snap set edgex-app-service-configurable profile=http-export > null
+      snap restart edgex-app-service-configurable > null
+    ;;
+    59705)
+      logger "INFO:snap-TAF: api-gateway-token: functional-tests"
+      snap set edgex-app-service-configurable profile=functional-tests > null
+      snap restart edgex-app-service-configurable > null
+    ;;
+    *)
+    logger "ERROR:snap-TAF: api-gateway-token: unsupported service on port  ${SNAP_APP_SERVICE_PORT}"
+    ;;
+  esac
+fi
 
 # JWT File
 JWT_FILE=/var/snap/edgexfoundry/current/secrets/security-proxy-setup/kong-admin-jwt
