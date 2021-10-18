@@ -14,6 +14,7 @@ import time
 import subprocess
 
 from TAF.testCaseModules.keywords.setup import edgex
+from TAF.config.default.configuration import SERVICE_PORT
 from TUC.data.SettingsInfo import SettingsInfo
 
 
@@ -33,6 +34,9 @@ services = {
         "support-scheduler": {"composeName": "scheduler",
                               "port": SettingsInfo().constant.SUPPORT_SCHEDULER_PORT,
                               "pingUrl": "/api/v2/ping"},
+        "device-virtual": {"composeName": "device-virtual",
+                           "port": SERVICE_PORT,
+                           "pingUrl": "/api/v2/ping"},
         "app-service-http-export": {"composeName": "app-service-http-export",
                                     "port": SettingsInfo().constant.APP_HTTP_EXPORT_PORT,
                                     "pingUrl": "/api/v2/ping"},
