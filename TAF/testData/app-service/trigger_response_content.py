@@ -7,17 +7,15 @@ trigger_content={
     "JSON String": '{"apiVersion": "v2", "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903", "deviceName": "Random-Integer-Device", "profileName": "Random-Integer-Device", '
                    '"sourceName": "Int32", "origin": 1540855006469, "readings": [{"id": "82eb2e26-0f24-48aa-ae4c-de9dac3fb920", '
                    '"origin": 1540855006469, "deviceName": "Random-Integer-Device", "resourceName": "Int32", "profileName": "Random-Integer-Device", '
-                   '"valueType": "Int32", "binaryValue": null, "mediaType": "", "value": "123"}]}',
-    "JSON-GZIP String": 'H4sIAAAAAAAA/4yPu2rDMBSG3+WfLZBkxdiau2TpUEqW0uHYOjYHbMnIsSGEvHtJbwTa0sz/he87g2Y5cF4kRXhsFgUkwKOx3Fq2ldK9dcrVRMo'
-                        'YY1TgJlBX9m2jSxQIvEnHjzQxPJ4ohjSpfTzywFk9vGcoMOfUy/hfa0lr/r7ax2N5ZUlZBonwZud0vdtpXbmqKZCZgsRhgX85f/DWP3mJXXfDa/'
-                        'Xff3dpZP4V8T67jcaVn0/z7bKVSPl0uCbwcR3HAhMHoc/a1woexpa4vF7eAgAA//8J4FLSrgEAAA==',
-    "JSON-ZLIB String": 'eJyMj7tqwzAUht/lny2QZMXYmrtk6VBKltLh2Do2B2zJyLEhhLx7SW8E2tLM/4XvO4NmOXBeJEV4bBYFJMCjsdxatpXSvXXK1UTKGGNU4CZQV/'
-                        'Zto0sUCLxJx480MTyeKIY0qX088sBZPbxnKDDn1Mv4X2tJa/6+2sdjeWVJWQaJ8GbndL3baV25qimQmYLEYYF/OX/'
-                        'w1j95iV13w2v13393aWT+FfE+u43GlZ9P8+2ylUj5dLgm8HEdxwITB6HP2tcKHsaWuLxe3gIAAP//WcWGDw==',
-    "JSON-ZLIB-AES String": 'LQ2xcajI8eBc5QuZ6XE3grzEzl+fx6EOA2hyQnRgPhU24+RwwNNyjyO7zviCztpfrhMolpSPDZ083l/Tac9pHpnQ14sHA1WsU/'
-                            'zEGZgpIg0EJsmazONv25QIpgnauUsLu3QWba4n1XMYqV2YnYF+x/3cK+ohEfSsAJQiTgaHL7WWVXm9Mq3yAqndHkPpcdgJ9my/'
-                            'k23zZvcS9FbwSOE99A3JYFxHCIa76+J3oAQY8aCAVGVZoMu3E7XEUxmhcIihCgVwPWr2ZV37MCggR44ar20BHcE4BfzJSbdBgP'
-                            'ejmh2FnM5qwr3q6objTGEs6FzLOUsd1GJEvgd+dMEaw5e61Y3HEttvmSpqPb6myeh1Tt+Fwakf+pN3JUrTb96cK0ZZ'
+                   '"valueType": "Int32", "value": "123"}]}',
+    "JSON-GZIP String": 'H4sIAAAAAAAA/4zPzUrDQBQF4Hc56wzMX0Jm1m66cSHiRlzcZm7ChXYmTNqAlL67WEEKKmZ7fw7fuYBmeeG6SMmIWC0aSEJEsLy3bDulR+uV74mUMcaoxCHR4MZ90'
+                        'A4NEq8y8CMdGRFPlFM5ql0+8cRVPdx2aDDXMsrhv6ulnOt31C6f3KelVJkkI5rW675tte58FxpUpiR5WhBfL1/e/qeX2A93Xqv/zttUo/KvxG3tVjqc+fl9vv+8zRB'
+                        'hrMP17foRAAD///89WASMAQAA',
+    "JSON-ZLIB String": 'eJyMz81Kw0AUBeB3OesMzF9CZtZuunEh4kZc3GZuwoV2JkzagJS+u1hBCipme38O37mAZnnhukjJiFgtGkhCRLC8t2w7pUfrle+JlDHGqMQh0eDGfdAODRKvMvAjHR'
+                        'kRT5RTOapdPvHEVT3cdmgw1zLK4b+rpZzrd9Qun9ynpVSZJCOa1uu+bbXufBcaVKYkeVoQXy9f3v6nl9gPd16r/87bVKPyr8Rt7VY6nPn5fb7/vM0QYazD9e36EQ'
+                        'AA//8mgnqY',
+    "JSON-ZLIB-AES String": 'L077Qk0zVTPo1yMs57rROBIpM6WSKNf0dhhcOCx3D22KtsQMJrl1lahswJYv6jbc3LFQs5/FjnJ5Xc8u+R2JlcV4Pgx9pbTVIP8V1/8N5ppBg1QSnFZqwzWW8'
+                            'Bq6TGb1mi1dVb6McNEGaqjFRPqOAjn0dAASB3B6Vtmx8LuBEK++7SMl7iA4ga1/xYX7g9xKbY8C3O9j9n3dtj6Ld8gn0tD3Y+A3SAjoRU2I9mS0o+pFFVWeGKC'
+                            '0cMEzy7HImcRQ2r7poWY0m+IzC+EUK8jj4w0FzJX1YSbGbUuWR5s/gZfz9fKmM9NZ3MGxTcA/x6oCd86lrpTRXJinAOJj+C9u/OHIBcaDm2o4pbSk3h0VCWQ='
 
 }
-
