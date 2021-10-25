@@ -18,6 +18,7 @@ ExternalTrigger001 - Test external mqtt trigger works
     And Subscribe MQTT Broker Topics
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${mqtt_trigger_topic} "${publish_msg}"
          ...          shell=True
+    And Sleep  1s
     Then Message Is Recevied By ${mqtt_trigger_topic} Topic
     And Message Is Recevied By ${mqtt_export_topic} Topic
     [Teardown]  Terminate All Processes  kill=True
