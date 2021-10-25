@@ -18,6 +18,7 @@ ReadingGET010 - Query readings by device name and resource name
     Given Create Multiple Events
     When Query Readings By deviceName And resourceName  ${device_name}  ${resource_name}
     Then Should Return Status Code "200"
+    And totalCount Should be 3
     And Should Be True  len(${content}[readings]) == 3
     And All 3 Readings Should Contain deviceName ${device_name} And resourceName ${resource_name}
     And Should Return Content-Type "application/json"
@@ -31,6 +32,7 @@ ReadingGET011 - Query readings by device name and resource name between start/en
     When Query readings by device and resource between start/end time
     ...   ${device_name}  ${resource_name}  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
+    And totalCount Should be 3
     And Total 3 Readings Should Be Created Between ${start_time} And ${end_time}
     And All 3 Readings Should Contain deviceName ${device_name} And resourceName ${resource_name}
     And Should Return Content-Type "application/json"

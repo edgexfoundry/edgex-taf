@@ -16,6 +16,7 @@ ReadingGET001 - Query all readings
     Given Create Multiple Events
     When Query All Readings
     Then Should Return Status Code "200"
+    And totalCount Should be 9
     And Should Be True  len(${content}[readings]) == 9
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -25,6 +26,7 @@ ReadingGET002 - Query all readings with offset
     Given Create Multiple Events
     When Query All Readings With offset=3
     Then Should Return Status Code "200"
+    And totalCount Should be 9
     And Should Be True  len(${content}[readings]) == 6
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -34,6 +36,7 @@ ReadingGET003 - Query all readings with limit
     Given Create Multiple Events
     When Query All Readings With limit=3
     Then Should Return Status Code "200"
+    And totalCount Should be 9
     And Should Be True  len(${content}[readings]) == 3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -43,6 +46,7 @@ ReadingGET004 - Query reading by resoucreName
     Given Create Multiple Events
     When Query Readings By resourceName  Simple-Reading
     Then Should Return Status Code "200"
+    And totalCount Should be 6
     And Should Be True  len(${content}[readings]) == 6
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -52,6 +56,7 @@ ReadingGET005 - Query all readings with specified device by device name
     Given Create Multiple Events
     When Query Readings By Device Name  Device-Test-001
     Then Should Return Status Code "200"
+    And totalCount Should be 3
     And Should Be True  len(${content}[readings]) == 3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -61,6 +66,7 @@ ReadingGET006 - Query readings by start/end time
     Given Create Multiple Events Twice To Get Start/End Time
     When Query Readings By Start/End Time  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
+    And totalCount Should be 9
     And Total 9 Readings Should Be Created Between ${start_time} And ${end_time}
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -89,6 +95,7 @@ ReadingGET009 - Query readings by resource name and time range
     Given Create Multiple Events Twice To Get Start/End Time
     When Query Readings By Resource And Start/End Time  ${resource_name}  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
+    And totalCount Should be 6
     And All 6 Readings Resource Should be ${resource_name}
     And Total 6 Readings Should Be Created Between ${start_time} And ${end_time}
     And Should Return Content-Type "application/json"

@@ -116,6 +116,10 @@ apiVersion Should be ${API_VERSION}
     Should contain "apiVersion"
     Should be true  '${content}[apiVersion]' == '${API_VERSION}'
 
+totalCount Should be ${value}
+    Should contain  ${content}  totalCount
+    Should be true  '${content}[totalCount]' == '${value}'
+
 Item Index ${index} Should Contain Status Code "${status_code}"
     ${content_type}=  Evaluate  type($content).__name__
     ${content}=  Run keyword if  ${content_type} != list  Evaluate  json.loads('''${content}''')  json

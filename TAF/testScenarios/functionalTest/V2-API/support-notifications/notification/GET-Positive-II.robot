@@ -22,6 +22,7 @@ NotificationGET010 - Query notifications with time range
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Notification Count Should Be 6 And Are Created Between ${start} And ${end}
+    And totalCount Should be 6
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
 NotificationGET011 - Query notifications with time range by offset
@@ -31,6 +32,7 @@ NotificationGET011 - Query notifications with time range by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Notification Count Should Be 5 And Are Created Between ${start} And ${end}
+    And totalCount Should be 6
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
 NotificationGET012 - Query notifications with time range by limit
@@ -40,6 +42,7 @@ NotificationGET012 - Query notifications with time range by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Notification Count Should Be 3 And Are Created Between ${start} And ${end}
+    And totalCount Should be 6
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
 # /notification/id/{id}
@@ -62,6 +65,7 @@ NotificationGET014 - Query notifications that subscribed categories by subscript
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 4
+    And totalCount Should be 4
     And Only Notifications That Subscribed By The Subscription Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
@@ -75,6 +79,7 @@ NotificationGET015 - Query notifications that subscribed labels by subscription
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 4
+    And totalCount Should be 4
     And Only Notifications That Subscribed By The Subscription Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
@@ -88,6 +93,7 @@ NotificationGET016 - Query notifications that subscribed labels and categories b
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 6
+    And totalCount Should be 6
     And Only Notifications That Subscribed By The Subscription Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
@@ -101,6 +107,7 @@ NotificationGET017 - Query notifications by subscription by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 4
+    And totalCount Should be 6
     And Only Notifications That Subscribed By The Subscription Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
@@ -114,6 +121,7 @@ NotificationGET018 - Query notifications by subscription by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 2
+    And totalCount Should be 6
     And Only Notifications That Subscribed By The Subscription Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}

@@ -23,6 +23,7 @@ NotificationGET001 - Query notifications with specified category
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 4
+    And totalCount Should be 4
     And Notifications Should Be Linked To Specified Category: ${category}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
@@ -33,6 +34,7 @@ NotificationGET002 - Query notifications with specified category by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 3
+    And totalCount Should be 4
     And Notifications Should Be Linked To Specified Category: ${category}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
@@ -43,6 +45,7 @@ NotificationGET003 - Query notifications with specified category by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 3
+    And totalCount Should be 4
     And Notifications Should Be Linked To Specified Category: ${category}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
@@ -54,6 +57,7 @@ NotificationGET004 - Query notifications with specified label
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 4
+    And totalCount Should be 4
     And Notifications Should Be Linked To Specified Label: ${label}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
@@ -64,6 +68,7 @@ NotificationGET005 - Query notifications with specified label by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 2
+    And totalCount Should be 4
     And Notifications Should Be Linked To Specified Label: ${label}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
@@ -74,6 +79,7 @@ NotificationGET006 - Query notifications with specified label by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 2
+    And totalCount Should be 4
     And Notifications Should Be Linked To Specified Label: ${label}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
@@ -85,6 +91,7 @@ NotificationGET007 - Query notifications with specified status
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[notifications]) == 1
+    And totalCount Should be 1
     And Only Notifications With Status ESCALATED Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  ${subscription_names}[0]  ESCALATION
