@@ -18,7 +18,6 @@ ExternalTrigger001 - Test external mqtt trigger works
     And Subscribe MQTT Broker Topics
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${mqtt_trigger_topic} "${publish_msg}"
          ...          shell=True
-    And Sleep  1s
     Then Message Is Recevied By ${mqtt_trigger_topic} Topic
     And Message Is Recevied By ${mqtt_export_topic} Topic
     [Teardown]  Terminate All Processes  kill=True
@@ -33,9 +32,11 @@ Subscribe MQTT Broker Topics
     END
 
 Message Is Recevied By ${topic} Topic
+    Wait Until Keyword Succeeds  6x  1 sec  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log
     ${subscribe_msg}  Grep File  ${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log  ${publish_msg}
     Should Not Be Empty  ${subscribe_msg}
 
 Store Secret With ${service} To Vault
     Set Test Variable  ${url}  http://${BASE_URL}:${APP_EXTERNAL_MQTT_TRIGGER_PORT}
     Store Secret Data With ${service} Auth
+
