@@ -24,6 +24,7 @@ SubscriptionGET008 - Query subscriptions with specified label
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 2
+    And totalCount Should be 2
     And Subscriptions Should Be Linked To Specified Label: new_list
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -38,6 +39,7 @@ SubscriptionGET009 - Query subscriptions with specified label by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 3
+    And totalCount Should be 4
     And Subscriptions Should Be Linked To Specified Label: simple
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -52,6 +54,7 @@ SubscriptionGET010 - Query subscriptions with specified label by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 2
+    And totalCount Should be 2
     And Subscriptions Should Be Linked To Specified Label: simple
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -66,6 +69,7 @@ SubscriptionGET011 - Query subscriptions with specified receiver
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 3
+    And totalCount Should be 3
     And Subscriptions Should Be Linked To Specified Receiver: tafuser
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -79,6 +83,7 @@ SubscriptionGET012 - Query subscriptions with specified receiver by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 2
+    And totalCount Should be 3
     And Subscriptions Should Be Linked To Specified Receiver: tafuser
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -92,6 +97,7 @@ SubscriptionGET013 - Query subscriptions with specified receiver by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 2
+    And totalCount Should be 3
     And Subscriptions Should Be Linked To Specified Receiver: tafuser
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 

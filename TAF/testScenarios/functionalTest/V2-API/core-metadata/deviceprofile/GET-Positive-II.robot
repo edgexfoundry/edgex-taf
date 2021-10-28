@@ -16,6 +16,7 @@ ProfileGET009 - Query device profiles by manufacturer's model
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles By Manufacturer And Model  Honeywell  ABC123
     Then Should Return Status Code "200" And profiles
+    And totalCount Should be 3
     And Should Be True  len(${content}[profiles]) == 3
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Profiles Should Be Linked To Specified Model: ABC123
@@ -28,6 +29,7 @@ ProfileGET010 - Query device profiles by manufacturer's model and offset
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles Having Manufacturer Honeywell And Model ABC123 With offset=1
     Then Should Return Status Code "200" And profiles
+    And totalCount Should be 3
     And Should Be True  len(${content}[profiles]) == 2
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Profiles Should Be Linked To Specified Model: ABC123
@@ -40,6 +42,7 @@ ProfileGET011 - Query device profiles by manufacturer's model and limit
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles Having Manufacturer Honeywell And Model ABC123 With limit=1
     Then Should Return Status Code "200" And profiles
+    And totalCount Should be 3
     And Should Be True  len(${content}[profiles]) == 1
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Profiles Should Be Linked To Specified Model: ABC123
@@ -52,6 +55,7 @@ ProfileGET012 - Query device profiles by model
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles By Model  ABC123
     Then Should Return Status Code "200" And profiles
+    And totalCount Should be 4
     And Should Be True  len(${content}[profiles]) == 4
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
@@ -63,6 +67,7 @@ ProfileGET013 - Query device profiles by model and offset
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles By Model ABC123 With offset=1
     Then Should Return Status Code "200" And profiles
+    And totalCount Should be 4
     And Should Be True  len(${content}[profiles]) == 3
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
@@ -74,6 +79,7 @@ ProfileGET014 - Query device profiles by model and limit
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles By Model ABC123 With limit=1
     Then Should Return Status Code "200" And profiles
+    And totalCount Should be 4
     And Should Be True  len(${content}[profiles]) == 1
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
@@ -87,7 +93,7 @@ ProfileGET015 - Query device profiles by empty manufacturer value
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles By Manufacturer  Honeywell
     Then Should Return Status Code "200" And profiles
-    And Profile ${deviceProfile}[0][profile][name] Should Have Empty Manfucturer
+    And totalCount Should be 2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
@@ -99,7 +105,7 @@ ProfileGET016 - Query device profiles by empty model value
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles By Model  ABC123
     Then Should Return Status Code "200" And profiles
-    And Profile ${deviceProfile}[0][profile][name] Should Have Empty Model
+    And totalCount Should be 2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
@@ -141,14 +147,5 @@ Profiles Should Be Linked To Specified ${property}: ${value}
     ${property}=  Convert To Lower Case  ${property}
     FOR  ${item}  IN  @{profiles}
         Should Be Equal As Strings  ${item}[${property}]  ${value}
-    END
-
-Profile ${profile_name} Should Have Empty ${property}
-   # property: model, manufacturer
-   ${profiles}=  Set Variable  ${content}[profiles]
-   ${property}=  Convert To Lower Case  ${property}
-    FOR  ${item}  IN  @{profiles}
-        Run Keyword If  "${item}[name]" == "${profile_name}"  Should Be Empty  ${item}[${property}]
-        ...       ELSE  Continue For Loop
     END
 

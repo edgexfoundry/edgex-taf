@@ -17,6 +17,7 @@ ProWatcherGET001 - Query all provision watcher
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers
     Then Should Return Status Code "200" And provisionWatchers
+    And totalCount Should be 3
     And Should Be True  len(${content}[provisionWatchers]) == 3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -28,6 +29,7 @@ ProWatcherGET002 - Query all provision watcher with offset
     When Query All Provision Watchers With offset=1
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 3
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
@@ -37,6 +39,7 @@ ProWatcherGET003 - Query all provision watcher with limit
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers With limit=2
     Then Should Return Status Code "200" And provisionWatchers
+    And totalCount Should be 3
     And Should Return Content-Type "application/json"
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -50,6 +53,7 @@ ProWatcherGET004 - Query all provision watcher with specified labels
     When Query All Provision Watchers with labels=simple
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 2
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Provision Watchers Should Be Linked To Specified Label: simple
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -72,6 +76,7 @@ ProWatcherGET006 - Query provision watcher by specified device profile
     When Query All Provision Watchers By profileName  Test-Profile-1
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 1
     And Should Be True  len(${content}[provisionWatchers]) == 1
     And Provision Watchers Should Be Linked To Specified Device Profile: Test-Profile-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -85,6 +90,7 @@ ProWatcherGET007 - Query provision watcher by specified device profile with offs
     When Query All Provision Watchers By profileName Test-Profile-1 With offset=1
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 3
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Provision Watchers Should Be Linked To Specified Device Profile: Test-Profile-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -98,6 +104,7 @@ ProWatcherGET008 - Query provision watcher by specified device profile with limi
     When Query All Provision Watchers By profileName Test-Profile-1 With limit=2
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 3
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Provision Watchers Should Be Linked To Specified Device Profile: Test-Profile-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -110,6 +117,7 @@ ProWatcherGET009 - Query provision watcher by specified device service
     When Query All Provision Watchers By serviceName  Device-Service-${index}-1
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 1
     And Should Be True  len(${content}[provisionWatchers]) == 1
     And Provision Watchers Should Be Linked To Specified Device Service: Device-Service-${index}-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -123,6 +131,7 @@ ProWatcherGET010 - Query provision watcher by specified device service with offs
     When Query All Provision Watchers By serviceName Device-Service-${index}-1 With offset=2
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 3
     And Should Be True  len(${content}[provisionWatchers]) == 1
     And Provision Watchers Should Be Linked To Specified Device Service: Device-Service-${index}-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -136,6 +145,7 @@ ProWatcherGET011 - Query provision watcher by specified device service with limi
     When Query All Provision Watchers By serviceName Device-Service-${index}-1 With limit=2
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
+    And totalCount Should be 3
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Provision Watchers Should Be Linked To Specified Device Service: Device-Service-${index}-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

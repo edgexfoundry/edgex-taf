@@ -21,6 +21,7 @@ SubscriptionGET001 - Query all subscriptions that subscriptions are less then 20
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 3
+    And totalCount Should be 3
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
 SubscriptionGET002 - Query all subscriptions that subscriptions are more then 20
@@ -28,6 +29,7 @@ SubscriptionGET002 - Query all subscriptions that subscriptions are more then 20
     And Create Subscription ${subscription}
     When Query All Subscriptions
     Then Should Return Status Code "200" And subscriptions
+    And totalCount Should be 21
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 20
@@ -40,6 +42,7 @@ SubscriptionGET003 - Query all subscriptions by offset
     Then Should Return Status Code "200" And subscriptions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And totalCount Should be 3
     And Should Be True  len(${content}[subscriptions]) == 2
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -50,6 +53,7 @@ SubscriptionGET004 - Query all subscriptions by limit
     Then Should Return Status Code "200" And subscriptions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And totalCount Should be 3
     And Should Be True  len(${content}[subscriptions]) == 2
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -65,6 +69,7 @@ SubscriptionGET005 - Query subscriptions with specified category
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[subscriptions]) == 2
+    And totalCount Should be 2
     And Subscriptions Should Be Linked To Specified Category: new_category
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -78,6 +83,7 @@ SubscriptionGET006 - Query subscriptions with specified category by offset
     Then Should Return Status Code "200" And subscriptions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And totalCount Should be 4
     And Should Be True  len(${content}[subscriptions]) == 3
     And Subscriptions Should Be Linked To Specified Category: health-check
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
@@ -87,11 +93,12 @@ SubscriptionGET007 - Query subscriptions with specified category by limit
     Given Generate 3 Subscriptions Sample
     And Set To Dictionary  ${subscription}[1][subscription]  categories=@{category_list}
     And Create Subscription ${subscription}
-    When Query All Subscriptions By Specified Category health-check With limit=2
+    When Query All Subscriptions By Specified Category health-check With limit=1
     Then Should Return Status Code "200" And subscriptions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Should Be True  len(${content}[subscriptions]) == 2
+    And Should Be True  len(${content}[subscriptions]) == 1
+    And totalCount Should be 2
     And Subscriptions Should Be Linked To Specified Category: health-check
     [Teardown]  Delete Multiple Subscriptions By Names  @{subscription_names}
 

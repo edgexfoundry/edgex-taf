@@ -23,6 +23,7 @@ TransmissionGET008 - Query transmissions with time range
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Transmission Count Should Be 4 And Are Created Between ${start} And ${end}
+    And totalCount Should be 4
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
 
@@ -33,6 +34,7 @@ TransmissionGET009 - Query transmissions with time range by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Transmission Count Should Be 3 And Are Created Between ${start} And ${end}
+    And totalCount Should be 4
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
 
@@ -43,6 +45,7 @@ TransmissionGET010 - Query transmissions with time range by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Transmission Count Should Be 2 And Are Created Between ${start} And ${end}
+    And totalCount Should be 4
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
 

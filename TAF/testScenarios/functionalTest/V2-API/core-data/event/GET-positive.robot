@@ -15,6 +15,7 @@ EventGET001 - Query all events
     Given Create Multiple Events
     When Query All Events
     Then Should Return Status Code "200"
+    And totalCount Should be 6
     And Should Return 6 Events
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -25,6 +26,7 @@ EventGET002 - Query all events by limit = -1 and MaxResultCount= 5
     And Create Multiple Events
     When Query All Events With limit=-1
     Then Should Return Status Code "200"
+    And totalCount Should be 6
     And Should Return 5 Events
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -45,6 +47,7 @@ EventGET004 - Query all events with specified device by device name
     Given Create Multiple Events
     When Query Events By Device Name  Device-Test-001
     Then Should Return Status Code "200"
+    And totalCount Should be 3
     And Events Should Be Linked To Specified Device
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -54,6 +57,7 @@ EventGET005 - Query events by start/end time
     Given Create Multiple Events Twice To Get Start/End Time
     When Query Events By Start/End Time  ${start_time}  ${end_time}
     Then Should Return Status Code "200"
+    And totalCount Should be 6
     And Events Should Be Created Between ${start_time} And ${end_time}
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

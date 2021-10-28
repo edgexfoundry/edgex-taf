@@ -17,6 +17,7 @@ ServiceGET001 - Query all device services
     And Create Device Service ${deviceService}
     When Query All Device Services
     Then Should Return Status Code "200" And services
+    And totalCount Should be 6
     And Should Be True  len(${content}[services]) == 6  # Contain 3 profiles of device-service
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -28,6 +29,7 @@ ServiceGET002 - Query all device services by offset
     And Create Device Service ${deviceService}
     When Query All Device Services With offset=2
     Then Should Return Status Code "200" And services
+    And totalCount Should be 6
     And Should Be True  len(${content}[services]) == 4  # Contain 3 profiles of device-service
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -39,6 +41,7 @@ ServiceGET003 - Query all device services by limit
     And Create Device Service ${deviceService}
     When Query All Device Services With limit=2
     Then Should Return Status Code "200" And services
+    And totalCount Should be 6
     And Should Be True  len(${content}[services]) == 2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -52,6 +55,7 @@ ServiceGET004 - Query all device services by labels
     And Create Device Service ${deviceService}
     When Query All Device Services With labels=device-example
     Then Should Return Status Code "200" And services
+    And totalCount Should be 2
     And Should Be True  len(${content}[services]) == 2
     And Should Return Content-Type "application/json"
     And Device Services Should Be Linked To Specified Label: device-example

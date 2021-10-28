@@ -24,6 +24,7 @@ TransmissionGET001 - Query all transmissions that transmissions are less then 20
     Then Should Return Status Code "200" And transmissions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And totalCount Should be 4
     And Should Be True  len(${content}[transmissions]) == 4
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
@@ -36,17 +37,18 @@ TransmissionGET002 - Query all transmissions that transmissions are more then 20
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[transmissions]) == 20
+    And totalCount Should be 24
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
 
 TransmissionGET003 - Query all transmissions by offset
-    Query All Subscriptions
     Given Create Subscriptions And Notifications Make Less Than 20 Transmission Created
     When Query All Transmissions With offset=1
     Then Should Return Status Code "200" And transmissions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[transmissions]) == 3
+    And totalCount Should be 4
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
 
@@ -58,6 +60,7 @@ TransmissionGET004 - Query all transmissions by limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[transmissions]) == 2
+    And totalCount Should be 4
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
 
@@ -70,6 +73,7 @@ TransmissionGET005 - Query transmissions with specified status
     Then Should Return Status Code "200" And transmissions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And totalCount Should be 2
     And Should Be True  len(${content}[transmissions]) == 2
     And Transmissions Should Be Linked To Specified Status: SENT
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
@@ -83,6 +87,7 @@ TransmissionGET006 - Query transmissions with specified status by offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be True  len(${content}[transmissions]) == 1
+    And totalCount Should be 2
     And Transmissions Should Be Linked To Specified Status: SENT
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions
@@ -90,11 +95,12 @@ TransmissionGET006 - Query transmissions with specified status by offset
 TransmissionGET007 - Query transmissions with specified status by limit
     Query All Subscriptions
     Given Create Subscriptions And Notifications Make Less Than 20 Transmission Created
-    When Query Transmissions By Specified Status SENT With limit=2
+    When Query Transmissions By Specified Status SENT With limit=1
     Then Should Return Status Code "200" And transmissions
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Should Be True  len(${content}[transmissions]) == 2
+    And Should Be True  len(${content}[transmissions]) == 1
+    And totalCount Should be 2
     And Transmissions Should Be Linked To Specified Status: SENT
     [Teardown]  Run Keywords  Delete Multiple Subscriptions By Names  @{subscription_names}
                 ...      AND  Cleanup All Notifications And Transmissions

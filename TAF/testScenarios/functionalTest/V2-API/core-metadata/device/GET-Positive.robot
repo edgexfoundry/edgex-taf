@@ -17,6 +17,7 @@ DeviceGET001 - Query all devices
     And Create Device With ${Device}
     When Query All Devices
     Then Should Return Status Code "200" And devices
+    And totalCount Should be 7
     And Should Be True  len(${content}[devices]) == 7  # 3 for device-rest
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -27,6 +28,7 @@ DeviceGET002 - Query all devices with offset
     And Create Device With ${Device}
     When Query All Devices With offset=2
     Then Should Return Status Code "200" And devices
+    And totalCount Should be 7
     And Should Be True  len(${content}[devices]) == 5  # 3 for device-rest
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -37,6 +39,7 @@ DeviceGET003 - Query all devices with limit
     And Create Device With ${Device}
     When Query All Devices With limit=3
     Then Should Return Status Code "200" And devices
+    And totalCount Should be 7
     And Should Be True  len(${content}[devices]) == 3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -49,6 +52,7 @@ DeviceGET004 - Query all devices with specified labels
     And Create Device With ${Device}
     When Query All Devices With labels=device-sample
     Then Should Return Status Code "200" And devices
+    And totalCount Should be 3
     And Should Be True  len(${content}[devices]) == 3
     And Devices Should Be Linked To Specified Label: device-sample
     And Should Return Content-Type "application/json"
