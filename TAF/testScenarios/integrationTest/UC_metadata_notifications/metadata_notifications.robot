@@ -8,6 +8,7 @@ Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Create A subscription To Subscribe Metadata Updates
+...                             AND  Set Core-Metadata PostDeviceChanges=true
 Suite Teardown   Run keywords   Delete metadata subscription, notifications and transmissions
 ...                             AND  Run Teardown Keywords
 Force Tags       MessageQueue=redis
