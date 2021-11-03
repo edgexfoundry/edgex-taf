@@ -58,6 +58,7 @@ TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST006 - Trigger pipeline (JSON-ZLIB-AES)
+    [Tags]  Skipped  # Since the key and initVector is deprecated. This case is invalid for non-security test.
     Given Set Functions FilterByDeviceName, Transform, Compress, Encrypt, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm zlib
