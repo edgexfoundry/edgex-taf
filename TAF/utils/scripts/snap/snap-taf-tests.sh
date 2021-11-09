@@ -4,6 +4,7 @@
 snap_taf_install_prerequisites()
 {
   if [ ! -e "./edgex-taf-common" ]; then
+        sudo apt-get install python-is-python3
         sudo apt-get install python3-pip
         git clone https://github.com/edgexfoundry/edgex-taf-common.git
         ## Install dependency lib
@@ -33,12 +34,21 @@ snap_taf_enable_snap_testing()
     sed -i -e ':a;N;$!ba;s@:\n    Check@:\n    Set Environment Variable  SNAP_APP_SERVICE_PORT  ${port}[2]\n    Check@' $WORK_DIR/TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
    
 
-    # modify TAF/testCaseModules/keywords/setup/edgex.py
-    sed -i -e 's@"docker logs edgex-{} --since {}"@"snap logs edgexfoundry.{} #{}"@' $WORK_DIR/TAF/testCaseModules/keywords/setup/edgex.py
+    # modify TAF/testCaseModules/keywords/setup/edgex.py 
+    sed -i -e "s!\"docker logs edgex-{} --since {}\".format(service, timestamp)!\"journalctl -g {} -S @{}\".format(service.replace(\'app-\',\'\'),timestamp)!" $WORK_DIR/TAF/testCaseModules/keywords/setup/edgex.py
    
-   # modify TAF/testCaseModules/keywords/setup/startup_checker.py
-    sed -i -e 's@"docker logs {}"@"snap logs edgex-{}"@' $WORK_DIR/TAF/testCaseModules/keywords/setup/startup_checker.py
- 
+   # modify TAF/testCaseModules/keywords/setup/startup_checker.py 
+    sed -i -e 's!"docker logs {}"!"journalctl -g {}"!' $WORK_DIR/TAF/testCaseModules/keywords/setup/startup_checker.py
+
+    # update host name
+    sed -i -e 's@Host=edgex-support-scheduler@Host=localhost@' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-scheduler/intervalaction/POST-Positive.robot
+
+
+   # integration tests
+   # The notification sender is "core-metadata", not "edgex-core-metadata"
+    sed -i -e 's@edgex-core-metadata@core-metadata@' $WORK_DIR/TAF/testScenarios/integrationTest/UC_metadata_notifications/metadata_notifications.robot
+
+    export DOCKER_HOST_IP="127.0.0.1"
 
 }
 
@@ -68,7 +78,7 @@ snap_taf_run_functional_tests() # arg:  tests to run
         cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
         >&2 echo "INFO:snap: V2 API Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html"
     fi
-
+  
 }
 
 snap_taf_run_functional_device_tests()
@@ -94,7 +104,7 @@ snap_taf_run_integration_tests()
     cd ${WORK_DIR}
     python3 -m TUC --exclude Skipped -u integrationTest -p device-virtual
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html 
-    >&2 echo "INFO:snap: V2 API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html"
+     >&2 echo "INFO:snap: V2 API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html"
  }
 
 snap_taf_shutdown()

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-logger "INFO:snap-TAF: deploy-edgex.sh"
+>&2 echo "INFO:snap-TAF: deploy-edgex.sh"
 
 . "$SCRIPT_DIR/snap-utils.sh"
 

@@ -5,7 +5,7 @@ option=${1}
 USER="gateway"
 GROUP="gateway-group"
 
-logger "INFO:snap-TAF: api-gateway-token: $*"
+>&2 echo "INFO:snap-TAF: api-gateway-token: $*"
 
 # This script gets called at the beginning of each test suite. It's therefore the
 # best location to check if we should use a different app-service-configurable profile
@@ -20,19 +20,21 @@ if [ ! -z "$SNAP_APP_SERVICE_PORT" ]; then
 
   case ${SNAP_APP_SERVICE_PORT} in
     59704)
-      logger "INFO:snap-TAF: api-gateway-token: http-export"
-      snap set edgex-app-service-configurable profile=http-export > null
-      snap restart edgex-app-service-configurable > null
+      >&2 echo "INFO:snap-TAF: api-gateway-token: switching to http-export profile"
+      >&2 snap set edgex-app-service-configurable profile=http-export
+      >&2 snap restart edgex-app-service-configurable
     ;;
     59705)
-      logger "INFO:snap-TAF: api-gateway-token: functional-tests"
-      snap set edgex-app-service-configurable profile=functional-tests > null
-      snap restart edgex-app-service-configurable > null
+      >&2 echo "INFO:snap-TAF: api-gateway-token: switching to functional-tests profile"
+      >&2 snap set edgex-app-service-configurable profile=functional-tests
+      >&2 snap restart edgex-app-service-configurable
+
     ;;
     *)
-    logger "ERROR:snap-TAF: api-gateway-token: unsupported service on port  ${SNAP_APP_SERVICE_PORT}"
+    >&2 echo "ERROR:snap-TAF: api-gateway-token: unsupported service on port  ${SNAP_APP_SERVICE_PORT}"
     ;;
   esac
+  sleep 5
 fi
 
 # JWT File
@@ -66,6 +68,7 @@ case ${option} in
     exit 0
   ;;
 esac
+#>&2 edgex-cli deviceprofile list
 
-
+>&2 echo "INFO:snap-TAF: api-gateway-token done"
 
