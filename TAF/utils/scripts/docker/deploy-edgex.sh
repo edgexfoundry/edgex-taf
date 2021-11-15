@@ -35,8 +35,18 @@ else
 fi
 
 # Waiting for all services startup
+sleep 5
+
 if [ "$SECURITY_SERVICE_NEEDED" = "true" ]; then
-  sleep 20
-else
-  sleep 5
+  for i in $(seq 1 12);
+  do
+    echo "Waiting for proxy setup is ready. Loop sleep times:${i}"
+    result=$(docker ps -a | grep edgex-security-proxy-setup | grep Up)
+    if [ -n "$result" ]; then
+      sleep 5
+    else
+      echo "Proxy Setup is ready."
+      break
+    fi
+  done
 fi
