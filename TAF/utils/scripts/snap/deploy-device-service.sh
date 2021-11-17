@@ -1,4 +1,4 @@
 #!/bin/bash -e
 
 
-logger "INFO:snap-TAF: deploy-device-service"
+>&2 echo "INFO:snap-TAF: deploy-device-service"

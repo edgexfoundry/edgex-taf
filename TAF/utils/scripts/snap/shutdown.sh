@@ -1,5 +1,5 @@
 #!/bin/bash
-logger "INFO:snap-TAF: shutdown.sh"
+>&2 echo "INFO:snap-TAF: shutdown.sh"
 
 
 . "$SCRIPT_DIR/snap-utils.sh"
@@ -7,5 +7,5 @@ logger "INFO:snap-TAF: shutdown.sh"
 snap_remove_all
 
 >&2 echo "INFO:snap: All EdgeX snaps removed"
-logger "INFO:snap-TAF: shutdown"
+>&2 echo "INFO:snap-TAF: shutdown"
 

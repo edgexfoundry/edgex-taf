@@ -7,8 +7,8 @@ help()
     printf --  "Usage:\n"
     printf --  "  run-tests.sh [OPTIONS]\n\n"
     printf --  "Available options:\n"
-    printf -- "  -s [filename] Test using specified local edgexfoundry snap [instead of --channel=2.0/stable]\n"
-    printf -- "  -a [filename] Test using specified local edgex-app-service-configurable snap [instead of --channel=2.0/stable]\n"
+    printf -- "  -s [filename] Test using specified local edgexfoundry snap [instead of --edge]\n"
+    printf -- "  -a [filename] Test using specified local edgex-app-service-configurable snap [instead of --edge]\n"
     printf -- "  -t [test]     Run V2 functional tests [all/app-service/core-command/core-data/core-metadata/support-notifications/support-scheduler/system-agent]\n"
     printf -- "  -d [test]     Run V2 device tests [all/device-virtual/device-modbus]\n"
     printf -- "  -n            Do not use security/API gateway\n"
@@ -93,7 +93,9 @@ snap_taf_enable_snap_testing
 snap_taf_deploy_edgex
 
 
- 
+ if [ $SECURITY_SERVICE_NEEDED = "false"]; then
+    sudo snap set edgexfoundry security-proxy=off
+ fi
 
 if [ ! -z "$V2_FUNCTIONAL_TESTS" ]; then
     echo "INFO:snap-TAF: running V2 API functional tests: $V2_FUNCTIONAL_TESTS ..." 
