@@ -43,12 +43,22 @@ snap_taf_enable_snap_testing()
     # update host name
     sed -i -e 's@Host=edgex-support-scheduler@Host=localhost@' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-scheduler/intervalaction/POST-Positive.robot
 
+    # this test assumes we are running on two different IP addresses. Set DOCKER_IP to an invalid IP in this case as otherwise we get duplicate transmissions
+    sed -i -e 's@${DOCKER_HOST_IP}@"invalid-ip"@' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-notifications/transmission/GET-Positive.robot
 
    # integration tests
    # The notification sender is "core-metadata", not "edgex-core-metadata"
     sed -i -e 's@edgex-core-metadata@core-metadata@' $WORK_DIR/TAF/testScenarios/integrationTest/UC_metadata_notifications/metadata_notifications.robot
 
-    export DOCKER_HOST_IP="127.0.0.1"
+    # in case python2 is the default, replace it with python3 (can also be done by apt-get install python3-is-python)
+    sed -s -i -e 's@Start process  python @Start process  python3 @' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-notifications/transmission/*.robot
+
+    # remove system-agent tests - we don't run them
+    rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/system-agent/info
+    rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/system-agent/services
+
+    
+    export DOCKER_HOST_IP="localhost"
 
 }
 
