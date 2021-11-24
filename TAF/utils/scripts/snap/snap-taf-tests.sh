@@ -53,7 +53,7 @@ snap_taf_enable_snap_testing()
     # in case python2 is the default, replace it with python3 (can also be done by apt-get install python3-is-python)
     sed -s -i -e 's@Start process  python @Start process  python3 @' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-notifications/transmission/*.robot
 
-    # remove system-agent tests - we don't run them
+    # remove system-agent tests - we don't run them because the system agent service has been deprecated since the Ireland release (2.0)
     rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/system-agent/info
     rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/system-agent/services
 
