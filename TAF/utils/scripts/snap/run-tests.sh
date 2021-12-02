@@ -92,8 +92,11 @@ snap_taf_install_prerequisites
 snap_taf_enable_snap_testing
 snap_taf_deploy_edgex
 
+# Update Consul to prevent "Your IP is issuing too many concurrent connections, please rate limit your calls"
+sed -i -e 's@"disable@"limits": { "http_max_conns_per_client": 65536}, "disable@' /var/snap/edgexfoundry/current/consul/config/consul_default.json 
+snap restart edgexfoundry.security-proxy-setup
 
- if [ $SECURITY_SERVICE_NEEDED = "false"]; then
+ if [ $SECURITY_SERVICE_NEEDED = "false" ]; then
     sudo snap set edgexfoundry security-proxy=off
  fi
 

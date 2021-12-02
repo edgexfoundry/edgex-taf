@@ -45,6 +45,6 @@ for service in $@; do
         >&2 echo "ERROR:snap-TAF: restart unknown service $service"
       ;;
     esac
-    sleep 2
+    sleep 1
   done     
-  sleep 5
+  sleep 1
