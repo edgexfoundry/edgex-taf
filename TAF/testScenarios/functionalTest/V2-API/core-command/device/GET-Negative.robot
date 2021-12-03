@@ -81,3 +81,33 @@ ErrCommandGET010 - Get specified device read command when device OperatingState 
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
+ErrCommandGET011 - Get unavailable HTTP device read command
+    # device-camera
+    ${default_response_time_threshold}  Set Variable  8000    # normally exceed default 1200ms
+    When Run Keyword And Expect Error  *  Get Specified Device Camera001 Read Command OnvifDeviceInformation
+    And Should Return Status Code "500" or "503"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+ErrCommandGET012 - Get unavailable Modbus device read command
+    # device-modbus
+    Given Create Unavailable Modbus device
+    When Run Keyword And Expect Error  *  Get Specified Device Test-Device Read Command Modbus_DeviceValue_Boolean_R
+    And Should Return Status Code "500" or "503"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete device by name Test-Device
+
+*** Keywords ***
+Should Return Status Code "500" or "503"
+    Should Match Regexp  "${response}"  (500|503)
+
+Create Unavailable Modbus device
+    ${service}  Set Variable  device-modbus
+    ${device}  Set device values  ${service}  Modbus-Sample-Profile
+    ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${service}"
+    Set To Dictionary  ${protocols}[modbus-tcp]  Port=123
+    Set To Dictionary  ${device}  protocols=${protocols}
+    Generate Devices  ${device}
+    Create Device With ${Device}
+    sleep  500ms
