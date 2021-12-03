@@ -17,8 +17,7 @@ ServiceGET001 - Query all device services
     And Create Device Service ${deviceService}
     When Query All Device Services
     Then Should Return Status Code "200" And services
-    And totalCount Should be 6
-    And Should Be True  len(${content}[services]) == 6  # Contain 3 profiles of device-service
+    And totalCount Is Greater Than Zero And ${content}[services] Count Should Match totalCount
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
@@ -27,10 +26,10 @@ ServiceGET001 - Query all device services
 ServiceGET002 - Query all device services by offset
     Given Generate Multiple Device Services Sample
     And Create Device Service ${deviceService}
-    When Query All Device Services With offset=2
+    And Set Test Variable  ${offset}  2
+    When Query All Device Services With offset=${offset}
     Then Should Return Status Code "200" And services
-    And totalCount Should be 6
-    And Should Be True  len(${content}[services]) == 4  # Contain 3 profiles of device-service
+    And totalCount Is Greater Than Zero And ${content}[services] Count Should Match totalCount-offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
@@ -39,10 +38,10 @@ ServiceGET002 - Query all device services by offset
 ServiceGET003 - Query all device services by limit
     Given Generate Multiple Device Services Sample
     And Create Device Service ${deviceService}
-    When Query All Device Services With limit=2
+    And Set Test Variable  ${limit}  2
+    When Query All Device Services With limit=${limit}
     Then Should Return Status Code "200" And services
-    And totalCount Should be 6
-    And Should Be True  len(${content}[services]) == 2
+    And totalCount Is Greater Than Zero And ${content}[services] Count Should Match limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Services By Names  Device-Service-${index}-1  Device-Service-${index}-2
@@ -55,8 +54,7 @@ ServiceGET004 - Query all device services by labels
     And Create Device Service ${deviceService}
     When Query All Device Services With labels=device-example
     Then Should Return Status Code "200" And services
-    And totalCount Should be 2
-    And Should Be True  len(${content}[services]) == 2
+    And totalCount Is Greater Than Zero And ${content}[services] Count Should Match totalCount
     And Should Return Content-Type "application/json"
     And Device Services Should Be Linked To Specified Label: device-example
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

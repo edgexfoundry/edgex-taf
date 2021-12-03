@@ -16,8 +16,7 @@ ProfileGET009 - Query device profiles by manufacturer's model
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles By Manufacturer And Model  Honeywell  ABC123
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 3
-    And Should Be True  len(${content}[profiles]) == 3
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
@@ -27,10 +26,10 @@ ProfileGET009 - Query device profiles by manufacturer's model
 ProfileGET010 - Query device profiles by manufacturer's model and offset
     # Multiple device profile which part of same manufacturer and same model
     Given Create Multiple Device Profiles Sample With Different Device Info
-    When Query All Device Profiles Having Manufacturer Honeywell And Model ABC123 With offset=1
+    And Set Test Variable  ${offset}  1
+    When Query All Device Profiles Having Manufacturer Honeywell And Model ABC123 With offset=${offset}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 3
-    And Should Be True  len(${content}[profiles]) == 2
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount-offset
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
@@ -40,10 +39,10 @@ ProfileGET010 - Query device profiles by manufacturer's model and offset
 ProfileGET011 - Query device profiles by manufacturer's model and limit
     # Multiple device profile which part of same manufacturer and same model
     Given Create Multiple Device Profiles Sample With Different Device Info
-    When Query All Device Profiles Having Manufacturer Honeywell And Model ABC123 With limit=1
+    And Set Test Variable  ${limit}  1
+    When Query All Device Profiles Having Manufacturer Honeywell And Model ABC123 With limit=${limit}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 3
-    And Should Be True  len(${content}[profiles]) == 1
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match limit
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
@@ -55,8 +54,7 @@ ProfileGET012 - Query device profiles by model
     Given Create Multiple Device Profiles Sample With Different Device Info
     When Query All Device Profiles By Model  ABC123
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 4
-    And Should Be True  len(${content}[profiles]) == 4
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -65,10 +63,10 @@ ProfileGET012 - Query device profiles by model
 ProfileGET013 - Query device profiles by model and offset
     # Multiple device profile with different manufacturer but same model
     Given Create Multiple Device Profiles Sample With Different Device Info
+    And Set Test Variable  ${offset}  1
     When Query All Device Profiles By Model ABC123 With offset=1
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 4
-    And Should Be True  len(${content}[profiles]) == 3
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount-offset
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -77,10 +75,10 @@ ProfileGET013 - Query device profiles by model and offset
 ProfileGET014 - Query device profiles by model and limit
     # Multiple device profile with different manufacturer but same model
     Given Create Multiple Device Profiles Sample With Different Device Info
-    When Query All Device Profiles By Model ABC123 With limit=1
+    And Set Test Variable  ${limit}  1
+    When Query All Device Profiles By Model ABC123 With limit=${limit}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 4
-    And Should Be True  len(${content}[profiles]) == 1
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match limit
     And Profiles Should Be Linked To Specified Model: ABC123
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

@@ -16,8 +16,7 @@ DeviceGET007 - Query all devices with specified device profile by profile name
     And Create Device With ${Device}
     When Query All Devices By profileName  Test-Profile-1
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 2
-    And Should Be True  len(${content}[devices]) == 2
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount
     And Devices Should Be Linked To Specified Device Profile: Test-Profile-1
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -26,10 +25,10 @@ DeviceGET007 - Query all devices with specified device profile by profile name
 DeviceGET008 - Query all devices with specified device profile by profile name and offset
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
-    When Query All Devices By profileName Test-Profile-1 With offset=1
+    And Set Test Variable  ${offset}  1
+    When Query All Devices By profileName Test-Profile-1 With offset=${offset}
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 2
-    And Should Be True  len(${content}[devices]) == 1
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount-offset
     And Devices Should Be Linked To Specified Device Profile: Test-Profile-1
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -38,10 +37,10 @@ DeviceGET008 - Query all devices with specified device profile by profile name a
 DeviceGET009 - Query all devices with specified device profile by profile name and limit
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
+    And Set Test Variable  ${limit}  1
     When Query All Devices By profileName Test-Profile-2 With limit=-1  # all devices with Test-Profile-2
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 1
-    And Should Be True  len(${content}[devices]) == 1
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match limit
     And Devices Should Be Linked To Specified Device Profile: Test-Profile-2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -53,8 +52,7 @@ DeviceGET010 - Query all devices with specified device service by service name
     And Create Device With ${Device}
     When Query All Devices By serviceName  Device-Service-${index}-1
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 3
-    And Should Be True  len(${content}[devices]) == 3
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount
     And Devices Should Be Linked To Specified Device Service: Device-Service-${index}-1
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -64,10 +62,10 @@ DeviceGET011 - Query all devices with specified device service by service name a
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  serviceName=Device-Service-${index}-1
     And Create Device With ${Device}
-    When Query All Devices By serviceName Device-Service-${index}-1 With offset=2
+    And Set Test Variable  ${offset}  2
+    When Query All Devices By serviceName Device-Service-${index}-1 With offset=${offset}
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 3
-    And Should Be True  len(${content}[devices]) == 1
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount-offset
     And Devices Should Be Linked To Specified Device Service: Device-Service-${index}-1
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -77,10 +75,10 @@ DeviceGET012 - Query all devices with specified device service by service name a
     # number of devices < limit
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
-    When Query All Devices By serviceName Device-Service-${index}-2 With limit=2
+    And Set Test Variable  ${limit}  2
+    When Query All Devices By serviceName Device-Service-${index}-2 With limit=${limit}
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 1
-    And Should Be True  len(${content}[devices]) == 1
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match limit
     And Devices Should Be Linked To Specified Device Service: Device-Service-${index}-2
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

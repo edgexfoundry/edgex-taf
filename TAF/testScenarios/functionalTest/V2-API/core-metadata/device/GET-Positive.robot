@@ -17,8 +17,7 @@ DeviceGET001 - Query all devices
     And Create Device With ${Device}
     When Query All Devices
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 7
-    And Should Be True  len(${content}[devices]) == 7  # 3 for device-rest
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
@@ -26,10 +25,10 @@ DeviceGET001 - Query all devices
 DeviceGET002 - Query all devices with offset
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
-    When Query All Devices With offset=2
+    And Set Test Variable  ${offset}  2
+    When Query All Devices With offset=${offset}
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 7
-    And Should Be True  len(${content}[devices]) == 5  # 3 for device-rest
+    And And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount-offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
@@ -37,10 +36,10 @@ DeviceGET002 - Query all devices with offset
 DeviceGET003 - Query all devices with limit
     Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
     And Create Device With ${Device}
-    When Query All Devices With limit=3
+    And Set Test Variable  ${limit}  3
+    When Query All Devices With limit=${limit}
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 7
-    And Should Be True  len(${content}[devices]) == 3
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
@@ -52,8 +51,7 @@ DeviceGET004 - Query all devices with specified labels
     And Create Device With ${Device}
     When Query All Devices With labels=device-sample
     Then Should Return Status Code "200" And devices
-    And totalCount Should be 3
-    And Should Be True  len(${content}[devices]) == 3
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount
     And Devices Should Be Linked To Specified Label: device-sample
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
