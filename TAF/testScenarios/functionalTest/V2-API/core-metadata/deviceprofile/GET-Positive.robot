@@ -17,8 +17,7 @@ ProfileGET001 - Query all device profiles
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 8
-    And Should Be True  len(${content}[profiles]) == 8  # 3 created on this test, 3 for device-rest, 1 for virtual, 1 for modbus
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
@@ -26,10 +25,10 @@ ProfileGET001 - Query all device profiles
 ProfileGET002 - Query all device profiles by offset
     Given Generate Multiple Device Profiles Sample
     And Create Device Profile ${deviceProfile}
-    When Query All Device Profiles With offset=2
+    And Set Test Variable  ${offset}  2
+    When Query All Device Profiles With offset=${offset}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 8
-    And Should Be True  len(${content}[profiles]) == 6  # 3 created on this test, 3 for device-rest, 1 for virtual, 1 for modbus
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount-offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
@@ -37,10 +36,10 @@ ProfileGET002 - Query all device profiles by offset
 ProfileGET003 - Query all device profiles by limit
     Given Generate Multiple Device Profiles Sample
     And Create Device Profile ${deviceProfile}
-    When Query All Device Profiles With limit=2
+    And Set Test Variable  ${limit}  2
+    When Query All Device Profiles With limit=${limit}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 8
-    And Should Be True  len(${content}[profiles]) == 2
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
@@ -50,8 +49,7 @@ ProfileGET004 - Query all device profiles by labels
     And Create Device Profile ${deviceProfile}
     When Query All Device Profiles With labels=bacnet
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 2
-    And Should Be True  len(${content}[profiles]) == 2
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount
     And Profiles Should Be Linked To Specified Labels: bacnet
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -72,8 +70,7 @@ ProfileGET006 - Query device profiles by manufacturer
     Given Create Multiple Device Profiles Sample With Different Manufacturers
     When Query All Device Profiles By Manufacturer  Honeywell
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 2
-    And Should Be True  len(${content}[profiles]) == 2
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -82,10 +79,10 @@ ProfileGET006 - Query device profiles by manufacturer
 ProfileGET007 - Query device profiles by manufacturer and offset
     # Multiple device profile which part of same manufacturer
     Given Create Multiple Device Profiles Sample With Different Manufacturers
-    When Query All Device Profiles By Manufacturer Honeywell With offset=1
+    And Set Test Variable  ${offset}  1
+    When Query All Device Profiles By Manufacturer Honeywell With offset=${offset}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 2
-    And Should Be True  len(${content}[profiles]) == 1
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match totalCount-offset
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -94,10 +91,10 @@ ProfileGET007 - Query device profiles by manufacturer and offset
 ProfileGET008 - Query device profiles by manufacturer and limit
     # Multiple device profile which part of same manufacturer
     Given Create Multiple Device Profiles Sample With Different Manufacturers
-    When Query All Device Profiles By Manufacturer Honeywell With limit=2
+    And Set Test Variable  ${limit}  2
+    When Query All Device Profiles By Manufacturer Honeywell With limit=${limit}
     Then Should Return Status Code "200" And profiles
-    And totalCount Should be 2
-    And Should Be True  len(${content}[profiles]) == 2
+    And totalCount Is Greater Than Zero And ${content}[profiles] Count Should Match limit
     And Profiles Should Be Linked To Specified Manufacturer: Honeywell
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

@@ -19,7 +19,7 @@ CommandGET001 - Query all DeviceCoreCommands
     Given Create 5 Devices For device-virtual
     When Query All DeviceCoreCommands
     Then Should Return Status Code "200" And deviceCoreCommands
-    And Should Be True  len(${content}[deviceCoreCommands]) == 8  # 3 for device-rest
+    And totalCount Is Greater Than Zero And ${content}[deviceCoreCommands] Count Should Match totalCount
     And All deviceCoreCommands Should Contain parameters In Each coreCommand
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -27,9 +27,10 @@ CommandGET001 - Query all DeviceCoreCommands
 
 CommandGET002 - Query all DeviceCoreCommands by offset
     Given Create 5 Devices For device-virtual
-    When Query All DeviceCoreCommands With offset=2
+    And Set Test Variable  ${offset}  2
+    When Query All DeviceCoreCommands With offset=${offset}
     Then Should Return Status Code "200" And deviceCoreCommands
-    And Should Be True  len(${content}[deviceCoreCommands]) == 6  # 3 for device-rest
+    And totalCount Is Greater Than Zero And ${content}[deviceCoreCommands] Count Should Match totalCount-offset
     And All deviceCoreCommands Should Contain parameters In Each coreCommand
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -37,9 +38,10 @@ CommandGET002 - Query all DeviceCoreCommands by offset
 
 CommandGET003 - Query all DeviceCoreCommands by limit
     Given Create 5 Devices For device-virtual
-    When Query All DeviceCoreCommands With limit=3
+    And Set Test Variable  ${limit}  3
+    When Query All DeviceCoreCommands With limit=${limit}
     Then Should Return Status Code "200" And deviceCoreCommands
-    And Should Be True  len(${content}[deviceCoreCommands]) == 3
+    And totalCount Is Greater Than Zero And ${content}[deviceCoreCommands] Count Should Match limit
     And All deviceCoreCommands Should Contain parameters In Each coreCommand
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

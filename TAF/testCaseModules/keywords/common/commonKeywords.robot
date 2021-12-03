@@ -120,6 +120,14 @@ totalCount Should be ${value}
     Should contain  ${content}  totalCount
     Should be true  '${content}[totalCount]' == '${value}'
 
+totalCount Is Greater Than Zero And ${query_count} Count Should Match ${option}
+    # option: totalCount, totalCount-offset, limit
+    Should contain  ${content}  totalCount
+    Should be true  '${content}[totalCount]' > '0'
+    Run Keyword If  "${option}" == "totalCount"  Should Be True  len(${query_count}) == ${content}[totalCount]
+    ...    ELSE IF  "${option}" == "totalCount-offset"  Should Be True  len(${query_count}) == ${content}[totalCount]-${offset}
+    ...    ELSE IF  "${option}" == "limit"  Should Be True  len(${query_count}) <= ${limit}
+
 Item Index ${index} Should Contain Status Code "${status_code}"
     ${content_type}=  Evaluate  type($content).__name__
     ${content}=  Run keyword if  ${content_type} != list  Evaluate  json.loads('''${content}''')  json
