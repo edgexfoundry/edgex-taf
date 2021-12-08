@@ -1,5 +1,5 @@
 #!/bin/bash -e
-
+ 
 
 help()
 {
@@ -92,9 +92,8 @@ snap_taf_install_prerequisites
 snap_taf_enable_snap_testing
 snap_taf_deploy_edgex
 
-# Update Consul to prevent "Your IP is issuing too many concurrent connections, please rate limit your calls"
-sed -i -e 's@"disable@"limits": { "http_max_conns_per_client": 65536}, "disable@' /var/snap/edgexfoundry/current/consul/config/consul_default.json 
-snap restart edgexfoundry.security-proxy-setup
+snap_taf_update_consul
+
 
  if [ $SECURITY_SERVICE_NEEDED = "false" ]; then
     sudo snap set edgexfoundry security-proxy=off
@@ -118,7 +117,17 @@ fi
 
 if [ ! -z "$INTEGRATION_TESTS" ]; then
     echo "INFO:snap-TAF: running integration tests"
-    snap_taf_run_integration_tests
+    snap_taf_run_integration_tests MessageQueue=redis redis-integration-test.html 
+    
+    # do a new clean install 
+    snap_taf_shutdown
+    snap_taf_deploy_edgex
+
+    # then switch to a mqtt message bus and run further tests
+    snap_set_messagebus_to_mqtt
+
+    snap_taf_run_integration_tests MessageQueue=mqtt mqtt-integration-test.html 
+
 fi
 
 snap_taf_shutdown

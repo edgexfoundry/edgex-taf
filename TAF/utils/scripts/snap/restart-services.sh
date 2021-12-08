@@ -1,7 +1,6 @@
 #!/bin/sh
 >&2 echo "INFO:snap-TAF: restart-services.sh"
 
- 
 
 for service in $@; do
     case $service in
@@ -12,6 +11,10 @@ for service in $@; do
       device-virtual)
         >&2 echo "INFO:snap-TAF: restart edgexfoundry.device-virtual"
         sudo snap restart edgexfoundry.device-virtual
+        ;;
+      mqtt-broker)
+        >&2 echo "INFO:snap-TAF: restart mosquitto"
+        sudo snap restart mosquitto
         ;;
       app-*)
         >&2 echo "INFO:snap-TAF: restart edgex-app-service-configurable.app-service-configurable"
@@ -43,6 +46,7 @@ for service in $@; do
         ;;
       *)    # unknown option
         >&2 echo "ERROR:snap-TAF: restart unknown service $service"
+        logger "ERROR:snap-TAF: restart unknown service $service"
       ;;
     esac
     sleep 1
