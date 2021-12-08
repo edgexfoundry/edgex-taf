@@ -14,7 +14,6 @@ ${SUITE}              Configrations
 *** Test Cases ***
 Config001 - Set MessageQueue.Protocol to MQTT
     ${handle}  Run MQTT Subscriber Progress And Output  edgex/events/device/#
-    ${configurations}  Create Dictionary  Type=mqtt  Protocol=mqtt  Host=edgex-mqtt-broker  Port=1883
     Given Set Test Variable  ${device_name}  messageQueue-mqtt
     And Set Writable LogLevel To Debug For device-virtual On Consul
     And Create Device For device-virtual With Name ${device_name}
@@ -28,7 +27,6 @@ Config001 - Set MessageQueue.Protocol to MQTT
 
 Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the topic correctly
     Set Test Variable  ${device_name}  messagebus-true-device-5
-    ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=yes
     ${handle}  Run MQTT Subscriber Progress And Output  edgex/events/custom/#
     Given Set MessageQueue PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
     And Set MessageQueue SubscribeTopic=edgex/events/custom/# For core-data On Consul
@@ -43,6 +41,19 @@ Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the top
                 ...           AND  Set MessageQueue PublishTopicPrefix=edgex/events/device For device-virtual On Consul
                 ...           AND  Set MessageQueue SubscribeTopic=edgex/events/device/# For core-data On Consul
 
+Config003 - Set device-virtual MessageQueue.Optional.Qos (PUBLISH)
+    Given Set Test Variable  ${device_name}  messagebus-true-device-6
+    And Create Device For device-virtual With Name ${device_name}
+    And Set MessageQueue Optional/Qos=2 For device-virtual On Consul
+    And Set MessageQueue Optional/Qos=1 For core-data On Consul
+    When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
+    Then Should Return Status Code "200" And event
+    And Event Has Been Pushed To Core Data
+    And Verify MQTT Broker Qos
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
+                ...           AND  Set MessageQueue Optional/Qos=0 For device-virtual On Consul
+                ...           AND  Set MessageQueue Optional/Qos=0 For core-data On Consul
 
 *** Keywords ***
 Set MessageQueue ${key}=${value} For ${service_name} On Consul
@@ -88,3 +99,11 @@ Event Has Been Recevied By MQTT Subscriber
     run keyword if  "${correlation_id}" not in """${received_event}"""
     ...             fail  Event is not received by mqtt subscriber
 
+Verify MQTT Broker Qos
+    ${command}=  Set Variable  docker logs edgex-mqtt-broker --since ${log_timestamp}
+    ${result} =  Run Process  ${command}  shell=True  stderr=STDOUT  output_encoding=UTF-8
+    Log  ${result.stdout}
+    ${publish_log}  Get Lines Containing String  ${result.stdout}  Received PUBLISH from device-virtual
+    Should Contain  ${publish_log}  q2
+    ${subscribe_log}   Get Lines Containing String  ${result.stdout}  Sending PUBLISH to core-data
+    Should Contain  ${subscribe_log}   q1

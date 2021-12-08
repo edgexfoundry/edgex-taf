@@ -24,6 +24,7 @@ if [ "${TEST_STRATEGY}" = "integration-test" ]; then
   ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "" "-mqtt-bus"
   cp docker-compose-taf${USE_NO_SECURITY}-mqtt-bus${USE_ARM64}.yml docker-compose-mqtt-bus.yml
   COMPOSE_FILE="docker-compose docker-compose-mqtt-bus"
+  sed -i '\/usr\/sbin\/mosquitto/ s/$/ -v/' docker-compose-mqtt-bus.yml  # enable mqtt-broker verbose mode
 else
   COMPOSE_FILE="docker-compose"
 fi

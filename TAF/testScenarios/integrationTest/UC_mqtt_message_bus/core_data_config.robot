@@ -56,6 +56,18 @@ CoreConfig003 - Customize core-data MessageQueue.PublishTopicPrefix
                 ...           AND  Delete all events by age
                 ...           AND  Set MessageQueue PublishTopicPrefix=edgex/events/core For core-data On Consul                     
 
+CoreConfig004 - Set core-data MessageQueue.Optional.Qos (SUBSCRIBE)
+    Given Set Test Variable  ${device_name}  messagebus-mqtt-core-4
+    And Set MessageQueue Optional/Qos=2 For core-data On Consul
+    And Create Device For device-virtual With Name ${device_name}
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
+    Then Should Return Status Code "200" And event
+    And Event Has Been Pushed To Core Data
+    And Verify MQTT Broker Qos
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...           AND  Delete all events by age
+                ...           AND  Set MessageQueue Optional/Qos=0 For core-data On Consul
+
 *** Keywords ***
 Set MessageQueue ${key}=${value} For core-data On Consul
     ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageQueue/${key}
@@ -78,3 +90,11 @@ Create An Event With ${device_name} and command ${command_name}
     Generate Event Sample  Event  ${device_name}  ${PREFIX}-Sample-Profile  ${PREFIX}_GenerateDeviceValue_UINT8_RW  Simple Reading  
     Create Event With ${device_name} And ${PREFIX}-Sample-Profile And ${PREFIX}_GenerateDeviceValue_UINT8_RW
 
+Verify MQTT Broker Qos
+    ${timestamp}=  Evaluate  ${log_timestamp}-30
+    ${command}=  Set Variable  docker logs edgex-mqtt-broker --since ${timestamp}
+    ${result} =  Run Process  ${command}  shell=True  stderr=STDOUT  output_encoding=UTF-8
+    Log  ${result.stdout}
+    Should Contain  ${result.stdout}  core-data 2 edgex/events/device/#
+    ${subscribe_log}  Get Lines Containing String  ${result.stdout}  Sending PUBLISH to core-data
+    Should Contain  ${subscribe_log}   q0  # because device-virtual QoS=0
