@@ -5,38 +5,10 @@ option=${1}
 USER="gateway"
 GROUP="gateway-group"
 
->&2 echo "INFO:snap-TAF: api-gateway-token: $*"
+. "$SCRIPT_DIR/snap-utils.sh"
 
-# This script gets called at the beginning of each test suite. It's therefore the
-# best location to check if we should use a different app-service-configurable profile
-# note that this depends on a change to AppServiceAPI.robot:
-#   Check app-service is available
-#    ${port}=  Split String  ${url}  :
-#    Set Environment Variable  SNAP_APP_SERVICE_PORT  ${port}[2]
-#    Check service is available  ${port}[2]   /api/v2/ping
-
-# also - this script should not write anything but the token to stdout
-if [ ! -z "$SNAP_APP_SERVICE_PORT" ]; then
-
-  case ${SNAP_APP_SERVICE_PORT} in
-    59704)
-      >&2 echo "INFO:snap-TAF: api-gateway-token: switching to http-export profile"
-      >&2 snap set edgex-app-service-configurable profile=http-export
-      >&2 snap restart edgex-app-service-configurable
-    ;;
-    59705)
-      >&2 echo "INFO:snap-TAF: api-gateway-token: switching to functional-tests profile"
-      >&2 snap set edgex-app-service-configurable profile=functional-tests
-      >&2 snap restart edgex-app-service-configurable
-
-    ;;
-    *)
-    >&2 echo "ERROR:snap-TAF: api-gateway-token: unsupported service on port  ${SNAP_APP_SERVICE_PORT}"
-    ;;
-  esac
-  sleep 5
-fi
-
+snap_maybe_switch_asc_profile
+ 
 # JWT File
 JWT_FILE=/var/snap/edgexfoundry/current/secrets/security-proxy-setup/kong-admin-jwt
 JWT_VOLUME=/var/snap/edgexfoundry/current/secrets/security-proxy-setup
@@ -68,7 +40,7 @@ case ${option} in
     exit 0
   ;;
 esac
-#>&2 edgex-cli deviceprofile list
+
 
 >&2 echo "INFO:snap-TAF: api-gateway-token done"
 
