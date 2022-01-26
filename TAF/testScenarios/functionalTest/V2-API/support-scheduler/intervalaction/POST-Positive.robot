@@ -52,6 +52,7 @@ Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Confi
     ${timestamp}=  Get current epoch time
     Set Test Variable  ${timestamp}  ${timestamp}
     Restart Services  scheduler
+    Wait Until Keyword Succeeds  10x  1s  Ping Scheduler Service
 
 Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
     Delete intervalAction by name ${intervalAction_name}
@@ -67,7 +68,6 @@ Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
     Restart Services  scheduler
 
 Pre-Created Interval And IntervalAction Should Be Created
-    Sleep  3s  # wait for service restart
     Query Interval By Name ${interval_name}
     Should Return Status Code "200"
     Query IntervalAction By Name ${intervalAction_name}
@@ -81,3 +81,7 @@ IntervalAction Should Be Executed Every ScheduleIntervalTime
     ${times}=  Get Regexp Matches  ${return_log}  :([0-5][0-9]:[0-5][0-9].[0-9]+)  1
     ${time_diff}=  Subtract Time From Time  ${times}[1]  ${times}[0]
     Should Be True  int(round(0.9981947000001128)) == 1
+
+Ping Scheduler Service
+    Query Ping
+    Should return status code "200"
