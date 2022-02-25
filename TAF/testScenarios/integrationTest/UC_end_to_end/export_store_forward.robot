@@ -74,10 +74,9 @@ StoreAndForward005 - Export retries will resume after application service is res
     And Create Device For device-virtual With Name ${device_name}
     When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=yes
     And Waiting For Retrying Export
-    And Restart Services  app-service-http-export
     ${timestamp}  get current epoch time
-    Sleep  7s
-    Then Found Retry Log After Restarting App Service  ${timestamp}
+    And Restart Services  app-service-http-export
+    Then Wait Until Keyword Succeeds  2x  5s  Found Retry Log After Restarting App Service  ${timestamp}
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
