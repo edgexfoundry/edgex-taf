@@ -19,13 +19,13 @@ export WORK_DIR=${HOME}/edgex-taf
 # Arguments for run-tests.sh
 ${ARCH}: x86_64 | arm64
 ${SECURITY_SERVICE_NEEDED}: false | true
-${TEST_STRATEGY}: 1 (functional)
-${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/V2-API 
+${TEST_STRATEGY}: functional-test
+${TEST_SERVICE}: V2-API 
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
 
 cd ${WORK_DIR}/TAF/utils/scripts/docker
 sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${DEPLOY_SERVICES}
-# ex. sh run-tests.sh x86_64 false 1 no-deployment
+# ex. sh run-tests.sh x86_64 false functional-test no-deployment
 ```
 
 #### View the test report
@@ -55,20 +55,22 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 3. Prepare test environment:
     ``` bash
     # Arguments for get-compose-file.sh
-    ${USE_DB}: -redis | -mongo (mongo is not supported from hanoi release)
     ${ARCH}: x86_64 | arm64
     ${USE_SECURITY}: - (false) | -security- (true)
+    ${USE_SHA1}:jakarta
+    ${TEST_STRATEGY}: -
 
     # Fetch the latest docker-compose file
     cd ${HOME}/edgex-taf/TAF/utils/scripts/docker
-    sh get-compose-file.sh ${USE_DB} ${ARCH} ${USE_SECURITY}
-    # ex. sh get-compose-file.sh -redis x86_64 -
+    sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
+    # ex. sh get-compose-file.sh x86_64 - jakarta -
     
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
-    export ARCH=x86_64
     export SECURITY_SERVICE_NEEDED=false
     export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose:latest
+    #export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose-arm64:latest
+    #It running test on arm64, then compose file should be edgex-compose-arm64
     ```
 #### Run Tests
 `View the test report after finishing a python command, otherwise the report will be overridden after executing next command. Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html.`
