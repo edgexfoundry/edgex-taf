@@ -3,7 +3,7 @@
 # # set default values
 USE_ARCH=${1:--x86_64}
 USE_SECURITY=${2:--}
-USE_SHA1=${3:-main}
+USE_SHA1=${3:-jakarta}
 TEST_STRATEGY=${4:-}
 
 # # x86_64 or arm64
