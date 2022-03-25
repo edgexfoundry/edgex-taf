@@ -32,16 +32,7 @@ ErrProfilePOST002 - Create device profile with profile name validation error
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST003 - Create device profile with deviceResources validation error
-    # Empty deviceResources
-    # Contains valid profile body
-    Given Generate Multiple Device Profiles Sample
-    And Set To Dictionary  ${deviceProfile}[1][profile]  deviceResources=@{EMPTY}
-    When Create Device Profile ${deviceProfile}
-    Then Should Return Status Code "400"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrProfilePOST004 - Create device profile with ResourceProperties valueType validation error
+ErrProfilePOST003- Create device profile with ResourceProperties valueType validation error
     # deviceResources > ResourceProperties without valueType
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
@@ -50,7 +41,7 @@ ErrProfilePOST004 - Create device profile with ResourceProperties valueType vali
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST005 - Create device profile with ResourceProperties readWrite validation error
+ErrProfilePOST004 - Create device profile with ResourceProperties readWrite validation error
     # deviceResources > ResourceProperties without readWrite
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
@@ -59,7 +50,7 @@ ErrProfilePOST005 - Create device profile with ResourceProperties readWrite vali
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST006 - Create device profile with deviceCommand name validation error
+ErrProfilePOST005 - Create device profile with deviceCommand name validation error
     # deviceCommands > deviceCommand without name
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
@@ -68,7 +59,7 @@ ErrProfilePOST006 - Create device profile with deviceCommand name validation err
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST007 - Create device profile with deviceCommand readWrite validation error
+ErrProfilePOST006 - Create device profile with deviceCommand readWrite validation error
     # deviceCommands > deviceCommand without readWrite
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
@@ -77,7 +68,7 @@ ErrProfilePOST007 - Create device profile with deviceCommand readWrite validatio
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST008 - Create device profile with deviceCommand resourceOperations validation error
+ErrProfilePOST007 - Create device profile with deviceCommand resourceOperations validation error
     # deviceCommands > resourceOperations without deviceResource
     # Contains valid profile body
     Given Generate Multiple Device Profiles Sample
@@ -86,7 +77,7 @@ ErrProfilePOST008 - Create device profile with deviceCommand resourceOperations 
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-ErrProfilePOST009 - Create device profile with deviceCommands deviceResources validation error
+ErrProfilePOST008 - Create device profile with deviceCommands deviceResources validation error
     # Contains valid profile body
     # Duplicated device profile name
     # deviceCommand contains part of deviceResources that only allow "read"
