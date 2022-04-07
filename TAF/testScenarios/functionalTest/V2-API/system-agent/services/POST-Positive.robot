@@ -80,9 +80,10 @@ Services Have Been Started
 Services Have Been Restarted
     [Arguments]  ${keyword}  @{service_list}
     FOR  ${service}  IN  @{service_list}
+        ${timestamp}  Get current milliseconds epoch time
         Run Keyword If  '${service}' == 'device-rest'  sleep  3s
-        ${service_log}=  Get service logs since timestamp  ${service}  0
-        Log  ${service_log}  # For error debug
-        ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
+        ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service} 0
+        ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+        ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
         Should Not Be Empty  ${return_log}
     END

@@ -47,8 +47,9 @@ Setup Suite for App Service Secrets
     Setup Suite for App Service  http://${BASE_URL}:${APP_HTTP_EXPORT_PORT}
 
 Get AppService Token
-    ${command}=  Set Variable  docker exec edgex-${app_service_name} cat /tmp/edgex/secrets/${app_service_name}/secrets-token.json
-    ${result} =  Run Process  ${command}  shell=yes  output_encoding=UTF-8
+    ${command}=  Set Variable  cat /tmp/edgex/secrets/${app_service_name}/secrets-token.json
+    ${result}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/execute-command-in-docker.sh ${app_service_name} "${command}"
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
     ${result_string}=  Evaluate  json.loads('''${result.stdout}''')  json
     Set Test Variable  ${token}  ${result_string}[auth][client_token]
 

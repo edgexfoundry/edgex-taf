@@ -91,10 +91,10 @@ Device data has recevied by mqtt subscriber
 No exported logs found on configurable application service
     [Arguments]  ${app_service_name}
     ${current_timestamp}=  get current epoch time
-    ${log_timestamp}=  evaluate  ${current_timestamp}-1
-    ${app_service_log}=  Get service logs since timestamp  ${app_service_name}  ${log_timestamp}
-    log  ${app_service_log}
-    ${app_service_str}=  convert to string  ${app_service_log}
+    ${timestamp}=  evaluate  ${current_timestamp}-1
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${app_service_name} ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${app_service_str}=  convert to string  ${logs.stdout}
     should not contain  ${app_service_str}  Sent data
 
 Store Secret With ${service} Export To Vault
