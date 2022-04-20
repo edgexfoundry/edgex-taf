@@ -4,7 +4,7 @@ Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags      v2-api
+Force Tags  Skipped
 
 *** Variables ***
 ${SUITE}          Core Metadata Device Profile PATCH Basicinfo Negative Test Cases
