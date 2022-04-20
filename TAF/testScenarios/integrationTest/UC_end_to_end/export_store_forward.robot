@@ -76,7 +76,7 @@ StoreAndForward005 - Export retries will resume after application service is res
     And Waiting For Retrying Export
     ${timestamp}  get current epoch time
     And Restart Services  app-service-http-export
-    Then Wait Until Keyword Succeeds  2x  5s  Found Retry Log After Restarting App Service  ${timestamp}
+    Then Wait Until Keyword Succeeds  2x  5s  Found Retry Log From ${timestamp} After Restarting app-http-export
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
@@ -100,17 +100,17 @@ Start HTTP Server And Received Exported Data Contains ${keyword}
                              ...       ELSE  Get Line Count  ${http_server_received}
     Should Be Equal As Integers  1  ${http_received_length}
 
-Found Retry Log ${number} Times In app-http-export Logs From ${timestamp}
-    ${logs}  Get Service Logs Since Timestamp  app-http-export  ${timestamp}
-    Log  ${logs}
-    ${retry_lines}  Get Lines Containing String  ${logs}.encode()  1 stored data items found for retrying
+Found Retry Log ${number} Times In ${service_name} Logs From ${timestamp}
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     ${retry_times}  Get Line Count  ${retry_lines}
     Should Be Equal As Integers  ${retry_times}  ${number}
 
-Found Remove Log In app-http-export Logs From ${timestamp}
-    ${logs}  Get Service Logs Since Timestamp  app-http-export  ${timestamp}
-    Log  ${logs}
-    ${retry_lines}  Get Lines Containing String  ${logs}.encode()  1 stored data items will be removed post retry
+Found Remove Log In ${service_name} Logs From ${timestamp}
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items will be removed post retry
     ${retry_times}  Get Line Count  ${retry_lines}
     Should Be Equal As Integers  ${retry_times}  1
 
@@ -123,9 +123,8 @@ Modify PersistOnError to ${value} On Consul
 Waiting For Retrying Export
     Run Keyword If  "${ARCH}" == "x86_64"  Sleep  5s
 
-Found Retry Log After Restarting App Service
-    [Arguments]  ${timestamp}
-    ${logs}  Get Service Logs Since Timestamp  app-http-export  ${timestamp}
-    Log  ${logs}
-    ${retry_lines}  Get Lines Containing String  ${logs}.encode()  1 stored data items found for retrying
+Found Retry Log From ${timestamp} After Restarting ${service_name}
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     Should Not Be Empty   ${retry_lines}

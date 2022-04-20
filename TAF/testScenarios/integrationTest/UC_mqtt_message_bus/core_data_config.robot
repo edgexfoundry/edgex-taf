@@ -78,9 +78,9 @@ Set MessageQueue ${key}=${value} For core-data On Consul
     Set Test Variable  ${log_timestamp}  ${timestamp}
 
 Event Has Been Recevied By MQTT Subscriber
-    ${logs}  Get Service Logs Since Timestamp  core-data  ${log_timestamp}
-    Log  ${logs}
-    ${correlation_line}  Get Lines Containing String  ${logs}.encode()  Event * on message queue
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh core-data ${log_timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Event * on message queue
     ${correlation_id}  Fetch From Right  ${correlation_line}  Correlation-id:
     ${correlation_id}  Fetch From Left  ${correlation_id.strip()}  "
     ${received_event}  Get file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
@@ -91,10 +91,9 @@ Create An Event With ${device_name} and command ${command_name}
     Create Event With ${device_name} And ${PREFIX}-Sample-Profile And ${PREFIX}_GenerateDeviceValue_UINT8_RW
 
 Verify MQTT Broker Qos
-    ${timestamp}=  Evaluate  ${log_timestamp}-30
-    ${command}=  Set Variable  docker logs edgex-mqtt-broker --since ${timestamp}
-    ${result} =  Run Process  ${command}  shell=True  stderr=STDOUT  output_encoding=UTF-8
-    Log  ${result.stdout}
-    Should Contain  ${result.stdout}  core-data 2 edgex/events/device/#
-    ${subscribe_log}  Get Lines Containing String  ${result.stdout}  Sending PUBLISH to core-data
+    ${timestamp}=  Evaluate  int(${log_timestamp})-30
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh mqtt-broker ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    Should Contain  ${logs.stdout}  core-data 2 edgex/events/device/#
+    ${subscribe_log}  Get Lines Containing String  ${logs.stdout}  Sending PUBLISH to core-data
     Should Contain  ${subscribe_log}   q0  # because device-virtual QoS=0

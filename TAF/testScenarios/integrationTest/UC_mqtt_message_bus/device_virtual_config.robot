@@ -89,9 +89,9 @@ Retrive device data by device ${device_name} and command ${command}
     sleep  500ms
 
 Event Has Been Recevied By MQTT Subscriber
-    ${logs}  Get Service Logs Since Timestamp  device-virtual  ${log_timestamp}
-    Log  ${logs}
-    ${correlation_line}  Get Lines Containing String  ${logs}.encode()  Correlation-ID
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh device-virtual ${log_timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Correlation-ID
     ${correlation_id}  Fetch From Right  ${correlation_line}  X-Correlation-ID:
     ${correlation_id}  Fetch From Left  ${correlation_id.strip()}  "
 
@@ -100,8 +100,8 @@ Event Has Been Recevied By MQTT Subscriber
     ...             fail  Event is not received by mqtt subscriber
 
 Verify MQTT Broker Qos
-    ${command}=  Set Variable  docker logs edgex-mqtt-broker --since ${log_timestamp}
-    ${result} =  Run Process  ${command}  shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${result} =  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh mqtt-broker ${log_timestamp}
+    ...          shell=True  stderr=STDOUT  output_encoding=UTF-8
     Log  ${result.stdout}
     ${publish_log}  Get Lines Containing String  ${result.stdout}  Received PUBLISH from device-virtual
     Should Contain  ${publish_log}  q2

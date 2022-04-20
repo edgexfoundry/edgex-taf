@@ -75,9 +75,9 @@ Pre-Created Interval And IntervalAction Should Be Created
 
 IntervalAction Should Be Executed Every ScheduleIntervalTime
     ${keyword}=  Set Variable  1 action need to be executed with interval ${interval_name}
-    ${service_log}=  Get service logs since timestamp  support-scheduler  ${timestamp}
-    Log  ${service_log}
-    ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh support-scheduler ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
     ${times}=  Get Regexp Matches  ${return_log}  :([0-5][0-9]:[0-5][0-9].[0-9]+)  1
     ${time_diff}=  Subtract Time From Time  ${times}[1]  ${times}[0]
     Should Be True  int(round(0.9981947000001128)) == 1

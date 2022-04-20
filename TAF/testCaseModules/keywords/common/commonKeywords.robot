@@ -173,10 +173,10 @@ Get current ISO 8601 time
 
 Catch logs for service "${service_name}" with keyword "${keyword}"
     ${current_timestamp}=  Get current epoch time
-    ${log_timestamp}=  evaluate   int(${current_timestamp}-1)
-    ${service_log}=  Get service logs since timestamp  ${service_name}  ${log_timestamp}
-    log  ${service_log}
-    ${return_log}=  Get Lines Containing String  str(${service_log})  ${keyword}
+    ${timestamp}=  evaluate   int(${current_timestamp}-1)
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
     [Return]  ${return_log}
 
 Found "${keyword}" in service "${service_name}" log
@@ -251,7 +251,8 @@ Update Service Configuration On Consul
     ${resp}=  PUT On Session  Consul  ${path}  data=${value}  headers=${headers}  expected_status=200
 
 Get Consul Token
-    ${command}  Set Variable  docker exec edgex-core-consul cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
-    ${result}  Run Process  ${command}  shell=True  output_encoding=UTF-8
+    ${command}  Set Variable  cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
+    ${result}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/execute-command-in-docker.sh core-consul "${command}"
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
     ${token}  Evaluate  json.loads('''${result.stdout}''')  json
     [Return]  ${token}[SecretID]
