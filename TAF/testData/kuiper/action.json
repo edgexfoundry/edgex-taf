@@ -3,7 +3,7 @@
     {
       "mqtt": {
         "server": "tcp://edgex-mqtt-broker:1883",
-        "topic": "rules-events",
+        "topic": "rules-events-kuiper",
         "clientId": "kuiper_mqtt"
       }
     }

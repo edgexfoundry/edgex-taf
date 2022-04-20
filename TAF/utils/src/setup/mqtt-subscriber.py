@@ -19,6 +19,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     current_timestamp = int(round(time.time() * 1000))
     print(current_timestamp)
+    print(msg.topic)
     print(msg.payload.decode())
     if keyword in msg.payload.decode():
         print("Got mqtt export data!!")
