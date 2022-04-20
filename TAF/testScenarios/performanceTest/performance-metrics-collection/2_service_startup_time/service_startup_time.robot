@@ -121,5 +121,6 @@ Start Services
   Run Process  ${command}  shell=True
   sleep  8s
   ${result}=  Run Process  docker ps -a | grep -Ev security-proxy-setup | grep Exited  shell=True
+  Check Services Startup  ["data","metadata","command","support-notifications","support-scheduler","device-virtual","app-service-rules-engine"]
   Run Keyword If  ${result.rc} == 0  log  ${result.stdout}
   Should Not Be Equal As Integers  ${result.rc}  0  >>> Start Services Fail <<<
