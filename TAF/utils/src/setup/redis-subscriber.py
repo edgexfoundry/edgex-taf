@@ -43,5 +43,6 @@ while True:
     message = p.get_message()
     if message and not message['type'] == 'psubscribe':
         if keyword in message['channel']:
-            print(message)
+            print(message['channel'])
+            print(message['data'])
             break

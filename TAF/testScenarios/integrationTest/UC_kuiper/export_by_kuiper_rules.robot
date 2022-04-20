@@ -9,8 +9,9 @@ Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                             AND  Create A Stream With Edgex Type
 Suite Teardown   Run Keywords   Delete Stream
+...                             AND  Delete all events by age
 ...                             AND  Run Teardown Keywords
-Force Tags       MessageQueue=redis
+Force Tags       MessageQueue=redis  MessageQueue=MQTT
 
 *** Variables ***
 ${SUITE}         Export By Kuiper Rules
@@ -24,7 +25,7 @@ Kuiper001 - Add a new rule and export to MQTT
     Given Set Test Variable  ${device_name}  kuiper-mqtt-device
     And Set Test Variable  ${command}  ${PREFIX}_GenerateDeviceValue_INT8_RW
     And Set Test Variable  ${resource}  ${PREFIX}_DeviceValue_INT8_RW
-    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events ${resource} arg &   # Process for MQTT Subscriber
+    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events-kuiper ${resource} arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Create A Rule mqtt-rule With ${rule_sql} And MQTT Sink
     And Create Device For device-virtual With Name ${device_name}
