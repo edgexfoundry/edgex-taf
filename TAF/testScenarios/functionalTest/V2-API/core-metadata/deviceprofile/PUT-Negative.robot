@@ -97,3 +97,15 @@ ErrProfilePUT007 - Update device profile with deivceCommands deviceResource vali
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
+
+ErrProfilePUT008 - Update device profile when StrictDeviceProfileChanges is true
+    Given Set ProfileChange.StrictDeviceProfileChanges=true For Core-Metadata On Consul
+    And Generate A Device Profile Sample  Test-Profile-1
+    And Create Device Profile ${deviceProfile}
+    And Set To Dictionary  ${deviceProfile}[0][profile]  manufacturer=Mfr_ABC
+    When Update Device Profile ${deviceProfile}
+    Then Should Return Status Code "423"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Consul
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1

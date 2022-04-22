@@ -36,3 +36,14 @@ ErrProfileDELETE003 - Delete device profile by name that used by rovisionwatcher
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
+
+ErrProfileDELETE004 - Delete device profile by name when StrictDeviceProfileDeletes is true
+    Given Set ProfileChange.StrictDeviceProfileDeletes=true For Core-Metadata On Consul
+    And Generate A Device Profile Sample  Test-Profile-2
+    And Create device profile ${deviceProfile}
+    When Delete Device Profile By Name  Test-Profile-2
+    Then Should Return Status Code "423"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileDeletes=false For Core-Metadata On Consul
+    ...                  AND  Delete Device Profile By Name  Test-Profile-2
