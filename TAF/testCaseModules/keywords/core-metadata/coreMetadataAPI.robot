@@ -589,3 +589,7 @@ Create A Provision Watcher Sample With Associated Test-Device-Service And ${devi
     Generate Provision Watchers  ${provisionwatcher}
     Create provision watcher ${provisionwatcher}
 
+Set ProfileChange.${config}=${value} For Core-Metadata On Consul
+   ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-metadata/Writable/ProfileChange/${config}
+   Update Service Configuration On Consul  ${path}  ${value}
+   Sleep  1s  # Waiting for the configuration updating
