@@ -102,6 +102,7 @@ deviceResources:
     minimum: "-128"
     maximum: "127"
     defaultValue: "0"
+    units: "ms"
 -
   name: "Virtual_DeviceValue_INT8_W"
   description: "Generate device INT8 value"
