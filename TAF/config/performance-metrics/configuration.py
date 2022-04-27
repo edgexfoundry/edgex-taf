@@ -128,7 +128,7 @@ ALLOWABLE_OUTLIER = 5
 
 
 # Suite: 5_event_exported_time
-# Loop time for sending ping request
+# Loop time for retrieve mqtt events
 EXPORTED_LOOP_TIMES = 10
 
 # Export time threshold value (in milliseconds)
