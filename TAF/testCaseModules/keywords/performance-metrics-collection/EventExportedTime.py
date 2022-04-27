@@ -26,12 +26,15 @@ class EventExportedTime(object):
         full_subscriber_logs = subprocess.check_output("python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin perf",
                                                        shell=True)
         subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with result code 0", "")
-        events = subscriber_logs.split('Got mqtt export data!!')
-        for event in events:
-            if "deviceName" in event:
-                event_str = event.split('\n')
-                event_json = json.loads(event_str[2])
-                event_json['received'] = int(event_str[1])
+        messages = subscriber_logs.split('Got mqtt export data!!')
+        for message in messages:
+            if "deviceName" in message:
+                full_msg_list = message.split('\n')
+                msg_list = list(filter(None, full_msg_list))  # Remove empty value
+                for line in msg_list:
+                    if "origin" in line:
+                        event_json = json.loads(line)
+                        event_json['received'] = int(msg_list[0])
 
                 if str(devices[0]) == event_json['deviceName']:
                     device_int.append(event_json)
