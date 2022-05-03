@@ -10,6 +10,7 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 *** Variables ***
 ${coreMetadataUrl}   ${URI_SCHEME}://${BASE_URL}:${CORE_METADATA_PORT}
 ${deviceProfileUri}  /api/${API_VERSION}/deviceprofile
+${deviceProfileBasicinfoUri}  /api/${API_VERSION}/deviceprofile/basicinfo
 ${deviceServiceUri}  /api/${API_VERSION}/deviceservice
 ${deviceResourceUri}  /api/${API_VERSION}/deviceresource
 ${deviceUri}         /api/${API_VERSION}/device
@@ -50,6 +51,14 @@ Update device profile ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  PUT On Session  Core Metadata  ${deviceProfileUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Update basicinfo ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH On Session  Core Metadata  ${deviceProfileBasicinfoUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
@@ -407,6 +416,23 @@ Generate New ${file} With "${dict}" Property "${property}" Value "${value}"
     ...    ELSE IF  "${dict}" == "deviceCommands-resourceOperations"  Set to Dictionary  ${yaml_dict}[deviceCommands][0][resourceOperations][0]  ${property}=${value}
     ${yaml}=  yaml.Safe Dump  ${yaml_dict}
     Create File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/NEW-${file}  ${yaml}
+
+Generate a basicinfo sample for updating
+    Set Test Variable  ${test_profile}  Test-Profile-1
+    Generate A Device Profile Sample  ${test_profile}
+    Create Device Profile ${deviceProfile}
+    ${basicinfo}=  Create Dictionary  name=${test_profile}  description=Dcp_ABC
+    Generate basicinfo  ${basicinfo}
+
+Generate basicinfo
+    [Arguments]  @{data_list}
+    ${profile_list}=  Create List
+    FOR  ${data}  IN  @{data_list}
+        ${json}=  Create Dictionary  basicinfo=${data}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
+        Append To List  ${profile_list}  ${json}
+    END
+    Set Test Variable  ${basicinfoProfile}  ${profile_list}
 
 Delete Profile Files
     [Arguments]  ${file}
