@@ -28,6 +28,14 @@ deviceResources:
       valueType: "Uint8"
       readWrite: "R"
       units: "degreesFarenheit"
+  - name: "DeviceValue_INT8_R"
+    description: "Generate device INT8 value"
+    isHidden: true
+    tag: "temperature"
+    properties:
+      valueType: "int8"
+      readWrite: "R"
+      units: "degreesFarenheit"
 
 deviceCommands:
   - name: "CurrentStatus"

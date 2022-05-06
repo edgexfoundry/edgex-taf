@@ -27,6 +27,16 @@ deviceResources:
       floatEncoding: "Base64"
       scale: "0.001"
       units: "kHz"
+  - name: "DeviceValue_FLOAT64_R"
+    description: "Generate device FLOAT64 value"
+    isHidden: true
+    tag: "speed"
+    properties:
+      valueType: "FLOAT64"
+      readWrite: "R"
+      floatEncoding: "Base64"
+      scale: "0.001"
+      units: "kHz"
 
 deviceCommands:
   - name: "MotorKind"
