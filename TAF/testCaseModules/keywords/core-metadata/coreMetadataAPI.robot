@@ -11,6 +11,7 @@ Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
 ${coreMetadataUrl}   ${URI_SCHEME}://${BASE_URL}:${CORE_METADATA_PORT}
 ${deviceProfileUri}  /api/${API_VERSION}/deviceprofile
 ${deviceProfileBasicinfoUri}  /api/${API_VERSION}/deviceprofile/basicinfo
+${deviceProfileResourceUri}  /api/${API_VERSION}/deviceprofile/resource
 ${deviceServiceUri}  /api/${API_VERSION}/deviceservice
 ${deviceResourceUri}  /api/${API_VERSION}/deviceresource
 ${deviceUri}         /api/${API_VERSION}/device
@@ -59,6 +60,14 @@ Update basicinfo ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  PATCH On Session  Core Metadata  ${deviceProfileBasicinfoUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Update resource ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH On Session  Core Metadata  ${deviceProfileResourceUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
@@ -433,6 +442,24 @@ Generate basicinfo
         Append To List  ${profile_list}  ${json}
     END
     Set Test Variable  ${basicinfoProfile}  ${profile_list}
+
+Generate a profile and a resource sample for updating
+    Set Test Variable  ${test_profile}  Test-Profile-1
+    Generate A Device Profile Sample  ${test_profile}
+    Create Device Profile ${deviceProfile}
+    ${resource}=  Create Dictionary  name=DeviceValue_Boolean_RW  description=Dcp_ABC  isHidden=${false}
+    Generate updating resource  ${resource}
+    Set to Dictionary  ${resourceUpdate}[0]  profileName=${test_profile}
+
+Generate updating resource
+    [Arguments]  @{data_list}
+    ${profile_list}=  Create List
+    FOR  ${data}  IN  @{data_list}
+        ${json}=  Create Dictionary  resource=${data}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
+        Append To List  ${profile_list}  ${json}
+    END
+    Set Test Variable  ${resourceUpdate}  ${profile_list}
 
 Delete Profile Files
     [Arguments]  ${file}
