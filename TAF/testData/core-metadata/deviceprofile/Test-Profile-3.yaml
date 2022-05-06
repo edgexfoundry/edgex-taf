@@ -17,7 +17,16 @@ deviceResources:
       valueType: "Float32"
       readWrite: "R"
       units: "%"
-
+  - name: "DeviceValue_BOOL_R"
+    description: "Generate device BOOL value"
+    isHidden: true
+    tag: "speed"
+    properties:
+      valueType: "BOOL"
+      readWrite: "R"
+      minimum: "0"
+      maximum: "1"
+      defaultValue: "true"
 deviceCommands:
   - name: "CurrentHumidity"
     isHidden: false

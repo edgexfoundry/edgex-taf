@@ -169,6 +169,15 @@ Delete multiple device profiles by names
         Delete device profile by name  ${profile}
     END
 
+Delete deviceResource by Name ${resource_name} in ${profile}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceProfileUri}/name/${profile}/resource/${resource_name}
+    ...       headers=${headers}  expected_status=any
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
+
+
 # Device
 Create device with ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -464,6 +473,7 @@ Generate updating resource
 Delete Profile Files
     [Arguments]  ${file}
     Remove File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${file}
+
 
 # Device Service
 Generate Device Services
