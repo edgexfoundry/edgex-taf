@@ -509,6 +509,37 @@ Delete Profile Files
     [Arguments]  ${file}
     Remove File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${file}
 
+# Device profile > resource
+Generate a device profile and Add multiple Resources on device profile
+    Set Test Variable  ${test_profile}  Test-Profile-1
+    Generate a device profile sample  ${test_profile}
+    Create Device Profile ${deviceProfile}
+    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads(r'''${resource_data}''')  json
+    Generate resource  ${json_string}
+
+Add multiple Resources on multiple device profile
+    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads(r'''${resource_data}''')  json
+    Generate resource  ${json_string}
+    Set To Dictionary  ${resourceProfile}[1]  profileName=Test-Profile-2
+    Set To Dictionary  ${resourceProfile}[2]  profileName=Test-Profile-3
+
+Generate resource
+    [Arguments]  ${data_list}
+    ${len}  Get Length  ${data_list}
+    FOR  ${INDEX}  IN RANGE  ${len}
+        Set To Dictionary  ${data_list}[${INDEX}]   apiVersion=${API_VERSION}
+    END
+    Set Test Variable  ${resourceProfile}  ${data_list}
+
+Create New resource ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  POST On Session  Core Metadata  ${deviceProfileResourceUri}  json=${entity}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
 
 # Device Service
 Generate Device Services
