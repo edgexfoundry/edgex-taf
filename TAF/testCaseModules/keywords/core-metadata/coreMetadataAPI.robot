@@ -177,6 +177,14 @@ Delete deviceResource by Name ${resource_name} in ${profile}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
+Delete deviceCommand by Name ${command_name} in ${profile}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Core Metadata  ${deviceProfileUri}/name/${profile}/deviceCommand/${command_name}
+    ...       headers=${headers}  expected_status=any
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
+
 
 # Device
 Create device with ${entity}
