@@ -12,6 +12,7 @@ ${coreMetadataUrl}   ${URI_SCHEME}://${BASE_URL}:${CORE_METADATA_PORT}
 ${deviceProfileUri}  /api/${API_VERSION}/deviceprofile
 ${deviceProfileBasicinfoUri}  /api/${API_VERSION}/deviceprofile/basicinfo
 ${deviceProfileResourceUri}  /api/${API_VERSION}/deviceprofile/resource
+${deviceProfileCommandUri}  /api/${API_VERSION}/deviceprofile/deviceCommand
 ${deviceServiceUri}  /api/${API_VERSION}/deviceservice
 ${deviceResourceUri}  /api/${API_VERSION}/deviceresource
 ${deviceUri}         /api/${API_VERSION}/device
@@ -68,6 +69,14 @@ Update resource ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
     ${resp}=  PATCH On Session  Core Metadata  ${deviceProfileResourceUri}  json=${entity}   headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Update command ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PATCH On Session  Core Metadata  ${deviceProfileCommandUri}  json=${entity}   headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
@@ -477,6 +486,24 @@ Generate updating resource
         Append To List  ${profile_list}  ${json}
     END
     Set Test Variable  ${resourceUpdate}  ${profile_list}
+
+Generate a profile and command sample for updating
+    Set Test Variable  ${test_profile}  Test-Profile-1
+    Generate A Device Profile Sample  ${test_profile}
+    Create Device Profile ${deviceProfile}
+    ${command}=  Create Dictionary  name=CurrentStatus  isHidden=${false}
+    Generate updating command  ${command}
+    Set to Dictionary  ${commandUpdate}[0]  profileName=${test_profile}
+
+Generate updating command
+    [Arguments]  @{data_list}
+    ${command_list}=  Create List
+    FOR  ${data}  IN  @{data_list}
+        ${json}=  Create Dictionary  devicecommand=${data}
+        Set to dictionary  ${json}       apiVersion=${API_VERSION}
+        Append To List  ${command_list}  ${json}
+    END
+    Set Test Variable  ${commandUpdate}  ${command_list}
 
 Delete Profile Files
     [Arguments]  ${file}
