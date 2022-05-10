@@ -1,0 +1,41 @@
+[
+  {
+    "profileName": "Test-Profile-1",
+    "deviceCommand": {
+      "name": "Switch",
+      "readWrite": "RW",
+      "resourceOperations": [
+        {
+          "deviceResource": "DeviceValue_Boolean_RW",
+          "DefaultValue": "false"
+        }
+      ]
+    }
+  },
+  {
+    "profileName": "Test-Profile-1",
+    "deviceCommand": {
+      "name": "GetSensorValues",
+      "readWrite": "R",
+      "resourceOperations": [
+        {
+          "deviceResource": "DeviceValue_Boolean_RW",
+          "DefaultValue": "false"
+        }
+      ]
+    }
+  },
+  {
+    "profileName": "Test-Profile-1",
+    "deviceCommand": {
+      "name": "Speed",
+      "readWrite": "R",
+      "resourceOperations": [
+        {
+          "deviceResource": "DeviceValue_Boolean_RW",
+          "DefaultValue": "false"
+        }
+      ]
+    }
+  }
+]

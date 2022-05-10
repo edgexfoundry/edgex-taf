@@ -541,6 +541,40 @@ Create New resource ${entity}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
 
+# Device profile > command
+Generate a device profile and Add multiple Commands on device profile
+    Set Test Variable  ${test_profile}  Test-Profile-1
+    Generate a device profile sample  ${test_profile}
+    Create Device Profile ${deviceProfile}
+    ${command_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/command_profile.json  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads(r'''${command_data}''')  json
+    Generate command  ${json_string}
+
+Add multiple Commands on multiple device profile
+    ${command_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/command_profile.json  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads(r'''${command_data}''')  json
+    Generate command  ${json_string}
+    Set To Dictionary  ${commandProfile}[1]  profileName=Test-Profile-2
+    Set To Dictionary  ${commandProfile}[1][deviceCommand][resourceOperations][0]  deviceResource=DeviceValue_String_R
+    Set To Dictionary  ${commandProfile}[2]  profileName=Test-Profile-3
+    Set To Dictionary  ${commandProfile}[2][deviceCommand][resourceOperations][0]  deviceResource=DeviceValue_FLOAT32_R
+
+Generate command
+    [Arguments]  ${data_list}
+    ${len}  Get Length  ${data_list}
+    FOR  ${INDEX}  IN RANGE  ${len}
+        Set To Dictionary  ${data_list}[${INDEX}]   apiVersion=${API_VERSION}
+    END
+    Set Test Variable  ${commandProfile}  ${data_list}
+
+Create New command ${entity}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  POST On Session  Core Metadata  ${deviceProfileCommandUri}  json=${entity}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
 # Device Service
 Generate Device Services
     [Arguments]  @{data_list}
