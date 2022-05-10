@@ -1,0 +1,40 @@
+[
+  {
+    "profileName": "Test-Profile-1",
+    "resource": {
+      "name": "SwitchButton",
+      "description": "Switch On/Off",
+      "properties": {
+        "valueType": "String",
+        "readWrite": "RW",
+        "defaultValue": "On",
+        "units": "On/Off"
+      }
+    }
+  },
+  {
+    "profileName": "Test-Profile-1",
+    "resource": {
+      "name": "Temperature",
+      "description": "Temperature of liquid within the tank",
+      "properties": {
+        "valueType": "int16",
+        "readWrite": "RW",
+        "defaultValue": "1",
+        "units": "Degrees Celsius"
+      }
+    }
+  },
+  {
+    "profileName": "Test-Profile-1",
+    "resource": {
+      "name": "BinaryInput1",
+      "description": "Current value of binary input 1",
+      "properties": {
+        "valueType": "Bool",
+        "readWrite": "R",
+        "units": "value"
+      }
+    }
+  }
+]
