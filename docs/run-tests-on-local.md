@@ -19,13 +19,17 @@ export WORK_DIR=${HOME}/edgex-taf
 # Arguments for run-tests.sh
 ${ARCH}: x86_64 | arm64
 ${SECURITY_SERVICE_NEEDED}: false | true
-${TEST_STRATEGY}: 1 (functional)
-${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/V2-API 
+${TEST_STRATEGY}: functional-test | integration-test
+${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/V2-API | mqtt (integration-test) | redis (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
 
 cd ${WORK_DIR}/TAF/utils/scripts/docker
-sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${DEPLOY_SERVICES}
-# ex. sh run-tests.sh x86_64 false 1 no-deployment
+sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${TEST_SERVICE} ${DEPLOY_SERVICES}
+
+# If using x86_64, no need for secuity, adopt for functional-test, choose "v2-api" for test_service and edgex service are deployed in place, it should be:
+ex. sh run-tests.sh x86_64 false functional-test v2-api no-deployment
+# If using x86_64, no need for secuity, adopt for integration-test, choose "mqtt" for test_service and edgex service are not deployed in place, it should be:
+ex. sh run-tests.sh x86_64 false integration-test mqtt 
 ```
 
 #### View the test report
@@ -55,18 +59,18 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 3. Prepare test environment:
     ``` bash
     # Arguments for get-compose-file.sh
-    ${USE_DB}: -redis | -mongo (mongo is not supported from hanoi release)
     ${ARCH}: x86_64 | arm64
     ${USE_SECURITY}: - (false) | -security- (true)
+    ${USE_SHA1}:main
+    ${TEST_STRATEGY}: functional-test | integration-test
 
     # Fetch the latest docker-compose file
     cd ${HOME}/edgex-taf/TAF/utils/scripts/docker
-    sh get-compose-file.sh ${USE_DB} ${ARCH} ${USE_SECURITY}
-    # ex. sh get-compose-file.sh -redis x86_64 -
+    sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
+    # ex. sh get-compose-file.sh x86_64 - main functional-test
     
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
-    export ARCH=x86_64
     export SECURITY_SERVICE_NEEDED=false
     export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose:latest
     ```
