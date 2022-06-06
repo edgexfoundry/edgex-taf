@@ -89,6 +89,7 @@ case ${TEST_STRATEGY} in
     docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
             --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
             --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
+            -v /tmp/edgex/secrets:/tmp/edgex/secrets:z \
             -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
             -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
             --exclude Skipped --include MessageQueue=${TEST_SERVICE} -u integrationTest -p device-virtual
