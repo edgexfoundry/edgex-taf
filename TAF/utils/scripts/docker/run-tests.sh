@@ -90,6 +90,7 @@ case ${TEST_STRATEGY} in
             --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
             -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
             --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
+            -v /tmp/edgex/secrets:/tmp/edgex/secrets:z \
             -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
             --exclude Skipped --include MessageQueue=${TEST_SERVICE} -u integrationTest -p device-virtual
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html
