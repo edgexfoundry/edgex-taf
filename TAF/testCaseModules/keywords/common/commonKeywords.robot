@@ -179,9 +179,9 @@ Catch logs for service "${service_name}" with keyword "${keyword}"
     ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
     [Return]  ${return_log}
 
-Found "${keyword}" in service "${service_name}" log
-    ${return_log}=  Catch logs for service "${service_name}" with keyword "${keyword}"
-    Should Not Be Empty  ${return_log}
+#Found "${keyword}" in service "${service_name}" log
+#    ${return_log}=  Catch logs for service "${service_name}" with keyword "${keyword}"
+#    Should Not Be Empty  ${return_log}
 
 Get Token
     ${jwt_token} =  Access Token  -useradd
