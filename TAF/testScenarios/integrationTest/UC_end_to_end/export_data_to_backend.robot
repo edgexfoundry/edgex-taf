@@ -39,7 +39,6 @@ Export002 - Export events/readings to MQTT Server
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW
     Then Device data has recevied by mqtt subscriber
-    And Found "Sent data to MQTT Broker" in service "app-mqtt-export" log
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
