@@ -84,18 +84,6 @@ Event Has Been Pushed To Core Data
     Should Return Status Code "200" And events
     Should Be Equal As Strings  ${content}[events][0][deviceName]  ${device_name}
 
-Run Redis Subscriber Progress And Output
-    [Arguments]  ${topic}
-    ${current_time}  get current epoch time
-    ${secty}  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Set Variable  true
-              ...       ELSE  Set Variable  false
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py ${topic} ${device_name} ${secty} &
-    ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/subscriber-${current_time}.log
-    ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/error-${current_time}.log
-    Set Test Variable  ${subscriber_file}  subscriber-${current_time}.log
-    sleep  2s
-    [Return]  ${handle}
-
 Get device data by device ${device} and command ${command} with ${params}
     Get device ${device} read command ${command} with ${params}
     Should return status code "200"
