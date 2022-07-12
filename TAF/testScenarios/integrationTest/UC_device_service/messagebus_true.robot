@@ -17,7 +17,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/messagebus_true.log
 DeviceService001-Send get command with parameters ds-pushevent=no and ds-returnevent=no when messagebus is enabled
     Set Test Variable  ${device_name}  messagebus-true-device-1
     ${params}  Create Dictionary  ds-pushevent=no  ds-returnevent=no
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*
+    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
     Given Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200"
@@ -30,7 +30,7 @@ DeviceService001-Send get command with parameters ds-pushevent=no and ds-returne
 DeviceService002-Send get command with parameters ds-pushevent=yes and ds-returnevent=no when messagebus is enabled
     Set Test Variable  ${device_name}  messagebus-true-device-2
     ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=no
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*
+    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
     Given Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200"
@@ -43,7 +43,7 @@ DeviceService002-Send get command with parameters ds-pushevent=yes and ds-return
 DeviceService003-Send get command with parameters ds-pushevent=no and ds-returnevent=yes when messagebus is enabled
     Set Test Variable  ${device_name}  messagebus-true-device-3
     ${params}  Create Dictionary  ds-pushevent=no  ds-returnevent=yes
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*
+    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
     Given Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200" And event
@@ -56,7 +56,7 @@ DeviceService003-Send get command with parameters ds-pushevent=no and ds-returne
 DeviceService004-Send get command with parameters ds-pushevent=yes and ds-returnevent=yes when messagebus is enabled
     Set Test Variable  ${device_name}  messagebus-true-device-4
     ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=yes
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*
+    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
     Given Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200" And event
@@ -69,7 +69,7 @@ DeviceService004-Send get command with parameters ds-pushevent=yes and ds-return
 DeviceService005-Customize PublishTopicPrefix works correctly when using Redis message bus
     Set Test Variable  ${device_name}  messagebus-true-device-5
     ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=yes
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.custom.*
+    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.custom.*  ${device_name}
     Given Set PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
     And Set SubscribeTopic=edgex/events/custom/# For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
