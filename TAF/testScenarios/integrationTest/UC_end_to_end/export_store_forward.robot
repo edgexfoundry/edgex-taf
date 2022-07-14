@@ -27,6 +27,7 @@ StoreAndForward001 - Stored data is exported after connecting to http server
     And Start HTTP Server And Received Exported Data Contains ${PREFIX}_GenerateDeviceValue_UINT8_RW
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
+                ...           AND  Terminate All Processes  kill=True
 
 StoreAndForward002 - Stored data is cleared after the maximum configured retires
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
