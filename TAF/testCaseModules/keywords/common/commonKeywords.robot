@@ -308,10 +308,12 @@ No ${metrics_name} Found In File
     Log  No ${metrics_name} Received In MessageBus With The Topic
 
 Run MQTT Subscriber Progress And Output
-    [Arguments]  ${topic}  ${keyword}
+    [Arguments]  ${topic}  ${keyword}=CorrelationID
     ${current_time}  get current epoch time
-    Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} arg &
-    ...            shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber-${current_time}.log
-    ...            stderr=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-error-${current_time}.log
     Set Test Variable  ${subscriber_file}  mqtt-subscriber-${current_time}.log
+    Set Test Variable  ${error_file}  mqtt-error-${current_time}.log
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} arg &
+    ...            shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
+    ...            stderr=${WORK_DIR}/TAF/testArtifacts/logs/${error_file}
     sleep  1s
+    [Return]  ${handle}

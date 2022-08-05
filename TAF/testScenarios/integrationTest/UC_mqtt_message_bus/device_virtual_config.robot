@@ -42,6 +42,7 @@ Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the top
                 ...           AND  Set MessageQueue SubscribeTopic=edgex/events/device/# For core-data On Consul
 
 Config003 - Set device-virtual MessageQueue.Optional.Qos (PUBLISH)
+    [Tags]  backward-skip
     Given Set Test Variable  ${device_name}  messagebus-true-device-6
     And Create Device For device-virtual With Name ${device_name}
     And Set MessageQueue Optional/Qos=2 For device-virtual On Consul
@@ -70,17 +71,6 @@ Set Writable LogLevel To Debug For ${service_name} On Consul
     ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/LogLevel
     Update Service Configuration On Consul  ${path}  DEBUG
     Sleep  500ms
-
-Run MQTT Subscriber Progress And Output
-    [Arguments]  ${topic}
-    ${current_time}  get current epoch time
-    Set Test Variable  ${subscriber_file}  mqtt-subscriber-${current_time}.log
-    Set Test Variable  ${error_file}  mqtt-error-${current_time}.log
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} CorrelationID arg &
-    ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/${error_file}
-    sleep  2s
-    [Return]  ${handle}
 
 Retrive device data by device ${device_name} and command ${command}
     ${timestamp}  get current epoch time

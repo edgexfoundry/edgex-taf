@@ -31,11 +31,18 @@ class S(BaseHTTPRequestHandler):
 
 def run(server_class=HTTPServer, handler_class=S, port=7770):
     logging.basicConfig(level=logging.INFO, datefmt='%m-%d %H:%M', filename='../testArtifacts/logs/httpd-server.log')
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
+    try:
+        server_address = ('', port)
+        httpd = server_class(server_address, handler_class)
+    except Exception as e:
+        logging.info(e, exc_info=True)
+
     logging.info('Starting httpd...\n')
+
     try:
         httpd.serve_forever()
+    except Exception as e:
+        logging.info(e, exc_info=True)
     except KeyboardInterrupt:
         pass
     httpd.server_close()

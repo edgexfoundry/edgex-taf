@@ -59,6 +59,7 @@ Config004 - Verify LastConnected data when UpdateLastConnected is true
                 ...      AND  Delete device by name ${device_name}
 
 Config005 - Verfiy reading contains units when ReadingUnits is true
+    [Tags]  backward-skip
     Given Create Device For ${SERVICE_NAME} With Name ReadingUnits-True
     And Retrive Device Data By Device ${device_name} And Command ${PREFIX}_DeviceValue_INT8_R
     When Query Readings By Device Name  ${device_name}
@@ -69,6 +70,7 @@ Config005 - Verfiy reading contains units when ReadingUnits is true
     [Teardown]  Delete Device By Name ${device_name}
 
 Config006 - Verfiy reading contains units when ReadingUnits is false
+    [Tags]  backward-skip
     Given Set Writable.Reading.ReadingUnits to false For ${SERVICE_NAME} On Consul
     And Create Device For ${SERVICE_NAME} With Name ReadingUnits-False
     And Retrive Device Data By Device ${device_name} And Command ${PREFIX}_DeviceValue_INT8_R
