@@ -50,7 +50,7 @@ CoreConfig003 - Customize core-data MessageQueue.PublishTopicPrefix
     And Create Device For device-virtual With Name ${device_name}
     When Create An Event With ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
     Then Should Return Status Code "201" And id
-    And Event Has Been Recevied By MQTT Subscriber
+    And MQTT Subscriber Received Event is the Same As Service Log
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
                 ...           AND  Set MessageQueue PublishTopicPrefix=edgex/events/core For core-data On Consul
@@ -79,13 +79,9 @@ Set MessageQueue ${key}=${value} For core-data On Consul
     Set Test Variable  ${log_timestamp}  ${timestamp}
 
 Event Has Been Recevied By MQTT Subscriber
-    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh core-data ${log_timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
-    ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Event * on message queue
-    ${correlation_id}  Fetch From Right  ${correlation_line}  Correlation-id:
-    ${correlation_id}  Fetch From Left  ${correlation_id.strip()}  "
     ${received_event}  Get file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    Should Contain  ${received_event}  ${correlation_id}  Event is not received by mqtt subscriber
+    Should Contain  ${received_event}  ${device_name}  No Event is not received by mqtt subscriber
+    Should Contain  ${received_event}  CorrelationID  No CorrelationID Found in Event
 
 Create An Event With ${device_name} and command ${command_name}
     Generate Event Sample  Event  ${device_name}  ${PREFIX}-Sample-Profile  ${PREFIX}_GenerateDeviceValue_UINT8_RW  Simple Reading  
@@ -99,3 +95,14 @@ Verify MQTT Broker Qos
     Should Contain  ${logs.stdout}  core-data 2 edgex/events/device/#
     ${subscribe_log}  Get Lines Containing String  ${logs.stdout}  Sending PUBLISH to core-data
     Should Contain  ${subscribe_log}   q0  # because device-virtual QoS=0
+
+MQTT Subscriber Received Event is the Same As Service Log
+    ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh core-data ${log_timestamp}
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Event Published on message queue
+    ${correlation_id}  Fetch From Right  ${correlation_line}  Correlation-id:
+    ${correlation_id}  Fetch From Left  ${correlation_id}  "
+    ${received_event}  Get file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
+    Should Not Be Empty  ${correlation_id}  No Event Log Found in Service Log
+    Should Not Be Empty  ${received_event}  No Event Received by MQTT Subscriber
+    Should Contain  ${received_event}  ${correlation_id.strip()}  Event correlation_id is Different With Service Log
