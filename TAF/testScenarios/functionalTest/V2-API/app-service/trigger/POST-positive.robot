@@ -57,17 +57,16 @@ TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
     And Body Should Match JSON-ZLIB String
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-TriggerPOST006 - Trigger pipeline (JSON-ZLIB-AES)
-    [Tags]  Skipped  # Since the key and initVector is deprecated. This case is invalid for non-security test.
-    Given Set Functions FilterByDeviceName, Transform, Compress, Encrypt, SetResponseData
-    And Set Transform Type json
-    And Set Compress Algorithm zlib
-    And Set Encrypt Algorithm aes
+TriggerPOST006 - Trigger pipeline (AES26)
+    [Setup]  Skip If  $SECURITY_SERVICE_NEEDED == 'false'
+    Given Store Secret Data With AES256 Auth
+    And Set Functions FilterByDeviceName, Encrypt, SetResponseData
+    And Set Encrypt Algorithm aes256
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"
-    And Body Should Match JSON-ZLIB-AES String
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And MAC and Decrypted Response both are Correct
 
 *** Keywords ***
 Body Should Match ${type}
@@ -77,3 +76,14 @@ Body Should Match ${type}
     ...    ELSE IF  '${type}' == 'JSON String'  Should be true  "${content}" == "${json_string}"
     ...    ELSE     Should be true  '${content}' == '${trigger_content["${type}"]}'
 
+MAC and Decrypted Response both are Correct
+    ${result}  Run Process  python ${WORK_DIR}/TAF/utils/src/setup/aes256-decrypt.py ${secrets_value} ${content} &
+    ...           shell=True  stderr=STDOUT
+    Run Keyword If  '${result.stdout}' == 'Incorrect MAC'  Fail  MAC Value is Incorrect
+    ...       ELSE  Decrypted Response Should be Correct  ${result.stdout}
+
+Decrypted Response Should be Correct
+    [Arguments]  ${result}
+    ${result_json}  Evaluate  json.loads('''${result}''')
+    ${request}  Evaluate  json.loads('''${trigger_content["JSON String"]}''')
+    Should Be Equal As Strings  ${result_json}  ${request}
