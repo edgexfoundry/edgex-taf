@@ -94,6 +94,18 @@ ErrProfileResourcePOST008 - Add deviceResource with readWrite validation error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device profile by name  ${test_profile}
 
+ErrProfileResourcePOST008 - Add deviceResource with invalid units value
+    [Tags]  Skipped
+    Given Set UoM Validation to True
+    And Create A Device Profile
+    When Create Device Resource with Invalid Units Value
+    Then Should Return Status Code "500"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And The Resource Should Not Be Added
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
+
 *** Keywords ***
 Generate deviceResource
     ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8

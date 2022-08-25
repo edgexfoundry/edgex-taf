@@ -52,6 +52,31 @@ ProfilePUT003 - Update device profiles by upload file
     [Teardown]  Run Keywords  Delete Device Profile By Name  Test-Profile-2
     ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
 
+ProfilePUT004 - Update a device profile with valid unit value
+    [Tags]  Skipped
+    Given Create Device Profile
+    And Set UoM Validation to True
+    When Update Device Profile Contains Valid Unit Value
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index 0 Should Contain Status Code "200"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Profile Should Be Updated
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
+
+ProfilePUT005 - Update device profiles by upload file and the update file contains valid unit value
+    [Tags]  Skipped
+    Given Upload Device Profile
+    And Set UoM Validation to True
+    When Upload File Contains Valid Unit Value To Update Device Profile
+    Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Profile Should Be Updated
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
+
 *** Keywords ***
 Profile ${device_profile_name} Data "${property}" Should Be Updated
     Query device profile by name  ${device_profile_name}

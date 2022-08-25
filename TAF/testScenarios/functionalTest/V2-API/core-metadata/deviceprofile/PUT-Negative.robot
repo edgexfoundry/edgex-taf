@@ -109,3 +109,15 @@ ErrProfilePUT008 - Update device profile when StrictDeviceProfileChanges is true
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Consul
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
+
+ErrProfilePUT009 - Update device profile with invalid units value
+    [Tags]  Skipped
+    Given Create device profile
+    And Set UoM Validation to True
+    When Update Device Profile ${deviceProfile}
+    Then Should Return Status Code "500"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Profile Should Not Be Updated
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile

@@ -83,4 +83,11 @@ ErrProfilePOSTUpload008 - Create device profile by upload file with deviceComman
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Profile Files  NEW-Test-Profile-2.yaml
 
-
+ErrProfilePOSTUpload009 - Create device profile by upload file with invalid units property
+    [Tags]  Skipped
+    Given Set UoM Validation to True
+    When Upload Device Prfoile and the File Contains Invalid Units Value
+    Then Should Return Status Code "500"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Set UoM Validation to False
