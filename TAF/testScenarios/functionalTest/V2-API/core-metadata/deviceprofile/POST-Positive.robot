@@ -43,7 +43,7 @@ ProfilePOST003 - Create device profile by upload file with empty deviceResources
     [Teardown]  Run Keywords  Delete Device Profile By Name  ${profile_name}
     ...                  AND  Delete Profile Files  ${upload_profile}
 
-ProfilePOST003 - Create device profile by upload file without deviceResources and deviceCommands
+ProfilePOST004 - Create device profile by upload file without deviceResources and deviceCommands
     When Upload Device Profile Without DeviceResources And DeviceCommands
     log to console  ${content}
     Then Should Return Status Code "201"
@@ -52,6 +52,28 @@ ProfilePOST003 - Create device profile by upload file without deviceResources an
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Device Profile By Name  ${profile_name}
     ...                  AND  Delete Profile Files  ${upload_profile}
+
+ProfilePOST005 - Create device profile with json body and contains valid unit value
+    [Tags]  Skipped
+    Given Set UoM Validation to True
+    When Create Device Profile Which Contains Valid Units Value
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
+
+ProfilePOST006 - Create device profile by upload file and the update file contains valid unit value
+    [Tags]  Skipped
+    Given Set UoM Validation to True
+    When Upload Device Prfoile and the File Contains Valid Units Value
+    Then Should Return Status Code "201"
+    And Should Return Content-Type "application/json"
+    And Should Contain "id"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
 
 *** Keywords ***
 Upload Device Profile With Empty DeviceResources And DeviceCommands

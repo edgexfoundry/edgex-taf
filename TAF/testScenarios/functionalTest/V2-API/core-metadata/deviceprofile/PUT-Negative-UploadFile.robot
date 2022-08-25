@@ -107,3 +107,15 @@ ErrProfilePUTUpload008 - Update device profile by upload file when StrictDeviceP
     [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Consul
     ...                  AND  Delete Device Profile By Name  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
+
+ErrProfilePUTUpload009 - Update device profile by upload file and the update file contains invalid unit value
+    [Tags]  Skipped
+    Given Upload Device Profile
+    And Set UoM Validation to True
+    When Update Device Profile with Upload File Contains Invalid Unit Value
+    Then Should Return Status Code "500"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Profile Should Not Be Updated
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile

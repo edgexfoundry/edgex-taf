@@ -37,6 +37,19 @@ ProfileResourcePOST002 - Add multiple Resources on multiple device profiles
     And New Resource BinaryInput1 in Test-Profile-3 Should Be Added
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
+ProfileResourcePOST003 - Add multiple Resources on device profile with valid units property
+    [Tags]  Skipped
+    Given Set UoM Validation to True
+    And Create A Device Profile
+    When Create Device Resources Contain Valid Units Property
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "201"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And New Resources Should Be Added
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
+
 *** Keywords ***
 New Resource ${resource_name} in ${profile_name} Should Be Added
     Query device profile by name  ${profile_name}

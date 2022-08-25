@@ -44,3 +44,16 @@ ErrProfileResourcePATCH003 - Update deviceResource with isHidden validation erro
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Device Profile By Name  ${test_profile}
+
+ErrProfileResourcePATCH004 - Update resources which contain invalid Units value
+    [Tags]  Skipped
+    Given Set UoM Validation to True
+    And Generate Device Profile
+    When Update Resource with Invalid Units Value
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "500"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Resource Should Not Be Updated
+    [Teardown]  Run Keywords  Set UoM Validation to False
+    ...                  AND  Delete Device Profile
