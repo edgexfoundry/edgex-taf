@@ -62,7 +62,6 @@ Set MessageQueue ${key}=${value} For ${service_name} On Consul
                       ...    ELSE IF  "device" in "${service_name}"  Set Variable  devices
     ${path}=  Set Variable  /v1/kv/edgex/${service_layer}/${CONSUL_CONFIG_VERSION}/${service_name}/MessageQueue/${key}
     Update Service Configuration On Consul  ${path}  ${value}
-    Sleep  500ms
     ${service}  Run Keyword If  "data" in "${service_name}"  Set Variable  data
                 ...       ELSE  Set Variable  ${service_name}
     Restart Services  ${service}
@@ -70,7 +69,6 @@ Set MessageQueue ${key}=${value} For ${service_name} On Consul
 Set Writable LogLevel To Debug For ${service_name} On Consul
     ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/LogLevel
     Update Service Configuration On Consul  ${path}  DEBUG
-    Sleep  500ms
 
 Retrive device data by device ${device_name} and command ${command}
     ${timestamp}  get current epoch time

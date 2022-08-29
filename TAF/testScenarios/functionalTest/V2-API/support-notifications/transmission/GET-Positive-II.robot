@@ -111,7 +111,6 @@ Set Writable configs: resendInterval=${resendInterval} and resendLimit=${resendL
     ${path}=  Set variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-notifications/Writable
     Update Service Configuration On Consul  ${path}/ResendInterval  ${resendInterval}
     Update Service Configuration On Consul  ${path}/ResendLimit  ${resendLimit}
-    Sleep  1s  # Waiting for the configuration updating
 
 Get Transmission Id
     Query All Transmissions

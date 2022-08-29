@@ -73,7 +73,6 @@ CoreConfig004 - Set core-data MessageQueue.Optional.Qos (SUBSCRIBE)
 Set MessageQueue ${key}=${value} For core-data On Consul
     ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageQueue/${key}
     Update Service Configuration On Consul  ${path}  ${value}
-    Sleep  500ms
     Restart Services  data
     ${timestamp}  get current epoch time
     Set Test Variable  ${log_timestamp}  ${timestamp}

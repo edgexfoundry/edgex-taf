@@ -89,11 +89,10 @@ ErrProfilePOST008 - Create device profile with deviceCommands deviceResources va
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrProfilePOST009 - Create device profile with invalid units value
-    [Tags]  Skipped
-    Given Set UoM Validation to True
-    When Create Device Profile Which Contains Invalid Units Value
+    Given Update Service Configuration On Consul  ${uomValidationPath}  true
+    When Create A Profile Test-Profile-1 With invalid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "500"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Set UoM Validation to False
+    [Teardown]  Update Service Configuration On Consul  ${uomValidationPath}  false

@@ -53,29 +53,31 @@ ProfilePUT003 - Update device profiles by upload file
     ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
 
 ProfilePUT004 - Update a device profile with valid unit value
-    [Tags]  Skipped
-    Given Create Device Profile
-    And Set UoM Validation to True
-    When Update Device Profile Contains Valid Unit Value
+    Given Generate A Device Profile Sample  Test-Profile-1
+    And Create Device Profile ${deviceProfile}
+    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Set Profile Units Value To valid
+    When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index 0 Should Contain Status Code "200"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Profile Should Be Updated
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    And Resource Units Should Be Updated in Test-Profile-1
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ProfilePUT005 - Update device profiles by upload file and the update file contains valid unit value
-    [Tags]  Skipped
-    Given Upload Device Profile
-    And Set UoM Validation to True
-    When Upload File Contains Valid Unit Value To Update Device Profile
+    Given Upload Device Profile Test-Profile-2.yaml
+    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Update Units Value In Profile Test-Profile-2 To valid
+    When Upload File NEW-Test-Profile-2.yaml To Update Device Profile
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Profile Should Be Updated
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    And Resource Units Should Be Updated in Test-Profile-2
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  Test-Profile-2
+    ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
 
 *** Keywords ***
 Profile ${device_profile_name} Data "${property}" Should Be Updated
@@ -86,3 +88,11 @@ Profile ${device_profile_name} Data "${property}" Should Be Updated
     ...             Should Be Equal  ${content}[profile][deviceResources][1][properties][valueType]  Float64
     ...    ELSE IF  "${property}" == "deviceCommands"  Should Be Equal  ${content}[profile][deviceCommands][0][isHidden]  ${true}
 
+Resource Units Should Be Updated in ${profile_name}
+    Retrieve Valid Units Value
+    Query device profile by name  ${profile_name}
+    # Validate
+    FOR  ${INDEX}  IN RANGE  len(${content}[profile][deviceResources])
+        Run Keyword If  "${content}[profile][deviceResources][${INDEX}][properties][units]" != "${EMPTY}"
+        ...   List Should Contain Value  ${uom_units}  ${content}[profile][deviceResources][${INDEX}][properties][units]
+    END

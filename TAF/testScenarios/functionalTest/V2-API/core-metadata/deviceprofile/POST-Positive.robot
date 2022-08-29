@@ -45,7 +45,6 @@ ProfilePOST003 - Create device profile by upload file with empty deviceResources
 
 ProfilePOST004 - Create device profile by upload file without deviceResources and deviceCommands
     When Upload Device Profile Without DeviceResources And DeviceCommands
-    log to console  ${content}
     Then Should Return Status Code "201"
     And Should Return Content-Type "application/json"
     And Should Contain "id"
@@ -54,26 +53,25 @@ ProfilePOST004 - Create device profile by upload file without deviceResources an
     ...                  AND  Delete Profile Files  ${upload_profile}
 
 ProfilePOST005 - Create device profile with json body and contains valid unit value
-    [Tags]  Skipped
-    Given Set UoM Validation to True
-    When Create Device Profile Which Contains Valid Units Value
+    Given Update Service Configuration On Consul  ${uomValidationPath}  true
+    When Create A Profile Test-Profile-1 With valid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ProfilePOST006 - Create device profile by upload file and the update file contains valid unit value
-    [Tags]  Skipped
-    Given Set UoM Validation to True
-    When Upload Device Prfoile and the File Contains Valid Units Value
+    Given Update Service Configuration On Consul  ${uomValidationPath}  true
+    When Modify Device Profile Test-Profile-1 With valid Units Value
     Then Should Return Status Code "201"
     And Should Return Content-Type "application/json"
     And Should Contain "id"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1
+    ...                  AND  Delete Profile Files  NEW-Test-Profile-1.yaml
 
 *** Keywords ***
 Upload Device Profile With Empty DeviceResources And DeviceCommands

@@ -18,6 +18,7 @@ ${deviceResourceUri}  /api/${API_VERSION}/deviceresource
 ${deviceUri}         /api/${API_VERSION}/device
 ${provisionWatcherUri}  /api/${API_VERSION}/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
+${uomValidationPath}   /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-metadata/Writable/UoM/Validation
 
 *** Keywords ***
 # Device Profile
@@ -510,28 +511,25 @@ Delete Profile Files
     Remove File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${file}
 
 # Device profile > resource
-Generate a device profile and Add multiple Resources on device profile
+Create A Device Profile And Generate Multiple Resources Entity
     Set Test Variable  ${test_profile}  Test-Profile-1
     Generate a device profile sample  ${test_profile}
     Create Device Profile ${deviceProfile}
-    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
-    ${json_string}=  Evaluate  json.loads(r'''${resource_data}''')  json
-    Generate resource  ${json_string}
+    Generate multiple deviceResources
 
 Add multiple Resources on multiple device profile
-    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
-    ${json_string}=  Evaluate  json.loads(r'''${resource_data}''')  json
-    Generate resource  ${json_string}
+    Generate multiple deviceResources
     Set To Dictionary  ${resourceProfile}[1]  profileName=Test-Profile-2
     Set To Dictionary  ${resourceProfile}[2]  profileName=Test-Profile-3
 
-Generate resource
-    [Arguments]  ${data_list}
-    ${len}  Get Length  ${data_list}
+Generate multiple deviceResources
+    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads(r'''${resource_data}''')  json
+    ${len}  Get Length  ${json_string}
     FOR  ${INDEX}  IN RANGE  ${len}
-        Set To Dictionary  ${data_list}[${INDEX}]   apiVersion=${API_VERSION}
+        Set To Dictionary  ${json_string}[${INDEX}]   apiVersion=${API_VERSION}
     END
-    Set Test Variable  ${resourceProfile}  ${data_list}
+    Set Test Variable  ${resourceProfile}  ${json_string}
 
 Create New resource ${entity}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -755,4 +753,63 @@ Create A Provision Watcher Sample With Associated Test-Device-Service And ${devi
 Set ProfileChange.${config}=${value} For Core-Metadata On Consul
    ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-metadata/Writable/ProfileChange/${config}
    Update Service Configuration On Consul  ${path}  ${value}
-   Sleep  1s  # Waiting for the configuration updating
+
+## UoM
+Query UoM
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    Create Session  Metrics  url=${coreMetadataUrl}  disable_warnings=true
+    ${resp}=  GET On Session  Metrics  api/${API_VERSION}/uom  headers=${headers}  expected_status=200
+    Set Response to Test Variables  ${resp}
+
+Retrieve Valid Units Value
+    Query UoM
+    ${units}  Create List
+    ${units_key}  Get Dictionary Keys  ${content}[uom][units]
+    FOR  ${ITEM}  IN  @{units_key}
+        FOR  ${INDEX}  IN RANGE  len(${content}[uom][units][${ITEM}][values])
+            Append To List  ${units}  ${content}[uom][units][${ITEM}][values][${INDEX}]
+        END
+    END
+    Set Test Variable  ${uom_units}  ${units}
+
+Set Profile Units Value To ${valid}
+    Run Keyword If  "${valid}" == "valid"  Retrieve Valid Units Value
+    FOR  ${INDEX}  IN RANGE  len(${deviceProfile}[0][profile][deviceResources])
+        ${unit}  Run Keyword If  "${valid}" == "valid"  Evaluate  random.choice(@{uom_units})  random
+                 ...       ELSE  Set Variable  invalid
+        Set To Dictionary   ${deviceProfile}[0][profile][deviceResources][${INDEX}][properties]  units=${unit}
+    END
+    Set Test Variable  ${deviceProfile}  ${deviceProfile}
+
+Create A Profile ${file} With ${valid} Units Value
+    Generate a device profile sample  ${file}
+    Set Profile Units Value To ${valid}
+    Create Device Profile ${deviceProfile}
+
+Update Units Value In Profile ${file} To ${valid}
+    Run Keyword If  "${valid}" == "valid"  Retrieve Valid Units Value
+    ${content}  Get File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${file}.yaml
+    ${matches}  Get Regexp Matches  ${content}  units: \"(.*?)\"
+    FOR  ${ITEM}  IN  @{matches}
+        ${variables}=  Get variables
+        ${existed}  Run Keyword And Return Status  Should be true  "\${replaced}" in $variables
+        ${data}  Run Keyword If  ${existed} == True  Set Variable  ${replaced}
+                 ...       ELSE  Set Variable  ${content}
+        ${unit}  Run Keyword If  "${valid}" == "valid"  Evaluate  random.choice(@{uom_units})  random
+                 ...       ELSE  Set Variable  invalid
+        ${replaced}  Replace String  ${data}  ${ITEM}  units: "${unit}"  count=1
+    END
+    Create File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/NEW-${file}.yaml  ${replaced}
+
+Modify Device Profile ${file} With ${valid} Units Value
+    Update Units Value In Profile ${file} To ${valid}
+    Upload device profile NEW-${file}.yaml
+
+Create Device Resources Contain ${valid} Units Value
+    Run Keyword If  "${valid}" == "valid"  Retrieve Valid Units Value
+    FOR  ${INDEX}  IN RANGE  len(${resourceProfile})
+        ${unit}  Run Keyword If  "${valid}" == "valid"  Evaluate  random.choice(@{uom_units})  random
+                 ...       ELSE  Set Variable  invalid
+        Set To Dictionary   ${resourceProfile}[${INDEX}][resource][properties]  units=${unit}
+    END
+    Create New resource ${resourceProfile}

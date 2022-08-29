@@ -24,22 +24,18 @@ Suite Teardown for App Service
 Set Functions ${functions}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/ExecutionOrder
     Update Service Configuration On Consul  ${path}  ${functions}
-    sleep  1
 
 Set Transform Type ${type}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
     Update Service Configuration On Consul  ${path}  ${type}
-    sleep  1
 
 Set Compress Algorithm ${algorithm}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
     Update Service Configuration On Consul  ${path}  ${algorithm}
-    sleep  1
 
 Set Encrypt Algorithm ${algorithm}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
     Update Service Configuration On Consul  ${path}  ${algorithm}
-    sleep  1
 
 Trigger Function Pipeline With ${data}
     ${trigger_data}=  Run keyword if  '${data}' != 'Invalid Data'  set variable  Valid Data

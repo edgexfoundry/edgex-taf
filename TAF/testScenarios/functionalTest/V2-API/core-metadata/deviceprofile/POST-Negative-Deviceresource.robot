@@ -11,7 +11,7 @@ ${SUITE}          Core Metadata Device Profile POST Deviceresource Negative Test
 *** Test Cases ***
 ErrProfileResourcePOST001 - Add deviceResource with Non-existent device profile name
     # non-existent profile name
-    Given Generate deviceResource
+    Given Generate multiple deviceResources
     And Set To Dictionary  ${resourceProfile}[0]  profileName=non-existent
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "207"
@@ -21,7 +21,7 @@ ErrProfileResourcePOST001 - Add deviceResource with Non-existent device profile 
 
 ErrProfileResourcePOST002 - Add deviceResource with Empty profile name
     # empty profile name
-    Given Generate deviceResource
+    Given Generate multiple deviceResources
     And Set To Dictionary  ${resourceProfile}[0]  profileName=${EMPTY}
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "400"
@@ -30,7 +30,7 @@ ErrProfileResourcePOST002 - Add deviceResource with Empty profile name
 
 ErrProfileResourcePOST003 - Add deviceResource with duplicate Resource name
     # 2 deviceResource with same resource name
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     And Create New resource ${resourceProfile}
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "207"
@@ -42,7 +42,7 @@ ErrProfileResourcePOST003 - Add deviceResource with duplicate Resource name
 ErrProfileResourcePOST004 - Add deviceResource with Empty Resource Name
     # deviceResources > deviceResource without name
     # Contains valid profile body
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     And Set To Dictionary  ${resourceProfile}[0][resource]  name=${EMPTY}
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "400"
@@ -53,7 +53,7 @@ ErrProfileResourcePOST004 - Add deviceResource with Empty Resource Name
 ErrProfileResourcePOST005 - Add deviceResource with Empty valueType
     # deviceResources > ResourceProperties without valueType
     # Contains valid profile body
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     And Set To Dictionary  ${resourceProfile}[0][resource][properties]  valueType=${Empty}
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "400"
@@ -64,7 +64,7 @@ ErrProfileResourcePOST005 - Add deviceResource with Empty valueType
 ErrProfileResourcePOST006 - Add deviceResource with valueType validation error
     # deviceResources > deviceResource invalid valueType
     # Contains valid profile body
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     And Set To Dictionary  ${resourceProfile}[0][resource][properties]  valueType=invalid
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "400"
@@ -75,7 +75,7 @@ ErrProfileResourcePOST006 - Add deviceResource with valueType validation error
 ErrProfileResourcePOST007 - Add deviceResource with Empty readWrite
     # deviceResources > ResourceProperties without readWrite
     # Contains valid profile body
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     And Set To Dictionary  ${resourceProfile}[0][resource][properties]  readWrite=${Empty}
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "400"
@@ -86,7 +86,7 @@ ErrProfileResourcePOST007 - Add deviceResource with Empty readWrite
 ErrProfileResourcePOST008 - Add deviceResource with readWrite validation error
     # deviceResources > ResourceProperties invalid readWrite
     # Contains valid profile body
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     And Set To Dictionary  ${resourceProfile}[0][resource][properties]  readWrite=invalid
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "400"
@@ -94,20 +94,26 @@ ErrProfileResourcePOST008 - Add deviceResource with readWrite validation error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device profile by name  ${test_profile}
 
-ErrProfileResourcePOST008 - Add deviceResource with invalid units value
-    [Tags]  Skipped
-    Given Set UoM Validation to True
-    And Create A Device Profile
-    When Create Device Resource with Invalid Units Value
-    Then Should Return Status Code "500"
+ErrProfileResourcePOST009 - Add deviceResource with invalid units value
+    Given Create A Device Profile And Generate Multiple Resources Entity
+    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    When Create Device Resources Contain invalid Units Value
+    Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "500"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And The Resource Should Not Be Added
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    And Resources Should Not Be Added in ${test_profile}
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  ${test_profile}
 
 *** Keywords ***
-Generate deviceResource
-    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
-    ${json_string}=  Evaluate  json.loads(r'''${resource_data}''')  json
-    Generate resource  ${json_string}
+Resources Should Not Be Added in ${profile_name}
+    Query device profile by name  ${profile_name}
+    ${resource_name_list}  Create List
+    FOR  ${resource}  IN  @{content}[profile][deviceResources]
+            Append To List  ${resource_name_list}  ${resource}[name]
+    END
+    # Validate
+    FOR  ${INDEX}  IN RANGE  len(${resourceProfile})
+        List Should Not Contain Value  ${resource_name_list}  ${resourceProfile}[${INDEX}][resource][name]
+    END

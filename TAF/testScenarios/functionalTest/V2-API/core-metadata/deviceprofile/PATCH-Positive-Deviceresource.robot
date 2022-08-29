@@ -37,19 +37,6 @@ ProfileResourcePATCH002 - Update multiple resources on multiple device profiles
     And Resource DeviceValue_FLOAT32_R in Profile Test-Profile-3 Should Be Updated
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ProfileResourcePATCH003 - Update resources which contain valid Units value
-    [Tags]  Skipped
-    Given Create Device Profile
-    And Set UoM Validation to True
-    When Update Resource with Valid Units Value
-    Then Should Return Status Code "207"
-    And Should Return Content-Type "application/json"
-    And Item Index All Should Contain Status Code "200"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Resource Should Be Updated
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
-
 *** Keywords ***
 Generate multiple resource sample for updating
     ${resource_1}=  Create Dictionary  name=DeviceValue_Boolean_RW  description=Dcp_ABC  isHidden=${false}

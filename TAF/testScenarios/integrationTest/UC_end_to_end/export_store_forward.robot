@@ -88,7 +88,6 @@ Set ${configurations} For ${service_name} On Consul
     FOR  ${key}  ${value}  IN ZIP  ${config_key}  ${config_value}
         ${path}=  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/StoreAndForward/${key}
         Update Service Configuration On Consul  ${path}  ${value}
-        Sleep  500ms
     END
 
 Start HTTP Server And Received Exported Data Contains ${keyword}
