@@ -50,7 +50,6 @@ ErrEventGET005 - Query events by start/end time fails (Start>End)
 ErrEventGET006 - Query event fails when persistData is false
     ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-data/Writable/PersistData
     Given Update Service Configuration On Consul  ${path}  false
-    And Sleep  1s  # Waiting for the configuration updating
     And Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
     And Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001
     When Query Event By Event Id "${id}"
@@ -59,4 +58,3 @@ ErrEventGET006 - Query event fails when persistData is false
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete All Events By Age
     ...                  AND  Update Service Configuration On Consul  ${path}  true
-    ...                  AND  Sleep  1s  # Waiting for the configuration updating

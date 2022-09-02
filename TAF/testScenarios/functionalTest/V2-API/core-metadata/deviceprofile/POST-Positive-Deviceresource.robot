@@ -13,13 +13,13 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile
 *** Test Cases ***
 ProfileResourcePOST001 - Add multiple Resources on device profile
     # multiple resources > one profile
-    Given Generate a device profile and Add multiple Resources on device profile
+    Given Create A Device Profile And Generate Multiple Resources Entity
     When Create New resource ${resourceProfile}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And New Resource SwitchButton in Test-Profile-1 Should Be Added
+    And Resources Should Be Added in ${test_profile}
     [Teardown]  Delete Device Profile By Name  ${test_profile}
 
 ProfileResourcePOST002 - Add multiple Resources on multiple device profiles
@@ -32,29 +32,37 @@ ProfileResourcePOST002 - Add multiple Resources on multiple device profiles
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And New Resource SwitchButton in Test-Profile-1 Should Be Added
-    And New Resource Temperature in Test-Profile-2 Should Be Added
-    And New Resource BinaryInput1 in Test-Profile-3 Should Be Added
+    And Resources Should Be Created in Profiles
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ProfileResourcePOST003 - Add multiple Resources on device profile with valid units property
-    [Tags]  Skipped
-    Given Set UoM Validation to True
-    And Create A Device Profile
-    When Create Device Resources Contain Valid Units Property
+    Given Create A Device Profile And Generate Multiple Resources Entity
+    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    When Create Device Resources Contain valid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And New Resources Should Be Added
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    And Resources Should Be Added in ${test_profile}
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  ${test_profile}
 
 *** Keywords ***
-New Resource ${resource_name} in ${profile_name} Should Be Added
+Resources Should Be Added in ${profile_name}
     Query device profile by name  ${profile_name}
     ${resource_name_list}  Create List
     FOR  ${resource}  IN  @{content}[profile][deviceResources]
             Append To List  ${resource_name_list}  ${resource}[name]
     END
-    List Should Contain Value  ${resource_name_list}  ${resource_name}
+    # Validate
+    FOR  ${INDEX}  IN RANGE  len(${resourceProfile})
+        Run Keyword If  "${resourceProfile}[${INDEX}][profileName]" == "${content}[profile][name]"
+        ...  List Should Contain Value  ${resource_name_list}  ${resourceProfile}[${INDEX}][resource][name]
+    END
+
+Resources Should Be Created in Profiles
+    ${profiles}  Create List  Test-Profile-1  Test-Profile-2  Test-Profile-3
+    FOR  ${profile}  IN  @{profiles}
+        Resources Should Be Added in ${profile}
+    END
+

@@ -41,10 +41,3 @@ InfoGET005 - Query UoM
     Then Should Return Status Code "200" And uom
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-*** Keywords ***
-Query UoM
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    Create Session  Metrics  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Metrics  api/${API_VERSION}/uom  headers=${headers}  expected_status=200
-    Set Response to Test Variables  ${resp}

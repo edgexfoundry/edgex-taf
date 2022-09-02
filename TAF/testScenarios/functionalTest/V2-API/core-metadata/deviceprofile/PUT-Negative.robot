@@ -111,13 +111,25 @@ ErrProfilePUT008 - Update device profile when StrictDeviceProfileChanges is true
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ErrProfilePUT009 - Update device profile with invalid units value
-    [Tags]  Skipped
-    Given Create device profile
-    And Set UoM Validation to True
+    Given Generate A Device Profile Sample  Test-Profile-1
+    And Create Device Profile ${deviceProfile}
+    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Set Profile Units Value To invalid
     When Update Device Profile ${deviceProfile}
-    Then Should Return Status Code "500"
+    Then Should Return Status Code "207"
+    And Item Index 0 Should Contain Status Code "500"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Profile Should Not Be Updated
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    And Resource Units Should Not Be Updated in Test-Profile-1
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  Test-Profile-1
+
+*** Keywords ***
+Resource Units Should Not Be Updated in ${profile_name}
+    Retrieve Valid Units Value
+    Query device profile by name  ${profile_name}
+    # Validate
+    FOR  ${INDEX}  IN RANGE  len(${content}[profile][deviceResources])
+        Run Keyword If  "${content}[profile][deviceResources][${INDEX}][properties][units]" != "${EMPTY}"
+        ...   List Should Not Contain Value  ${uom_units}  ${content}[profile][deviceResources][${INDEX}][properties][units]
+    END

@@ -109,13 +109,24 @@ ErrProfilePUTUpload008 - Update device profile by upload file when StrictDeviceP
     ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
 
 ErrProfilePUTUpload009 - Update device profile by upload file and the update file contains invalid unit value
-    [Tags]  Skipped
-    Given Upload Device Profile
-    And Set UoM Validation to True
-    When Update Device Profile with Upload File Contains Invalid Unit Value
+    Given Upload Device Profile Test-Profile-3.yaml
+    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Update Units Value In Profile Test-Profile-3 To invalid
+    When Upload File NEW-Test-Profile-3.yaml To Update Device Profile
     Then Should Return Status Code "500"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Profile Should Not Be Updated
-    [Teardown]  Run Keywords  Set UoM Validation to False
-    ...                  AND  Delete Device Profile
+    And Resource Units Should Not Be Updated in Test-Profile-3
+    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    ...                  AND  Delete Device Profile By Name  Test-Profile-3
+    ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
+
+*** Keywords ***
+Resource Units Should Not Be Updated in ${profile_name}
+    Retrieve Valid Units Value
+    Query device profile by name  ${profile_name}
+    # Validate
+    FOR  ${INDEX}  IN RANGE  len(${content}[profile][deviceResources])
+        Run Keyword If  "${content}[profile][deviceResources][${INDEX}][properties][units]" != "${EMPTY}"
+        ...   List Should Not Contain Value  ${uom_units}  ${content}[profile][deviceResources][${INDEX}][properties][units]
+    END

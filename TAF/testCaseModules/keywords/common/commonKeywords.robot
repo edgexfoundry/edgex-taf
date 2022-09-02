@@ -249,6 +249,7 @@ Update Service Configuration On Consul
     ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
     Create Session  Consul  url=${url}  disable_warnings=true
     ${resp}=  PUT On Session  Consul  ${path}  data=${value}  headers=${headers}  expected_status=200
+    Sleep  1s  # Waiting for the configuration updating
 
 Get Consul Token
     ${command}  Set Variable  cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
@@ -263,7 +264,6 @@ Set Telemetry ${config}=${value} For ${service_name} On Consul
     ${telemetry_path}  Set Variable  /v1/kv/edgex/${service_layer}/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/Telemetry
     ${path}  Set Variable   ${telemetry_path}/${config}
     Update Service Configuration On Consul  ${path}  ${value}
-    Sleep  500ms  # Waiting for the configuration available
 
 Run Redis Subscriber Progress And Output
     [Arguments]  ${topic}  ${keyword}

@@ -30,5 +30,4 @@ Accept raw data
     [Arguments]  ${bool}
     ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/UseTargetTypeOfByteArray
     Update Service Configuration On Consul  ${path}  ${bool}
-    sleep  1
 

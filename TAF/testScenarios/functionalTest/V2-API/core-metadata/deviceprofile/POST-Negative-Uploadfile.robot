@@ -84,10 +84,9 @@ ErrProfilePOSTUpload008 - Create device profile by upload file with deviceComman
     [Teardown]  Delete Profile Files  NEW-Test-Profile-2.yaml
 
 ErrProfilePOSTUpload009 - Create device profile by upload file with invalid units property
-    [Tags]  Skipped
-    Given Set UoM Validation to True
-    When Upload Device Prfoile and the File Contains Invalid Units Value
+    Given Update Service Configuration On Consul  ${uomValidationPath}  true
+    When Modify Device Profile Test-Profile-4 With invalid Units Value
     Then Should Return Status Code "500"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Set UoM Validation to False
+    [Teardown]  Update Service Configuration On Consul  ${uomValidationPath}  false
