@@ -23,7 +23,7 @@ StoreAndForward001 - Stored data is exported after connecting to http server
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
     Sleep  5s  # wait until retry fails
-    Then Found Retry Log 2 Times In app-http-export Logs From ${timestamp}
+    Then Wait Until Keyword Succeeds   3x  2s  Found Retry Log 2 Times In app-http-export Logs From ${timestamp}
     And Start HTTP Server And Received Exported Data Contains ${PREFIX}_GenerateDeviceValue_UINT8_RW
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
@@ -37,7 +37,7 @@ StoreAndForward002 - Stored data is cleared after the maximum configured retires
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW with ds-pushevent=yes
     Sleep  12s  # wait until retry fails
-    Then Found Retry Log 3 Times In app-http-export Logs From ${timestamp}
+    Then Wait Until Keyword Succeeds   3x  3s  Found Retry Log 3 Times In app-http-export Logs From ${timestamp}
     And Found Remove Log In app-http-export Logs From ${timestamp}
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
