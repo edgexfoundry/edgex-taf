@@ -36,7 +36,11 @@ services = {
     "edgex-kong": {"binary": ""},
     "edgex-kong-db": {"binary": ""},
     "edgex-vault": {"binary": ""},
-    "edgex-security-bootstrapper": {"binary": ""}
+    "edgex-security-bootstrapper": {"binary": ""},
+    "edgex-security-spiffe-token-provider": {"binary": ""},
+    "edgex-security-spire-agent": {"binary": ""},
+    "edgex-security-spire-config": {"binary": ""},
+    "edgex-security-spire-server": {"binary": ""}
 }
 
 prior_rel_image_footprint = {
@@ -57,7 +61,11 @@ prior_rel_image_footprint = {
     "edgex-kong": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_IMAGE)},
     "edgex-kong-db": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_DB_IMAGE)},
     "edgex-vault": {"imagesize": "{}".format(SettingsInfo().profile_constant.VAULT_IMAGE)},
-    "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE)}
+    "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE)},
+    "edgex-security-spiffe-token-provider": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIFFE_TOKEN_IMAGE)},
+    "edgex-security-spire-agent": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIRE_AGENT_IMAGE)},
+    "edgex-security-spire-config": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIRE_CONFIG_IMAGE)},
+    "edgex-security-spire-server": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIRE_SERVER_IMAGE)}
 }
 
 prior_rel_image_footprint_arm64 = {
@@ -78,7 +86,11 @@ prior_rel_image_footprint_arm64 = {
     "edgex-kong": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_IMAGE_ARM64)},
     "edgex-kong-db": {"imagesize": "{}".format(SettingsInfo().profile_constant.KONG_DB_IMAGE_ARM64)},
     "edgex-vault": {"imagesize": "{}".format(SettingsInfo().profile_constant.VAULT_IMAGE_ARM64)},
-    "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE_ARM64)}
+    "edgex-security-bootstrapper": {"imagesize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_IMAGE_ARM64)},
+    "edgex-security-spiffe-token-provider": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIFFE_TOKEN_IMAGE_ARM64)},
+    "edgex-security-spire-agent": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIRE_AGENT_IMAGE_ARM64)},
+    "edgex-security-spire-config": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIRE_CONFIG_IMAGE_ARM64)},
+    "edgex-security-spire-server": {"imagesize": "{}".format(SettingsInfo().profile_constant.SPIRE_SERVER_IMAGE_ARM64)}
 }
 
 prior_rel_binary_footprint = {
@@ -99,7 +111,11 @@ prior_rel_binary_footprint = {
     "edgex-kong": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_BINARY)},
     "edgex-kong-db": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_DB_BINARY)},
     "edgex-vault": {"binarysize": "{}".format(SettingsInfo().profile_constant.VAULT_BINARY)},
-    "edgex-security-bootstrapper": {"binarysize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_BINARY)}
+    "edgex-security-bootstrapper": {"binarysize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_BINARY)},
+    "edgex-security-spiffe-token-provider": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIFFE_TOKEN_BINARY)},
+    "edgex-security-spire-agent": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIRE_AGENT_BINARY)},
+    "edgex-security-spire-config": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIRE_CONFIG_BINARY)},
+    "edgex-security-spire-server": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIRE_SERVER_BINARY)}
 }
 
 prior_rel_binary_footprint_arm64 = {
@@ -120,13 +136,22 @@ prior_rel_binary_footprint_arm64 = {
     "edgex-kong": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_BINARY)},
     "edgex-kong-db": {"binarysize": "{}".format(SettingsInfo().profile_constant.KONG_DB_BINARY)},
     "edgex-vault": {"binarysize": "{}".format(SettingsInfo().profile_constant.VAULT_BINARY)},
-    "edgex-security-bootstrapper": {"binarysize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_BINARY)}
+    "edgex-security-bootstrapper": {"binarysize": "{}".format(SettingsInfo().profile_constant.BOOTSTRAPPER_BINARY)},
+    "edgex-security-spiffe-token-provider": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIFFE_TOKEN_BINARY)},
+    "edgex-security-spire-agent": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIRE_AGENT_BINARY)},
+    "edgex-security-spire-config": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIRE_CONFIG_BINARY)},
+    "edgex-security-spire-server": {"binarysize": "{}".format(SettingsInfo().profile_constant.SPIRE_SERVER_BINARY)}
 }
 
 exclude_services = ["edgex-kuiper", "edgex-redis", "edgex-core-consul"]
 exclude_secty_services = ["edgex-security-proxy-setup", "edgex-security-secretstore-setup", "edgex-kong", "edgex-kong-db", "edgex-vault",
                           "edgex-security-bootstrapper"]
+exclude_delayed_start_services = ["edgex-security-spiffe-token-provider", "edgex-security-spire-agent", "edgex-security-spire-config",
+                                  "edgex-security-spire-server"]
 
+secty_services = []
+secty_services.extend(exclude_secty_services)
+secty_services.extend(exclude_delayed_start_services)
 
 class RetrieveFootprint(object):
 
@@ -155,7 +180,7 @@ def get_services(services_dict):
     security_enabled = os.getenv("SECURITY_SERVICE_NEEDED")
     if security_enabled != 'true':
         for k in list(services_dict):
-            if k in exclude_secty_services:
+            if k in secty_services:
                 services_dict.pop(k)
     return services_dict
 
@@ -208,7 +233,7 @@ def fetch_footprint_by_service(service):
 def compare_image_footprint_size_with_prior_release(usages):
     isfailed = 0
     for k in usages:
-        if k not in exclude_services and k not in exclude_secty_services:
+        if k not in exclude_services and k not in secty_services:
             threshold_limit = float(usages[k]["priorImageFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
             try:
                 if float(usages[k]["priorImageFootprint"]) != 0.0:
@@ -233,7 +258,7 @@ def compare_image_footprint_size_with_prior_release(usages):
 def compare_binary_footprint_size_with_prior_release(usages):
     isfailed = 0
     for k in usages:
-        if k not in exclude_services and k not in exclude_secty_services:
+        if k not in exclude_services and k not in secty_services:
             threshold_limit = float(usages[k]["priorBinaryFootprint"]) * float(SettingsInfo().profile_constant.FOOTPRINT_THRESHOLD)
             try:
                 if float(usages[k]["priorBinaryFootprint"]) != 0.0:
