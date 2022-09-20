@@ -5,9 +5,9 @@ import sys
 
 topic = sys.argv[1]
 message = sys.argv[2]
-
+port = sys.argv[3]
 
 client = mqtt.Client()
-client.connect("localhost", 1883, 60)
+client.connect("localhost", int(port), 60)
 client.publish(topic, message)
 client.disconnect()

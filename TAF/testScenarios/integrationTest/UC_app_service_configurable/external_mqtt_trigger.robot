@@ -15,8 +15,9 @@ ExternalTrigger001 - Test external mqtt trigger works
     Given Set Test Variable  ${publish_msg}  Message from mqtt publisher
     And Set Test Variable  ${mqtt_trigger_topic}  external-request
     And Set Test Variable  ${mqtt_export_topic}  edgex-export
-    And Subscribe MQTT Broker Topics
-    When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${mqtt_trigger_topic} "${publish_msg}"
+    And Subscribe MQTT Broker Topics ${mqtt_trigger_topic} With ${EX_BROKER_PORT}  # Subscribe trigger mqtt broker
+    And Subscribe MQTT Broker Topics ${mqtt_export_topic} With ${EX_BROKER_PORT}  # Subscribe export mqtt broker
+    When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${mqtt_trigger_topic} "${publish_msg}" ${EX_BROKER_PORT}
          ...          shell=True
     Then Message Is Recevied By ${mqtt_trigger_topic} Topic
     And Message Is Recevied By ${mqtt_export_topic} Topic
@@ -24,20 +25,12 @@ ExternalTrigger001 - Test external mqtt trigger works
 
 
 *** Keywords ***
-Subscribe MQTT Broker Topics
-    ${topics}  Create List  ${mqtt_trigger_topic}  ${mqtt_export_topic}
-    FOR  ${topic}  IN  @{topics}
-        Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} publisher arg   # Process for MQTT Subscriber
+Subscribe MQTT Broker Topics ${topic} With ${Port}
+    Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} publisher ${Port} false arg   # Process for MQTT Subscriber
         ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log
-    END
     Sleep  1s  # Waiting for subscriber is ready
 
 Message Is Recevied By ${topic} Topic
     Wait Until Keyword Succeeds  6x  1 sec  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log
     ${subscribe_msg}  Grep File  ${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log  ${publish_msg}
     Should Not Be Empty  ${subscribe_msg}
-
-Store Secret With ${service} To Vault
-    Set Test Variable  ${url}  http://${BASE_URL}:${APP_EXTERNAL_MQTT_TRIGGER_PORT}
-    Store Secret Data With ${service} Auth
-
