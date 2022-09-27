@@ -9,7 +9,8 @@ USE_SHA1=${3:-main}
 [ "$USE_SECURITY" = "-security-" ] && SECURITY_SERVICE_NEEDED="true"
 
 TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common${USE_ARM64}:latest
-COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose${USE_ARM64}:latest
+COMPOSE_IMAGE=docker:20.10.18
+
 
 # Pull edgex images
 sh get-compose-file-perfermance.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1}
@@ -17,7 +18,7 @@ sh get-compose-file-perfermance.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1}
 # Pull images
 docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
         --env WORK_DIR=${WORK_DIR} --security-opt label:disable \
-        ${COMPOSE_IMAGE} -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" pull
+        ${COMPOSE_IMAGE} docker compose -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" pull
 sleep 5
 
 # Run scripts to collect performance metrics and generate reports

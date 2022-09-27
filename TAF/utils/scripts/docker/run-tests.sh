@@ -13,7 +13,8 @@ DEPLOY_SERVICES=${5:-} # no-deployment or empty
 # Common Variables
 USE_SHA1=main  # edgex-compose branch or SHA1
 TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common${USE_ARM64}:latest
-COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose${USE_ARM64}:latest
+COMPOSE_IMAGE=docker:20.10.18
+
 
 if [ "$SECURITY_SERVICE_NEEDED" = true ]; then
         USE_SECURITY=-security-
