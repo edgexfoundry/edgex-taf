@@ -117,7 +117,7 @@ ErrProfilePUT009 - Update device profile with invalid units value
     And Set Profile Units Value To invalid
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "207"
-    And Item Index 0 Should Contain Status Code "500"
+    And Item Index 0 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Not Be Updated in Test-Profile-1
