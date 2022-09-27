@@ -116,7 +116,7 @@ Convert milliseconds to seconds
 Start Services
   ${command}=  Catenate
   ...          docker run --rm -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-  ...          --env WORK_DIR=${WORK_DIR}  --security-opt label:disable ${COMPOSE_IMAGE} \
+  ...          --env WORK_DIR=${WORK_DIR}  --security-opt label:disable ${COMPOSE_IMAGE} docker compose \
   ...          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" start
   Run Process  ${command}  shell=True
   sleep  8s
