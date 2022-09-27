@@ -100,7 +100,7 @@ ErrProfileResourcePOST009 - Add deviceResource with invalid units value
     When Create Device Resources Contain invalid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
-    And Item Index All Should Contain Status Code "500"
+    And Item Index All Should Contain Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resources Should Not Be Added in ${test_profile}
     [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false

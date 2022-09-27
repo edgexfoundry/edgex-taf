@@ -86,7 +86,7 @@ ErrProfilePOSTUpload008 - Create device profile by upload file with deviceComman
 ErrProfilePOSTUpload009 - Create device profile by upload file with invalid units property
     Given Update Service Configuration On Consul  ${uomValidationPath}  true
     When Modify Device Profile Test-Profile-4 With invalid Units Value
-    Then Should Return Status Code "500"
+    Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Update Service Configuration On Consul  ${uomValidationPath}  false

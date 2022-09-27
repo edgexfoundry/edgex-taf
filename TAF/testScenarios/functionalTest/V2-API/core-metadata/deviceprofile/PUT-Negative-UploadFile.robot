@@ -113,7 +113,7 @@ ErrProfilePUTUpload009 - Update device profile by upload file and the update fil
     And Update Service Configuration On Consul  ${uomValidationPath}  true
     And Update Units Value In Profile Test-Profile-3 To invalid
     When Upload File NEW-Test-Profile-3.yaml To Update Device Profile
-    Then Should Return Status Code "500"
+    Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Not Be Updated in Test-Profile-3

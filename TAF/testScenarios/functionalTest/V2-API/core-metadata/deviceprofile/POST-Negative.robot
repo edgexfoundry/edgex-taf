@@ -93,6 +93,6 @@ ErrProfilePOST009 - Create device profile with invalid units value
     When Create A Profile Test-Profile-1 With invalid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
-    And Item Index All Should Contain Status Code "500"
+    And Item Index All Should Contain Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Update Service Configuration On Consul  ${uomValidationPath}  false
