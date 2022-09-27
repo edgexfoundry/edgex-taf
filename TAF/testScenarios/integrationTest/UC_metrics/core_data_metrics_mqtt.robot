@@ -18,6 +18,7 @@ ${SUITE}          Core Data Metrics Test - MQTT bus
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core_data_metrics_mqtt.log
 
 
+
 *** Test Cases ***
 DataMetricsMQTT001-Enable EventsPersisted And Verify Metrics is Publish to MessageBus
     Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  Payload

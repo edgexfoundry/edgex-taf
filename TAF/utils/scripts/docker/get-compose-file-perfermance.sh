@@ -30,5 +30,5 @@ done
 # # Then sync TAF performance specific docker-compose file from edgex-compose repo and replace the placeholders
 #./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "-perf"
 cp docker-compose-taf-perf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose-mqtt.yml
-sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${MQTT_BROKER_HOSTNAME}/g' docker-compose-mqtt.yml
+sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${MQTT_BROKER_HOSTNAME}:1883/g' docker-compose-mqtt.yml
 sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose-mqtt.yml

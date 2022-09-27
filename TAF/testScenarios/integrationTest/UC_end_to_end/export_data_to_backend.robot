@@ -32,7 +32,7 @@ Export001 - Export events/readings to HTTP Server
 Export002 - Export events/readings to MQTT Server
     [Tags]  SmokeTest
     [Setup]  Run Keyword And Ignore Error  Stop Services  edgex-scalability-test-mqtt-export
-    Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin arg &   # Process for MQTT Subscriber
+    Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin ${EX_BROKER_PORT} false arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Set Test Variable  ${device_name}  mqtt-export-device
     And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With MQTT Export To Vault

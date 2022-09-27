@@ -25,9 +25,9 @@ Kuiper001 - Add a new rule and export to MQTT
     Given Set Test Variable  ${device_name}  kuiper-mqtt-device
     And Set Test Variable  ${command}  ${PREFIX}_GenerateDeviceValue_INT8_RW
     And Set Test Variable  ${resource}  ${PREFIX}_DeviceValue_INT8_RW
-    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events-kuiper ${resource} arg &   # Process for MQTT Subscriber
+    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events-kuiper ${resource} ${EX_BROKER_PORT} false arg &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
-    And Create A Rule mqtt-rule With ${rule_sql} And MQTT Sink
+    Given Create A Rule mqtt-rule With ${rule_sql} And MQTT Sink
     And Create Device For device-virtual With Name ${device_name}
     When Execute Get Command ${command} To Trigger ${device_name}
     Then Device data with keyword "${resource}" has recevied by mqtt subscriber
@@ -88,6 +88,8 @@ Set ${action} Action Value With Rule ${rule_id}
     ...    ELSE IF  '${action}' == 'REST' and '${rule_id}' == 'rest-rule-1'  Run Keywords
     ...              Set to dictionary  ${action_data}[0][rest]  url=${url}
     ...              AND  Set to dictionary  ${action_data}[0][rest]  dataTemplate={\"${kuiper_set_resource}\":\"-123\"}
+    Run Keyword If  '${action}' == 'MQTT'
+    ...      Set to dictionary  ${action_data}[0][mqtt]  server=tcp://edgex-taf-mqtt-broker:${BROKER_PORT}
     [Return]  ${action_data}
 
 Execute Get Command ${command} To Trigger ${device_name}
@@ -124,4 +126,3 @@ Resource Value Should Be Updated
     ${get_reading_value}  Set Variable  ${content}[event][readings][0][value]
     Run Keyword If  ${resource_value} >= 0  Should Be Equal  ${get_reading_value}  123
     ...       ELSE   Should Be Equal  ${get_reading_value}  -123
-
