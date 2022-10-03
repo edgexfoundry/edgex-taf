@@ -7,7 +7,7 @@ import requests
 import json
 
 topic = sys.argv[1]
-keyword = sys.argv[2]
+message = sys.argv[2]
 security = sys.argv[3]
 
 
@@ -36,14 +36,4 @@ else:
 
 queue = redis.StrictRedis(host='localhost', port=6379, password=pwd, decode_responses=True)
 channel = topic
-p = queue.pubsub()
-p.psubscribe(channel)
-
-while True:
-    message = p.get_message()
-    if message and not message['type'] == 'psubscribe':
-        if keyword in message['channel']:
-            print(message['channel'])
-            print(message['data'])
-            if sys.argv[4] != 'multi':
-                break
+queue.publish(channel, message)

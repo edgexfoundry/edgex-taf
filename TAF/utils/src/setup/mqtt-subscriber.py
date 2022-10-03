@@ -45,7 +45,7 @@ def on_message(client, userdata, msg):
     print(msg.payload.decode())
     if keyword in msg.payload.decode():
         print("Got mqtt export data!!")
-        if sys.argv[5] != 'perf':
+        if sys.argv[5] == 'single':
             client.disconnect()
 
 if secure == 'true':
@@ -63,9 +63,9 @@ client.connect("localhost", int(port), 60)
 client.on_connect = on_connect
 client.on_message = on_message
 
-if sys.argv[5] != 'perf':
-    client.loop_forever()
-else:
+if sys.argv[5] == 'perf':
     client.loop_start()
     time.sleep(180)
     client.loop_stop()
+else:
+    client.loop_forever()

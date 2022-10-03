@@ -11,6 +11,7 @@ Suite Setup      Run keywords   Setup Suite
 ...                             AND  Set Core-Metadata PostDeviceChanges=true
 Suite Teardown   Run keywords   Delete metadata subscription, notifications and transmissions
 ...                             AND  Run Teardown Keywords
+...                             AND  Terminate All Processes  kill=True
 Force Tags       MessageQueue=redis
 
 *** Variables ***

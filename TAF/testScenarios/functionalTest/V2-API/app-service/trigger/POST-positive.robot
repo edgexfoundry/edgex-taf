@@ -13,7 +13,7 @@ ${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIOAL_TESTS_PORT}
 
 *** Test Cases ***
 TriggerPOST001 - Trigger pipeline (no match)
-    Given Set Functions FilterByDeviceName, Transform, SetResponseData
+    Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
     When Trigger Function Pipeline With No Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match Empty
@@ -21,7 +21,7 @@ TriggerPOST001 - Trigger pipeline (no match)
 
 TriggerPOST002 - Trigger pipeline (XML)
     [Tags]  SmokeTest
-    Given Set Functions FilterByDeviceName, Transform, SetResponseData
+    Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
     And Set Transform Type xml
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
@@ -30,7 +30,7 @@ TriggerPOST002 - Trigger pipeline (XML)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST003 - Trigger pipeline (JSON)
-    Given Set Functions FilterByDeviceName, Transform, SetResponseData
+    Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
     And Set Transform Type json
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
@@ -39,7 +39,7 @@ TriggerPOST003 - Trigger pipeline (JSON)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST004 - Trigger pipeline (JSON-GZIP)
-    Given Set Functions FilterByDeviceName, Transform, Compress, SetResponseData
+    Given Set app-functional-tests Functions FilterByDeviceName, Transform, Compress, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm gzip
     When Trigger Function Pipeline With Matching DeviceName
@@ -48,7 +48,7 @@ TriggerPOST004 - Trigger pipeline (JSON-GZIP)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
-    Given Set Functions FilterByDeviceName, Transform, Compress, SetResponseData
+    Given Set app-functional-tests Functions FilterByDeviceName, Transform, Compress, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm zlib
     When Trigger Function Pipeline With Matching DeviceName
@@ -60,7 +60,7 @@ TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
 TriggerPOST006 - Trigger pipeline (AES26)
     [Setup]  Skip If  $SECURITY_SERVICE_NEEDED == 'false'
     Given Store Secret Data With AES256 Auth
-    And Set Functions FilterByDeviceName, Encrypt, SetResponseData
+    And Set app-functional-tests Functions FilterByDeviceName, Encrypt, SetResponseData
     And Set Encrypt Algorithm aes256
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
