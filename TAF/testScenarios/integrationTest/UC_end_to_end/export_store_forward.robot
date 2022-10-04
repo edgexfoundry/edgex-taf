@@ -16,7 +16,7 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_store_and_fo
 *** Test Cases ***
 # PersistOnError=true and StoreAndForward.Enable=true
 StoreAndForward001 - Stored data is exported after connecting to http server
-    ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
+    ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=4
     ${device_name}  Set Variable  store-device-1
     ${timestamp}  get current epoch time
     Given Set ${configurations} For app-http-export On Consul
