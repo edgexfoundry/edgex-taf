@@ -118,13 +118,3 @@ Command Contains Parameters
     FOR  ${command}  IN  @{coreCommands}
         Dictionary Should Contain Key  ${command}  parameters
     END
-
-Create ${number} Devices For ${SERVICE_NAME}
-    ${device_list}  Create List
-    FOR  ${INDEX}  IN RANGE  0  ${number}
-        ${name}  Set Variable  Command-Device-${INDEX}
-        Create Device For ${SERVICE_NAME} With Name ${name}
-        Append To List  ${device_list}  ${name}
-    END
-    Set Test Variable  ${device_list}  ${device_list}
-

@@ -66,6 +66,15 @@ Create Device For ${SERVICE_NAME} With Name ${name}
     sleep  500ms
     Set Test Variable  ${device_name}  ${name}
 
+Create ${number} Devices For ${SERVICE_NAME}
+    ${device_list}  Create List
+    FOR  ${INDEX}  IN RANGE  0  ${number}
+        ${name}  Set Variable  Command-Device-${INDEX}
+        Create Device For ${SERVICE_NAME} With Name ${name}
+        Append To List  ${device_list}  ${name}
+    END
+    Set Test Variable  ${device_list}  ${device_list}
+
 Run Discovery Request For Device Service
     Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
