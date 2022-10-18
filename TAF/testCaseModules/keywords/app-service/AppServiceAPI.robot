@@ -21,8 +21,8 @@ Suite Teardown for App Service
     Suite Teardown
     Run Teardown Keywords
 
-Set Functions ${functions}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/ExecutionOrder
+Set ${service} Functions ${functions}
+    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/${service}/Writable/Pipeline/ExecutionOrder
     Update Service Configuration On Consul  ${path}  ${functions}
 
 Set Transform Type ${type}

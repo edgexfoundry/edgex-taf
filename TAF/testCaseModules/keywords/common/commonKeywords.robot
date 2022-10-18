@@ -258,63 +258,33 @@ Get Consul Token
     ${token}  Evaluate  json.loads('''${result.stdout}''')  json
     [Return]  ${token}[SecretID]
 
-Set Telemetry ${config}=${value} For ${service_name} On Consul
-    ${service_layer}  Set Variable If  'device' in """${service_name}"""  devices
-                      ...              'core' in """${service_name}"""  core
-    ${telemetry_path}  Set Variable  /v1/kv/edgex/${service_layer}/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/Telemetry
-    ${path}  Set Variable   ${telemetry_path}/${config}
-    Update Service Configuration On Consul  ${path}  ${value}
-
 Run Redis Subscriber Progress And Output
-    [Arguments]  ${topic}  ${keyword}
+    [Arguments]  ${topic}  ${keyword}  ${msgs}=single
     ${current_time}  get current epoch time
     ${secty}  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Set Variable  true
               ...       ELSE  Set Variable  false
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py ${topic} ${keyword} ${secty} &
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py ${topic} ${keyword} ${secty} ${msgs} &
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/redis-subscriber-${current_time}.log
     ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/redis-error-${current_time}.log
     Set Test Variable  ${subscriber_file}  redis-subscriber-${current_time}.log
     sleep  2s
     [Return]  ${handle}
 
-Metrics ${metrics_name} Should Be Received
-    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
-    ${last_msg}  Get Line  ${content}  -1
-    ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    ${decode_payload}  Evaluate  base64.b64decode('${last_msg_json}[Payload]').decode('utf-8')  modules=base64
-    ${payload}  Evaluate  json.loads('''${decode_payload}''')
-    Should Be Equal As Strings  ${metrics_name}  ${payload}[name]
-    FOR  ${INDEX}  IN RANGE  len(${payload}[fields])
-        Run Keyword If  '${payload}[fields][${INDEX}][name]' == 'counter-count'
-        ...     Should Not Be Equal As Integers  0  ${payload}[fields][${INDEX}][value]
-    END
-
-No Metrics With Name ${metrics_name} Received
-    ${file_size}  Get File Size  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    Run Keyword If  ${file_size} == 0  Log  No Any Metrics Received With The Topic
-    ...       ELSE  No ${metrics_name} Found In File
-
-
-No ${metrics_name} Found In File
-    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
-    ${count}  Get Line Count  ${content}
-    FOR  ${INDEX}  IN RANGE  ${count}
-        ${json_msg}  Get Line  ${content}  ${INDEX}
-        ${encode_payload}  Evaluate  json.loads('''${json_msg}''')
-        ${decode_payload}  Evaluate  base64.b64decode('${encode_payload}[Payload]').decode('utf-8')  modules=base64
-        ${payload}  Evaluate  json.loads('''${decode_payload}''')
-        Should Not Be Equal As Strings  ${metrics_name}  ${payload}[name]
-    END
-    Log  No ${metrics_name} Received In MessageBus With The Topic
-
 Run MQTT Subscriber Progress And Output  # Only available on mqtt message bus testcases
-    [Arguments]  ${topic}  ${keyword}=CorrelationID
+    [Arguments]  ${topic}  ${keyword}=CorrelationID  ${msgs}=single
     ${current_time}  get current epoch time
     Set Test Variable  ${subscriber_file}  mqtt-subscriber-${current_time}.log
     Set Test Variable  ${error_file}  mqtt-error-${current_time}.log
     ${secure}  Set Variable  ${SECURITY_SERVICE_NEEDED}
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${BROKER_PORT} ${secure} arg &
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${BROKER_PORT} ${secure} ${msgs} &
     ...            shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ...            stderr=${WORK_DIR}/TAF/testArtifacts/logs/${error_file}
     sleep  1s
     [Return]  ${handle}
+
+Decode Base64 String
+    [Arguments]  ${string}
+    ${last_msg_json}  Evaluate  json.loads('''${string}''')
+    ${decode_payload}  Evaluate  base64.b64decode('${last_msg_json}[Payload]').decode('utf-8')  modules=base64
+    ${payload}  Evaluate  json.loads('''${decode_payload}''')
+    [Return]  ${payload}

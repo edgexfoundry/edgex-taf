@@ -62,6 +62,13 @@ for compose in ${COMPOSE_FILE}; do
     done
   fi
 
+  # Update app-sample PerTopicPipeline
+  sed -n "/^\ \ app-service-sample:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/app-service-sample.yml
+  sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_HTTPEXPORT_PARAMETERS_URL: http:\/\/${DOCKER_HOST_IP}:7770' tmp/app-service-sample.yml
+  sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/app-service-sample.yml
+  sed -i "/^\ \ app-service-sample:/,/^  [a-z].*:$/{//!d}; /^\ \ app-service-sample:/d" ${compose}.yml
+  sed -i "/services:/ r tmp/app-service-sample.yml" ${compose}.yml
+
   sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' ${compose}.yml
   sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' ${compose}.yml
   sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883/g' ${compose}.yml

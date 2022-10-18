@@ -8,7 +8,7 @@ Suite Setup  Run Keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                   AND  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
 Suite Teardown  Run Keywords  Run Teardown Keywords
-...                      AND  Terminate All Processes
+...                      AND  Terminate All Processes  kill=True
 Force Tags  v2-api
 
 *** Variables ***

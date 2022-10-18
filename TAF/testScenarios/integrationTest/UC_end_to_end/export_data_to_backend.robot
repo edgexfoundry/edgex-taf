@@ -27,12 +27,12 @@ Export001 - Export events/readings to HTTP Server
     Then HTTP Server received event is the same with exported from service app-http-export
     [Teardown]  Run keywords  Delete device by name http-export-device
                 ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...           AND  Terminate All Processes  kill=True
 
 Export002 - Export events/readings to MQTT Server
     [Tags]  SmokeTest
     [Setup]  Run Keyword And Ignore Error  Stop Services  edgex-scalability-test-mqtt-export
-    Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin ${EX_BROKER_PORT} false arg &   # Process for MQTT Subscriber
+    Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin ${EX_BROKER_PORT} false single &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Sleep  1s  # Waiting for above process is ready
     And Set Test Variable  ${device_name}  mqtt-export-device

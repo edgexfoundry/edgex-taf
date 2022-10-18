@@ -1,6 +1,6 @@
 *** Settings ***
 Library      TAF/testCaseModules/keywords/setup/edgex.py
-Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource     TAF/testCaseModules/keywords/common/metrics.robot
 Resource     TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run keywords  Setup Suite
@@ -26,7 +26,7 @@ DataMetricsRedis001-Enable EventsPersisted And Verify Metrics is Publish to Mess
     And Create Device For device-virtual With Name ${device_name}
     When Create multiple events
     And Sleep  ${interval}
-    Then Metrics EventsPersisted Should Be Received
+    Then Metrics EventsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...           AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
 
@@ -47,7 +47,7 @@ DataMetricsRedis003-Enable ReadingsPersisted And Verify Metrics is Publish to Me
     And Create Device For device-virtual With Name ${device_name}
     When Create multiple events
     And Sleep  ${interval}
-    Then Metrics ReadingsPersisted Should Be Received
+    Then Metrics ReadingsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
 
