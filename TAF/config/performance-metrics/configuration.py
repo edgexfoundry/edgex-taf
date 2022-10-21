@@ -145,3 +145,6 @@ EXPORTED_LOOP_TIMES = 10
 
 # Export time threshold value (in milliseconds)
 EXPORT_TIME_THRESHOLD = 1200
+
+# Subscriber Wait Duration (in seconds)
+SUBSCIBE_DURATION = 180

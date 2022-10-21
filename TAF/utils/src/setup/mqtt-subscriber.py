@@ -13,6 +13,9 @@ topic = sys.argv[1]
 keyword = sys.argv[2]
 port = sys.argv[3]
 secure = sys.argv[4]
+expected_msg_count = sys.argv[5]  # if value is -1 means loop with duration
+duration = sys.argv[6]
+current_msg_count = 0
 
 def get_token():
     file = open('/tmp/edgex/secrets/device-virtual/secrets-token.json')
@@ -39,13 +42,18 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
+    global current_msg_count
     current_timestamp = int(round(time.time() * 1000))
-    print(current_timestamp)
-    print(msg.topic)
-    print(msg.payload.decode())
     if keyword in msg.payload.decode():
-        print("Got mqtt export data!!")
-        if sys.argv[5] == 'single':
+        current_msg_count += 1
+        print(current_timestamp)
+        print(msg.topic)
+        print(msg.payload.decode())
+        print("Got message!!")
+        if int(expected_msg_count) < 0:
+            # keep subscribing the message until loop_stop()
+            return
+        elif current_msg_count >= int(expected_msg_count) :
             client.disconnect()
 
 if secure == 'true':
@@ -58,14 +66,14 @@ client = mqtt.Client()
 if secure == 'true':
     client.username_pw_set(mqtt_user[0], mqtt_user[1])
 
-client.connect("localhost", int(port), 60)
-
 client.on_connect = on_connect
 client.on_message = on_message
+client.connect("localhost", int(port), 60)
 
-if sys.argv[5] == 'perf':
+if int(expected_msg_count) < 0 :
     client.loop_start()
-    time.sleep(180)
+    time.sleep(int(duration))
+    client.disconnect()
     client.loop_stop()
 else:
     client.loop_forever()

@@ -15,6 +15,7 @@ Force Tags      backward-skip  MessageQueue=redis
 ${SUITE}          APP Services Metrics Test - Redis bus
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app_services_metrics_redis.log
 ${interval}       4
+${interval_ex}    8
 ${INT8_CMD}       ${PREFIX}_GenerateDeviceValue_INT8_RW
 ${INT16_CMD}      ${PREFIX}_GenerateDeviceValue_INT16_RW
 ${FLOAT32_CMD}    ${PREFIX}_GenerateDeviceValue_FLOAT32_RW
@@ -88,33 +89,33 @@ APPServicesMetricsRedis005-Enable InvalidMessagesReceived And Verify Metrics is 
                 ...      AND  Set Telemetry Metrics/InvalidMessagesReceived=false For app-sample On Consul
 
 APPServicesMetricsRedis006-Enable PipelineMessagesProcessed And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessagesProcessed  telemetry  multi
+    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessagesProcessed  telemetry  6
     And Set Test Variable  ${device_name}  pipeline-messages-processed
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Set Telemetry Metrics/PipelineMessagesProcessed=true For app-sample On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Get Multiple Device Data With Commands ${COMMANDS}
-    And Sleep  ${interval}
+    And Sleep  ${interval_ex}
     Then Recieved Metrics PipelineMessagesProcessed For All Pipelines And timer-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
                 ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed=false For app-sample On Consul
 
 APPServicesMetricsRedis007-Enable PipelineMessageProcessingTime And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessageProcessingTime  telemetry  multi
+    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessageProcessingTime  telemetry  6
     And Set Test Variable  ${device_name}  pipeline-messages-processing-time
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
     And Set Telemetry Metrics/PipelineMessageProcessingTime=true For app-sample On Consul
     When Get Multiple Device Data With Commands ${COMMANDS}
-    And Sleep  ${interval}
+    And Sleep  ${interval_ex}
     Then Recieved Metrics PipelineMessageProcessingTime For All Pipelines And timer-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
                 ...      AND  Set Telemetry Metrics/PipelineMessageProcessingTime=false For app-sample On Consul
 
 APPServicesMetricsRedis008-Enable PipelineProcessingErrors And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineProcessingErrors  telemetry  multi
+    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineProcessingErrors  telemetry  6
     And Set Test Variable  ${device_name}  pipeline-processing-errors
     And Set app-sample Functions HTTPExport
     And Set PerTopicPipelines float ExecutionOrder HTTPExport
@@ -123,7 +124,7 @@ APPServicesMetricsRedis008-Enable PipelineProcessingErrors And Verify Metrics is
     And Set Telemetry Metrics/PipelineProcessingErrors=true For app-sample On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Get Multiple Device Data With Commands ${COMMANDS}
-    And Sleep  ${interval}
+    And Sleep  ${interval_ex}
     Then Recieved Metrics PipelineProcessingErrors For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
