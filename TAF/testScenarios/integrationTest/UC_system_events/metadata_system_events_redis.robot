@@ -7,53 +7,54 @@ Suite Setup  Run keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run keywords   Terminate All Processes
 ...                      AND  Run Teardown Keywords
-Force Tags     backward-skip  MessageQueue=MQTT
+Force Tags      backward-skip MessageQueue=redis
 
 *** Variables ***
-${SUITE}          Core-Metadata System Events Test - MQTT bus
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/metadata_system_events_mqtt.log
+${SUITE}          Core-Metadata System Events Test - Redis bus
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/metadata_system_events_redis.log
 
 *** Test Cases ***
-SystemEventsMQTT001-Add Device and Receive Correct System Events
-    Given Set Test Variable  ${add_device_topic}  edgex/system-events/core-metadata/device/add/device-virtual/Virtual-Sample-Profile
+SystemEventsRedis001-Add Device and Receive Correct System Events
+    Given Set Test Variable  ${add_device_topic}  edgex.system-events.core-metadata.device.add.device-virtual.Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  add-system-event
-    And Run MQTT Subscriber Progress And Output  ${add_device_topic}  Payload
+    And Run Redis Subscriber Progress And Output  ${add_device_topic}  system-events
     When Create Device For device-virtual With Name ${device_name}
     Then Single System Event Should Match With Source core-metadata, Type device and Action add
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEventsMQTT002-Add Multiple Devices and Receive Correct System Events
-    Given Set Test Variable  ${add_devices_topic}  edgex/system-events/core-metadata/device/add/device-virtual/Virtual-Sample-Profile
-    And Run MQTT Subscriber Progress And Output  ${add_devices_topic}  Payload  3
+SystemEventsRedis002-Add Multiple Devices and Receive Correct System Events
+    Given Set Test Variable  ${add_device_topic}  edgex.system-events.core-metadata.device.add.device-virtual.Virtual-Sample-Profile
+    And Set Test Variable  ${device_name}  add-system-events
+    And Run Redis Subscriber Progress And Output  ${add_device_topic}  system-events  3
     When Create 3 Devices For device-virtual
     Then Multiple 3 System Events Should Match With Source core-metadata, Type device and Action add
     [Teardown]  Run Keywords  Delete multiple devices by names  @{device_list}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEventsMQTT003-Update Device and Receive Correct System Events
-    Given Set Test Variable  ${update_device_topic}  edgex/system-events/core-metadata/device/update/device-virtual/Virtual-Sample-Profile
+SystemEventsRedis003-Update Device and Receive Correct System Events
+    Given Set Test Variable  ${update_device_topic}  edgex.system-events.core-metadata.device.update.device-virtual.Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  update-system-event
-    And Run MQTT Subscriber Progress And Output  ${update_device_topic}  Payload
+    And Run Redis Subscriber Progress And Output  ${update_device_topic}  system-events
     And Create Device For device-virtual With Name ${device_name}
     When Update Device ${device_name} With operatingState=DOWN
     Then Single System Event Should Match With Source core-metadata, Type device and Action update
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEventsMQTT004-Update Multiple Devices and Receive Correct System Events
-    Given Set Test Variable  ${update_devices_topic}  edgex/system-events/core-metadata/device/update/device-virtual/Virtual-Sample-Profile
-    And Run MQTT Subscriber Progress And Output  ${update_devices_topic}  Payload  3
+SystemEventsRedis004-Update Multiple Devices and Receive Correct System Events
+    Given Set Test Variable  ${update_devices_topic}  edgex.system-events.core-metadata.device.update.device-virtual.Virtual-Sample-Profile
+    And Run Redis Subscriber Progress And Output  ${update_devices_topic}  system-events  3
     And Create 3 Devices For device-virtual
     When Update Multiple Devices
     Then Multiple 3 System Events Should Match With Source core-metadata, Type device and Action update
     [Teardown]   Run Keywords  Delete multiple devices by names  @{device_list}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEventsMQTT005-Delete Device and Receive Correct System Events
-    Given Set Test Variable  ${delete_device_topic}  edgex/system-events/core-metadata/device/delete/device-virtual/Virtual-Sample-Profile
+SystemEventsRedis005-Delete Device and Receive Correct System Events
+    Given Set Test Variable  ${delete_device_topic}  edgex.system-events.core-metadata.device.delete.device-virtual.Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  delete-system-event
-    And Run MQTT Subscriber Progress And Output  ${delete_device_topic}  Payload
+    And Run Redis Subscriber Progress And Output  ${delete_device_topic}  system-events
     And Create Device For device-virtual With Name ${device_name}
     When Delete device by name ${device_name}
     Then Single System Event Should Match With Source core-metadata, Type device and Action delete
