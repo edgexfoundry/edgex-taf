@@ -657,7 +657,12 @@ Set device values
     [Arguments]  ${device_service_name}  ${device_profile_name}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/device_data.json  encoding=UTF-8
     ${device}=  Evaluate  json.loads('''${data}''')  json
-    ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${SERVICE_NAME}"
+    ${json_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/device_protocol.json  encoding=UTF-8
+    ${json_string}=  Evaluate  json.loads(r'''${json_data}''')  json
+    ${protocol_samples}  Get Dictionary Keys  ${json_string}
+    ${device_service}  Run Keyword If  '${device_service_name}' not in ${protocol_samples}  Set Variable  ${SERVICE_NAME}
+                       ...       ELSE   Set Variable  ${device_service_name}
+    ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${device_service}"
     Set To Dictionary  ${device}  protocols=${protocols}
     Set To Dictionary  ${device}  serviceName=${device_service_name}
     Set To Dictionary  ${device}  profileName=${device_profile_name}

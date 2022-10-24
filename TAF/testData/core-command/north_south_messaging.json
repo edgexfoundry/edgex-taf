@@ -1,0 +1,26 @@
+{
+  "GET": {
+    "apiVersion": "v2",
+    "requestId": "",
+    "ContentType": "application/json",
+    "queryParams": {
+      "ds-pushevent":"no",
+      "ds-returnevent":"yes"
+     }
+  },
+  "SET": {
+    "apiVersion": "v2",
+    "requestId": "",
+    "ContentType": "application/json",
+    "Payload": ""
+  },
+  "QUERY": {
+    "apiVersion": "v2",
+    "requestId": "",
+    "ContentType": "application/json",
+    "queryParams": {
+      "offset": "0",
+      "limit": "20"
+     }
+  }
+}

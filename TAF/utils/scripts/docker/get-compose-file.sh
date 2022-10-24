@@ -62,6 +62,17 @@ for compose in ${COMPOSE_FILE}; do
     done
   fi
 
+  # Enable North-South Messaging
+  if [ "${TEST_STRATEGY}" = "integration-test" ]; then
+    sed -n "/^\ \ command:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/command.yml
+    sed -i '/MESSAGEQUEUE_EXTERNAL_URL/d' tmp/command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEQUEUE_EXTERNAL_ENABLED: true' tmp/command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEQUEUE_EXTERNAL_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEQUEUE_EXTERNAL_RETAIN: false' tmp/command.yml
+    sed -i "/^\ \ command:/,/^  [a-z].*:$/{//!d}; /^\ \ command:/d" ${compose}.yml
+    sed -i "/services:/ r tmp/command.yml" ${compose}.yml
+  fi
+
   # Update app-sample PerTopicPipeline
   sed -n '/^\ \ app-service-sample:/,/^  [a-z].*:$/p' ${compose}.yml | sed '$d' > tmp/app-service-sample.yml
   sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_HTTPEXPORT_PARAMETERS_URL: http:\/\/${DOCKER_HOST_IP}:7770' tmp/app-service-sample.yml

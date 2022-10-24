@@ -271,12 +271,12 @@ Run Redis Subscriber Progress And Output
     Set Test Variable  ${handle_redis}  ${handle}
 
 Run MQTT Subscriber Progress And Output  # Only available on mqtt message bus testcases
-    [Arguments]  ${topic}  ${keyword}=CorrelationID  ${expected_msg_count}=1  ${duration}=30  ${port}=${BROKER_PORT}  # duration only enabled when expected_msg_count=-1
+    [Arguments]  ${topic}  ${keyword}=CorrelationID  ${expected_msg_count}=1  ${port}=${BROKER_PORT}
+    ...          ${secure}=${SECURITY_SERVICE_NEEDED}  ${duration}=30  # duration only enabled when expected_msg_count=-1
     ${current_time}  get current epoch time
     Set Test Variable  ${subscriber_file}  mqtt-subscriber-${current_time}.log
     Set Test Variable  ${error_file}  mqtt-error-${current_time}.log
-    ${secure}  Set Variable  ${SECURITY_SERVICE_NEEDED}
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${BROKER_PORT} ${secure} ${expected_msg_count} ${duration} &
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${port} ${secure} ${expected_msg_count} ${duration} &
     ...            shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ...            stderr=${WORK_DIR}/TAF/testArtifacts/logs/${error_file}
     Sleep  1s
@@ -287,4 +287,5 @@ Decode Base64 String
     ${last_msg_json}  Evaluate  json.loads('''${string}''')
     ${decode_payload}  Evaluate  base64.b64decode('${last_msg_json}[Payload]').decode('utf-8')  modules=base64
     ${payload}  Evaluate  json.loads('''${decode_payload}''')
+    Log  ${payload}
     [Return]  ${payload}
