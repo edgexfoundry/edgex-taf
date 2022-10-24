@@ -5,11 +5,16 @@ import redis
 import sys
 import requests
 import json
+import time
 
 topic = sys.argv[1]
 keyword = sys.argv[2]
 security = sys.argv[3]
+expected_msg_count = sys.argv[4]
+duration = sys.argv[5]
+current_msg_count = 0
 
+start_time = time.time()
 
 def get_token():
     file = open('/tmp/edgex/secrets/device-virtual/secrets-token.json')
@@ -43,7 +48,13 @@ while True:
     message = p.get_message()
     if message and not message['type'] == 'psubscribe':
         if keyword in message['channel']:
+            current_msg_count += 1
             print(message['channel'])
             print(message['data'])
-            if sys.argv[4] != 'multi':
+            if int(expected_msg_count) > 0 and current_msg_count >= int(expected_msg_count):
+                # after receiving the expected message number, end the loop
                 break
+            elif time.time() - start_time >= int(duration):
+                # end the loop after the time out
+                break
+    time.sleep(0.001)

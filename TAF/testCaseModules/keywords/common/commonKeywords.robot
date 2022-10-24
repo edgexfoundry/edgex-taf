@@ -259,11 +259,11 @@ Get Consul Token
     [Return]  ${token}[SecretID]
 
 Run Redis Subscriber Progress And Output
-    [Arguments]  ${topic}  ${keyword}  ${msgs}=single
+    [Arguments]  ${topic}  ${keyword}  ${expected_msg_count}=1  ${duration}=30
     ${current_time}  get current epoch time
     ${secty}  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Set Variable  true
               ...       ELSE  Set Variable  false
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py ${topic} ${keyword} ${secty} ${msgs} &
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/redis-subscriber.py ${topic} ${keyword} ${secty} ${expected_msg_count} ${duration} &
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/redis-subscriber-${current_time}.log
     ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/redis-error-${current_time}.log
     Set Test Variable  ${subscriber_file}  redis-subscriber-${current_time}.log
@@ -271,12 +271,12 @@ Run Redis Subscriber Progress And Output
     [Return]  ${handle}
 
 Run MQTT Subscriber Progress And Output  # Only available on mqtt message bus testcases
-    [Arguments]  ${topic}  ${keyword}=CorrelationID  ${msgs}=single
+    [Arguments]  ${topic}  ${keyword}=CorrelationID  ${expected_msg_count}=1  ${duration}=30  ${port}=${BROKER_PORT}  # duration only enabled when expected_msg_count=-1
     ${current_time}  get current epoch time
     Set Test Variable  ${subscriber_file}  mqtt-subscriber-${current_time}.log
     Set Test Variable  ${error_file}  mqtt-error-${current_time}.log
     ${secure}  Set Variable  ${SECURITY_SERVICE_NEEDED}
-    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${BROKER_PORT} ${secure} ${msgs} &
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${BROKER_PORT} ${secure} ${expected_msg_count} ${duration} &
     ...            shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ...            stderr=${WORK_DIR}/TAF/testArtifacts/logs/${error_file}
     sleep  1s

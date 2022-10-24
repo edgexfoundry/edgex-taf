@@ -25,7 +25,7 @@ Kuiper001 - Add a new rule and export to MQTT
     Given Set Test Variable  ${device_name}  kuiper-mqtt-device
     And Set Test Variable  ${command}  ${PREFIX}_GenerateDeviceValue_INT8_RW
     And Set Test Variable  ${resource}  ${PREFIX}_DeviceValue_INT8_RW
-    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events-kuiper ${resource} ${EX_BROKER_PORT} false single &   # Process for MQTT Subscriber
+    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events-kuiper ${resource} ${EX_BROKER_PORT} false 1 30 &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     Given Create A Rule mqtt-rule With ${rule_sql} And MQTT Sink
     And Create Device For device-virtual With Name ${device_name}

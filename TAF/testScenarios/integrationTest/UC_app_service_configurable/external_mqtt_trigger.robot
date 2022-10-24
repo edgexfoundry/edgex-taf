@@ -26,7 +26,7 @@ ExternalTrigger001 - Test external mqtt trigger works
 
 *** Keywords ***
 Subscribe MQTT Broker Topics ${topic} With ${Port}
-    Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} publisher ${Port} false single   # Process for MQTT Subscriber
+    Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} publisher ${Port} false 1 30 &  # Process for MQTT Subscriber
         ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log
     Sleep  1s  # Waiting for subscriber is ready
 

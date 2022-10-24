@@ -42,7 +42,7 @@ Metrics ${metrics_name} With ${field_name} Should Be Received
 Recieved Metrics ${metrics_name} For All Pipelines And ${field_name} Should Not Be 0
     @{pipeline_ids}  Create List  default-pipeline  float-pipeline  int8-16-pipeline
     @{message_ids}  Create List
-    Wait Until Keyword Succeeds  10x  3s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
+    #Wait Until Keyword Succeeds  10x  3s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
     ${messages}  Split String  ${content}  \n
     # Set same pipeline messages to a list

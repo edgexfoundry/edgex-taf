@@ -15,6 +15,7 @@ Force Tags      backward-skip  MessageQueue=MQTT
 ${SUITE}          APP Services Metrics Test - MQTT bus
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app_services_metrics_mqtt.log
 ${interval}       4
+${interval_ex}    8
 ${INT8_CMD}       ${PREFIX}_GenerateDeviceValue_INT8_RW
 ${INT16_CMD}      ${PREFIX}_GenerateDeviceValue_INT16_RW
 ${FLOAT32_CMD}    ${PREFIX}_GenerateDeviceValue_FLOAT32_RW
@@ -91,10 +92,10 @@ APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is
     Given Set Test Variable  ${device_name}  pipeline-messages-processed
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessagesProcessed  Payload  multi
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessagesProcessed  Payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Set Telemetry Metrics/PipelineMessagesProcessed=true For app-sample On Consul
-    And Sleep  ${interval}
+    And Sleep  ${interval_ex}
     Then Recieved Metrics PipelineMessagesProcessed For All Pipelines And timer-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
@@ -104,10 +105,10 @@ APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metric
     Given Set Test Variable  ${device_name}  pipeline-messages-processing-time
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessageProcessingTime  Payload  multi
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessageProcessingTime  Payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Set Telemetry Metrics/PipelineMessageProcessingTime=true For app-sample On Consul
-    And Sleep  ${interval}
+    And Sleep  ${interval_ex}
     Then Recieved Metrics PipelineMessageProcessingTime For All Pipelines And timer-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
@@ -119,11 +120,11 @@ APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is 
     And Set PerTopicPipelines float ExecutionOrder HTTPExport
     And Set PerTopicPipelines int8-16 ExecutionOrder HTTPExport
     And Set Topics For app-samle PerTopicPipelines On Consul
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineProcessingErrors  Payload  multi
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineProcessingErrors  Payload  6
     And Create Device For device-virtual With Name ${device_name}
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Set Telemetry Metrics/PipelineProcessingErrors=true For app-sample On Consul
-    And Sleep  ${interval}
+    And Sleep  ${interval_ex}
     Then Recieved Metrics PipelineProcessingErrors For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
