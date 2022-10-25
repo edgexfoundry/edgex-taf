@@ -3,6 +3,10 @@ Resource         TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robo
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource  TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource  TAF/testCaseModules/keywords/core-command/coreCommandAPI.robot
+Suite Setup  Run keywords  Setup Suite
+...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+Suite Teardown  Run keywords   Terminate All Processes
+...                      AND  Run Teardown Keywords
 Force Tags     backward-skip  MessageQueue=MQTT
 
 *** Variables ***
@@ -10,7 +14,7 @@ ${SUITE}          Core-Metadata System Events Test - MQTT bus
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/metadata_system_events_mqtt.log
 
 *** Test Cases ***
-SystemEvents001-Add Device and Receive Correct System Events
+SystemEventsMQTT001-Add Device and Receive Correct System Events
     Given Set Test Variable  ${add_device_topic}  edgex/system-events/core-metadata/device/add/device-virtual/Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  add-system-event
     And Run MQTT Subscriber Progress And Output  ${add_device_topic}  Payload
@@ -19,7 +23,7 @@ SystemEvents001-Add Device and Receive Correct System Events
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEvents002-Add Multiple Devices and Receive Correct System Events
+SystemEventsMQTT002-Add Multiple Devices and Receive Correct System Events
     Given Set Test Variable  ${add_devices_topic}  edgex/system-events/core-metadata/device/add/device-virtual/Virtual-Sample-Profile
     And Run MQTT Subscriber Progress And Output  ${add_devices_topic}  Payload  3
     When Create 3 Devices For device-virtual
@@ -27,7 +31,7 @@ SystemEvents002-Add Multiple Devices and Receive Correct System Events
     [Teardown]  Run Keywords  Delete multiple devices by names  @{device_list}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEvents003-Update Device and Receive Correct System Events
+SystemEventsMQTT003-Update Device and Receive Correct System Events
     Given Set Test Variable  ${update_device_topic}  edgex/system-events/core-metadata/device/update/device-virtual/Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  update-system-event
     And Run MQTT Subscriber Progress And Output  ${update_device_topic}  Payload
@@ -37,7 +41,7 @@ SystemEvents003-Update Device and Receive Correct System Events
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEvents004-Update Multiple Devices and Receive Correct System Events
+SystemEventsMQTT004-Update Multiple Devices and Receive Correct System Events
     Given Set Test Variable  ${update_devices_topic}  edgex/system-events/core-metadata/device/update/device-virtual/Virtual-Sample-Profile
     And Run MQTT Subscriber Progress And Output  ${update_devices_topic}  Payload  3
     And Create 3 Devices For device-virtual
@@ -46,7 +50,7 @@ SystemEvents004-Update Multiple Devices and Receive Correct System Events
     [Teardown]   Run Keywords  Delete multiple devices by names  @{device_list}
                 ...      AND  Terminate All Processes  kill=True
 
-SystemEvents005-Delete Device and Receive Correct System Events
+SystemEventsMQTT005-Delete Device and Receive Correct System Events
     Given Set Test Variable  ${delete_device_topic}  edgex/system-events/core-metadata/device/delete/device-virtual/Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  delete-system-event
     And Run MQTT Subscriber Progress And Output  ${delete_device_topic}  Payload
