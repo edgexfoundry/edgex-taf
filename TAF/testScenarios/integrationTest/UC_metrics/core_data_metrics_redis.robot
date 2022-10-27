@@ -28,7 +28,8 @@ DataMetricsRedis001-Enable EventsPersisted And Verify Metrics is Publish to Mess
     And Sleep  ${interval}
     Then Metrics EventsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
+                ...      AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
 
 DataMetricsRedis002-Disable EventsPersisted And Verify Metrics isn't Publish to MessageBus
     Given Run Redis Subscriber Progress And Output  edgex.telemetry.core-data.EventsPersisted  telemetry
@@ -38,7 +39,8 @@ DataMetricsRedis002-Disable EventsPersisted And Verify Metrics isn't Publish to 
     When Create multiple events
     And Sleep  ${interval}
     Then No Metrics With Name EventsPersisted Received
-    [Teardown]  Delete device by name ${device_name}
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 DataMetricsRedis003-Enable ReadingsPersisted And Verify Metrics is Publish to MessageBus
     Given Run Redis Subscriber Progress And Output  edgex.telemetry.core-data.ReadingsPersisted  telemetry
@@ -49,6 +51,7 @@ DataMetricsRedis003-Enable ReadingsPersisted And Verify Metrics is Publish to Me
     And Sleep  ${interval}
     Then Metrics ReadingsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
                 ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
 
 DataMetricsRedis004-Disable ReadingsPersisted And Verify Metrics isn't Publish to MessageBus
@@ -59,4 +62,5 @@ DataMetricsRedis004-Disable ReadingsPersisted And Verify Metrics isn't Publish t
     When Create multiple events
     And Sleep  ${interval}
     Then No Metrics With Name ReadingsPersisted Received
-    [Teardown]  Delete device by name ${device_name}
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_redis}  kill=True

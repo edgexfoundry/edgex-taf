@@ -63,14 +63,25 @@ for compose in ${COMPOSE_FILE}; do
   fi
 
   # Update app-sample PerTopicPipeline
-  sed -n "/^\ \ app-service-sample:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/app-service-sample.yml
+  sed -n '/^\ \ app-service-sample:/,/^  [a-z].*:$/p' ${compose}.yml | sed '$d' > tmp/app-service-sample.yml
   sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_HTTPEXPORT_PARAMETERS_URL: http:\/\/${DOCKER_HOST_IP}:7770' tmp/app-service-sample.yml
   sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/app-service-sample.yml
-  sed -i "/^\ \ app-service-sample:/,/^  [a-z].*:$/{//!d}; /^\ \ app-service-sample:/d" ${compose}.yml
-  sed -i "/services:/ r tmp/app-service-sample.yml" ${compose}.yml
+  sed -i '$a\ \ \ \ extra_hosts:' tmp/app-service-sample.yml
+  sed -i '$a\ \ \ \ -\ \"${DOCKER_HOST_IP}:host-gateway"' tmp/app-service-sample.yml
+  sed -i '/^\ \ app-service-sample:/,/^  [a-z].*:$/{//!d}; /^\ \ app-service-sample:/d' ${compose}.yml
+  sed -i '/services:/ r tmp/app-service-sample.yml' ${compose}.yml
+
+  # Update services which use DOCKER_HOST_IP
+  for service in notifications app-service-http-export; do
+    sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
+    sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' tmp/${service}.yml
+    sed -i '$a\ \ \ \ extra_hosts:' tmp/${service}.yml
+    sed -i '$a\ \ \ \ -\ \"${DOCKER_HOST_IP}:host-gateway"' tmp/${service}.yml
+    sed -i "/^\ \ ${service}:/,/^  [a-z].*:$/{//!d}; /^\ \ ${service}:/d" ${compose}.yml
+    sed -i "/services:/ r tmp/${service}.yml" ${compose}.yml
+  done
 
   sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' ${compose}.yml
-  sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' ${compose}.yml
   sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883/g' ${compose}.yml
 
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' ${compose}.yml
