@@ -13,8 +13,8 @@ ${SUITE}              Configrations
 
 *** Test Cases ***
 Config001 - Set MessageQueue.Protocol to MQTT
-    ${handle}  Run MQTT Subscriber Progress And Output  edgex/events/device/#
-    Given Set Test Variable  ${device_name}  messageQueue-mqtt
+    Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
+    And Set Test Variable  ${device_name}  messageQueue-mqtt
     And Set Writable LogLevel To Debug For device-virtual On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
@@ -22,13 +22,13 @@ Config001 - Set MessageQueue.Protocol to MQTT
     And Event Has Been Recevied By MQTT Subscriber
     And Event Has Been Pushed To Core Data
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the topic correctly
-    Set Test Variable  ${device_name}  messagebus-true-device-5
-    ${handle}  Run MQTT Subscriber Progress And Output  edgex/events/custom/#
-    Given Set MessageQueue PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
+    Given Set Test Variable  ${device_name}  messagebus-true-device-5
+    And Run MQTT Subscriber Progress And Output  edgex/events/custom/#
+    And Set MessageQueue PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
     And Set MessageQueue SubscribeTopic=edgex/events/custom/# For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW
@@ -36,10 +36,10 @@ Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the top
     And Event Has Been Pushed To Core Data
     And Event Has Been Recevied By MQTT Subscriber
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
-                ...           AND  Set MessageQueue PublishTopicPrefix=edgex/events/device For device-virtual On Consul
-                ...           AND  Set MessageQueue SubscribeTopic=edgex/events/device/# For core-data On Consul
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
+                ...      AND  Set MessageQueue PublishTopicPrefix=edgex/events/device For device-virtual On Consul
+                ...      AND  Set MessageQueue SubscribeTopic=edgex/events/device/# For core-data On Consul
 
 Config003 - Set device-virtual MessageQueue.Optional.Qos (PUBLISH)
     [Tags]  backward-skip

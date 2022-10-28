@@ -267,8 +267,8 @@ Run Redis Subscriber Progress And Output
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/redis-subscriber-${current_time}.log
     ...                stderr=${WORK_DIR}/TAF/testArtifacts/logs/redis-error-${current_time}.log
     Set Test Variable  ${subscriber_file}  redis-subscriber-${current_time}.log
-    sleep  2s
-    [Return]  ${handle}
+    Sleep  2s
+    Set Test Variable  ${handle_redis}  ${handle}
 
 Run MQTT Subscriber Progress And Output  # Only available on mqtt message bus testcases
     [Arguments]  ${topic}  ${keyword}=CorrelationID  ${expected_msg_count}=1  ${duration}=30  ${port}=${BROKER_PORT}  # duration only enabled when expected_msg_count=-1
@@ -279,8 +279,8 @@ Run MQTT Subscriber Progress And Output  # Only available on mqtt message bus te
     ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py ${topic} ${keyword} ${BROKER_PORT} ${secure} ${expected_msg_count} ${duration} &
     ...            shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ...            stderr=${WORK_DIR}/TAF/testArtifacts/logs/${error_file}
-    sleep  1s
-    [Return]  ${handle}
+    Sleep  1s
+    Set Test Variable  ${handle_mqtt}  ${handle}
 
 Decode Base64 String
     [Arguments]  ${string}

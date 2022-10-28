@@ -21,7 +21,7 @@ SystemEventsRedis001-Add Device and Receive Correct System Events
     When Create Device For device-virtual With Name ${device_name}
     Then Single System Event Should Match With Source core-metadata, Type device and Action add
     [Teardown]  Run Keywords  Delete device by name ${device_name}
-                ...      AND  Terminate All Processes  kill=True
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 SystemEventsRedis002-Add Multiple Devices and Receive Correct System Events
     Given Set Test Variable  ${add_device_topic}  edgex.system-events.core-metadata.device.add.device-virtual.Virtual-Sample-Profile
@@ -30,7 +30,7 @@ SystemEventsRedis002-Add Multiple Devices and Receive Correct System Events
     When Create 3 Devices For device-virtual
     Then Multiple 3 System Events Should Match With Source core-metadata, Type device and Action add
     [Teardown]  Run Keywords  Delete multiple devices by names  @{device_list}
-                ...      AND  Terminate All Processes  kill=True
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 SystemEventsRedis003-Update Device and Receive Correct System Events
     Given Set Test Variable  ${update_device_topic}  edgex.system-events.core-metadata.device.update.device-virtual.Virtual-Sample-Profile
@@ -40,7 +40,7 @@ SystemEventsRedis003-Update Device and Receive Correct System Events
     When Update Device ${device_name} With operatingState=DOWN
     Then Single System Event Should Match With Source core-metadata, Type device and Action update
     [Teardown]  Run Keywords  Delete device by name ${device_name}
-                ...      AND  Terminate All Processes  kill=True
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 SystemEventsRedis004-Update Multiple Devices and Receive Correct System Events
     Given Set Test Variable  ${update_devices_topic}  edgex.system-events.core-metadata.device.update.device-virtual.Virtual-Sample-Profile
@@ -49,7 +49,7 @@ SystemEventsRedis004-Update Multiple Devices and Receive Correct System Events
     When Update Multiple Devices
     Then Multiple 3 System Events Should Match With Source core-metadata, Type device and Action update
     [Teardown]   Run Keywords  Delete multiple devices by names  @{device_list}
-                ...      AND  Terminate All Processes  kill=True
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 SystemEventsRedis005-Delete Device and Receive Correct System Events
     Given Set Test Variable  ${delete_device_topic}  edgex.system-events.core-metadata.device.delete.device-virtual.Virtual-Sample-Profile
@@ -58,7 +58,7 @@ SystemEventsRedis005-Delete Device and Receive Correct System Events
     And Create Device For device-virtual With Name ${device_name}
     When Delete device by name ${device_name}
     Then Single System Event Should Match With Source core-metadata, Type device and Action delete
-    [Teardown]   Terminate All Processes  kill=True
+    [Teardown]   Terminate Process  ${handle_redis}  kill=True
 
 *** Keywords ***
 Update Multiple Devices

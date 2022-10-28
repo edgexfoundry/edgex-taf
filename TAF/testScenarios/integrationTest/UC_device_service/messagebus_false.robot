@@ -19,68 +19,68 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/messagebus_false.log
 DeviceService006-Send get command with parameters ds-pushevent=no and ds-returnevent=no when messagebus is disabled
     Set Test Variable  ${device_name}  messagebus-false-device-5
     ${params}  Create Dictionary  ds-pushevent=no  ds-returnevent=no
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
-    Given Create Device For device-virtual With Name ${device_name}
+    Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
+    And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200"
     And Should Be Empty  ${content}
     And Event Is Not Pushed To Core Data
     And Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${subscriber_file}
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 DeviceService007-Send get command with parameters ds-pushevent=yes and ds-returnevent=no when messagebus is disabled
     Set Test Variable  ${device_name}  messagebus-false-device-6
     ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=no
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
-    Given Create Device For device-virtual With Name ${device_name}
+    Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
+    And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200"
     And Should Be Empty  ${content}
     And Event Has Been Pushed To Core Data
     And Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${subscriber_file}
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 DeviceService008-Send get command with parameters ds-pushevent=no and ds-returnevent=yes when messagebus is disabled
     Set Test Variable  ${device_name}  messagebus-false-device-7
     ${params}  Create Dictionary  ds-pushevent=no  ds-returnevent=yes
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
-    Given Create Device For device-virtual With Name ${device_name}
+    Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
+    And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200" And event
     And Event Is Not Pushed To Core Data
     And Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${subscriber_file}
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 DeviceService009-Send get command with parameters ds-pushevent=yes and ds-returnevent=yes when messagebus is disabled
     Set Test Variable  ${device_name}  messagebus-false-device-8
     ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=yes
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
-    Given Create Device For device-virtual With Name ${device_name}
+    Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
+    And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200" And event
     And Event Has Been Pushed To Core Data
     And Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${subscriber_file}
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 DeviceService010-Create Events by REST API when messagebus is disabled
     Set Test Variable  ${device_name}  messagebus-false-device-10
-    ${handle}  Run Redis Subscriber Progress And Output  edgex.events.core.*  ${device_name}
-    Given Create Device For device-virtual With Name ${device_name}
+    Given Run Redis Subscriber Progress And Output  edgex.events.core.*  ${device_name}
+    And Create Device For device-virtual With Name ${device_name}
     And Generate Event Sample  Event  ${device_name}  ${PREFIX}-Sample-Profile  ${PREFIX}_GenerateDeviceValue_UINT8_RW  Simple Reading  
     When Create Event With ${device_name} And ${PREFIX}-Sample-Profile And ${PREFIX}_GenerateDeviceValue_UINT8_RW
     Then Should Return Status Code "201" And id
     And Event With Device ${device_name} Should Be Received by Redis Subscriber ${subscriber_file}
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
+                ...      AND  Delete all events by age
+                ...      AND  Terminate Process  ${handle_redis}  kill=True
 
 *** Keywords ***
 Set UseMessageBus=${value} For device-virtual On Consul

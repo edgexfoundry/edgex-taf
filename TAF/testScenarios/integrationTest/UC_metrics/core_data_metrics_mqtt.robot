@@ -29,7 +29,8 @@ DataMetricsMQTT001-Enable EventsPersisted And Verify Metrics is Publish to Messa
     And Sleep  ${interval}
     Then Metrics EventsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...           AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
+                ...      AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
 
 DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to MessageBus
     Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  Payload
@@ -39,7 +40,8 @@ DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to M
     When Create multiple events
     And Sleep  ${interval}
     Then No Metrics With Name EventsPersisted Received
-    [Teardown]  Delete device by name ${device_name}
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 DataMetricsMQTT003-Enable ReadingsPersisted And Verify Metrics is Publish to MessageBus
     Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  Payload
@@ -50,6 +52,7 @@ DataMetricsMQTT003-Enable ReadingsPersisted And Verify Metrics is Publish to Mes
     And Sleep  ${interval}
     Then Metrics ReadingsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
                 ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
 
 DataMetricsMQTT004-Disable ReadingsPersisted And Verify Metrics isn't Publish to MessageBus
@@ -60,5 +63,6 @@ DataMetricsMQTT004-Disable ReadingsPersisted And Verify Metrics isn't Publish to
     When Create multiple events
     And Sleep  ${interval}
     Then No Metrics With Name ReadingsPersisted Received
-    [Teardown]  Delete device by name ${device_name}
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 

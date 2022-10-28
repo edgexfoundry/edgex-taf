@@ -2,6 +2,8 @@
 
 import paho.mqtt.client as mqtt
 import sys
+import requests
+import json
 
 topic = sys.argv[1]
 message = sys.argv[2]
