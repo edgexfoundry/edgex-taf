@@ -92,3 +92,9 @@ Set ${config}=${value} For ${service_name} On Consul
     ${service}  Run Keyword If  'core' in """${service_name}"""  Fetch From Right  ${service_name}  -
                 ...       ELSE  Set Variable  ${service_name}
     Restart Services  ${service}
+    Set Test Variable  ${url}  ${deviceServiceUrl}
+    FOR  ${INDEX}  IN RANGE  5
+        Query Ping
+        Run Keyword If  ${response} == 200  Exit For Loop
+        ...       ELSE  Sleep  5s
+    END

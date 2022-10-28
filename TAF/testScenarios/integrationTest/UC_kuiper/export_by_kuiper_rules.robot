@@ -25,14 +25,14 @@ Kuiper001 - Add a new rule and export to MQTT
     Given Set Test Variable  ${device_name}  kuiper-mqtt-device
     And Set Test Variable  ${command}  ${PREFIX}_GenerateDeviceValue_INT8_RW
     And Set Test Variable  ${resource}  ${PREFIX}_DeviceValue_INT8_RW
-    And Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py rules-events-kuiper ${resource} ${EX_BROKER_PORT} false 1 30 &   # Process for MQTT Subscriber
-    ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
+    And Run MQTT Subscriber Progress And Output  rules-events-kuiper  ${resource}  1  ${EX_BROKER_PORT}  false  30
     Given Create A Rule mqtt-rule With ${rule_sql} And MQTT Sink
     And Create Device For device-virtual With Name ${device_name}
     When Execute Get Command ${command} To Trigger ${device_name}
     Then Device data with keyword "${resource}" has recevied by mqtt subscriber
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Delete Rules mqtt-rule
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 Kuiper002 - Add a new rule to execute set command
     ${random_int8}  Evaluate  random.randint(-128, 128)  random
@@ -117,7 +117,8 @@ Delete Stream
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
 
 Device data with keyword "${keyword}" has recevied by mqtt subscriber
-    ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log  ${keyword}
+    Dump Last 100 lines Log And Service Config  app-rules-engine  http://localhost:59701
+    ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  ${keyword}
     run keyword if  """${mqtt_broker_received}""" == '${EMPTY}'
     ...             fail  No export log found on mqtt subscriber
     ...       ELSE  Log  Found export data: ${mqtt_broker_received}

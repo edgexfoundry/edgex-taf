@@ -270,7 +270,7 @@ Run Redis Subscriber Progress And Output
     Sleep  2s
     Set Test Variable  ${handle_redis}  ${handle}
 
-Run MQTT Subscriber Progress And Output  # Only available on mqtt message bus testcases
+Run MQTT Subscriber Progress And Output
     [Arguments]  ${topic}  ${keyword}=CorrelationID  ${expected_msg_count}=1  ${port}=${BROKER_PORT}
     ...          ${secure}=${SECURITY_SERVICE_NEEDED}  ${duration}=30  # duration only enabled when expected_msg_count=-1
     ${current_time}  get current epoch time
@@ -289,3 +289,10 @@ Decode Base64 String
     ${payload}  Evaluate  json.loads('''${decode_payload}''')
     Log  ${payload}
     [Return]  ${payload}
+
+Dump Last 100 lines Log And Service Config  # For Debug use
+    [Arguments]  ${service_name}  ${url}
+    Set Test Variable  ${url}  ${url}
+    Query Config
+    ${logs}  Run Process  docker logs edgex-${service_name} -n 100  shell=True  stderr=STDOUT  output_encoding=UTF-8
+    Log  ${logs.stdout}

@@ -84,7 +84,12 @@ DeviceService010-Create Events by REST API when messagebus is disabled
 
 *** Keywords ***
 Set UseMessageBus=${value} For device-virtual On Consul
-   ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/device-virtual/Device/UseMessageBus
-   Update Service Configuration On Consul  ${path}  ${value}
-   Restart Services  device-virtual
-
+    ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/device-virtual/Device/UseMessageBus
+    Update Service Configuration On Consul  ${path}  ${value}
+    Restart Services  device-virtual
+    Set Suite Variable  ${url}  ${deviceServiceUrl}
+    FOR  ${INDEX}  IN RANGE  5
+        Query Ping
+        Run Keyword If  ${response} == 200  Exit For Loop
+        ...       ELSE  Sleep  5s
+    END
