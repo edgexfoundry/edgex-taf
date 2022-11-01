@@ -27,7 +27,7 @@ StoreAndForward001 - Stored data is exported after connecting to http server
     And Start HTTP Server And Received Exported Data Contains ${PREFIX}_GenerateDeviceValue_UINT8_RW
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
-                ...           AND  Terminate All Processes  kill=True
+                ...           AND  Terminate Process  ${handle}  kill=True
 
 StoreAndForward002 - Stored data is cleared after the maximum configured retires
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
@@ -73,10 +73,9 @@ StoreAndForward005 - Export retries will resume after application service is res
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=yes
-    And Waiting For Retrying Export
     ${timestamp}  get current epoch time
     And Restart Services  app-service-http-export
-    Then Wait Until Keyword Succeeds  2x  5s  Found Retry Log From ${timestamp} After Restarting app-http-export
+    Then Wait Until Keyword Succeeds  5x  5s  Found Retry Log From ${timestamp} After Restarting app-http-export
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
@@ -119,11 +118,12 @@ Modify PersistOnError to ${value} On Consul
     Restart Services  app-service-http-export
     Sleep  4s
 
-Waiting For Retrying Export
-    Run Keyword If  "${ARCH}" == "x86_64"  Sleep  5s
-
 Found Retry Log From ${timestamp} After Restarting ${service_name}
+    # Show last 100 lines for debug
+    Dump Last 100 lines Log And Service Config  ${service_name}  http://${BASE_URL}:${APP_HTTP_EXPORT_PORT}
+
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
     ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     Should Not Be Empty   ${retry_lines}
+

@@ -51,13 +51,13 @@ ExportErr001 - Export events/readings to unreachable HTTP backend
                 ...           AND  Delete all events by age
 
 ExportErr002 - Export events/readings to unreachable MQTT backend
-    Given Stop Services  mqtt-broker
+    Given Run Keyword And Ignore Error  Stop Services  mqtt-broker  mqtt-taf-broker
     And Create Device For device-virtual With Name mqtt-export-error-device
     When Get device data by device mqtt-export-error-device and command ${PREFIX}_GenerateDeviceValue_INT64_RW
     Then No exported logs found on configurable application service  app-mqtt-export
     [Teardown]  Run keywords  Delete device by name mqtt-export-error-device
                 ...           AND  Delete all events by age
-                ...           AND  Restart Services  mqtt-broker
+                ...           AND  Run Keyword And Ignore Error  Restart Services  mqtt-broker  mqtt-taf-broker
 
 
 *** Keywords ***
