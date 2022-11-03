@@ -102,14 +102,3 @@ ErrCommandGET012 - Get unavailable Modbus device read command
 *** Keywords ***
 Should Return Status Code "500" or "503"
     Should Match Regexp  "${response}"  (500|503)
-
-Create Unavailable Modbus device
-     ${service}  Set Variable  device-modbus
-     ${device}  Set device values  ${service}  Modbus-Sample-Profile
-     ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${service}"
-     Set To Dictionary  ${protocols}[modbus-tcp]  Port=123
-     Set To Dictionary  ${device}  protocols=${protocols}
-     Set To Dictionary  ${device}  name=${device_name}
-     Generate Devices  ${device}
-     Create Device With ${Device}
-     sleep  500ms

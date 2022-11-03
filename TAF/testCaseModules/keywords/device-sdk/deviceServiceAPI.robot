@@ -109,3 +109,14 @@ Event With Device ${device_name} Should Be Received by Redis Subscriber ${filena
     ${redis_subscriber}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
     run keyword if  "${device_name}" not in """${redis_subscriber}"""
     ...             fail  No data received by redis subscriber
+
+Create Unavailable Modbus device
+     ${service}  Set Variable  device-modbus
+     ${device}  Set device values  ${service}  Modbus-Sample-Profile
+     ${protocols}=  Load data file "core-metadata/device_protocol.json" and get variable "${service}"
+     Set To Dictionary  ${protocols}[modbus-tcp]  Port=123
+     Set To Dictionary  ${device}  protocols=${protocols}
+     Set To Dictionary  ${device}  name=${device_name}
+     Generate Devices  ${device}
+     Create Device With ${Device}
+     sleep  500ms

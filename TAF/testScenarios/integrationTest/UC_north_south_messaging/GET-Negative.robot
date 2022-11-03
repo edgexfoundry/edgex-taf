@@ -112,7 +112,7 @@ ErrNSMessagingGET012 - Get unavailable Modbus device read command
     # device-modbus
     Given Set Test Variable  ${device_name}  ex-mqtt-get-modbus
     And Set Test Variable  ${resource_name}  Modbus_DeviceValue_Boolean_R
-    And Create Device For device-modbus With Name ${device_name}
+    And Create Unavailable Modbus device
     And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
     When Get Command From External MQTT Broker
     Then Should Return Error Code 1 And RequestID Should Be The Same As Request
