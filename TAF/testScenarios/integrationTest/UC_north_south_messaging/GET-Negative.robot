@@ -101,12 +101,15 @@ ErrNSMessagingGET010 - Get specified device read command when device OperatingSt
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 ErrNSMessagingGET011 - Get unavailable HTTP device read command
-    [Tags]  skipped
-    # device-camera
-    Given Subscribe MQTT Topic 'edgex/command/response/#'
-    When Get Command With Camera01 From External MQTT Broker
-    Then Should Return Error Code "1"
-    And RequestID Should Be Correct
+    # device-onvif-camera
+    Given Set Test Variable  ${device_name}  Camera01
+    And Set Test Variable  ${resource_name}  NetworkConfiguration
+    And Create Device For device-onvif-camera With Name ${device_name}
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    When Get Command From External MQTT Broker
+    Then Should Return Error Code 1 And RequestID Should Be The Same As Request
+    [Teardown]  Run keywords  Delete device by name ${device_name}
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 ErrNSMessagingGET012 - Get unavailable Modbus device read command
     # device-modbus

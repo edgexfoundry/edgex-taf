@@ -17,8 +17,8 @@ ProWatcherGET001 - Query all provision watcher
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers
     Then Should Return Status Code "200" And provisionWatchers
-    And totalCount Should be 3
-    And Should Be True  len(${content}[provisionWatchers]) == 3
+    And totalCount Should be 4  # device-onvif-camera will auto create a provision watcher
+    And Should Be True  len(${content}[provisionWatchers]) == 4
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
@@ -29,8 +29,8 @@ ProWatcherGET002 - Query all provision watcher with offset
     When Query All Provision Watchers With offset=1
     Then Should Return Status Code "200" And provisionWatchers
     And Should Return Content-Type "application/json"
-    And totalCount Should be 3
-    And Should Be True  len(${content}[provisionWatchers]) == 2
+    And totalCount Should be 4  # device-onvif-camera will auto create a provision watcher
+    And Should Be True  len(${content}[provisionWatchers]) == 3
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
@@ -39,7 +39,7 @@ ProWatcherGET003 - Query all provision watcher with limit
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers With limit=2
     Then Should Return Status Code "200" And provisionWatchers
-    And totalCount Should be 3
+    And totalCount Should be 4  # device-onvif-camera will auto create a provision watcher
     And Should Return Content-Type "application/json"
     And Should Be True  len(${content}[provisionWatchers]) == 2
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

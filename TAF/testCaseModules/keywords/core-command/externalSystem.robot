@@ -101,7 +101,7 @@ Should Return Error Code 1 And RequestID Should Be The Same As Request
     Should Be Equal As Integers  1  ${last_msg_json}[ErrorCode]
 
 Get Response Message
-    Wait Until Keyword Succeeds  10x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
+    Wait Until Keyword Succeeds  10x  2s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
     ${count}  Get Line Count  ${content}
     ${last_msg}  Run Keyword If  ${count} > 1  Get Line  ${content}  -1
