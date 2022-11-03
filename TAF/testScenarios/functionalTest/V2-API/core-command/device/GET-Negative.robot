@@ -82,12 +82,16 @@ ErrCommandGET010 - Get specified device read command when device OperatingState 
     [Teardown]  Delete device by name ${device_name}
 
 ErrCommandGET011 - Get unavailable HTTP device read command
-    # device-camera
+    # device-onvif-camera
     ${default_response_time_threshold}  Set Variable  8000    # normally exceed default 1200ms
-    When Run Keyword And Expect Error  *  Get Specified Device Camera001 Read Command OnvifDeviceInformation
+    Given Set Test Variable  ${device_name}  Camera01
+    And Set Test Variable  ${resource_name}  NetworkConfiguration
+    And Create Device For device-onvif-camera With Name ${device_name}
+    When Run Keyword And Expect Error  *  Get Specified Device ${device_name} Read Command ${resource_name}
     And Should Return Status Code "500" or "503"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete device by name ${device_name}
 
 ErrCommandGET012 - Get unavailable Modbus device read command
     # device-modbus
