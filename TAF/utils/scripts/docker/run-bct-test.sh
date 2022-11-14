@@ -26,25 +26,25 @@ TEST_STRATEGY=${TEST_STRATEGY:-integration-test}
 # Common Variables
 case ${CASE} in
   1)
-   CORE_SERVICES_RELEASE=main  # edgex-compose branch or SHA1
+   CORE_SERVICES_RELEASE=levski  # edgex-compose branch or SHA1
    COMPATIBLE_RELEASE=jakarta
    USE_APP=true
    USE_DS=true
   ;;
   2)
    CORE_SERVICES_RELEASE=jakarta  # edgex-compose branch or SHA1
-   COMPATIBLE_RELEASE=main
+   COMPATIBLE_RELEASE=levski
    USE_APP=true
    USE_DS=true
   ;;
   3)
-   CORE_SERVICES_RELEASE=main  # edgex-compose branch or SHA1
+   CORE_SERVICES_RELEASE=levski  # edgex-compose branch or SHA1
    COMPATIBLE_RELEASE=jakarta
    USE_APP=false
    USE_DS=true
   ;;
   4)
-   CORE_SERVICES_RELEASE=main  # edgex-compose branch or SHA1
+   CORE_SERVICES_RELEASE=levski  # edgex-compose branch or SHA1
    COMPATIBLE_RELEASE=jakarta
    USE_APP=true
    USE_DS=false
