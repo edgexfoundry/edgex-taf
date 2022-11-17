@@ -46,6 +46,7 @@ NSMessagingGET004 - Query DeviceCoreCommand by device name
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 NSMessagingGET005 - Get specified device read command
+    [Tags]  SmokeTest
     Given Set Test Variable  ${device_name}  ex-mqtt-get
     And Set Random Read Command
     And Create Device For device-virtual With Name ${device_name}

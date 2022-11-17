@@ -20,7 +20,6 @@ ${kuiperUrl}     ${URI_SCHEME}://${BASE_URL}:${RULESENGINE_PORT}
 
 *** Test Cases ***
 Kuiper001 - Add a new rule and export to MQTT
-    [Tags]  SmokeTest
     ${rule_sql}  Set Variable  SELECT * FROM ${stream}
     Given Set Test Variable  ${device_name}  kuiper-mqtt-device
     And Set Test Variable  ${command}  ${PREFIX}_GenerateDeviceValue_INT8_RW

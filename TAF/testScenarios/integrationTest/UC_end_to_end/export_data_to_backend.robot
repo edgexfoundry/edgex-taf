@@ -19,7 +19,6 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 
 *** Test Cases ***
 Export001 - Export events/readings to HTTP Server
-    [Tags]  SmokeTest
     ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
     Given Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With HTTP Export To Vault
     And Create Device For device-virtual With Name http-export-device
@@ -30,7 +29,6 @@ Export001 - Export events/readings to HTTP Server
                 ...           AND  Terminate All Processes  kill=True
 
 Export002 - Export events/readings to MQTT Server
-    [Tags]  SmokeTest
     [Setup]  Run Keyword And Ignore Error  Stop Services  edgex-scalability-test-mqtt-export
     Given Start process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin ${EX_BROKER_PORT} false 1 30 &   # Process for MQTT Subscriber
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
