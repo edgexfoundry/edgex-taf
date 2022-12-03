@@ -44,6 +44,6 @@ System Agent Controls Services
     Set Response to Test Variables  ${resp}
 
 Update MetricsMechanism To ${value} On Consul
-    ${mechanism_path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/sys-mgmt-agent/MetricsMechanism
+    ${mechanism_path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/sys-mgmt-agent/MetricsMechanism
     Update Service Configuration On Consul  ${mechanism_path}  ${value}
     Restart Services  system

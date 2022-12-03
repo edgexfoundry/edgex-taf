@@ -11,7 +11,7 @@ Force Tags   MessageQueue=MQTT
 
 *** Variables ***
 ${SUITE}              Core-Data-Configrations
-${DATA_CONSOL_PATH}   /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-data
+${DATA_CONSOL_PATH}   ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data
 
 *** Test Cases ***
 CoreConfig001 - Set core-data MessageQueue.SubscribeEnabled to false

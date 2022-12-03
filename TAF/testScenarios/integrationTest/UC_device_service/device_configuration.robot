@@ -85,12 +85,12 @@ Config006 - Verfiy reading contains units when ReadingUnits is false
 
 *** Keywords ***
 Set Device ${config} to ${value} For ${service_name} On Consul
-    ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${service_name}/Device/${config}
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Device/${config}
     Update Service Configuration On Consul  ${path}  ${value}
     Restart Services  device-virtual
 
 Set Writable.Reading.ReadingUnits to ${value} For ${service_name} On Consul
-    ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/Reading/ReadingUnits
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/Reading/ReadingUnits
     Update Service Configuration On Consul  ${path}  ${value}
 
 Retrive device data by device ${device_name} and command ${command}

@@ -33,7 +33,7 @@ IntervalactionPOST002 - Create pre-created intervalaction with pre-created inter
 
 *** Keywords ***
 Set support-scheduler configs ScheduleIntervalTime=${millisecond} And LogLevel=${logLevel}
-    Set Test Variable  ${consul_path}    /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-scheduler
+    Set Test Variable  ${consul_path}    ${CONSUL_CONFIG_BASE_ENDPOINT}/support-scheduler
     Update Service Configuration On Consul  ${consul_path}/Writable/LogLevel  ${logLevel}
     Update Service Configuration On Consul  ${consul_path}/ScheduleIntervalTime  ${millisecond}
 

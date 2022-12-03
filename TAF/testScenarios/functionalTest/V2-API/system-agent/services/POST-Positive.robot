@@ -44,8 +44,8 @@ SysMgmtPOST002 - Stop services by system management agent
 SysMgmtPOST003 - Restart services by system management agent
     ${service_name_list}=  Create List  app-service-rules  device-rest
     ${container_name_list}=  Create List  app-rules-engine  device-rest
-    ${app_path}=  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-rules-engine/Service/StartupMsg
-    ${device_path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/device-rest/Service/StartupMsg
+    ${app_path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-rules-engine/Service/StartupMsg
+    ${device_path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/device-rest/Service/StartupMsg
     ${keyword}=  Set Variable  service has been restart
     Given Update Service Configuration On Consul  ${app_path}  ${keyword}
     And Update Service Configuration On Consul  ${device_path}  ${keyword}

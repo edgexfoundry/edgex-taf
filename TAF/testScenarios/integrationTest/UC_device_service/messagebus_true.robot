@@ -85,9 +85,7 @@ DeviceService005-Customize PublishTopicPrefix works correctly when using Redis m
 
 *** Keywords ***
 Set ${config}=${value} For ${service_name} On Consul
-    ${service_layer}  Set Variable If  'device' in """${service_name}"""  devices
-                      ...              'core' in """${service_name}"""  core
-    ${path}=  Set Variable  /v1/kv/edgex/${service_layer}/${CONSUL_CONFIG_VERSION}/${service_name}/MessageQueue/${config}
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageQueue/${config}
     Update Service Configuration On Consul  ${path}  ${value}
     ${service}  Run Keyword If  'core' in """${service_name}"""  Fetch From Right  ${service_name}  -
                 ...       ELSE  Set Variable  ${service_name}

@@ -85,7 +85,7 @@ Set ${configurations} For ${service_name} On Consul
     ${config_key}  Get Dictionary Keys  ${configurations}  sort_keys=false
     ${config_value}  Get Dictionary Values  ${configurations}  sort_keys=false
     FOR  ${key}  ${value}  IN ZIP  ${config_key}  ${config_value}
-        ${path}=  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/StoreAndForward/${key}
+        ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/StoreAndForward/${key}
         Update Service Configuration On Consul  ${path}  ${value}
     END
 
@@ -113,7 +113,7 @@ Found Remove Log In ${service_name} Logs From ${timestamp}
     Should Be Equal As Integers  ${retry_times}  1
 
 Modify PersistOnError to ${value} On Consul
-    ${path}  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
+    ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
     Update Service Configuration On Consul  ${path}  ${value}
     Restart Services  app-service-http-export
     Sleep  4s

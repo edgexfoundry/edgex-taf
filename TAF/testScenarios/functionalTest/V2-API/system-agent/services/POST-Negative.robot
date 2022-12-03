@@ -12,7 +12,7 @@ Force Tags      v2-api
 *** Variables ***
 ${SUITE}          System Management Agent POST Negative Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/system-agent-post-negative.log
-${metadata_path}  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-metadata/Service/StartupMsg
+${metadata_path}  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-metadata/Service/StartupMsg
 ${keyword}        service has been restart
 
 *** Test Cases ***
