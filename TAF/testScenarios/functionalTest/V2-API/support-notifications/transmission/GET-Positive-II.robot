@@ -108,7 +108,7 @@ Create A Subscriptions And Notifications
     sleep  3s  # Waiting for the resend process to finish
 
 Set Writable configs: resendInterval=${resendInterval} and resendLimit=${resendLimit}
-    ${path}=  Set variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/support-notifications/Writable
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/support-notifications/Writable
     Update Service Configuration On Consul  ${path}/ResendInterval  ${resendInterval}
     Update Service Configuration On Consul  ${path}/ResendLimit  ${resendLimit}
 

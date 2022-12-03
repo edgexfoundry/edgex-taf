@@ -8,16 +8,13 @@ Resource     TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 
 *** Keywords ***
 Set Telemetry ${config}=${value} For ${service_name} On Consul
-    ${service_layer}  Set Variable If  'device' in """${service_name}"""  devices
-                      ...              'core' in """${service_name}"""  core
-                      ...              'app' in """${service_name}"""  appservices
-    ${telemetry_path}  Set Variable  /v1/kv/edgex/${service_layer}/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/Telemetry
+    ${telemetry_path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/Telemetry
     ${path}  Set Variable   ${telemetry_path}/${config}
     Update Service Configuration On Consul  ${path}  ${value}
 
 Set Topics For app-samle PerTopicPipelines On Consul
     ${perTopics}  Create List  float  int8-16
-    ${path}  Set Variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-sample/Writable/Pipeline/PerTopicPipelines
+    ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/Pipeline/PerTopicPipelines
     FOR  ${ITEM}  IN  @{perTopics}
         ${topics_path}  Set Variable  ${path}/${ITEM}/Topics
         Update Service Configuration On Consul  ${topics_path}  edgex/events/device/#/${device_name}/#
@@ -104,5 +101,5 @@ Get First Lines
     [Return]  ${list}
 
 Set PerTopicPipelines ${perTopicPipeline} ExecutionOrder ${functions}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-sample/Writable/Pipeline/PerTopicPipelines/${perTopicPipeline}/ExecutionOrder
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/Pipeline/PerTopicPipelines/${perTopicPipeline}/ExecutionOrder
     Update Service Configuration On Consul  ${path}  ${functions}

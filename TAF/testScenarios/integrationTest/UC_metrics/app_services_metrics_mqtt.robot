@@ -5,7 +5,7 @@ Resource     TAF/testCaseModules/keywords/common/metrics.robot
 Suite Setup  Run keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                   AND  Set Telemetry Interval=${interval}s For app-sample On Consul
-...                   AND  Update Service Configuration On Consul  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-sample/Writable/LogLevel  DEBUG
+...                   AND  Update Service Configuration On Consul  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/LogLevel  DEBUG
 Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
 ...                      AND  Set Telemetry Interval=30s For app-sample On Consul

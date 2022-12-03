@@ -58,16 +58,14 @@ Config003 - Set device-virtual MessageQueue.Optional.Qos (PUBLISH)
 
 *** Keywords ***
 Set MessageQueue ${key}=${value} For ${service_name} On Consul
-    ${service_layer}  Run Keyword If  "core" in "${service_name}"  Set Variable  core
-                      ...    ELSE IF  "device" in "${service_name}"  Set Variable  devices
-    ${path}=  Set Variable  /v1/kv/edgex/${service_layer}/${CONSUL_CONFIG_VERSION}/${service_name}/MessageQueue/${key}
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageQueue/${key}
     Update Service Configuration On Consul  ${path}  ${value}
     ${service}  Run Keyword If  "data" in "${service_name}"  Set Variable  data
                 ...       ELSE  Set Variable  ${service_name}
     Restart Services  ${service}
 
 Set Writable LogLevel To Debug For ${service_name} On Consul
-    ${path}=  Set Variable  /v1/kv/edgex/devices/${CONSUL_CONFIG_VERSION}/${service_name}/Writable/LogLevel
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/LogLevel
     Update Service Configuration On Consul  ${path}  DEBUG
 
 Retrive device data by device ${device_name} and command ${command}

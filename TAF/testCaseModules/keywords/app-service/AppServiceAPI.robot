@@ -22,19 +22,19 @@ Suite Teardown for App Service
     Run Teardown Keywords
 
 Set ${service} Functions ${functions}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/${service}/Writable/Pipeline/ExecutionOrder
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/Writable/Pipeline/ExecutionOrder
     Update Service Configuration On Consul  ${path}  ${functions}
 
 Set Transform Type ${type}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
     Update Service Configuration On Consul  ${path}  ${type}
 
 Set Compress Algorithm ${algorithm}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
     Update Service Configuration On Consul  ${path}  ${algorithm}
 
 Set Encrypt Algorithm ${algorithm}
-    ${path}=  Set variable  /v1/kv/edgex/appservices/${CONSUL_CONFIG_VERSION}/app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
     Update Service Configuration On Consul  ${path}  ${algorithm}
 
 Trigger Function Pipeline With ${data}

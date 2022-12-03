@@ -48,7 +48,7 @@ ErrEventGET005 - Query events by start/end time fails (Start>End)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventGET006 - Query event fails when persistData is false
-    ${path}=  Set Variable  /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-data/Writable/PersistData
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data/Writable/PersistData
     Given Update Service Configuration On Consul  ${path}  false
     And Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
     And Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001

@@ -2,8 +2,8 @@ import os
 
 LOG_LEVEL = "INFO"
 
-# Version in the Consul path for all services
-CONSUL_CONFIG_VERSION = "2.0"
+# Base endpoint in the Consul path for all services
+CONSUL_CONFIG_BASE_ENDPOINT = "/v1/kv/edgex/v3"
 
 # API Version
 API_VERSION = "v2"
