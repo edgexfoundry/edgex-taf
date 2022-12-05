@@ -19,6 +19,7 @@ ${deviceUri}         /api/${API_VERSION}/device
 ${provisionWatcherUri}  /api/${API_VERSION}/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
 ${uomValidationPath}   /v1/kv/edgex/core/${CONSUL_CONFIG_VERSION}/core-metadata/Writable/UoM/Validation
+@{device_service_list}  device-virtual  device-modbus  device-rest
 
 *** Keywords ***
 # Device Profile
@@ -620,36 +621,30 @@ Generate Devices
     END
     Set Test Variable  ${Device}  ${device_list}
 
-Create Multiple Profiles/Services And Generate Multiple Devices Sample
-    Generate Multiple Device Services Sample
-    Create Device Service ${deviceService}
+Create Multiple Profiles And Generate Multiple Devices Sample
     Generate Multiple Device Profiles Sample
     Create Device Profile ${deviceProfile}
-    ${device_1}=  Set device values  Device-Service-${index}-1  Test-Profile-1
-    ${device_2}=  Set device values  Device-Service-${index}-2  Test-Profile-2
+    ${device_1}=  Set device values  ${device_service_list}[0]  Test-Profile-1
+    ${device_2}=  Set device values  ${device_service_list}[1]  Test-Profile-2
     Set To Dictionary  ${device_2}  name=Test-Device-Locked
     Set To Dictionary  ${device_2}  adminState=LOCKED
-    ${device_3}=  Set device values  Device-Service-${index}-3  Test-Profile-3
+    ${device_3}=  Set device values  ${device_service_list}[2]  Test-Profile-3
     Set To Dictionary  ${device_3}  name=Test-Device-Disabled
     Set To Dictionary  ${device_3}  operatingState=DOWN
     ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-1.yaml" and convert to dictionary
     ${autoEvent}=  Set autoEvents values  10s  false  ${profile}[deviceResources][0][name]
     ${autoEvents}=  Create List  ${autoEvent}
-    ${device_4}=  Set device values  Device-Service-${index}-1  Test-Profile-1
+    ${device_4}=  Set device values  ${device_service_list}[0]  Test-Profile-1
     Set To Dictionary  ${device_4}  name=Test-Device-AutoEvents
     Set To Dictionary  ${device_4}  autoEvents=${autoEvents}
     Generate Devices  ${device_1}  ${device_2}  ${device_3}  ${device_4}
 
-Create A Device Sample With Associated Test-Device-Service And ${device_profile_name}
-    Generate A Device Service Sample
-    Create Device Service ${deviceService}
-    Get "id" From Multi-status Item 0
-    Set Test Variable  ${device_service_id}  ${item_value}
+Create A Device Sample With Associated ${device_service} And ${device_profile_name}
     Generate A Device Profile Sample  ${device_profile_name}
     Create Device Profile ${deviceProfile}
     Get "id" From Multi-status Item 0
     Set Test Variable  ${device_profile_id}  ${item_value}
-    ${device}=  Set device values  Test-Device-Service  ${device_profile_name}
+    ${device}=  Set device values  ${device_service}  ${device_profile_name}
     Generate Devices  ${device}
     Create Device With ${Device}
 
@@ -679,7 +674,7 @@ Set autoEvents values
     [Return]  ${autoEvent}
 
 Create Devices And Generate Multiple Devices Sample For Updating ${type}
-    Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Create Multiple Profiles And Generate Multiple Devices Sample
     Create Device With ${Device}
     ${labels}=  Create List  device-example  device-update
     ${update_labels}=  Create Dictionary  name=Test-Device  labels=${labels}
@@ -689,16 +684,14 @@ Create Devices And Generate Multiple Devices Sample For Updating ${type}
     Set To Dictionary  ${protocols}[other]  Address=simple02
     ${update_protocols}=  Create Dictionary  name=Test-Device-AutoEvents  protocols=${protocols}
     Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
-    ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
+    ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=${device_service_list}[2]
     ...        AND  Set To Dictionary  ${update_opstate}  operatingState=DOWN
     ...        AND  Set To Dictionary  ${update_opstate}  profileName=Test-Profile-3
     Generate Devices  ${update_labels}  ${update_adminstate}  ${update_opstate}  ${update_protocols}
 
-Delete Multiple Devices Sample, Profiles Sample And Services Sample
+Delete Multiple Devices Sample And Profiles Sample
     Delete Multiple Devices By Names
     ...  Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
-    Delete multiple device services by names
-    ...  Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
     Delete multiple device profiles by names
     ...  Test-Profile-1  Test-Profile-2  Test-Profile-3
 

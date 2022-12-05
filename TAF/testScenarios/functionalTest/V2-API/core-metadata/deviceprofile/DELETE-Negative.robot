@@ -19,7 +19,7 @@ ErrProfileDELETE001 - Delete device profile by non-existent name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrProfileDELETE002 - Delete device profile by name that used by device
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-2
     When Delete Device Profile By Name  Test-Profile-2
     Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"

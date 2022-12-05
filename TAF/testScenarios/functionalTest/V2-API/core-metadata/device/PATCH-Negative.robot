@@ -21,7 +21,7 @@ ErrDevicePATCH001 - Update device with non-existent device name and device name 
     And Item Index 1 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH002 - Update device with device name validate error
     # Empty device name
@@ -31,7 +31,7 @@ ErrDevicePATCH002 - Update device with device name validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH003 - Update device with adminState validate error
     # Empty adminState
@@ -41,7 +41,7 @@ ErrDevicePATCH003 - Update device with adminState validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH004 - Update device with operatingState validate error
     # Empty operatingState
@@ -51,7 +51,7 @@ ErrDevicePATCH004 - Update device with operatingState validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH005 - Update device with serviceName validate error
     # Empty serviceName
@@ -61,7 +61,7 @@ ErrDevicePATCH005 - Update device with serviceName validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH006 - Update device with profileName validate error
     # Empty profileName
@@ -71,7 +71,7 @@ ErrDevicePATCH006 - Update device with profileName validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH007 - Update device with protocols validate error
     # Empty protocols
@@ -81,7 +81,7 @@ ErrDevicePATCH007 - Update device with protocols validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH008 - Update device with adminState value validate error
     # Out of optional value for adminState
@@ -91,7 +91,7 @@ ErrDevicePATCH008 - Update device with adminState value validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH009 - Update device with operatingState value validate error
     # Out of optional value for operatingState
@@ -101,7 +101,7 @@ ErrDevicePATCH009 - Update device with operatingState value validate error
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH010 - Update device with non-existent device name
     Given Create Devices And Generate Multiple Devices Sample For Updating Data
@@ -111,4 +111,4 @@ ErrDevicePATCH010 - Update device with non-existent device name
     And Item Index 2 Should Contain Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample

@@ -12,13 +12,12 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceservice
 
 *** Test Cases ***
 ErrServiceDELETE001 - Delete device service by name that used by device
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
-    When Delete Device Service By Name  Test-Device-Service
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-2
+    When Delete Device Service By Name  device-virtual
     Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Device By Name Test-Device
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
 ErrServiceDELETE002 - Delete device service by name with non-existent service name
