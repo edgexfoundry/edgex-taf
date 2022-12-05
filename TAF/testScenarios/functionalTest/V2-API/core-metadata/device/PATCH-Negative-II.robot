@@ -20,7 +20,7 @@ ErrDevicePATCH0011 - Update device with non-existent serviceName
     And Item Index 0 Should Contain Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 ErrDevicePATCH012 - Update device with non-existent profileName
     Given Create Devices And Generate Multiple Devices Sample For Updating Data
@@ -30,4 +30,4 @@ ErrDevicePATCH012 - Update device with non-existent profileName
     And Item Index 1 Should Contain Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample

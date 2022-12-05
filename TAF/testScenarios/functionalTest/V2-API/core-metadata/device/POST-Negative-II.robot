@@ -13,7 +13,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-post-n
 
 *** Test Cases ***
 ErrDevicePOST010 - Create device with non-existent device service name
-    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  serviceName=Non-existent
     When Create Device With ${Device}
     Then Should Return Status Code "207"
@@ -23,13 +23,11 @@ ErrDevicePOST010 - Create device with non-existent device service name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Devices By Names
     ...                       Test-Device  Test-Device-Disabled  Test-Device-AutoEvents
-    ...                  AND  Delete multiple device services by names
-    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
     ...                  AND  Delete multiple device profiles by names
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrDevicePOST011 - Create device with non-existent device profile name
-    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[2][device]  profileName=Non-existent
     When Create Device With ${Device}
     Then Should Return Status Code "207"
@@ -38,8 +36,6 @@ ErrDevicePOST011 - Create device with non-existent device profile name
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Devices By Names
-    ...                       Test-Device  Test-Device-Locked  Test-Device-AutoEvents
-    ...                  AND  Delete multiple device services by names
-    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                       Test-Device  Test-Device-Locked  Test-Device-AutoEvents\
     ...                  AND  Delete multiple device profiles by names
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3

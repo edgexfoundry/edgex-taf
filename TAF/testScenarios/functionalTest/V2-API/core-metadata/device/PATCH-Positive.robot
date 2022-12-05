@@ -21,7 +21,7 @@ DevicePATCH001 - Update device
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Device Data Should Be Updated
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 DevicePATCH002 - Update device with device service and profile
     # profileName, serviceName
@@ -32,7 +32,7 @@ DevicePATCH002 - Update device with device service and profile
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Device Profile/Device Should Be Updated
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 *** Keywords ***
 Device ${type} Should Be Updated
@@ -47,7 +47,7 @@ Device ${type} Should Be Updated
         Run Keyword If  "${type}" == "Data" and "${device}" == "Test-Device-Locked"
         ...             Should Be Equal  ${content}[device][adminState]  UNLOCKED
         ...    ELSE IF  "${device}" == "Test-Device-Locked"
-        ...             Should Be Equal  ${content}[device][serviceName]  Device-Service-${index}-3
+        ...             Should Be Equal  ${content}[device][serviceName]  ${device_service_list}[2]
         Run Keyword If  "${type}" == "Data" and "${device}" == "Test-Device-Disabled"
         ...             Should Be Equal  ${content}[device][operatingState]  UP
         ...    ELSE IF  "${device}" == "Test-Device-Disabled"

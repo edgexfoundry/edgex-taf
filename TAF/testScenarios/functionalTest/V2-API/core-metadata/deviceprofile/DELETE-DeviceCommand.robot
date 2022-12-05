@@ -42,7 +42,7 @@ ErrProfileCommandDELETE002 - Delete deviceCommand by non-existent command name
 
 ErrProfileCommandDELETE003 - Delete deviceCommand which profile used by device
     Given Set Test Variable  ${profile_name}  Test-Profile-2
-    And Create A Device Sample With Associated Test-Device-Service And ${profile_name}
+    And Create A Device Sample With Associated device-virtual And ${profile_name}
     When Delete deviceCommand
     Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"

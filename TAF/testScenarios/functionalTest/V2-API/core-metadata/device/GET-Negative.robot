@@ -36,13 +36,13 @@ ErrDeviceGET004 - Query all devices by profile name with non-int value on limit
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrDeviceGET004 - Query all devices by service name with non-int value on offset
-    When Run Keyword And Expect Error  *  Query All Devices By serviceName Test-Device-Service With offset=Invalid
+    When Run Keyword And Expect Error  *  Query All Devices By serviceName device-virtual With offset=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrDeviceGET005 - Query all devices by service name with non-int value on limit
-    When Run Keyword And Expect Error  *  Query All Devices By serviceName Test-Device-Service With limit=Invalid
+    When Run Keyword And Expect Error  *  Query All Devices By serviceName device-virtual With limit=Invalid
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

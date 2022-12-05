@@ -12,7 +12,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-delete
 
 *** Test Cases ***
 DeviceDELETE001 - Delete device by name
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-2
     When Delete Device By Name Test-Device
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"

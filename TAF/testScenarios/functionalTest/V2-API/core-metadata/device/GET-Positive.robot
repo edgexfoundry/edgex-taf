@@ -13,17 +13,17 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-get-po
 *** Test Cases ***
 DeviceGET001 - Query all devices
     [Tags]  SmokeTest
-    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
     When Query All Devices
     Then Should Return Status Code "200" And devices
     And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 DeviceGET002 - Query all devices with offset
-    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
     And Set Test Variable  ${offset}  2
     When Query All Devices With offset=${offset}
@@ -31,10 +31,10 @@ DeviceGET002 - Query all devices with offset
     And And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount-offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 DeviceGET003 - Query all devices with limit
-    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
     And Set Test Variable  ${limit}  3
     When Query All Devices With limit=${limit}
@@ -42,10 +42,10 @@ DeviceGET003 - Query all devices with limit
     And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match limit
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 DeviceGET004 - Query all devices with specified labels
-    Given Create Multiple Profiles/Services And Generate Multiple Devices Sample
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  labels=@{EMPTY}
     And Append To List  ${Device}[2][device][labels]  new_label
     And Create Device With ${Device}
@@ -55,27 +55,25 @@ DeviceGET004 - Query all devices with specified labels
     And Devices Should Be Linked To Specified Label: device-sample
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample, Profiles Sample And Services Sample
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
 DeviceGET005 - Query device by name
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-1
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-1
     When Query Device By Name  Test-Device
     Then Should Return Status Code "200" and device
     And Should Be True  "${content}[device][name]" == "Test-Device"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device By Name Test-Device
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
+    [Teardown]  Run Keywords  Delete Device By Name Test-Device\
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 DeviceGET006 - Check device exists by name
-    Given Create A Device Sample With Associated Test-Device-Service And Test-Profile-2
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-2
     When Check Existence Of Device By Name  Test-Device
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device By Name Test-Device
-    ...                  AND  Delete Device Service By Name  Test-Device-Service
+    [Teardown]  Run Keywords  Delete Device By Name Test-Device\
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
 *** Keywords ***
