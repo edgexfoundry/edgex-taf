@@ -98,7 +98,7 @@ Update Device
     Update devices ${Device}
 
 Set Core-Metadata PostDeviceChanges=${bool}
-    ${path}=  Set Variable ${CONSUL_CONFIG_BASE_ENDPOINT}/core-metadata/Notifications/PostDeviceChanges
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-metadata/Notifications/PostDeviceChanges
     Update Service Configuration On Consul  ${path}  ${bool}
     Restart Services  metadata
 
