@@ -42,7 +42,6 @@ if SECURITY_SERVICE_NEEDED == 'true':
     SUPPORT_NOTIFICATIONS_PORT = "8443/support-notifications"
     SUPPORT_SCHEDULER_PORT = "8443/support-scheduler"
     RULESENGINE_PORT = "8443/rules-engine"
-    SYS_MGMT_AGENT_PORT = "8443/sys-mgmt-agent"
 else:
     URI_SCHEME = "http"
     CORE_DATA_PORT = 59880
@@ -51,4 +50,3 @@ else:
     SUPPORT_NOTIFICATIONS_PORT = 59860
     SUPPORT_SCHEDULER_PORT = 59861
     RULESENGINE_PORT = 59720
-    SYS_MGMT_AGENT_PORT = 58890
