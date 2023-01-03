@@ -115,8 +115,8 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     # Modify the ProfilesDir value on configuration.toml under ${HOME}/edgex-taf/TAF/config/${profile}
     ProfilesDir = ${HOME}/edgex-taf/TAF/config/${profile}
    
-    # Launch device service with the confdir parameter 
-    --confdir=${HOME}/edgex-taf/TAF/config/${profile}
+    # Launch device service with the configDir parameter 
+    --configDir=${HOME}/edgex-taf/TAF/config/${profile}
    
     # Run Test Command
     python3 -m TUC --exclude Skipped -u functionalTest/device-service -p ${profile}

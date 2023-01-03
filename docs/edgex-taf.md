@@ -149,9 +149,9 @@ To write the automation testing for virtual device service, complete the followi
           CLIENTS_CORE_METADATA_HOST: edgex-core-metadata
           Service_Host: edgex-device-virtual
         entrypoint: ["/device-virtual"]
-        command: ["--registry","--confdir=${CONF_DIR}"]
+        command: ["--registry","--configDir=${CONFIG_DIR}"]
         volumes:
-          - ${WORK_DIR}/TAF/config/${PROFILE}:${CONF_DIR}:z
+          - ${WORK_DIR}/TAF/config/${PROFILE}:${CONFIG_DIR}:z
         depends_on:
           - consul
           - data

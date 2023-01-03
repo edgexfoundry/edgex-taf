@@ -93,7 +93,7 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
 cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/jakarta-${BUS}.html
 
 docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
-    -e CONF_DIR=/custom-config --security-opt label:disable -v /var/run/docker.sock:/var/run/docker.sock \
+    -e CONFIG_DIR=/custom-config --security-opt label:disable -v /var/run/docker.sock:/var/run/docker.sock \
     ${COMPOSE_IMAGE} docker compose -f ${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml down
 
 # Get Backward Compose file
