@@ -21,7 +21,7 @@ client = docker.from_env()
 global services
 services = ["edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
             "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-rules-engine",
-            "edgex-sys-mgmt-agent", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"]
+            "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"]
 
 secty_services = ["edgex-security-secretstore-setup", "edgex-kong", "edgex-kong-db", "edgex-vault", "edgex-security-bootstrapper"]
 

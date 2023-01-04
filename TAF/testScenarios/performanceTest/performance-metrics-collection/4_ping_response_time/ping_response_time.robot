@@ -33,9 +33,6 @@ Measure the ping response time
     ${NOTIFICATIONS_RES_LIST}=  Ping API for service  support-notifications  ${SUPPORT_NOTIFICATIONS_PORT}
     Record response   edgex-support-notifications  ${NOTIFICATIONS_RES_LIST}
 
-    ${SYS_MGMT_RES_LIST}=  Ping API for service  sys-mgmt-agent  ${SYS_MGMT_AGENT_PORT}
-    Record response   edgex-sys-mgmt-agent          ${SYS_MGMT_RES_LIST}
-
     ${DEVICE_REST_RES_LIST}=  Ping API for service  device-rest  ${DEVICE_REST_PORT}
     Record response   edgex-device-rest             ${DEVICE_REST_RES_LIST}
 
