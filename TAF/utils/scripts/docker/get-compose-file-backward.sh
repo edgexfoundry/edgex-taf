@@ -33,7 +33,7 @@ mkdir -p tmp
 for compose in ${COMPOSE_FILE_BCT}; do
   for profile in device-virtual device-modbus; do
     sed -n "/ ${profile}:/,/ - PROFILE_VOLUME_PLACE_HOLDER/ p" ${compose}.yml > tmp/${profile}.yml  # print device-service
-    sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' tmp/${profile}.yml
+    sed -i 's/\CONFIG_DIR_PLACE_HOLDER/${CONFIG_DIR}/g' tmp/${profile}.yml
     sed -i "s/\PROFILE_VOLUME_PLACE_HOLDER/\${WORK_DIR}\/TAF\/config\/${profile}/g" tmp/${profile}.yml
     sed -i "/ ${profile}:/,/ - PROFILE_VOLUME_PLACE_HOLDER/d" ${compose}.yml
     sed -i "/services:/ r tmp/${profile}.yml" ${compose}.yml

@@ -34,7 +34,7 @@ fi
 for compose in ${COMPOSE_FILE}; do
   for profile in device-virtual device-modbus; do
     sed -n "/^\ \ ${profile}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${profile}.yml  # print device-service
-    sed -i 's/\CONF_DIR_PLACE_HOLDER/${CONF_DIR}/g' tmp/${profile}.yml
+    sed -i 's/\CONFIG_DIR_PLACE_HOLDER/${CONFIG_DIR}/g' tmp/${profile}.yml
     sed -i "s/\PROFILE_VOLUME_PLACE_HOLDER/\${WORK_DIR}\/TAF\/config\/${profile}/g" tmp/${profile}.yml
     # Enable Delayed Start
     if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${USE_SECURITY}" = '-security-' ] \
