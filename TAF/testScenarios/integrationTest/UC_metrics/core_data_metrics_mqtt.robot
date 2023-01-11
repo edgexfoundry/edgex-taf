@@ -11,7 +11,7 @@ Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
 ...                      AND  Set Telemetry Interval=30s For core-data On Consul
 ...                      AND  Run Teardown Keywords
-Force Tags      MessageQueue=MQTT  backward-skip
+Force Tags      MessageBus=MQTT  backward-skip
 
 *** Variables ***
 ${SUITE}          Core Data Metrics Test - MQTT bus

@@ -117,7 +117,7 @@ fi
 
 if [ ! -z "$INTEGRATION_TESTS" ]; then
     echo "INFO:snap-TAF: running integration tests"
-    snap_taf_run_integration_tests MessageQueue=redis redis-integration-test.html 
+    snap_taf_run_integration_tests MessageBus=redis redis-integration-test.html
     
     # do a new clean install 
     snap_taf_shutdown
@@ -126,7 +126,7 @@ if [ ! -z "$INTEGRATION_TESTS" ]; then
     # then switch to a mqtt message bus and run further tests
     snap_set_messagebus_to_mqtt
 
-    snap_taf_run_integration_tests MessageQueue=mqtt mqtt-integration-test.html 
+    snap_taf_run_integration_tests MessageBus=mqtt mqtt-integration-test.html
 
 fi
 

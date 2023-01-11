@@ -5,7 +5,7 @@ Resource        TAF/testCaseModules/keywords/core-command/externalSystem.robot
 Suite Setup  Run keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags      MessageQueue=MQTT  MessageQueue=redis  backward-skip
+Force Tags      MessageBus=MQTT  MessageBus=redis  backward-skip
 
 *** Variables ***
 ${SUITE}          North-South Messaging Set Testcases

@@ -7,7 +7,7 @@ Suite Setup      Run keywords  Setup Suite
 ...                       AND  Modify PersistOnError to true On Consul
 Suite Teardown   Run keywords  Run Teardown Keywords
 ...                       AND  Modify PersistOnError to false On Consul
-Force Tags       MessageQueue=redis
+Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}         Store And Forward Capability

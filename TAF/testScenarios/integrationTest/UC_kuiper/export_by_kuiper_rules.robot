@@ -11,7 +11,7 @@ Suite Setup      Run keywords   Setup Suite
 Suite Teardown   Run Keywords   Delete Stream
 ...                             AND  Delete all events by age
 ...                             AND  Run Teardown Keywords
-Force Tags       MessageQueue=redis  MessageQueue=MQTT
+Force Tags       MessageBus=redis  MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}         Export By Kuiper Rules

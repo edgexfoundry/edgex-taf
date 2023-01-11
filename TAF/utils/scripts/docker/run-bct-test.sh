@@ -88,7 +88,7 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
     -v /tmp/edgex/secrets:/tmp/edgex/secrets:z -v /var/run/docker.sock:/var/run/docker.sock \
     --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env ${TAF_COMMON_IMAGE} \
-    --exclude Skipped --exclude backward-skip --include MessageQueue=${BUS} \
+    --exclude Skipped --exclude backward-skip --include MessageBus=${BUS} \
     -u integrationTest -p device-virtual
 cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/jakarta-${BUS}.html
 
@@ -112,7 +112,7 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
     -v /tmp/edgex/secrets:/tmp/edgex/secrets:z -v /var/run/docker.sock:/var/run/docker.sock \
     --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env ${TAF_COMMON_IMAGE} \
-    --exclude Skipped --exclude backward-skip --include MessageQueue=${BUS} \
+    --exclude Skipped --exclude backward-skip --include MessageBus=${BUS} \
     -u integrationTest -p device-virtual
 cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/backward-test-${BUS}.html
 

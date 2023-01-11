@@ -12,7 +12,7 @@ Suite Setup      Run keywords   Setup Suite
 Suite Teardown   Run keywords   Delete metadata subscription, notifications and transmissions
 ...                             AND  Run Teardown Keywords
 ...                             AND  Terminate All Processes  kill=True
-Force Tags       MessageQueue=redis
+Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}              Send Notifications From Core-Metadata
