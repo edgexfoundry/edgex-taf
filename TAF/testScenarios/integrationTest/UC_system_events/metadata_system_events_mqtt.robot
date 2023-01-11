@@ -7,7 +7,7 @@ Suite Setup  Run keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run keywords   Terminate All Processes
 ...                      AND  Run Teardown Keywords
-Force Tags     backward-skip  MessageQueue=MQTT
+Force Tags     backward-skip  MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}          Core-Metadata System Events Test - MQTT bus

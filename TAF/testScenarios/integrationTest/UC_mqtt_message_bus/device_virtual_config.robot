@@ -6,13 +6,13 @@ Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                        AND  Run Keyword And Ignore Error  Stop Services  scalability-test-mqtt-export  app-service-mqtt-export  # No data received from the both services
 Suite Teardown  Run Teardown Keywords
-Force Tags   MessageQueue=MQTT
+Force Tags   MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}              Configrations
 
 *** Test Cases ***
-Config001 - Set MessageQueue.Protocol to MQTT
+Config001 - Set MessageBus.Protocol to MQTT
     Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
     And Set Test Variable  ${device_name}  messageQueue-mqtt
     And Set Writable LogLevel To Debug For device-virtual On Consul
@@ -25,11 +25,11 @@ Config001 - Set MessageQueue.Protocol to MQTT
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the topic correctly
+Config002 - Modify MessageBus.Topics.PublishTopicPrefix and receive data from the topic correctly
     Given Set Test Variable  ${device_name}  messagebus-true-device-5
     And Run MQTT Subscriber Progress And Output  edgex/events/custom/#
-    And Set MessageQueue PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
-    And Set MessageQueue SubscribeTopic=edgex/events/custom/# For core-data On Consul
+    And Set MessageBus Topics/PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
+    And Set MessageBus Topics/SubscribeTopic=edgex/events/custom/# For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then Should Return Status Code "200" And event
@@ -38,27 +38,27 @@ Config002 - Modify MessageQueue.PublishTopicPrefix and receive data from the top
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set MessageQueue PublishTopicPrefix=edgex/events/device For device-virtual On Consul
-                ...      AND  Set MessageQueue SubscribeTopic=edgex/events/device/# For core-data On Consul
+                ...      AND  Set MessageBus Topics/PublishTopicPrefix=edgex/events/device For device-virtual On Consul
+                ...      AND  Set MessageBus Topics/SubscribeTopic=edgex/events/device/# For core-data On Consul
 
-Config003 - Set device-virtual MessageQueue.Optional.Qos (PUBLISH)
+Config003 - Set device-virtual MessageBus.Optional.Qos (PUBLISH)
     [Tags]  backward-skip
     Given Set Test Variable  ${device_name}  messagebus-true-device-6
     And Create Device For device-virtual With Name ${device_name}
-    And Set MessageQueue Optional/Qos=2 For device-virtual On Consul
-    And Set MessageQueue Optional/Qos=1 For core-data On Consul
+    And Set MessageBus Optional/Qos=2 For device-virtual On Consul
+    And Set MessageBus Optional/Qos=1 For core-data On Consul
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
     Then Should Return Status Code "200" And event
     And Event Has Been Pushed To Core Data
     And Verify MQTT Broker Qos
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
-                ...           AND  Set MessageQueue Optional/Qos=0 For device-virtual On Consul
-                ...           AND  Set MessageQueue Optional/Qos=0 For core-data On Consul
+                ...           AND  Set MessageBus Optional/Qos=0 For device-virtual On Consul
+                ...           AND  Set MessageBus Optional/Qos=0 For core-data On Consul
 
 *** Keywords ***
-Set MessageQueue ${key}=${value} For ${service_name} On Consul
-    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageQueue/${key}
+Set MessageBus ${key}=${value} For ${service_name} On Consul
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageBus/${key}
     Update Service Configuration On Consul  ${path}  ${value}
     ${service}  Run Keyword If  "data" in "${service_name}"  Set Variable  data
                 ...       ELSE  Set Variable  ${service_name}

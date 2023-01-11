@@ -64,10 +64,10 @@ for compose in ${COMPOSE_FILE}; do
   # Enable North-South Messaging
   if [ "${TEST_STRATEGY}" = "integration-test" ]; then
     sed -n "/^\ \ command:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/command.yml
-    sed -i '/MESSAGEQUEUE_EXTERNAL_URL/d' tmp/command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEQUEUE_EXTERNAL_ENABLED: true' tmp/command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEQUEUE_EXTERNAL_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEQUEUE_EXTERNAL_RETAIN: false' tmp/command.yml
+    sed -i '/MESSAGEBUS _EXTERNAL_URL/d' tmp/command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS _EXTERNAL_ENABLED: true' tmp/command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS _EXTERNAL_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS _EXTERNAL_RETAIN: false' tmp/command.yml
     sed -i "/^\ \ command:/,/^  [a-z].*:$/{//!d}; /^\ \ command:/d" ${compose}.yml
     sed -i "/services:/ r tmp/command.yml" ${compose}.yml
   fi

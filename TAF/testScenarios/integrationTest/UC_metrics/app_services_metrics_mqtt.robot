@@ -10,7 +10,7 @@ Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
 ...                      AND  Set Telemetry Interval=30s For app-sample On Consul
 ...                      AND  Run Teardown Keywords
-Force Tags      backward-skip  MessageQueue=MQTT
+Force Tags      backward-skip  MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}          APP Services Metrics Test - MQTT bus

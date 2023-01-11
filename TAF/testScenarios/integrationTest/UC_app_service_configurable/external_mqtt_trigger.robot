@@ -4,7 +4,7 @@ Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource         TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Suite Setup      Setup Suite
 Suite Teardown   Run Teardown Keywords
-Force Tags       MessageQueue=redis
+Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}         External MQTT Trigger

@@ -7,7 +7,7 @@ Resource         TAF/testCaseModules/keywords/support-scheduler/supportScheduler
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
-Force Tags       MessageQueue=redis
+Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}         Clean Up Events/Readings By Scheduler

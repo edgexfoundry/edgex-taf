@@ -5,7 +5,7 @@ Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run keywords   Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags      MessageQueue=redis
+Force Tags      MessageBus=redis
 
 *** Variables ***
 ${SUITE}          Device Service Test When MessageBus Set To True
@@ -70,8 +70,8 @@ DeviceService005-Customize PublishTopicPrefix works correctly when using Redis m
     Set Test Variable  ${device_name}  messagebus-true-device-5
     ${params}  Create Dictionary  ds-pushevent=yes  ds-returnevent=yes
     Given Run Redis Subscriber Progress And Output  edgex.events.custom.*  ${device_name}
-    And Set PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
-    And Set SubscribeTopic=edgex/events/custom/# For core-data On Consul
+    And Set Topics/PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
+    And Set Topics/SubscribeTopic=edgex/events/custom/# For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200" And event
@@ -80,12 +80,12 @@ DeviceService005-Customize PublishTopicPrefix works correctly when using Redis m
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_redis}  kill=True
-                ...      AND  Set PublishTopicPrefix=edgex/events/device For device-virtual On Consul
-                ...      AND  Set SubscribeTopic=edgex/events/device/# For core-data On Consul
+                ...      AND  Set Topics/PublishTopicPrefix=edgex/events/device For device-virtual On Consul
+                ...      AND  Set Topics/SubscribeTopic=edgex/events/device/# For core-data On Consul
 
 *** Keywords ***
 Set ${config}=${value} For ${service_name} On Consul
-    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageQueue/${config}
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageBus/${config}
     Update Service Configuration On Consul  ${path}  ${value}
     ${service}  Run Keyword If  'core' in """${service_name}"""  Fetch From Right  ${service_name}  -
                 ...       ELSE  Set Variable  ${service_name}

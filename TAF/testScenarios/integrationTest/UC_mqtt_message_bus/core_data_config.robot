@@ -7,31 +7,17 @@ Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword And Ignore Error  Stop Services  scalability-test-mqtt-export  app-service-mqtt-export  # No data received from the both services
 Suite Teardown  Run Keywords  Run Teardown Keywords
 ...             AND  Terminate All Processes  kill=True
-Force Tags   MessageQueue=MQTT
+Force Tags   MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}              Core-Data-Configrations
 ${DATA_CONSOL_PATH}   ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data
 
 *** Test Cases ***
-CoreConfig001 - Set core-data MessageQueue.SubscribeEnabled to false
-    Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
-    And Set Test Variable  ${device_name}  messageQueue-mqtt-core-1
-    And Set MessageQueue SubscribeEnabled=false For core-data On Consul
-    And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
-    Then Should Return Status Code "200" And event
-    And Event Has Been Recevied By MQTT Subscriber
-    And Event Is Not Pushed To Core Data
-    [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...      AND  Delete all events by age
-                ...      AND  Set MessageQueue SubscribeEnabled=true For core-data On Consul
-                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-
-CoreConfig002 - Set core-data MessageQueue.SubscribeTopic not match device-virtual PublishTopicPrefix
+CoreConfig001 - Set core-data MessageBus.Topics.SubscribeTopic not match device-virtual PublishTopicPrefix
     Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
     And Set Test Variable  ${device_name}  messagebus-mqtt-core-2
-    And Set MessageQueue SubscribeTopic=edgex/events/custom/# For core-data On Consul
+    And Set MessageBus Topics/SubscribeTopic=edgex/events/custom/# For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
     Then Should Return Status Code "200" And event
@@ -39,13 +25,13 @@ CoreConfig002 - Set core-data MessageQueue.SubscribeTopic not match device-virtu
     And Event Is Not Pushed To Core Data
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
-                ...      AND  Set MessageQueue SubscribeTopic=edgex/events/device/# For core-data On Consul
+                ...      AND  Set MessageBus Topics/SubscribeTopic=edgex/events/device/# For core-data On Consul
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-CoreConfig003 - Customize core-data MessageQueue.PublishTopicPrefix
+CoreConfig002 - Customize core-data MessageBus.PublishTopicPrefix
     Given Run MQTT Subscriber Progress And Output  edgex/events/custom/#
     And Set Test Variable  ${device_name}  messagebus-mqtt-core-3
-    And Set MessageQueue PublishTopicPrefix=edgex/events/custom For core-data On Consul
+    And Set MessageBus Topics/PublishTopicPrefix=edgex/events/custom For core-data On Consul
     And Update Service Configuration On Consul  ${DATA_CONSOL_PATH}/Writable/LogLevel  DEBUG
     And Create Device For device-virtual With Name ${device_name}
     When Create An Event With ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
@@ -53,13 +39,13 @@ CoreConfig003 - Customize core-data MessageQueue.PublishTopicPrefix
     And MQTT Subscriber Received Event is the Same As Service Log
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
-                ...      AND  Set MessageQueue PublishTopicPrefix=edgex/events/core For core-data On Consul
+                ...      AND  Set MessageBus Topics/PublishTopicPrefix=edgex/events/core For core-data On Consul
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-CoreConfig004 - Set core-data MessageQueue.Optional.Qos (SUBSCRIBE)
+CoreConfig003 - Set core-data MessageBus.Optional.Qos (SUBSCRIBE)
     [Tags]  backward-skip
     Given Set Test Variable  ${device_name}  messagebus-mqtt-core-4
-    And Set MessageQueue Optional/Qos=2 For core-data On Consul
+    And Set MessageBus Optional/Qos=2 For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
     Then Should Return Status Code "200" And event
@@ -67,11 +53,11 @@ CoreConfig004 - Set core-data MessageQueue.Optional.Qos (SUBSCRIBE)
     And Verify MQTT Broker Qos
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
-                ...      AND  Set MessageQueue Optional/Qos=0 For core-data On Consul
+                ...      AND  Set MessageBus Optional/Qos=0 For core-data On Consul
 
 *** Keywords ***
-Set MessageQueue ${key}=${value} For core-data On Consul
-    ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageQueue/${key}
+Set MessageBus ${key}=${value} For core-data On Consul
+    ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageBus/${key}
     Update Service Configuration On Consul  ${path}  ${value}
     Restart Services  data
     ${timestamp}  get current epoch time
