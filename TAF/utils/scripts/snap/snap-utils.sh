@@ -81,44 +81,38 @@ snap_set_messagebus_to_mqtt()
     # note that the integration tests use mqtt as the bus https://github.com/edgexfoundry/edgex-compose/blob/main/taf/docker-compose-taf-mqtt-bus.yml
     #      
     # rules-engine
- #   snap set edgexfoundry env.app-service-configurable.trigger.edgex-message-bus.publish-host.port="1883"
- #   snap set edgexfoundry env.app-service-configurable.trigger.edgex-message-bus.publish-host.protocol="tcp" 
- #   snap set edgexfoundry env.app-service-configurable.trigger.edgex-message-bus.subscribe-host.port="1883"
- #   snap set edgexfoundry env.app-service-configurable.trigger.edgex-message-bus.subscribe-host.protocol="tcp" 
-  #snap set edgexfoundry env.app-service-configurable.trigger.edgex-message-bus.type="mqtt" 
+ #   snap set edgexfoundry env.app-service-configurable.edgex-message-bus.port="1883"
+ #   snap set edgexfoundry env.app-service-configurable.edgex-message-bus.protocol="tcp"
+  #snap set edgexfoundry env.app-service-configurable.edgex-message-bus.type="mqtt"
 
     # rule engine
     ASC_FILE=/var/snap/edgexfoundry/current/config/app-service-configurable/res/app-service-configurable.env
-    echo "export TRIGGER_EDGEXMESSAGEBUS_PUBLISHHOST_PORT=1883"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_PUBLISHHOST_PROTOCOL=tcp"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_SUBSCRIBEHOST_PORT=1883"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_SUBSCRIBEHOST_PROTOCOL=tcp"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_TYPE=mqtt"  | tee -a $ASC_FILE > /dev/null    
+    echo "export MESSAGEBUS_PORT=1883"  |  tee -a $ASC_FILE > /dev/null
+    echo "export MESSAGEBUS_PROTOCOL=tcp"  |  tee -a $ASC_FILE > /dev/null
+    echo "export MESSAGEBUS_TYPE=mqtt"  | tee -a $ASC_FILE > /dev/null
     >&2 snap restart edgexfoundry.app-service-configurable
 
     #core-data
-#    snap set edgexfoundry env.core-data.messagequeue.optional.clientid="core-data"
-    >&2 snap set edgexfoundry env.core-data.messagequeue.host="localhost" # edgex-mqtt-broker
-    >&2 snap set edgexfoundry env.core-data.messagequeue.port="1883"
-    >&2 snap set edgexfoundry env.core-data.messagequeue.protocol="tcp"
-    >&2 snap set edgexfoundry env.core-data.messagequeue.type="mqtt"
+#    snap set edgexfoundry env.core-data.messagebus.optional.clientid="core-data"
+    >&2 snap set edgexfoundry env.core-data.messagebus.host="localhost" # edgex-mqtt-broker
+    >&2 snap set edgexfoundry env.core-data.messagebus.port="1883"
+    >&2 snap set edgexfoundry env.core-data.messagebus.protocol="tcp"
+    >&2 snap set edgexfoundry env.core-data.messagebus.type="mqtt"
     >&2 snap restart edgexfoundry.core-data 
 
    #device-virtual
-    >&2 snap set edgexfoundry env.device-virtual.messagequeue.host="localhost" # edgex-mqtt-broker
-    >&2 snap set edgexfoundry env.device-virtual.messagequeue.port="1883"
-    >&2 snap set edgexfoundry env.device-virtual.messagequeue.protocol="tcp"
-    >&2 snap set edgexfoundry env.device-virtual.messagequeue.type="mqtt"
+    >&2 snap set edgexfoundry env.device-virtual.messagebus.host="localhost" # edgex-mqtt-broker
+    >&2 snap set edgexfoundry env.device-virtual.messagebus.port="1883"
+    >&2 snap set edgexfoundry env.device-virtual.messagebus.protocol="tcp"
+    >&2 snap set edgexfoundry env.device-virtual.messagebus.type="mqtt"
     >&2 snap restart edgexfoundry.device-virtual 
 
  
     # asc (mqtt export/http export/external-mqtt-trigger)
     ASC_FILE=/var/snap/edgex-app-service-configurable/current/config/res/app-service-configurable.env
-    echo "export TRIGGER_EDGEXMESSAGEBUS_PUBLISHHOST_PORT=1883"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_PUBLISHHOST_PROTOCOL=tcp"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_SUBSCRIBEHOST_PORT=1883"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_SUBSCRIBEHOST_PROTOCOL=tcp"  |  tee -a $ASC_FILE > /dev/null
-    echo "export TRIGGER_EDGEXMESSAGEBUS_TYPE=mqtt"  | tee -a $ASC_FILE > /dev/null    
+    echo "export MESSAGEBUS_PORT=1883"  |  tee -a $ASC_FILE > /dev/null
+    echo "export MESSAGEBUS_PROTOCOL=tcp"  |  tee -a $ASC_FILE > /dev/null
+    echo "export MESSAGEBUS_TYPE=mqtt"  | tee -a $ASC_FILE > /dev/null
     >&2 snap restart edgex-app-service-configurable
 
     >&2 sudo snap restart mosquitto

@@ -84,7 +84,7 @@ Verify MQTT Broker Qos
 MQTT Subscriber Received Event is the Same As Service Log
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh core-data ${log_timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
-    ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Event Published on message queue
+    ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Event Published to MessageBus
     ${correlation_id}  Fetch From Right  ${correlation_line}  Correlation-id:
     ${correlation_id}  Fetch From Left  ${correlation_id}  "
     ${received_event}  Get file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}

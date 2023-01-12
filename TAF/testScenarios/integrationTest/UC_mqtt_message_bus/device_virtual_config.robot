@@ -14,7 +14,7 @@ ${SUITE}              Configrations
 *** Test Cases ***
 Config001 - Set MessageBus.Protocol to MQTT
     Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
-    And Set Test Variable  ${device_name}  messageQueue-mqtt
+    And Set Test Variable  ${device_name}  messageBus-mqtt
     And Set Writable LogLevel To Debug For device-virtual On Consul
     And Create Device For device-virtual With Name ${device_name}
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
