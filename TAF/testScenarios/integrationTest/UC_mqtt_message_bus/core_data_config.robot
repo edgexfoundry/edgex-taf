@@ -19,7 +19,7 @@ CoreConfig001 - Set core-data MessageBus.Topics.SubscribeTopic not match device-
     And Set Test Variable  ${device_name}  messagebus-mqtt-core-2
     And Set MessageBus Topics/SubscribeTopic=edgex/events/custom/# For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Then Should Return Status Code "200" And event
     And Event Has Been Recevied By MQTT Subscriber
     And Event Is Not Pushed To Core Data
@@ -47,7 +47,7 @@ CoreConfig003 - Set core-data MessageBus.Optional.Qos (SUBSCRIBE)
     Given Set Test Variable  ${device_name}  messagebus-mqtt-core-4
     And Set MessageBus Optional/Qos=2 For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Then Should Return Status Code "200" And event
     And Event Has Been Pushed To Core Data
     And Verify MQTT Broker Qos

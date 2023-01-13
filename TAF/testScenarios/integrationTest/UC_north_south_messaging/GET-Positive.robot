@@ -56,22 +56,22 @@ NSMessagingGET005 - Get specified device read command
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-NSMessagingGET006 - Get specified device read command when ds-returnevent is no
+NSMessagingGET006 - Get specified device read command when ds-returnevent is false
     Given Set Test Variable  ${device_name}  ex-mqtt-get-returnevent
     And Set Random Read Command
     And Create Device For device-virtual With Name ${device_name}
     And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
-    When Get Command With ds-returnevent=no From External MQTT Broker
+    When Get Command With ds-returnevent=false From External MQTT Broker
     Then Should Return Error Code 0 And Response Payload With GET Command Should Be Null
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-NSMessagingGET007 - Get specified device read command when ds-pushevent is yes
+NSMessagingGET007 - Get specified device read command when ds-pushevent is true
     Given Set Test Variable  ${device_name}  ex-mqtt-get-pushevent
     And Set Random Read Command
     And Create Device For device-virtual With Name ${device_name}
     And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
-    When Get Command With ds-pushevent=yes From External MQTT Broker
+    When Get Command With ds-pushevent=true From External MQTT Broker
     Then Should Return Error Code 0 And Response Payload With GET Command Should Be Correct
     And Event Has Been Pushed To Core Data
     [Teardown]  Run keywords  Delete device by name ${device_name}

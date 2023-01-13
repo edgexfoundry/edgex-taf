@@ -58,7 +58,7 @@ Create events by get device command
     FOR  ${INDEX}  IN RANGE  0  5
         @{data_type_skip_write_only}  Get All Read Commands
         ${random_command}  Get random "commandName" from "${data_type_skip_write_only}"
-        Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${random_command}
+        Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${random_command}
     END
     Query all events
     should be equal as integers  ${response}  200

@@ -70,19 +70,19 @@ CommandGET005 - Get specified device read command
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
-CommandGET006 - Get specified device read command when ds-returnevent is no
+CommandGET006 - Get specified device read command when ds-returnevent is false
     ${device_name}  Set Variable  Random-Boolean-Device
     Given Create Device For device-virtual With Name ${device_name}
-    When Get Device ${device_name} Read Command Virtual_GenerateDeviceValue_Boolean_R With ds-returnevent=no
+    When Get Device ${device_name} Read Command Virtual_GenerateDeviceValue_Boolean_R With ds-returnevent=false
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
 
-CommandGET007 - Get specified device read command when ds-pushevent is yes
+CommandGET007 - Get specified device read command when ds-pushevent is true
     ${device_name}  Set Variable  Random-Float-Device
     Given Create Device For device-virtual With Name ${device_name}
-    When Get Device ${device_name} Read Command Virtual_GenerateDeviceValue_FLOAT32_R With ds-pushevent=yes
+    When Get Device ${device_name} Read Command Virtual_GenerateDeviceValue_FLOAT32_R With ds-pushevent=true
     Then Should Return Status Code "200" And event
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
