@@ -40,8 +40,7 @@ for compose in ${COMPOSE_FILE}; do
       && [ "${DELAYED_START}" = 'true' ]; then
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_ENABLED: "true"' tmp/${profile}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_HOST: edgex-security-spiffe-token-provider' tmp/${profile}.yml
-      sed -i '/\ \ volumes:/a \ \ \ \ - \/tmp\/edgex\/secrets\/spiffe\/public:\/tmp\/edgex\/secrets\/spiffe\/public:ro,z' tmp/${profile}.yml
-      sed -i "/tmp\/edgex\/secrets\/${profile}/d" tmp/${profile}.yml
+      sed -i "s/\/tmp\/edgex\/secrets\/${profile}/\/tmp\/edgex\/secrets\/spiffe\/public/g" tmp/${profile}.yml
     fi
     sed -i "/^\ \ ${profile}:/,/^  [a-z].*:$/{//!d}; /^\ \ ${profile}:/d" ${compose}.yml
     sed -i "/services:/ r tmp/${profile}.yml" ${compose}.yml
@@ -54,8 +53,7 @@ for compose in ${COMPOSE_FILE}; do
       sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_ENABLED: "true"' tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_HOST: edgex-security-spiffe-token-provider' tmp/${service}.yml
-      sed -i '/\ \ volumes:/a \ \ \ \ - \/tmp\/edgex\/secrets\/spiffe\/public:\/tmp\/edgex\/secrets\/spiffe\/public:ro,z' tmp/${service}.yml
-      sed -i "/tmp\/edgex\/secrets\/support-${service}/d" tmp/${service}.yml
+      sed -i "s/\/tmp\/edgex\/secrets\/support-${service}/\/tmp\/edgex\/secrets\/spiffe\/public/g" tmp/${service}.yml
       sed -i "/^\ \ ${service}:/,/^  [a-z].*:$/{//!d}; /^\ \ ${service}:/d" ${compose}.yml
       sed -i "/services:/ r tmp/${service}.yml" ${compose}.yml
     done
