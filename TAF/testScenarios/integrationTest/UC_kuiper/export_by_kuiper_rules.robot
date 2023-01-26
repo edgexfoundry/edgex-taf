@@ -92,7 +92,7 @@ Set ${action} Action Value With Rule ${rule_id}
     [Return]  ${action_data}
 
 Execute Get Command ${command} To Trigger ${device_name}
-    Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${command}
+    Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${command}
     Should return status code "200"
     sleep  500ms
 

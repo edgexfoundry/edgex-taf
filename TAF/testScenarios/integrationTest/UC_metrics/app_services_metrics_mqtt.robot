@@ -30,7 +30,7 @@ APPServicesMetricsMQTT001-No Telemery Metrics isn't Published to MessageBus
     And Set Test Variable  ${device_name}  telemetry-metrics
     And Set All Telemetry Metrics To False
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
     Then No Telemetry Metrics are Received
     [Teardown]  Run Keywords  Delete device by name ${device_name}
@@ -44,7 +44,7 @@ APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to
     And Set app-sample Functions HTTPExport
     And Set Telemetry Metrics/HttpExportSize=true For app-sample On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
     Then Metrics HttpExportSize With histogram-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -59,7 +59,7 @@ APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to
     And Set app-sample Functions MQTTExport
     And Set Telemetry Metrics/MqttExportSize=true For app-sample On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
     Then Metrics MqttExportSize With histogram-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -72,7 +72,7 @@ APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish 
     And Set Test Variable  ${device_name}  message-received
     And Set Telemetry Metrics/MessagesReceived=true For app-sample On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
     Then Metrics MessagesReceived With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -147,7 +147,7 @@ Set All Telemetry Metrics To False
 Get Multiple Device Data With Commands ${commands}
     ${range}  Get Length  ${commands}
     FOR  ${INDEX}  IN RANGE  ${range}
-        Get device data by device ${device_name} and command ${commands}[${INDEX}] with ds-pushevent=yes
+        Get device data by device ${device_name} and command ${commands}[${INDEX}] with ds-pushevent=true
     END
     sleep  500ms
 

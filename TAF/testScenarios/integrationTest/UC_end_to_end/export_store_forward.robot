@@ -21,7 +21,7 @@ StoreAndForward001 - Stored data is exported after connecting to http server
     ${timestamp}  get current epoch time
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Sleep  5s  # wait until retry fails
     Then Wait Until Keyword Succeeds   3x  2s  Found Retry Log 2 Times In app-http-export Logs From ${timestamp}
     And Start HTTP Server And Received Exported Data Contains ${PREFIX}_GenerateDeviceValue_UINT8_RW
@@ -35,7 +35,7 @@ StoreAndForward002 - Stored data is cleared after the maximum configured retires
     ${timestamp}  get current epoch time
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW with ds-pushevent=true
     Sleep  12s  # wait until retry fails
     Then Wait Until Keyword Succeeds   3x  3s  Found Retry Log 3 Times In app-http-export Logs From ${timestamp}
     And Found Remove Log In app-http-export Logs From ${timestamp}
@@ -48,7 +48,7 @@ StoreAndForward003 - Exporting data didn't retry when Writeable.StoreAndForward.
     ${timestamp}  get current epoch time
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT32_RW with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT32_RW with ds-pushevent=true
     Sleep  6s
     Then Found Retry Log 0 Times In app-http-export Logs From ${timestamp}
     [Teardown]  Run Keywords  Delete device by name ${device_name}
@@ -60,7 +60,7 @@ StoreAndForward004 - Retry loop interval is set by the Writeable.StoreAndForward
     ${timestamp}  get current epoch time
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ds-pushevent=yes
+    When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ds-pushevent=true
     Sleep  12s  # wait until retry fails
     Then Found Retry Log 4 Times In app-http-export Logs From ${timestamp}
     [Teardown]  Run Keywords  Delete device by name ${device_name}
@@ -72,7 +72,7 @@ StoreAndForward005 - Export retries will resume after application service is res
     ${device_name}  Set Variable  store-device-5
     Given Set ${configurations} For app-http-export On Consul
     And Create Device For device-virtual With Name ${device_name}
-    When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=yes
+    When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=true
     ${timestamp}  get current epoch time
     And Restart Services  app-service-http-export
     Then Wait Until Keyword Succeeds  5x  5s  Found Retry Log From ${timestamp} After Restarting app-http-export

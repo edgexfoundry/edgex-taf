@@ -95,7 +95,7 @@ Set Writable.Reading.ReadingUnits to ${value} For ${service_name} On Consul
 
 Retrive device data by device ${device_name} and command ${command}
     ${timestamp}  Get current milliseconds epoch time
-    Get device data by device ${device_name} and command ${command} with ds-pushevent=yes
+    Get device data by device ${device_name} and command ${command} with ds-pushevent=true
     Set Test Variable  ${timestamp}  ${timestamp}
     sleep  500ms
 

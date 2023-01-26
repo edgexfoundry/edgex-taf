@@ -50,7 +50,7 @@ ErrGet003 - Test Retrieve device reading by name but the command is write only
 Retrieve reading by device name and the data is sent to Core Data
     [Arguments]    ${dataType}    ${command_name}    ${reading_name}
     ${start_time}=  Get current milliseconds epoch time
-    When Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${command_name}
+    When Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${command_name}
     Then Should return status code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

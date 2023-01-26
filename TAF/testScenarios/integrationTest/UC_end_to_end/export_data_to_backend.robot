@@ -76,7 +76,7 @@ Get exported data length from "${app_service}" service log
     [Return]  ${sent_data_length}
 
 Get device data by device ${device_name} and command ${command}
-    Invoke Get command with params ds-pushevent=yes by device ${device_name} and command ${command}
+    Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${command}
     Should return status code "200"
     sleep  500ms
 

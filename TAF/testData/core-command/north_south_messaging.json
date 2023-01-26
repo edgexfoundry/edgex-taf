@@ -4,8 +4,8 @@
     "requestId": "",
     "ContentType": "application/json",
     "queryParams": {
-      "ds-pushevent":"no",
-      "ds-returnevent":"yes"
+      "ds-pushevent":"false",
+      "ds-returnevent":"true"
      }
   },
   "SET": {

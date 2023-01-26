@@ -70,7 +70,7 @@ Set Writable LogLevel To Debug For ${service_name} On Consul
 
 Retrive device data by device ${device_name} and command ${command}
     ${timestamp}  get current epoch time
-    Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=yes
+    Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Set Test Variable  ${log_timestamp}  ${timestamp}
     sleep  500ms
 
