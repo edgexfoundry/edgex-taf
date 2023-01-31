@@ -24,19 +24,13 @@ InfoGET002 - Query version
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-InfoGET003 - Query metrics
-    When Query Metrics
-    Then Should Return Status Code "200" And metrics
-    And apiVersion Should be ${API_VERSION}
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-InfoGET004 - Query config
+InfoGET003 - Query config
     When Query Config
     Then Should Return Status Code "200" And config
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-InfoGET005 - Query UoM
+InfoGET004 - Query UoM
     When Query UoM
     Then Should Return Status Code "200" And uom
     And apiVersion Should be ${API_VERSION}

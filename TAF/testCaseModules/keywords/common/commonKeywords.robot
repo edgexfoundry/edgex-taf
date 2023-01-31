@@ -236,12 +236,6 @@ Query Version
     ${resp}=  GET On Session  Version  api/${API_VERSION}/version  headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query Metrics
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    Create Session  Metrics  url=${url}  disable_warnings=true
-    ${resp}=  GET On Session  Metrics  api/${API_VERSION}/metrics  headers=${headers}  expected_status=200
-    Set Response to Test Variables  ${resp}
-
 Update Service Configuration On Consul
     [Arguments]  ${path}  ${value}
     ${consul_token}  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Get Consul Token
