@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/messagebus_true.log
 
 # No nessecary to update consul, because default setting is MessageBus=true
 *** Test Cases ***
-DeviceService001-Send get command with parameters ds-pushevent=false and ds-returnevent=false when messagebus is enabled
+DeviceService001-Send get command with parameters ds-pushevent=false and ds-returnevent=false
     Set Test Variable  ${device_name}  messagebus-true-device-1
     ${params}  Create Dictionary  ds-pushevent=false  ds-returnevent=false
     Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
@@ -27,7 +27,7 @@ DeviceService001-Send get command with parameters ds-pushevent=false and ds-retu
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_redis}  kill=True
 
-DeviceService002-Send get command with parameters ds-pushevent=true and ds-returnevent=false when messagebus is enabled
+DeviceService002-Send get command with parameters ds-pushevent=true and ds-returnevent=false
     Set Test Variable  ${device_name}  messagebus-true-device-2
     ${params}  Create Dictionary  ds-pushevent=true  ds-returnevent=false
     Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
@@ -40,7 +40,7 @@ DeviceService002-Send get command with parameters ds-pushevent=true and ds-retur
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_redis}  kill=True
 
-DeviceService003-Send get command with parameters ds-pushevent=false and ds-returnevent=true when messagebus is enabled
+DeviceService003-Send get command with parameters ds-pushevent=false and ds-returnevent=true
     Set Test Variable  ${device_name}  messagebus-true-device-3
     ${params}  Create Dictionary  ds-pushevent=false  ds-returnevent=true
     Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
@@ -53,7 +53,7 @@ DeviceService003-Send get command with parameters ds-pushevent=false and ds-retu
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_redis}  kill=True
 
-DeviceService004-Send get command with parameters ds-pushevent=true and ds-returnevent=true when messagebus is enabled
+DeviceService004-Send get command with parameters ds-pushevent=true and ds-returnevent=true
     Set Test Variable  ${device_name}  messagebus-true-device-4
     ${params}  Create Dictionary  ds-pushevent=true  ds-returnevent=true
     Given Run Redis Subscriber Progress And Output  edgex.events.device.*  ${device_name}
