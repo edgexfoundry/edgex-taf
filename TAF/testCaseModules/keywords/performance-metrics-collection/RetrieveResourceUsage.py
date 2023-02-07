@@ -20,10 +20,10 @@ client = docker.from_env()
 
 global services
 services = ["edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
-            "edgex-support-notifications", "edgex-support-scheduler", "edgex-app-rules-engine",
-            "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"]
+            "edgex-support-notifications", "edgex-support-scheduler", "edgex-core-common-config-bootstrapper",
+            "edgex-app-rules-engine", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"]
 
-secty_services = ["edgex-security-secretstore-setup", "edgex-kong", "edgex-kong-db", "edgex-vault", "edgex-security-bootstrapper"]
+secty_services = ["edgex-security-secretstore-setup", "edgex-nginx", "edgex-vault", "edgex-security-bootstrapper"]
 
 
 class RetrieveResourceUsage(object):

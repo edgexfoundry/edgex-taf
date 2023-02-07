@@ -70,9 +70,9 @@ def security_startup_check():
 
 def http_client_connection(port):
     if SettingsInfo().constant.SECURITY_SERVICE_NEEDED == 'true' and '/' in str(port):
-        kong_port = port.split('/')[0]
+        nginx_port = port.split('/')[0]
         service_name = "/"+port.split('/')[1]
-        conn = http.client.HTTPSConnection(host=SettingsInfo().constant.BASE_URL, port=kong_port, timeout=httpConnTimeout,
+        conn = http.client.HTTPSConnection(host=SettingsInfo().constant.BASE_URL, port=nginx_port, timeout=httpConnTimeout,
                                            context=ssl._create_unverified_context())
     else:
         conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=port, timeout=httpConnTimeout)

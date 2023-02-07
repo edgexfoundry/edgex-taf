@@ -17,7 +17,7 @@ case ${option} in
     echo "${id_token}"
   ;;
   -userdel)
-    # Remove a user from Kong
+    # Remove a user from Nginx
     edgexfoundry.secrets-config proxy deluser --user ${USER} --useRootToken > /dev/null 2>&1
   ;;
   *)
