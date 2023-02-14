@@ -19,15 +19,14 @@ ErrTriggerPOST001 - Trigger pipeline fails (Invalid Data)
 
 ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
     Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
-    And Accept raw data  true
+    And Update Target Type To raw
     When Trigger Function Pipeline With Invalid Data
     Then Should Return Status Code "422"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Accept raw data  false
+    [Teardown]  Update Target Type To event
 
 *** Keywords ***
-Accept raw data
-    [Arguments]  ${bool}
-    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/UseTargetTypeOfByteArray
-    Update Service Configuration On Consul  ${path}  ${bool}
+Update Target Type To ${value}
+    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/TargetType
+    Update Service Configuration On Consul  ${path}  ${value}
 
