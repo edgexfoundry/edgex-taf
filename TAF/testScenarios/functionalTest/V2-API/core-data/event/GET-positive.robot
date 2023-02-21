@@ -36,7 +36,7 @@ EventGET002 - Query all events by limit = -1 and MaxResultCount= 5
 EventGET003 - Query event by ID
     [Tags]  SmokeTest
     Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
-    And Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001
+    And Create Event With Service-Test-001 And Profile-Test-001 And Device-Test-001 And Command-Test-001
     When Query Event By Event Id "${id}"
     Then Should Return Status Code "200" And event
     And Should Return Content-Type "application/json"
