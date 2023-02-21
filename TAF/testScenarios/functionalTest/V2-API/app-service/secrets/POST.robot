@@ -57,7 +57,7 @@ Secrets Should be Stored
     Get AppService Token
     Create Session  GetSecrets  url=http://${BASE_URL}:8200  disable_warnings=true
     ${headers}=  Create Dictionary  X-Vault-Token  ${token}
-    ${resp}=  GET On Session  GetSecrets  /v1/secret/edgex/${app_service_name}/${secrets_path}  headers=${headers}
+    ${resp}=  GET On Session  GetSecrets  /v1/secret/edgex/${app_service_name}/${secrets_name}  headers=${headers}
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
     Should Contain  ${content}[data]  ${secrets_key}  ${secrets_value}
