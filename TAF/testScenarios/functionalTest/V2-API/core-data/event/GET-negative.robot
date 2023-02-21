@@ -51,7 +51,7 @@ ErrEventGET006 - Query event fails when persistData is false
     ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data/Writable/PersistData
     Given Update Service Configuration On Consul  ${path}  false
     And Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
-    And Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001
+    And Create Event With Service-Test-001 And Profile-Test-001 And Device-Test-001 And Command-Test-001
     When Query Event By Event Id "${id}"
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"

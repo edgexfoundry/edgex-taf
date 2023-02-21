@@ -113,10 +113,10 @@ Query readings count by device name
     Set Response to Test Variables  ${resp}
 
 # Event
-Create event with ${deviceName} and ${profileName} and ${sourceName}
+Create event with ${serviceName} and ${profileName} and ${deviceName} and ${sourceName}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${profileName}/${deviceName}/${sourceName}  json=${event}
+    ${resp}=  POST On Session  Core Data    ${coreDataEventUri}/${serviceName}/${profileName}/${deviceName}/${sourceName}  json=${event}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 201  log to console  ${content}
@@ -229,9 +229,9 @@ Generate event sample
 Create multiple events
   FOR  ${index}  IN RANGE  0  3   # total: 6 events, 9 readings
     Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
-    Create Event With Device-Test-001 and Profile-Test-001 and Command-Test-001
+    Create Event With Service-Test-001 and Profile-Test-001 and Device-Test-001 and Command-Test-001
     Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Command-Test-002  Simple Reading  Simple Float Reading
-    Create Event With Device-Test-002 and Profile-Test-001 and Command-Test-002
+    Create Event With Service-Test-001 and Profile-Test-001 and Device-Test-002 and Command-Test-002
   END
 
 Create multiple events twice to get start/end time

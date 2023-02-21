@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-data-post-positive.log
 EventPOST001 - Create event
     [Tags]  SmokeTest
     Given Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading  Simple Float Reading
-    When Create Event With Device-Test-001 And Profile-Test-001 And Command-Test-001
+    When Create Event With Service-Test-001 And Profile-Test-001 And Device-Test-001 And Command-Test-001
     Then Should Return Status Code "201" And id
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -22,7 +22,7 @@ EventPOST001 - Create event
 
 EventPOST002 - Create event with binary data
     Given Generate Event Sample  Event With Tags  Device-Test-002  Profile-Test-002  Command-Test-002  Binary Reading
-    When Create Event With Device-Test-002 And Profile-Test-002 And Command-Test-002
+    When Create Event With Service-Test-002 And Profile-Test-002 And Device-Test-002 And Command-Test-002
     Then Should Return Status Code "201" And id
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

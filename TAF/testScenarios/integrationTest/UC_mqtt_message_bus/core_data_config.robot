@@ -70,7 +70,7 @@ Event Has Been Recevied By MQTT Subscriber
 
 Create An Event With ${device_name} and command ${command_name}
     Generate Event Sample  Event  ${device_name}  ${PREFIX}-Sample-Profile  ${PREFIX}_GenerateDeviceValue_UINT8_RW  Simple Reading  
-    Create Event With ${device_name} And ${PREFIX}-Sample-Profile And ${PREFIX}_GenerateDeviceValue_UINT8_RW
+    Create Event With ${SERVICE_NAME} And ${PREFIX}-Sample-Profile And ${device_name} And ${PREFIX}_GenerateDeviceValue_UINT8_RW
 
 
 Verify MQTT Broker Qos
