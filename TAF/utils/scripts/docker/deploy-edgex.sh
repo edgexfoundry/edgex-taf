@@ -17,8 +17,10 @@ else
 
     # copy device service default configuration in the res to TAF/config/{service}/res
     docker cp edgex-${PROFILE}:/res/configuration.toml ${WORK_DIR}/TAF/config/${PROFILE}
-    sed -i '/DevicesDir/d' ${WORK_DIR}/TAF/config/${PROFILE}/configuration.toml
-    sed -i "s/ProfilesDir.*/ProfilesDir = '\\$CONFIG_DIR'/g" ${WORK_DIR}/TAF/config/${PROFILE}/configuration.toml
+    sed -i "s/\[Device\]/[Device_old]/" ${WORK_DIR}/TAF/config/${PROFILE}/configuration.toml
+    echo "" >> ${WORK_DIR}/TAF/config/${PROFILE}/configuration.toml
+    echo "[Device]" >> ${WORK_DIR}/TAF/config/${PROFILE}/configuration.toml
+    echo "ProfilesDir = \"$CONFIG_DIR\"" >> ${WORK_DIR}/TAF/config/${PROFILE}/configuration.toml
 
   done
 

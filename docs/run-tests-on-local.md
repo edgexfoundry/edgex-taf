@@ -72,7 +72,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
     export SECURITY_SERVICE_NEEDED=false
-    export COMPOSE_IMAGE=nexus3.edgexfoundry.org:10003/edgex-devops/edgex-compose:latest
+    export COMPOSE_IMAGE=docker:20.10.18
     ```
 #### Run Tests
 `View the test report after finishing a python command, otherwise the report will be overridden after executing next command. Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html.`
