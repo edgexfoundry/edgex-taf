@@ -36,29 +36,8 @@ Config002 - Verify the return value when Data Transform is false and shift field
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Set Device DataTransform to true For ${SERVICE_NAME} On Consul
 
-Config003 - Verify LastConnected data when UpdateLastConnected is false
-    Given Create Device For ${SERVICE_NAME} With Name Last-Connected-False
-    And Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
-    When Query device by name  ${device_name}
-    Then Should return status code "200"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Dictionary Should Not Contain Key  ${content}[device]  lastConnected
-    [Teardown]  Delete device by name ${device_name}
 
-Config004 - Verify LastConnected data when UpdateLastConnected is true
-    [Setup]  Set Device UpdateLastConnected to true For ${SERVICE_NAME} On Consul
-    Given Create Device For ${SERVICE_NAME} With Name Last-Connected-True
-    And Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
-    When Query device by name  ${device_name}
-    Then Should return status code "200"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And LastConnected Is Not Empty And Later Then ${timestamp}
-    [Teardown]  Run Keywords  Set Device UpdateLastConnected to false For ${SERVICE_NAME} On Consul
-                ...      AND  Delete device by name ${device_name}
-
-Config005 - Verfiy reading contains units when ReadingUnits is true
+Config003 - Verfiy reading contains units when ReadingUnits is true
     [Tags]  backward-skip
     Given Create Device For ${SERVICE_NAME} With Name ReadingUnits-True
     And Retrive Device Data By Device ${device_name} And Command ${PREFIX}_DeviceValue_INT8_R
@@ -69,7 +48,7 @@ Config005 - Verfiy reading contains units when ReadingUnits is true
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Device By Name ${device_name}
 
-Config006 - Verfiy reading contains units when ReadingUnits is false
+Config004 - Verfiy reading contains units when ReadingUnits is false
     [Tags]  backward-skip
     Given Set Writable.Reading.ReadingUnits to false For ${SERVICE_NAME} On Consul
     And Create Device For ${SERVICE_NAME} With Name ReadingUnits-False
@@ -98,7 +77,3 @@ Retrive device data by device ${device_name} and command ${command}
     Get device data by device ${device_name} and command ${command} with ds-pushevent=true
     Set Test Variable  ${timestamp}  ${timestamp}
     sleep  500ms
-
-LastConnected Is Not Empty And Later Then ${timestamp}
-    Should Not Be Empty  str(${content}[device][lastConnected])
-    Should Be True  float(${content}[device][lastConnected]) > float(${timestamp})
