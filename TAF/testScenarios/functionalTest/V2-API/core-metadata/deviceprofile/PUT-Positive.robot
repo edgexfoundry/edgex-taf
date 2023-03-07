@@ -93,6 +93,8 @@ Resource Units Should Be Updated in ${profile_name}
     Query device profile by name  ${profile_name}
     # Validate
     FOR  ${INDEX}  IN RANGE  len(${content}[profile][deviceResources])
-        Run Keyword If  "${content}[profile][deviceResources][${INDEX}][properties][units]" != "${EMPTY}"
-        ...   List Should Contain Value  ${uom_units}  ${content}[profile][deviceResources][${INDEX}][properties][units]
+        ${properties}=  Get From Dictionary  ${content}[profile][deviceResources][${INDEX}]  properties
+        IF  "units" in ${properties}
+           List Should Contain Value  ${uom_units}  ${properties}[units]
+        END
     END
