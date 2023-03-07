@@ -126,8 +126,15 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 
     ###### Run Integration testing:
     `Only support deploying edgex services through docker-compose file.`
+    Run test with MQTT bus
+    ```
+    python3 -m TUC --exclude Skipped --include mqtt-bus -u deploy.robot -p default
+    python3 -m TUC --exclude Skipped --include MessageBus=MQTT -u integrationTest -p device-virtual --name MQTT-bus
+    ```
+    Run test with Redis bus
     ``` bash
-    python3 -m TUC --exclude Skipped -u integrationTest -p device-virtual
+    python3 -m TUC --exclude Skipped --include redis-bus -u deploy.robot -p default
+    python3 -m TUC --exclude Skipped --include MessageBus=REDIS -u integrationTest -p device-virtual --name REDIS-bus
     ```
 4. Shutdown edgex:
     ``` bash
