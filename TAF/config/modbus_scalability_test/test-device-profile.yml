@@ -240,7 +240,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -255,7 +255,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -270,7 +270,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -284,7 +284,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -298,7 +298,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -312,7 +312,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -326,7 +326,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -340,7 +340,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -354,7 +354,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -368,7 +368,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -384,7 +384,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -398,7 +398,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -412,7 +412,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -426,7 +426,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -441,7 +441,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -455,7 +455,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -469,7 +469,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -483,7 +483,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -497,7 +497,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
@@ -511,7 +511,7 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    scale: "1"
+    scale: 1
     minimum: "0"
     maximum: "1"
     defaultValue: "0"
