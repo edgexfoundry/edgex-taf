@@ -25,7 +25,7 @@ deviceResources:
       valueType: "Float32"
       readWrite: "R"
       floatEncoding: "Base64"
-      scale: "0.001"
+      scale: 0.001
       units: "kHz"
   - name: "DeviceValue_FLOAT64_R"
     description: "Generate device FLOAT64 value"
@@ -35,7 +35,7 @@ deviceResources:
       valueType: "FLOAT64"
       readWrite: "R"
       floatEncoding: "Base64"
-      scale: "0.001"
+      scale: 0.001
       units: "kHz"
 
 deviceCommands:
