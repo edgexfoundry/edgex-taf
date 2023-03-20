@@ -100,14 +100,14 @@ Start HTTP Server And Received Exported Data Contains ${keyword}
 
 Found Retry Log ${number} Times In ${service_name} Logs From ${timestamp}
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     ${retry_times}  Get Line Count  ${retry_lines}
     Should Be Equal As Integers  ${retry_times}  ${number}
 
 Found Remove Log In ${service_name} Logs From ${timestamp}
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items will be removed post retry
     ${retry_times}  Get Line Count  ${retry_lines}
     Should Be Equal As Integers  ${retry_times}  1
@@ -123,7 +123,7 @@ Found Retry Log From ${timestamp} After Restarting ${service_name}
     Dump Last 100 lines Log And Service Config  ${service_name}  http://${BASE_URL}:${APP_HTTP_EXPORT_PORT}
 
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     Should Not Be Empty   ${retry_lines}
 
