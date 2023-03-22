@@ -290,3 +290,31 @@ Dump Last 100 lines Log And Service Config  # For Debug use
     Query Config
     ${logs}  Run Process  docker logs edgex-${service_name} -n 100  shell=True  stderr=STDOUT  output_encoding=UTF-8
     Log  ${logs.stdout}
+
+Store Secret Data With ${data}
+    ${secrets_data}=  Load data file "all-services/secrets_data.json" and get variable "${data}"
+    Create Session  Secrets  url=${url}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  POST On Session  Secrets  api/${API_VERSION}/secret  json=${secrets_data}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 201  log to console  ${content}
+    ...             ELSE  Run Keywords  Set test variable  ${secrets_name}  ${secrets_data}[secretName]
+    ...             AND  Set test variable  ${secrets_key}  ${secrets_data}[secretData][0][key]
+    ...             AND  Set test variable  ${secrets_value}  ${secrets_data}[secretData][0][value]
+
+Get Service ${service} Token
+    ${command}=  Set Variable  cat /tmp/edgex/secrets/${service}/secrets-token.json
+    ${result}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/execute-command-in-docker.sh ${service} "${command}"
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=5s
+    ${result_string}=  Evaluate  json.loads('''${result.stdout}''')  json
+    Set Test Variable  ${token}  ${result_string}[auth][client_token]
+
+Service ${service} Secrets Should be Stored
+    Get Service ${service} Token
+    Create Session  GetSecrets  url=http://${BASE_URL}:8200  disable_warnings=true
+    ${headers}=  Create Dictionary  X-Vault-Token  ${token}
+    ${resp}=  GET On Session  GetSecrets  /v1/secret/edgex/${service}/${secrets_name}  headers=${headers}
+    ...       expected_status=200
+    Set Response to Test Variables  ${resp}
+    Should Contain  ${content}[data]  ${secrets_key}  ${secrets_value}

@@ -50,18 +50,3 @@ Trigger Function Pipeline With ${data}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 200  log to console  ${content}
-
-Store Secret Data With ${data}
-    ${secrets_data}=  Load data file "app-service/secrets_data.json" and get variable "${data}"
-    Create Session  Secrets  url=${url}  disable_warnings=true
-    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  POST On Session  Secrets  api/${API_VERSION}/secret  json=${secrets_data}  headers=${headers}
-    ...       expected_status=any
-    Set Response to Test Variables  ${resp}
-    Run keyword if  ${response} != 201  log to console  ${content}
-    ...             ELSE  Run Keywords  Set test variable  ${secrets_name}  ${secrets_data}[secretName]
-    ...             AND  Set test variable  ${secrets_key}  ${secrets_data}[secretData][0][key]
-    ...             AND  Set test variable  ${secrets_value}  ${secrets_data}[secretData][0][value]
-
-
-
