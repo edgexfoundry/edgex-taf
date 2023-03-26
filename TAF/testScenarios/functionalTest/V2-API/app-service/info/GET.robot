@@ -30,7 +30,7 @@ InfoGET003 - Query config
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
-**** Keywords ***
+*** Keywords ***
 Should Return SDK Version
     Should contain "sdk_version"
 
