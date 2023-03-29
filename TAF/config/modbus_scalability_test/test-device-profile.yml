@@ -241,8 +241,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 
 -
@@ -256,8 +256,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 
 -
@@ -271,8 +271,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-4"
@@ -285,8 +285,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-5"
@@ -299,8 +299,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-6"
@@ -313,8 +313,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-7"
@@ -327,8 +327,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-8"
@@ -341,8 +341,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-9"
@@ -355,8 +355,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-10"
@@ -369,8 +369,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 
 
@@ -385,8 +385,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-12"
@@ -399,8 +399,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-13"
@@ -413,8 +413,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-14"
@@ -427,8 +427,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 
 -
@@ -442,8 +442,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-16"
@@ -456,8 +456,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-17"
@@ -470,8 +470,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-18"
@@ -484,8 +484,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-19"
@@ -498,8 +498,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 -
   name: "bool-20"
@@ -512,8 +512,8 @@ deviceResources:
     valueType: "BOOL"
     readWrite: "RW"
     scale: 1
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "0"
 
 deviceCommands:
