@@ -17,8 +17,8 @@ deviceResources:
     properties:
       valueType: "Bool"
       readWrite: "RW"
-      minimum: "0"
-      maximum: "1"
+      minimum: 0
+      maximum: 1
       defaultValue: "true"
   - name: "DeviceValue_UINT8_R"
     description: "Generate device UINT8 value"

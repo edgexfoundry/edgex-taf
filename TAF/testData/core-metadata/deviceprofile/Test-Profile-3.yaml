@@ -24,8 +24,8 @@ deviceResources:
     properties:
       valueType: "BOOL"
       readWrite: "R"
-      minimum: "0"
-      maximum: "1"
+      minimum: 0
+      maximum: 1
       defaultValue: "true"
 deviceCommands:
   - name: "CurrentHumidity"

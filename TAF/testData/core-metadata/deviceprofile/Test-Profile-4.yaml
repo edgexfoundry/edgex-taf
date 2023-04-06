@@ -16,7 +16,7 @@ deviceResources:
     properties:
       valueType: "Uint16"
       readWrite: "RW"
-      minimum: "1500"
+      minimum: 1500
       units: "rpm"
       defaultValue: "3000"
   - name: "DeviceValue_FLOAT64_RW"

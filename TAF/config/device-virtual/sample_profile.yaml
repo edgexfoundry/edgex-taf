@@ -21,8 +21,8 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "RW"
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "true"
 -
   name: "Virtual_DeviceValue_Boolean_R"
@@ -30,8 +30,8 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "R"
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "true"
 -
   name: "Virtual_DeviceValue_Boolean_W"
@@ -39,8 +39,8 @@ deviceResources:
   properties:
     valueType: "BOOL"
     readWrite: "W"
-    minimum: "0"
-    maximum: "1"
+    minimum: 0
+    maximum: 1
     defaultValue: "true"
 -  ### FLOAT32 ###
   name: "Virtual_DeviceValue_FLOAT32_RW"
@@ -90,8 +90,8 @@ deviceResources:
   properties:
     valueType: "Int8"
     readWrite: "RW"
-    minimum: "-128"
-    maximum: "127"
+    minimum: -128
+    maximum: 127
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT8_R"
@@ -99,8 +99,8 @@ deviceResources:
   properties:
     valueType: "Int8"
     readWrite: "R"
-    minimum: "-128"
-    maximum: "127"
+    minimum: -128
+    maximum: 127
     defaultValue: "0"
     units: "ms"
 -
@@ -109,8 +109,8 @@ deviceResources:
   properties:
     valueType: "Int8"
     readWrite: "W"
-    minimum: "-128"
-    maximum: "127"
+    minimum: -128
+    maximum: 127
     defaultValue: "0"
 -  ### INT16 ###
   name: "Virtual_DeviceValue_INT16_RW"
@@ -118,8 +118,8 @@ deviceResources:
   properties:
     valueType: "Int16"
     readWrite: "RW"
-    minimum: "-32768"
-    maximum: "32767"
+    minimum: -32768
+    maximum: 32767
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT16_R"
@@ -127,8 +127,8 @@ deviceResources:
   properties:
     valueType: "Int16"
     readWrite: "R"
-    minimum: "-32768"
-    maximum: "32767"
+    minimum: -32768
+    maximum: 32767
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT16_W"
@@ -136,8 +136,8 @@ deviceResources:
   properties:
     valueType: "Int16"
     readWrite: "W"
-    minimum: "-32768"
-    maximum: "32767"
+    minimum: -32768
+    maximum: 32767
     defaultValue: "0"
 -  ### INT32 ###
   name: "Virtual_DeviceValue_INT32_RW"
@@ -145,8 +145,8 @@ deviceResources:
   properties:
     valueType: "Int32"
     readWrite: "RW"
-    minimum: "-2147483648"
-    maximum: "2147483647"
+    minimum: -2147483648
+    maximum: 2147483647
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT32_R"
@@ -154,8 +154,8 @@ deviceResources:
   properties:
     valueType: "Int32"
     readWrite: "R"
-    minimum: "-2147483648"
-    maximum: "2147483647"
+    minimum: -2147483648
+    maximum: 2147483647
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT32_W"
@@ -163,8 +163,8 @@ deviceResources:
   properties:
     valueType: "Int32"
     readWrite: "W"
-    minimum: "-2147483648"
-    maximum: "2147483647"
+    minimum: -2147483648
+    maximum: 2147483647
     defaultValue: "0"
 -  ### INT64 ###
   name: "Virtual_DeviceValue_INT64_RW"
@@ -172,8 +172,8 @@ deviceResources:
   properties:
     valueType: "Int64"
     readWrite: "RW"
-    minimum: "-9223372036854775808"
-    maximum: "9223372036854775807"
+    minimum: -9223372036854775808
+    maximum: 9223372036854775807
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT64_R"
@@ -181,8 +181,8 @@ deviceResources:
   properties:
     valueType: "Int64"
     readWrite: "R"
-    minimum: "-9223372036854775808"
-    maximum: "9223372036854775807"
+    minimum: -9223372036854775808
+    maximum: 9223372036854775807
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_INT64_W"
@@ -190,8 +190,8 @@ deviceResources:
   properties:
     valueType: "Int64"
     readWrite: "W"
-    minimum: "-9223372036854775808"
-    maximum: "9223372036854775807"
+    minimum: -9223372036854775808
+    maximum: 9223372036854775807
     defaultValue: "0"
 -  ### UINT8 ###
   name: "Virtual_DeviceValue_UINT8_RW"
@@ -199,8 +199,8 @@ deviceResources:
   properties:
     valueType: "Uint8"
     readWrite: "RW"
-    minimum: "0"
-    maximum: "255"
+    minimum: 0
+    maximum: 255
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT8_R"
@@ -208,8 +208,8 @@ deviceResources:
   properties:
     valueType: "Uint8"
     readWrite: "R"
-    minimum: "0"
-    maximum: "255"
+    minimum: 0
+    maximum: 255
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT8_W"
@@ -217,8 +217,8 @@ deviceResources:
   properties:
     valueType: "Uint8"
     readWrite: "W"
-    minimum: "0"
-    maximum: "255"
+    minimum: 0
+    maximum: 255
     defaultValue: "0"
 -  ### UINT16 ###
   name: "Virtual_DeviceValue_UINT16_RW"
@@ -226,8 +226,8 @@ deviceResources:
   properties:
     valueType: "Uint16"
     readWrite: "RW"
-    minimum: "0"
-    maximum: "65535"
+    minimum: 0
+    maximum: 65535
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT16_R"
@@ -235,8 +235,8 @@ deviceResources:
   properties:
     valueType: "Uint16"
     readWrite: "R"
-    minimum: "0"
-    maximum: "65535"
+    minimum: 0
+    maximum: 65535
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT16_W"
@@ -244,8 +244,8 @@ deviceResources:
   properties:
     valueType: "Uint16"
     readWrite: "W"
-    minimum: "0"
-    maximum: "65535"
+    minimum: 0
+    maximum: 65535
     defaultValue: "0"
 -  ### UINT32 ###
   name: "Virtual_DeviceValue_UINT32_RW"
@@ -253,8 +253,8 @@ deviceResources:
   properties:
     valueType: "Uint32"
     readWrite: "RW"
-    minimum: "0"
-    maximum: "4294967295"
+    minimum: 0
+    maximum: 4294967295
     defaultValue: "0"
     shift: -16
 -
@@ -263,8 +263,8 @@ deviceResources:
   properties:
     valueType: "Uint32"
     readWrite: "R"
-    minimum: "0"
-    maximum: "4294967295"
+    minimum: 0
+    maximum: 4294967295
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT32_W"
@@ -272,8 +272,8 @@ deviceResources:
   properties:
     valueType: "Uint32"
     readWrite: "W"
-    minimum: "0"
-    maximum: "4294967295"
+    minimum: 0
+    maximum: 4294967295
     defaultValue: "0"
 -  ### UINT64 ###
   name: "Virtual_DeviceValue_UINT64_RW"
@@ -281,8 +281,8 @@ deviceResources:
   properties:
     valueType: "Uint64"
     readWrite: "RW"
-    minimum: "0"
-    maximum: "18446744073709551615"
+    minimum: 0
+    maximum: 18446744073709551615
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT64_R"
@@ -290,8 +290,8 @@ deviceResources:
   properties:
     valueType: "Uint64"
     readWrite: "R"
-    minimum: "0"
-    maximum: "18446744073709551615"
+    minimum: 0
+    maximum: 18446744073709551615
     defaultValue: "0"
 -
   name: "Virtual_DeviceValue_UINT64_W"
@@ -299,8 +299,8 @@ deviceResources:
   properties:
     valueType: "Uint64"
     readWrite: "W"
-    minimum: "0"
-    maximum: "18446744073709551615"
+    minimum: 0
+    maximum: 18446744073709551615
     defaultValue: "0"
 
 deviceCommands:
