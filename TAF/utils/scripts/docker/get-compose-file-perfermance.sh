@@ -17,8 +17,8 @@ USE_SHA1=${3:-main}
 cp docker-compose-taf-perf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yml
 
 if [ "$USE_SECURITY" = '-security-' ]; then
-    NGINX_ROUTE="device-rest.http:\/\/device-rest:59986,app-rules-engine.http:\/\/app-service-rules:59701"
-    sed -i "/ADD_PROXY_ROUTE: / s/''/'${NGINX_ROUTE}'/" docker-compose.yml
+    NGINX_ROUTE=",device-rest.http:\/\/edgex-device-rest:59986"
+    sed -i "/ADD_PROXY_ROUTE: / s/$/${NGINX_ROUTE}/" docker-compose.yml
 fi
 
 MQTT_SERVICES='mqtt-broker app-service-mqtt-export'
