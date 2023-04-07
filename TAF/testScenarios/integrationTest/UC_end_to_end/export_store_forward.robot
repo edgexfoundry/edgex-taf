@@ -74,7 +74,7 @@ StoreAndForward005 - Export retries will resume after application service is res
     And Create Device For device-virtual With Name ${device_name}
     When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=true
     ${timestamp}  get current epoch time
-    And Restart Services  app-service-http-export
+    And Restart Services  app-http-export
     Then Wait Until Keyword Succeeds  5x  5s  Found Retry Log From ${timestamp} After Restarting app-http-export
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
@@ -115,7 +115,7 @@ Found Remove Log In ${service_name} Logs From ${timestamp}
 Modify PersistOnError to ${value} On Consul
     ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
     Update Service Configuration On Consul  ${path}  ${value}
-    Restart Services  app-service-http-export
+    Restart Services  app-http-export
     Sleep  4s
 
 Found Retry Log From ${timestamp} After Restarting ${service_name}

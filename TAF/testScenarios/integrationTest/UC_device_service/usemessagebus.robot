@@ -87,9 +87,7 @@ DeviceService005-Customize PublishTopicPrefix works correctly when using Redis m
 Set ${config}=${value} For ${service_name} On Consul
     ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageBus/${config}
     Update Service Configuration On Consul  ${path}  ${value}
-    ${service}  Run Keyword If  'core' in """${service_name}"""  Fetch From Right  ${service_name}  -
-                ...       ELSE  Set Variable  ${service_name}
-    Restart Services  ${service}
+    Restart Services  ${service_name}
     Set Test Variable  ${url}  ${deviceServiceUrl}
     FOR  ${INDEX}  IN RANGE  5
         Query Ping

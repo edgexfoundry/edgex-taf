@@ -51,7 +51,7 @@ Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Confi
     END
     ${timestamp}=  Get current epoch time
     Set Test Variable  ${timestamp}  ${timestamp}
-    Restart Services  scheduler
+    Restart Services  support-scheduler
     Wait Until Keyword Succeeds  10x  1s  Ping Scheduler Service
 
 Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
@@ -65,7 +65,7 @@ Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
     ...  expected_status=200
     DELETE On Session  Consul  ${consul_path}/Intervals/${interval_name}  params=recurse=true  headers=${headers}
     ...  expected_status=200
-    Restart Services  scheduler
+    Restart Services  support-scheduler
 
 Pre-Created Interval And IntervalAction Should Be Created
     Query Interval By Name ${interval_name}
