@@ -59,7 +59,7 @@ CoreConfig003 - Set core-data MessageBus.Optional.Qos (SUBSCRIBE)
 Set MessageBus ${key}=${value} For core-data On Consul
     ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageBus/${key}
     Update Service Configuration On Consul  ${path}  ${value}
-    Restart Services  data
+    Restart Services  core-data
     ${timestamp}  get current epoch time
     Set Test Variable  ${log_timestamp}  ${timestamp}
 

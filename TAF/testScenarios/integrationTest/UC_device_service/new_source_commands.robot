@@ -4,7 +4,8 @@ Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-Suite Teardown  Run Teardown Keywords
+Suite Teardown  Run Keywords  Delete all events by age
+                ...      AND  Run Teardown Keywords
 Force Tags  MessageBus=redis
 
 *** Variables ***

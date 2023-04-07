@@ -60,9 +60,7 @@ Config003 - Set device-virtual MessageBus.Optional.Qos (PUBLISH)
 Set MessageBus ${key}=${value} For ${service_name} On Consul
     ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageBus/${key}
     Update Service Configuration On Consul  ${path}  ${value}
-    ${service}  Run Keyword If  "data" in "${service_name}"  Set Variable  data
-                ...       ELSE  Set Variable  ${service_name}
-    Restart Services  ${service}
+    Restart Services  ${service_name}
 
 Set Writable LogLevel To Debug For ${service_name} On Consul
     ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/LogLevel

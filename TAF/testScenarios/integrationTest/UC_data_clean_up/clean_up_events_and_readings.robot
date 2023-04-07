@@ -50,6 +50,8 @@ Create interval action with interval delete events for core-data
     Set To Dictionary  ${intervalActions}[0][action]  intervalName=${interval_name}
     Set To Dictionary  ${intervalActions}[0][action][address]  host=edgex-core-data
     Set To Dictionary  ${intervalActions}[0][action][address]  path=${coreDataEventUri}/age/0
+    Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'
+    ...             Set To Dictionary  ${intervalActions}[0][action]  authmethod=JWT
     Create intervalAction  ${intervalActions}
     Should Return Status Code "207"
     Item Index 0 Should Contain Status Code "201" And id

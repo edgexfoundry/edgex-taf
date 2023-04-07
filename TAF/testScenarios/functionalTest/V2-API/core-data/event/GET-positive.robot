@@ -103,4 +103,4 @@ Events Should Be Created Between ${start} And ${end}
 Set MaxResultCount=${number} For Core-Data On Consul
    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data/Service/MaxResultCount
    Update Service Configuration On Consul  ${path}  ${number}
-   Restart Services  data
+   Restart Services  core-data
