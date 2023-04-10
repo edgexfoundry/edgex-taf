@@ -49,7 +49,7 @@ for compose in ${COMPOSE_FILE}; do
   # Enable Delayed Start
   if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${USE_SECURITY}" = '-security-' ] \
         && [ "${DELAYED_START}" = 'true' ]; then
-    for service in notifications scheduler; do
+    for service in support-notifications support-scheduler; do
       sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_ENABLED: "true"' tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_HOST: edgex-security-spiffe-token-provider' tmp/${service}.yml
@@ -61,26 +61,26 @@ for compose in ${COMPOSE_FILE}; do
 
   # Enable North-South Messaging
   if [ "${TEST_STRATEGY}" = "integration-test" ]; then
-    sed -n "/^\ \ command:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/command.yml
-    sed -i '/EXTERNALMQTT_URL/d' tmp/command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_ENABLED: true' tmp/command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_RETAIN: false' tmp/command.yml
-    sed -i "/^\ \ command:/,/^  [a-z].*:$/{//!d}; /^\ \ command:/d" ${compose}.yml
-    sed -i "/services:/ r tmp/command.yml" ${compose}.yml
+    sed -n "/^\ \ core-command:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-command.yml
+    sed -i '/EXTERNALMQTT_URL/d' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_ENABLED: true' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_RETAIN: false' tmp/core-command.yml
+    sed -i "/^\ \ core-command:/,/^  [a-z].*:$/{//!d}; /^\ \ core-command:/d" ${compose}.yml
+    sed -i "/services:/ r tmp/core-command.yml" ${compose}.yml
   fi
 
   # Update app-sample PerTopicPipeline
-  sed -n '/^\ \ app-service-sample:/,/^  [a-z].*:$/p' ${compose}.yml | sed '$d' > tmp/app-service-sample.yml
-  sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_HTTPEXPORT_PARAMETERS_URL: http:\/\/${DOCKER_HOST_IP}:7770' tmp/app-service-sample.yml
-  sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/app-service-sample.yml
-  sed -i '$a\ \ \ \ extra_hosts:' tmp/app-service-sample.yml
-  sed -i '$a\ \ \ \ -\ \"${DOCKER_HOST_IP}:host-gateway"' tmp/app-service-sample.yml
-  sed -i '/^\ \ app-service-sample:/,/^  [a-z].*:$/{//!d}; /^\ \ app-service-sample:/d' ${compose}.yml
-  sed -i '/services:/ r tmp/app-service-sample.yml' ${compose}.yml
+  sed -n '/^\ \ app-sample:/,/^  [a-z].*:$/p' ${compose}.yml | sed '$d' > tmp/app-sample.yml
+  sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_HTTPEXPORT_PARAMETERS_URL: http:\/\/${DOCKER_HOST_IP}:7770' tmp/app-sample.yml
+  sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/app-sample.yml
+  sed -i '$a\ \ \ \ extra_hosts:' tmp/app-sample.yml
+  sed -i '$a\ \ \ \ -\ \"${DOCKER_HOST_IP}:host-gateway"' tmp/app-sample.yml
+  sed -i '/^\ \ app-sample:/,/^  [a-z].*:$/{//!d}; /^\ \ app-sample:/d' ${compose}.yml
+  sed -i '/services:/ r tmp/app-sample.yml' ${compose}.yml
 
   # Update services which use DOCKER_HOST_IP
-  for service in notifications app-service-http-export; do
+  for service in support-notifications app-http-export; do
     sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
     sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' tmp/${service}.yml
     sed -i '$a\ \ \ \ extra_hosts:' tmp/${service}.yml

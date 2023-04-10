@@ -40,7 +40,7 @@ for compose in ${COMPOSE_FILE_BCT}; do
   done
 
   # Update services which use DOCKER_HOST_IP
-  for service in notifications app-service-http-export; do
+  for service in support-notifications app-http-export; do
     sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
     sed -i 's/\EXPORT_HOST_PLACE_HOLDER/${DOCKER_HOST_IP}/g' tmp/${service}.yml
     sed -i '$a\ \ \ \ extra_hosts:' tmp/${service}.yml
@@ -62,8 +62,8 @@ for compose in ${COMPOSE_FILE_BCT}; do
 done
 
 # Define override services
-APP_SERVICES='app-service-external-mqtt-trigger app-service-functional-tests app-service-http-export
-          app-service-mqtt-export app-service-rules scalability-test-mqtt-export'
+APP_SERVICES='app-external-mqtt-trigger app-functional-tests app-http-export
+          app-mqtt-export app-rules-engine app-scalability-test-mqtt-export'
 DEVICE_SERVICES='device-virtual device-camera device-modbus device-rest'
 
 if [  "${USE_APP_SERVICE}" = "true" ] && [  "${USE_DEVICE_SERVICE}" = "true" ]; then
