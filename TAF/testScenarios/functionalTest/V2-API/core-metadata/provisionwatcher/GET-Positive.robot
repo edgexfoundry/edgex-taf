@@ -84,8 +84,8 @@ ProWatcherGET006 - Query provision watcher by specified device profile
 
 ProWatcherGET007 - Query provision watcher by specified device profile with offset
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  profileName=Test-Profile-1
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  profileName=Test-Profile-1
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers By profileName Test-Profile-1 With offset=1
     Then Should Return Status Code "200" And provisionWatchers
@@ -98,8 +98,8 @@ ProWatcherGET007 - Query provision watcher by specified device profile with offs
 
 ProWatcherGET008 - Query provision watcher by specified device profile with limit
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  profileName=Test-Profile-1
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  profileName=Test-Profile-1
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers By profileName Test-Profile-1 With limit=2
     Then Should Return Status Code "200" And provisionWatchers
@@ -125,8 +125,8 @@ ProWatcherGET009 - Query provision watcher by specified device service
 
 ProWatcherGET010 - Query provision watcher by specified device service with offset
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=Device-Service-${index}-1
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  serviceName=Device-Service-${index}-1
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  serviceName=Device-Service-${index}-1
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  serviceName=Device-Service-${index}-1
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers By serviceName Device-Service-${index}-1 With offset=2
     Then Should Return Status Code "200" And provisionWatchers
@@ -139,8 +139,8 @@ ProWatcherGET010 - Query provision watcher by specified device service with offs
 
 ProWatcherGET011 - Query provision watcher by specified device service with limit
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=Device-Service-${index}-1
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  serviceName=Device-Service-${index}-1
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  serviceName=Device-Service-${index}-1
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  serviceName=Device-Service-${index}-1
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers By serviceName Device-Service-${index}-1 With limit=2
     Then Should Return Status Code "200" And provisionWatchers
@@ -162,5 +162,5 @@ Provision Watchers Should Be Linked To Specified Device ${associated}: ${associa
     ${provisionwatchers}=  Set Variable  ${content}[provisionWatchers]
     ${associated}=  Convert To Lower Case  ${associated}
     FOR  ${item}  IN  @{provisionwatchers}
-        Should Be Equal  ${item}[${associated}Name]  ${associated_name}
+        Should Be Equal  ${item}[discoveredDevice][${associated}Name]  ${associated_name}
     END

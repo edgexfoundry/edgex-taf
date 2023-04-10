@@ -12,18 +12,18 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatc
 
 *** Test Cases ***
 ProWatcherPATCH001 - Update provision watcher
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "200"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Provision Watcher Data Should Be Updated
+    And Provision Watcher Should Be Updated
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
 ErrProWatcherPATCH001 - Update provision watcher with duplicate name
     [Tags]  skipped  # Not implement
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
     And Set To Dictionary  ${provisionwatcher}[0][provisionwatcher]  name=Test-Provision-Watcher-Locked
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "207"
@@ -34,7 +34,7 @@ ErrProWatcherPATCH001 - Update provision watcher with duplicate name
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
 ErrProWatcherPATCH002 - Update provision watcher with empty name
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  name=${EMPTY}
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "400"
@@ -43,7 +43,7 @@ ErrProWatcherPATCH002 - Update provision watcher with empty name
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
 ErrProWatcherPATCH003 - Update provision watcher with empty identifiers
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  identifiers=&{EMPTY}
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "400"
@@ -53,8 +53,8 @@ ErrProWatcherPATCH003 - Update provision watcher with empty identifiers
 
 ErrProWatcherPATCH004 - Update provision watcher with autoEvents but no interval
     ${autoEvents}=  Set autoEvents values  ${EMPTY}  false  DeviceValue_Boolean_RW
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  autoEvents=${autoEvents}
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
+    And Set To Dictionary  ${provisionwatcher}[4][provisionwatcher][discoveredDevice]  autoEvents=${autoEvents}
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -63,8 +63,8 @@ ErrProWatcherPATCH004 - Update provision watcher with autoEvents but no interval
 
 ErrProWatcherPATCH005 - Update provision watcher with autoEvents but no resource
     ${autoEvents}=  Set autoEvents values  24h  false  ${EMPTY}
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  autoEvents=${autoEvents}
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
+    And Set To Dictionary  ${provisionwatcher}[4][provisionwatcher][discoveredDevice]  autoEvents=${autoEvents}
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -72,7 +72,7 @@ ErrProWatcherPATCH005 - Update provision watcher with autoEvents but no resource
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
 ErrProWatcherPATCH006 - Update provision watcher with invalid adminState
-    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating Data
+    Given Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
     And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  adminState=Invalid
     When Update Provision Watchers ${provisionwatcher}
     Then Should Return Status Code "400"
@@ -82,7 +82,7 @@ ErrProWatcherPATCH006 - Update provision watcher with invalid adminState
 
 
 *** Keywords ***
-Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating ${type}
+Create Provision Watchers And Generate Multiple Provision Watchers Sample For Updating
     Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     Create Provision Watcher ${provisionwatcher}
     ${labels}=  Create List  provision-watcher-example  provision-watcher-update
@@ -97,29 +97,31 @@ Create Provision Watchers And Generate Multiple Provision Watchers Sample For Up
     ${update_blockingIdentifiers}=  Create Dictionary  name=Test-Provision-Watcher-Locked  blockingIdentifiers=${blockingIdentifiers}
     ${autoEvent}=  Set autoEvents values  24h  false  ${PREFIX}_DeviceValue_Boolean_RW
     ${autoEvents}=  Create List  ${autoEvent}
-    ${update_autoEvents}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  autoEvents=${autoEvents}
-    Run Keyword If  "${type}" != "Data"  run keywords  Set To Dictionary  ${update_adminstate}  adminState=LOCKED
-    ...        AND  Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
+    ${autoEvents_dict}  Create Dictionary  autoEvents=${autoEvents}
+    ${update_autoEvents}=  Create Dictionary  name=Test-Provision-Watcher-AutoEvents  discoveredDevice=${autoEvents_dict}
+    Set To Dictionary  ${update_adminstate}  serviceName=Device-Service-${index}-3
     Generate Provision Watchers  ${update_labels}  ${update_adminstate}  ${update_identifiers}
     ...         ${update_blockingidentifiers}  ${update_autoEvents}
 
-Provision Watcher ${type} Should Be Updated
-    ${list}=  Create List  Test-Provision-Watcher  Test-Provision-Watcher-Locked  Test-Provision-Watcher-AutoEvents
-    ${expected_keys}=  Create List  name  labels  adminState  identifiers  serviceName  profileName
-    FOR  ${provisionwatcher}  IN  @{list}
-        Query Provision Watchers By Name  ${provisionwatcher}
-        ${keys}=  Get Dictionary Keys  ${content}[provisionWatcher]
+Provision Watcher Should Be Updated
+    ${list}  Create List  Test-Provision-Watcher  Test-Provision-Watcher-Locked  Test-Provision-Watcher-AutoEvents
+    ${expected_keys}  Create List  name  labels  adminState  identifiers  discoveredDevice
+    ${discoveredDevice_expected_keys}  Create List  serviceName  profileName
+    FOR  ${name}  IN  @{list}
+        Query Provision Watchers By Name  ${name}
+        ${keys}  Get Dictionary Keys  ${content}[provisionWatcher]
+        ${discoveredDevice_keys}  Get Dictionary Keys  ${content}[provisionWatcher][discoveredDevice]
         List Should Contain Sub List  ${keys}  ${expected_keys}
-        Run Keyword If  "${type}" == "Data" and "${provisionwatcher}" == "Test-Provision-Watcher"  Run Keywords
+        List Should Contain Sub List  ${discoveredDevice_keys}  ${discoveredDevice_expected_keys}
+        Run Keyword If  "${name}" == "Test-Provision-Watcher"  Run Keywords
         ...             List Should Contain Value  ${content}[provisionWatcher][labels]  provision-watcher-update
         ...       AND   List Should Contain Value  ${content}[provisionWatcher][labels]  provision-watcher-example
-        Run Keyword If  "${type}" == "Data" and "${provisionwatcher}" == "Test-Provision-Watcher-Locked"  Run Keywords
+        Run Keyword If  "${name}" == "Test-Provision-Watcher-Locked"  Run Keywords
         ...             Should Be Equal  ${content}[provisionWatcher][adminState]  UNLOCKED
         ...        AND  Should Be Equal  ${content}[provisionWatcher][blockingIdentifiers][ports][0]  111
-        ...    ELSE IF  "${provisionwatcher}" == "Test-Provision-Watcher-Locked"
-        ...             Should Be Equal  ${content}[provisionWatcher][serviceName]  Device-Service-${index}-3
-        Run Keyword If  "${type}" == "Data" and "${provisionwatcher}" == "Test-Provision-Watcher-AutoEvents"  Run Keywords
+        ...        AND  Should Be Equal  ${content}[provisionWatcher][discoveredDevice][serviceName]  Device-Service-${index}-2
+        Run Keyword If  "${name}" == "Test-Provision-Watcher-AutoEvents"  Run Keywords
         ...             Should Be Equal  ${content}[provisionWatcher][identifiers][address]  0.0.0.0
-        ...        AND  Should Be Equal  ${content}[provisionWatcher][autoEvents][0][interval]  24h
+        ...        AND  Should Be Equal  ${content}[provisionWatcher][discoveredDevice][autoEvents][0][interval]  24h
     END
 

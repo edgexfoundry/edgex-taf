@@ -49,7 +49,7 @@ ErrProWatcherPOST004 - Create provision watcher with non-existent profile name
     [Tags]  skipped
     # Waiting for implementation
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  profileName=Invalid
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  profileName=Invalid
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
@@ -64,7 +64,7 @@ ErrProWatcherPOST005 - Create provision watcher with non-existent service name
     [Tags]  skipped
     # Waiting for implementation
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=Invalid
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  serviceName=Invalid
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
@@ -77,7 +77,7 @@ ErrProWatcherPOST005 - Create provision watcher with non-existent service name
 
 ErrProWatcherPOST006 - Create provision watcher with autoEvents but no interval
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][autoEvents][0]  interval=${EMPTY}
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice][autoEvents][0]  interval=${EMPTY}
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -89,7 +89,7 @@ ErrProWatcherPOST006 - Create provision watcher with autoEvents but no interval
 
 ErrProWatcherPOST007 - Create provision watcher with autoEvents but no sourceName
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][autoEvents][0]  sourceName=${EMPTY}
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice][autoEvents][0]  sourceName=${EMPTY}
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
@@ -103,6 +103,19 @@ ErrProWatcherPOST008 - Create provision watcher with invalid adminState
     # adminState is not locked or unlocked
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  adminState=Invalid
+    When Create Provision Watcher ${provisionwatcher}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete multiple device services by names
+    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+    ...                  AND  Delete multiple device profiles by names
+    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
+
+ErrProWatcherPOST008 - Create provision watcher with invalid DiscoveredDevice adminState
+    # adminState is not locked or unlocked
+    Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  adminState=Invalid
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
