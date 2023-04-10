@@ -77,7 +77,7 @@ Set Command From External MQTT Broker
 Should Return Error Code 0 And Response Payload With GET Command Should Be Correct
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Strings  edgex/device/command/response/device-virtual/${device_name}/${resource_name}/get  ${last_msg_json}[ReceivedTopic]
+    Should Be Equal As Strings  edgex/response/device-virtual/${requestId}  ${last_msg_json}[ReceivedTopic]
     Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
     Should Be Equal  ${requestId}  ${last_msg_json}[RequestID]
     # Validate Payload Content
@@ -89,7 +89,7 @@ Should Return Error Code 0 And Response Payload With GET Command Should Be Corre
 Should Return Error Code 0 And Response Payload With SET Command Should Be Correct
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Strings  edgex/device/command/response/device-virtual/${device_name}/${resource_name}/set  ${last_msg_json}[ReceivedTopic]
+    Should Be Equal As Strings  edgex/response/device-virtual/${requestId}  ${last_msg_json}[ReceivedTopic]
     Should Be Equal  ${requestId}  ${last_msg_json}[RequestID]
     Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
     Should Be Equal As Strings  None  ${last_msg_json}[Payload]
