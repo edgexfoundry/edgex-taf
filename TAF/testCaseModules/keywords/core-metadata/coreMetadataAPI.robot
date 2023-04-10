@@ -715,20 +715,21 @@ Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sampl
     ${provisionwatcher_2}=  Set provision watcher values  Device-Service-${index}-2  Test-Profile-2
     Set To Dictionary  ${provisionwatcher_2}  name=Test-Provision-Watcher-Locked
     Set To Dictionary  ${provisionwatcher_2}  adminState=LOCKED
+    Set To Dictionary  ${provisionwatcher_2}[discoveredDevice]  adminState=LOCKED
     ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-3.yaml" and convert to dictionary
     ${autoEvent}=  Set autoEvents values  20s  true  ${profile}[deviceResources][0][name]
     ${autoEvents}=  Create List  ${autoEvent}
     ${provisionwatcher_3}=  Set provision watcher values  Device-Service-${index}-3  Test-Profile-3
     Set To Dictionary  ${provisionwatcher_3}  name=Test-Provision-Watcher-AutoEvents
-    Set To Dictionary  ${provisionwatcher_3}  autoEvents=${autoEvents}
+    Set To Dictionary  ${provisionwatcher_3}[discoveredDevice]  autoEvents=${autoEvents}
     Generate Provision Watchers  ${provisionwatcher_1}  ${provisionwatcher_2}  ${provisionwatcher_3}
 
 Set provision watcher values
     [Arguments]  ${device_service_name}  ${device_profile_name}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/provisionwatcher_data.json  encoding=UTF-8
     ${provisionwatcher}=  Evaluate  json.loads('''${data}''')  json
-    Set To Dictionary  ${provisionwatcher}  serviceName=${device_service_name}
-    Set To Dictionary  ${provisionwatcher}  profileName=${device_profile_name}
+    Set To Dictionary  ${provisionwatcher}[discoveredDevice]  serviceName=${device_service_name}
+    Set To Dictionary  ${provisionwatcher}[discoveredDevice]  profileName=${device_profile_name}
     [Return]  ${provisionwatcher}
 
 Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample

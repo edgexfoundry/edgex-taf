@@ -13,8 +13,8 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-provisionwatc
 *** Test Cases ***
 ProWatcherPOST001 - Create provision watcher with same device service
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=Device-Service-${index}-1
-    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  serviceName=Device-Service-${index}-1
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  serviceName=Device-Service-${index}-1
+    And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  serviceName=Device-Service-${index}-1
     When Create Provision Watcher ${provisionwatcher}
     Then Should Return Status Code "207"
     And Item Index All Should Contain Status Code "201" And id
