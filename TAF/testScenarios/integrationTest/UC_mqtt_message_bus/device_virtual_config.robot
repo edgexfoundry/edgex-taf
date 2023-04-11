@@ -1,10 +1,11 @@
 *** Settings ***
 Documentation  Configrations
-Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource  TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource  TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                        AND  Run Keyword And Ignore Error  Stop Services  scalability-test-mqtt-export  app-service-mqtt-export  # No data received from the both services
+...                        AND  Run Keyword And Ignore Error  Stop Services  app-scalability-test-mqtt-export  app-mqtt-export  # No data received from the both services
 Suite Teardown  Run Teardown Keywords
 Force Tags   MessageBus=MQTT
 
@@ -12,7 +13,7 @@ Force Tags   MessageBus=MQTT
 ${SUITE}              Configrations
 
 *** Test Cases ***
-Config001 - Set MessageBus.Protocol to MQTT
+Config001 - Set MessageBus.Protocol to MQTT  # Set protocol on deployment
     Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
     And Set Test Variable  ${device_name}  messageBus-mqtt
     And Set Writable LogLevel To Debug For device-virtual On Consul
@@ -25,12 +26,12 @@ Config001 - Set MessageBus.Protocol to MQTT
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-Config002 - Modify MessageBus.Topics.PublishTopicPrefix and receive data from the topic correctly
+Config002 - Modify MessageBus.BaseTopicPrefix and receive data from the topic correctly
     Given Set Test Variable  ${device_name}  messagebus-true-device-5
-    And Run MQTT Subscriber Progress And Output  edgex/events/custom/#
-    And Set MessageBus Topics/PublishTopicPrefix=edgex/events/custom For device-virtual On Consul
-    And Set MessageBus Topics/SubscribeTopic=edgex/events/custom/# For core-data On Consul
+    And Run MQTT Subscriber Progress And Output  custom/events/device/#
     And Create Device For device-virtual With Name ${device_name}
+    And Set MessageBus BaseTopicPrefix=custom For device-virtual On Consul
+    And Set MessageBus BaseTopicPrefix=custom For core-data On Consul
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then Should Return Status Code "200" And event
     And Event Has Been Pushed To Core Data
@@ -38,8 +39,8 @@ Config002 - Modify MessageBus.Topics.PublishTopicPrefix and receive data from th
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set MessageBus Topics/PublishTopicPrefix=edgex/events/device For device-virtual On Consul
-                ...      AND  Set MessageBus Topics/SubscribeTopic=edgex/events/device/# For core-data On Consul
+                ...      AND  Set MessageBus BaseTopicPrefix=edgex For device-virtual On Consul
+                ...      AND  Set MessageBus BaseTopicPrefix=edgex For core-data On Consul
 
 Config003 - Set device-virtual MessageBus.Optional.Qos (PUBLISH)
     [Tags]  backward-skip
@@ -57,10 +58,17 @@ Config003 - Set device-virtual MessageBus.Optional.Qos (PUBLISH)
                 ...           AND  Set MessageBus Optional/Qos=0 For core-data On Consul
 
 *** Keywords ***
-Set MessageBus ${key}=${value} For ${service_name} On Consul
-    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/MessageBus/${key}
+Set MessageBus ${key}=${value} For ${service} On Consul
+    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/MessageBus/${key}
     Update Service Configuration On Consul  ${path}  ${value}
-    Restart Services  ${service_name}
+    Restart Services  ${service}
+    Run Keyword If  '${service}' == 'device-virtual'  Set Test Variable  ${url}  ${deviceServiceUrl}
+    ...    ELSE IF  '${service}' == 'core-data'  Set Test Variable  ${url}  ${coreDataUrl}
+    FOR  ${INDEX}  IN RANGE  5
+        Query Ping
+        Run Keyword If  ${response} == 200  Exit For Loop
+        ...       ELSE  Sleep  5s
+    END
 
 Set Writable LogLevel To Debug For ${service_name} On Consul
     ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/LogLevel
