@@ -34,6 +34,7 @@ Kuiper001 - Add a new rule and export to MQTT
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 Kuiper002 - Add a new rule to execute set command
+    [Setup]  Skip if  $SECURITY_SERVICE_NEEDED == 'true'  # Wait until ekuiper support JWT call
     ${random_int8}  Evaluate  random.randint(-128, 128)  random
     ${random_int8_str}  Convert To String  ${random_int8}
     ${resource}  Set Variable  ${PREFIX}_DeviceValue_INT8_RW
