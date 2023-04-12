@@ -17,7 +17,7 @@ ErrDevicePATCH0011 - Update device with non-existent serviceName
     When Update Devices ${Device}
     Then Should Return Status Code "207"
     And Item Index 1,2,3 Should Contain Status Code "200"
-    And Item Index 0 Should Contain Status Code "404"
+    And Item Index 0 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
