@@ -53,7 +53,7 @@ for compose in ${COMPOSE_FILE}; do
       sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_ENABLED: "true"' tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_HOST: edgex-security-spiffe-token-provider' tmp/${service}.yml
-      sed -i "s/\/tmp\/edgex\/secrets\/support-${service}/\/tmp\/edgex\/secrets\/spiffe\/public/g" tmp/${service}.yml
+      sed -i "s/\/tmp\/edgex\/secrets\/${service}/\/tmp\/edgex\/secrets\/spiffe\/public/g" tmp/${service}.yml
       sed -i "/^\ \ ${service}:/,/^  [a-z].*:$/{//!d}; /^\ \ ${service}:/d" ${compose}.yml
       sed -i "/services:/ r tmp/${service}.yml" ${compose}.yml
     done
