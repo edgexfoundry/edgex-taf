@@ -172,8 +172,8 @@ deviceResources:
   properties:
     valueType: "INT64"
     readWrite: "RW"
-    minimum: -9223372036854775808
-    maximum: 9223372036854775807
+    minimum: -9999999999999999
+    maximum: 9999999999999999
     defaultValue: "device INT64 value"
 -
   name: "Modbus_DeviceValue_INT64_R"
@@ -183,8 +183,8 @@ deviceResources:
   properties:
     valueType: "INT64"
     readWrite: "R"
-    minimum: -9223372036854775808
-    maximum: 9223372036854775807
+    minimum: -9999999999999999
+    maximum: 9999999999999999
     defaultValue: "device INT64 value"
 -
   name: "Modbus_DeviceValue_INT64_W"
@@ -194,8 +194,8 @@ deviceResources:
   properties:
     valueType: "INT64"
     readWrite: "W"
-    minimum: -9223372036854775808
-    maximum: 9223372036854775807
+    minimum: -9999999999999999
+    maximum: 9999999999999999
     defaultValue: "device INT64 value"
 -  ### UINT16 ###
   name: "Modbus_DeviceValue_UINT16_RW"
@@ -272,7 +272,7 @@ deviceResources:
     valueType: "UINT64"
     readWrite: "RW"
     minimum: 0
-    maximum: 18446744073709551615
+    maximum: 99999999999999999
     defaultValue: "device UINT64 value"
 -
   name: "Modbus_DeviceValue_UINT64_R"
@@ -283,7 +283,7 @@ deviceResources:
     valueType: "UINT64"
     readWrite: "R"
     minimum: 0
-    maximum: 18446744073709551615
+    maximum: 99999999999999999
     defaultValue: "device UINT64 value"
 -
   name: "Modbus_DeviceValue_UINT64_W"
@@ -294,7 +294,7 @@ deviceResources:
     valueType: "UINT64"
     readWrite: "W"
     minimum: 0
-    maximum: 18446744073709551615
+    maximum: 99999999999999999
     defaultValue: "device UINT64 value"
 
 deviceCommands:

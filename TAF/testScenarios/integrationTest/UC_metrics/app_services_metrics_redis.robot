@@ -100,7 +100,7 @@ APPServicesMetricsRedis006-Enable PipelineMessagesProcessed And Verify Metrics i
     And Create Device For device-virtual With Name ${device_name}
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
-    Then Recieved Metrics PipelineMessagesProcessed For All Pipelines And timer-count Should Not Be 0
+    Then Recieved Metrics PipelineMessagesProcessed For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_redis}  kill=True
                 ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed=false For app-sample On Consul

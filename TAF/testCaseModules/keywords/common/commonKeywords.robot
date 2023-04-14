@@ -79,12 +79,12 @@ Get reading value with data type "${data_type}"
     run keyword and return if  '${data_type}' == 'INT8'  evaluate  random.randint(-128, 127)  modules=random
     run keyword and return if  '${data_type}' == 'INT16'  evaluate  random.randint(-32768, 32767)  modules=random
     run keyword and return if  '${data_type}' == 'INT32'  evaluate  random.randint(-2147483648, 2147483647)  modules=random
-    run keyword and return if  '${data_type}' == 'INT64'  evaluate  random.randint(-9223372036854775808, 9223372036854775807)  modules=random
+    run keyword and return if  '${data_type}' == 'INT64'  evaluate  random.randint(-9999999999999999, 9999999999999999)  modules=random
     # UINT
     run keyword and return if  '${data_type}' == 'UINT8'  evaluate  random.randint(0, 255)  modules=random
     run keyword and return if  '${data_type}' == 'UINT16'  evaluate  random.randint(0, 65535)  modules=random
     run keyword and return if  '${data_type}' == 'UINT32'  evaluate  random.randint(0, 4294967295)  modules=random
-    run keyword and return if  '${data_type}' == 'UINT64'  evaluate  random.randint(0, 18446744073709551615)  modules=random
+    run keyword and return if  '${data_type}' == 'UINT64'  evaluate  random.randint(0, 99999999999999999)  modules=random
 
 Get random "${value}" from "${list}"
     ${random}=  Evaluate  random.choice(@{list})  random
