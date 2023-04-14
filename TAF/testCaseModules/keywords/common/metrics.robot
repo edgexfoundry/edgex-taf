@@ -17,7 +17,7 @@ Set Topics For app-samle PerTopicPipelines On Consul
     ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/Pipeline/PerTopicPipelines
     FOR  ${ITEM}  IN  @{perTopics}
         ${topics_path}  Set Variable  ${path}/${ITEM}/Topics
-        Update Service Configuration On Consul  ${topics_path}  edgex/events/device/#/${device_name}/#
+        Update Service Configuration On Consul  ${topics_path}  edgex/events/device/+/+/${device_name}/#
     END
 
 Metrics ${metrics_name} With ${field_name} Should Be Received
