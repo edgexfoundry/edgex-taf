@@ -17,7 +17,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/metadata_system_events_mqtt
 SystemEventsMQTT001-Add Device and Receive Correct System Events
     Given Set Test Variable  ${add_device_topic}  edgex/system-events/core-metadata/device/add/device-virtual/Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  add-system-event
-    And Run MQTT Subscriber Progress And Output  ${add_device_topic}  Payload
+    And Run MQTT Subscriber Progress And Output  ${add_device_topic}  payload
     When Create Device For device-virtual With Name ${device_name}
     Then Single System Event Should Match With Source core-metadata, Type device and Action add
     [Teardown]  Run Keywords  Delete device by name ${device_name}
@@ -25,7 +25,7 @@ SystemEventsMQTT001-Add Device and Receive Correct System Events
 
 SystemEventsMQTT002-Add Multiple Devices and Receive Correct System Events
     Given Set Test Variable  ${add_devices_topic}  edgex/system-events/core-metadata/device/add/device-virtual/Virtual-Sample-Profile
-    And Run MQTT Subscriber Progress And Output  ${add_devices_topic}  Payload  3
+    And Run MQTT Subscriber Progress And Output  ${add_devices_topic}  payload  3
     When Create 3 Devices For device-virtual
     Then Multiple 3 System Events Should Match With Source core-metadata, Type device and Action add
     [Teardown]  Run Keywords  Delete multiple devices by names  @{device_list}
@@ -34,7 +34,7 @@ SystemEventsMQTT002-Add Multiple Devices and Receive Correct System Events
 SystemEventsMQTT003-Update Device and Receive Correct System Events
     Given Set Test Variable  ${update_device_topic}  edgex/system-events/core-metadata/device/update/device-virtual/Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  update-system-event
-    And Run MQTT Subscriber Progress And Output  ${update_device_topic}  Payload
+    And Run MQTT Subscriber Progress And Output  ${update_device_topic}  payload
     And Create Device For device-virtual With Name ${device_name}
     When Update Device ${device_name} With operatingState=DOWN
     Then Single System Event Should Match With Source core-metadata, Type device and Action update
@@ -43,7 +43,7 @@ SystemEventsMQTT003-Update Device and Receive Correct System Events
 
 SystemEventsMQTT004-Update Multiple Devices and Receive Correct System Events
     Given Set Test Variable  ${update_devices_topic}  edgex/system-events/core-metadata/device/update/device-virtual/Virtual-Sample-Profile
-    And Run MQTT Subscriber Progress And Output  ${update_devices_topic}  Payload  3
+    And Run MQTT Subscriber Progress And Output  ${update_devices_topic}  payload  3
     And Create 3 Devices For device-virtual
     When Update Multiple Devices
     Then Multiple 3 System Events Should Match With Source core-metadata, Type device and Action update
@@ -53,7 +53,7 @@ SystemEventsMQTT004-Update Multiple Devices and Receive Correct System Events
 SystemEventsMQTT005-Delete Device and Receive Correct System Events
     Given Set Test Variable  ${delete_device_topic}  edgex/system-events/core-metadata/device/delete/device-virtual/Virtual-Sample-Profile
     And Set Test Variable  ${device_name}  delete-system-event
-    And Run MQTT Subscriber Progress And Output  ${delete_device_topic}  Payload
+    And Run MQTT Subscriber Progress And Output  ${delete_device_topic}  payload
     And Create Device For device-virtual With Name ${device_name}
     When Delete device by name ${device_name}
     Then Single System Event Should Match With Source core-metadata, Type device and Action delete
@@ -67,7 +67,7 @@ Update Multiple Devices
 
 Single System Event Should Match With Source ${source}, Type ${type} and Action ${action}
     Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${payload}  Decode Base64 String  ${received_content}
     Should Be Equal As Strings  ${payload}[type]  ${type}
     Should Be Equal As Strings  ${payload}[action]  ${action}
@@ -75,7 +75,7 @@ Single System Event Should Match With Source ${source}, Type ${type} and Action 
 
 Multiple ${numbers} System Events Should Match With Source ${source}, Type ${type} and Action ${action}
     Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${messages}  Split String  ${received_content}  \n
     ${range}=  Get Length  ${messages}
     Should Be Equal As Strings  ${range}  ${numbers}  # Check the number of received system events

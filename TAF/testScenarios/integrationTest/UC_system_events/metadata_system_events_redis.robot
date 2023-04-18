@@ -68,7 +68,7 @@ Update Multiple Devices
 
 Single System Event Should Match With Source ${source}, Type ${type} and Action ${action}
     Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${payload}  Decode Base64 String  ${received_content}
     Should Be Equal As Strings  ${payload}[type]  ${type}
     Should Be Equal As Strings  ${payload}[action]  ${action}
@@ -76,7 +76,7 @@ Single System Event Should Match With Source ${source}, Type ${type} and Action 
 
 Multiple ${numbers} System Events Should Match With Source ${source}, Type ${type} and Action ${action}
     Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${messages}  Split String  ${received_content}  \n
     ${range}=  Get Length  ${messages}
     Should Be Equal As Strings  ${range}  ${numbers}  # Check the number of received system events

@@ -14,7 +14,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/north-south-messaging-get-p
 *** Test Cases ***
 NSMessagingGET001 - Query all DeviceCoreCommands
     Given Create 3 Devices For device-virtual
-    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Query Commands For All Devices From External MQTT Broker
     Then Should Return Error Code 0 And Commands For All Devices Should Be Also Returned
     [Teardown]  Run keywords  Delete multiple devices by names  @{device_list}
@@ -22,7 +22,7 @@ NSMessagingGET001 - Query all DeviceCoreCommands
 
 NSMessagingGET002 - Query all DeviceCoreCommands by offset
     Given Create 3 Devices For device-virtual
-    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Query All Devices Commands With offset=1 From External MQTT Broker
     Then Should Return Error Code 0 And Commands With Filter offset=1 Should Be Also Returned
     [Teardown]  Run keywords  Delete multiple devices by names  @{device_list}
@@ -30,7 +30,7 @@ NSMessagingGET002 - Query all DeviceCoreCommands by offset
 
 NSMessagingGET003 - Query all DeviceCoreCommands by limit
     Given Create 3 Devices For device-virtual
-    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Query All Devices Commands With limit=3 From External MQTT Broker
     Then Should Return Error Code 0 And Commands With Filter limit=3 Should Be Also Returned
     [Teardown]  Run keywords  Delete multiple devices by names  @{device_list}
@@ -39,7 +39,7 @@ NSMessagingGET003 - Query all DeviceCoreCommands by limit
 NSMessagingGET004 - Query DeviceCoreCommand by device name
     Given Set Test Variable  ${device_name}  ex-mqtt-query-device
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${QUERY_RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Query Commands For Specified Device From External MQTT Broker
     Then Should Return Error Code 0 And Commands Should Be Also Returned
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -50,7 +50,7 @@ NSMessagingGET005 - Get specified device read command
     Given Set Test Variable  ${device_name}  ex-mqtt-get
     And Set Random Read Command
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Get Command From External MQTT Broker
     Then Should Return Error Code 0 And Response Payload With GET Command Should Be Correct
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -60,7 +60,7 @@ NSMessagingGET006 - Get specified device read command when ds-returnevent is fal
     Given Set Test Variable  ${device_name}  ex-mqtt-get-returnevent
     And Set Random Read Command
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Get Command With ds-returnevent=false From External MQTT Broker
     Then Should Return Error Code 0 And Response Payload With GET Command Should Be Null
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -70,7 +70,7 @@ NSMessagingGET007 - Get specified device read command when ds-pushevent is true
     Given Set Test Variable  ${device_name}  ex-mqtt-get-pushevent
     And Set Random Read Command
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Get Command With ds-pushevent=true From External MQTT Broker
     Then Should Return Error Code 0 And Response Payload With GET Command Should Be Correct
     And Event Has Been Pushed To Core Data
@@ -81,14 +81,14 @@ NSMessagingGET007 - Get specified device read command when ds-pushevent is true
 Should Return Error Code 0 And Response Payload With GET Command Should Be Null
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
-    Should Be Equal As Strings  None  ${last_msg_json}[Payload]
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
+    Should Be Equal As Strings  None  ${last_msg_json}[payload]
 
 Should Return Error Code 0 And Commands For All Devices Should Be Also Returned
     # Response for Query Command
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
     ${payload}  Decode Base64 String  ${last_msg}
     ${devices_list}  Get deviceCoreCommands Devices List From ${payload}
     # Retrieve devices by core-command API
@@ -100,7 +100,7 @@ Should Return Error Code 0 And Commands With Filter ${param}=${value} Should Be 
     # Response for Query Command with parameters
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
     ${payload}  Decode Base64 String  ${last_msg}
     ${devices_list}  Get deviceCoreCommands Devices List From ${payload}
     # Retrieve devices by core-command API
@@ -111,7 +111,7 @@ Should Return Error Code 0 And Commands With Filter ${param}=${value} Should Be 
 Should Return Error Code 0 And Commands Should Be Also Returned
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
     ${payload}  Decode Base64 String  ${last_msg}
     Should Be Equal As Strings  ${device_name}  ${payload}[deviceCoreCommand][deviceName]
     Should Not Be Empty  ${payload}[deviceCoreCommand][coreCommands]

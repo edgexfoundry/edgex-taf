@@ -68,7 +68,7 @@ Set Command From External MQTT Broker
     #${random_value}  Get reading value with data type "${data_type}"
     #${set_reading_value}  convert to string  ${random_value}
     Set To Dictionary  ${message_dict}  requestId=${requestId}
-    Set To Dictionary  ${message_dict}  Payload=${payload}
+    Set To Dictionary  ${message_dict}  payload=${payload}
     ${message_str}  Convert To String  ${message_dict}
     ${message}  Replace String  ${message_str}  '  "
     Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${topic} '${message}' ${EX_BROKER_PORT} false
@@ -77,9 +77,9 @@ Set Command From External MQTT Broker
 Should Return Error Code 0 And Response Payload With GET Command Should Be Correct
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Strings  edgex/command/response/${device_name}/${resource_name}/get  ${last_msg_json}[ReceivedTopic]
-    Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
-    Should Be Equal  ${requestId}  ${last_msg_json}[RequestID]
+    Should Be Equal As Strings  edgex/command/response/${device_name}/${resource_name}/get  ${last_msg_json}[receivedTopic]
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
+    Should Be Equal  ${requestId}  ${last_msg_json}[requestID]
     # Validate Payload Content
     ${payload}  Decode Base64 String  ${last_msg}
     Should Be Equal As Strings  ${device_name}  ${payload}[event][deviceName]
@@ -89,20 +89,20 @@ Should Return Error Code 0 And Response Payload With GET Command Should Be Corre
 Should Return Error Code 0 And Response Payload With SET Command Should Be Correct
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Strings  edgex/command/response/${device_name}/${resource_name}/set  ${last_msg_json}[ReceivedTopic]
-    Should Be Equal  ${requestId}  ${last_msg_json}[RequestID]
-    Should Be Equal As Integers  0  ${last_msg_json}[ErrorCode]
-    Should Be Equal As Strings  None  ${last_msg_json}[Payload]
+    Should Be Equal As Strings  edgex/command/response/${device_name}/${resource_name}/set  ${last_msg_json}[receivedTopic]
+    Should Be Equal  ${requestId}  ${last_msg_json}[requestID]
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
+    Should Be Equal As Strings  None  ${last_msg_json}[payload]
 
 Should Return Error Code 1 And RequestID Should Be The Same As Request
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal  ${requestId}  ${last_msg_json}[RequestID]
-    Should Be Equal As Integers  1  ${last_msg_json}[ErrorCode]
+    Should Be Equal  ${requestId}  ${last_msg_json}[requestID]
+    Should Be Equal As Integers  1  ${last_msg_json}[errorCode]
 
 Get Response Message
     Wait Until Keyword Succeeds  10x  2s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${count}  Get Line Count  ${content}
     ${last_msg}  Run Keyword If  ${count} > 1  Get Line  ${content}  -1
                  ...       ELSE  Set Variable  ${content}

@@ -16,7 +16,7 @@ NSMessagingSET001 - Set specified device write command
     Given Set Test Variable  ${device_name}  ex_mqtt_set
     And Get A Write Command
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Set Command From External MQTT Broker
     Then Should Return Error Code 0 And Response Payload With SET Command Should Be Correct
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -25,7 +25,7 @@ NSMessagingSET001 - Set specified device write command
 ErrNSMessagingSET001 - Set specified device write command with non-existent device
     Given Set Test Variable  ${device_name}  ex-mqtt-set-non-existent-device
     And Get A Write Command
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Set Command From External MQTT Broker
     Then Should Return Error Code 1 And RequestID Should Be The Same As Request
     [Teardown]  Terminate Process  ${handle_mqtt}  kill=True
@@ -35,7 +35,7 @@ ErrNSMessagingSET002 - Set specified device write command with non-existent comm
     And Get A Write Command
     And Set Test Variable  ${resource_name}  invalid
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Set Command From External MQTT Broker
     Then Should Return Error Code 1 And RequestID Should Be The Same As Request
     [Teardown]  Run keywords  Delete device by name ${device_name}
@@ -46,7 +46,7 @@ ErrNSMessagingSET002 - Set specified device write command when device is locked
     And Get A Write Command
     And Create Device For device-virtual With Name ${device_name}
     And Update Device ${device_name} With adminState=LOCKED
-    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  Payload  1  ${EX_BROKER_PORT}  false
+    And Run MQTT Subscriber Progress And Output  ${RES_TOPIC}  payload  1  ${EX_BROKER_PORT}  false
     When Set Command From External MQTT Broker
     Then Should Return Error Code 1 And RequestID Should Be The Same As Request
     [Teardown]  Run keywords  Delete device by name ${device_name}

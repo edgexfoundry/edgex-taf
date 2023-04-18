@@ -22,7 +22,7 @@ Set Topics For app-samle PerTopicPipelines On Consul
 
 Metrics ${metrics_name} With ${field_name} Should Be Received
     Wait Until Keyword Succeeds  10x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
-    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${count}  Get Line Count  ${content}
     ${last_msg}  Run Keyword If  ${count} > 1  Get Line  ${content}  -1
                  ...       ELSE  Set Variable  ${content}
@@ -41,7 +41,7 @@ Recieved Metrics ${metrics_name} For All Pipelines And ${field_name} Should Not 
     Wait Until Keyword Succeeds  10x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     @{pipeline_ids}  Create List  default-pipeline  float-pipeline  int8-16-pipeline
     @{message_ids}  Create List
-    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     ${messages}  Split String  ${content}  \n
     # Set same pipeline messages to a list
     @{decode_default_pipe}  Create List
@@ -79,13 +79,13 @@ No Metrics With Name ${metrics_name} Received
     ...       ELSE  No ${metrics_name} Found In File
 
 No ${metrics_name} Found In File
-    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  Payload
+    ${content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
     Log  ${content}
     ${count}  Get Line Count  ${content}
     FOR  ${INDEX}  IN RANGE  ${count}
         ${json_msg}  Get Line  ${content}  ${INDEX}
         ${encode_payload}  Evaluate  json.loads('''${json_msg}''')
-        ${decode_payload}  Evaluate  base64.b64decode('${encode_payload}[Payload]').decode('utf-8')  modules=base64
+        ${decode_payload}  Evaluate  base64.b64decode('${encode_payload}[payload]').decode('utf-8')  modules=base64
         ${payload}  Evaluate  json.loads('''${decode_payload}''')
         Should Not Be Equal As Strings  ${metrics_name}  ${payload}[name]
     END
