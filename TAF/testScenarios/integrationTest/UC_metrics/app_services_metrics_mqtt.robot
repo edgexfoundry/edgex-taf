@@ -26,7 +26,7 @@ ${FLOAT32_CMD}    ${PREFIX}_GenerateDeviceValue_FLOAT32_RW
 
 *** Test Cases ***
 APPServicesMetricsMQTT001-No Telemery Metrics isn't Published to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/#  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/#  payload
     And Set Test Variable  ${device_name}  telemetry-metrics
     And Set All Telemetry Metrics To False
     And Create Device For device-virtual With Name ${device_name}
@@ -39,7 +39,7 @@ APPServicesMetricsMQTT001-No Telemery Metrics isn't Published to MessageBus
 APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to MessageBus
     ${handle_http}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
     Sleep  1s  # Waiting for Http Server startup
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/HttpExportSize  Payload  2
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/HttpExportSize  payload  2
     And Set Test Variable  ${device_name}  http-export-size
     And Set app-sample Functions HTTPExport
     And Set Telemetry Metrics/HttpExportSize=true For app-sample On Consul
@@ -54,7 +54,7 @@ APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to
                 ...      AND  Set app-sample Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
 
 APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/MqttExportSize  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/MqttExportSize  payload
     And Set Test Variable  ${device_name}  mqtt-export-size
     And Set app-sample Functions MQTTExport
     And Set Telemetry Metrics/MqttExportSize=true For app-sample On Consul
@@ -68,7 +68,7 @@ APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to
                 ...      AND  Set app-sample Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
 
 APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/MessagesReceived  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/MessagesReceived  payload
     And Set Test Variable  ${device_name}  message-received
     And Set Telemetry Metrics/MessagesReceived=true For app-sample On Consul
     And Create Device For device-virtual With Name ${device_name}
@@ -81,7 +81,7 @@ APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish 
 
 APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is Publish to MessageBus
     ${publish_msg}  Set Variable  Invalid Message
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/InvalidMessagesReceived  Payload  2
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/InvalidMessagesReceived  payload  2
     And Set Test Variable  ${device_name}  invalid-message-received
     And Create Device For device-virtual With Name ${device_name}
     And Set Telemetry Metrics/InvalidMessagesReceived=true For app-sample On Consul
@@ -96,7 +96,7 @@ APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is
     Given Set Test Variable  ${device_name}  pipeline-messages-processed
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessagesProcessed  Payload  6
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessagesProcessed  payload  6
     And Set Telemetry Metrics/PipelineMessagesProcessed=true For app-sample On Consul
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
@@ -109,7 +109,7 @@ APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metric
     Given Set Test Variable  ${device_name}  pipeline-messages-processing-time
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessageProcessingTime  Payload  6
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessageProcessingTime  payload  6
     And Set Telemetry Metrics/PipelineMessageProcessingTime=true For app-sample On Consul
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
@@ -125,7 +125,7 @@ APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is 
     And Set PerTopicPipelines int8-16 ExecutionOrder HTTPExport
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineProcessingErrors  Payload  6
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineProcessingErrors  payload  6
     And Set Telemetry Metrics/PipelineProcessingErrors=true For app-sample On Consul
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}

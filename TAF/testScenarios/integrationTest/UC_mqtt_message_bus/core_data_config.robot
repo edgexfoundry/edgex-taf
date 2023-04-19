@@ -52,7 +52,7 @@ Set MessageBus ${key}=${value} For core-data On Consul
 Event Has Been Recevied By MQTT Subscriber
     ${received_event}  Get file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     Should Contain  ${received_event}  ${device_name}  No Event is not received by mqtt subscriber
-    Should Contain  ${received_event}  CorrelationID  No CorrelationID Found in Event
+    Should Contain  ${received_event}  correlationID  No CorrelationID Found in Event
 
 Create An Event With ${device_name} and command ${command_name}
     Generate Event Sample  Event  ${device_name}  ${PREFIX}-Sample-Profile  ${PREFIX}_GenerateDeviceValue_UINT8_RW  Simple Reading  

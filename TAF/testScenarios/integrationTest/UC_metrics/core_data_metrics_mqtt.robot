@@ -21,7 +21,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core_data_metrics_mqtt.log
 
 *** Test Cases ***
 DataMetricsMQTT001-Enable EventsPersisted And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  payload
     And Set Test Variable  ${device_name}  events-persisted-true
     And Set Telemetry Metrics/EventsPersisted=true For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
@@ -33,7 +33,7 @@ DataMetricsMQTT001-Enable EventsPersisted And Verify Metrics is Publish to Messa
                 ...      AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
 
 DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  payload
     And Set Test Variable  ${device_name}  events-persisted-false
     And Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
@@ -44,7 +44,7 @@ DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to M
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 DataMetricsMQTT003-Enable ReadingsPersisted And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  payload
     And Set Test Variable  ${device_name}  readings-persisted-true
     And Set Telemetry Metrics/ReadingsPersisted=true For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}
@@ -56,7 +56,7 @@ DataMetricsMQTT003-Enable ReadingsPersisted And Verify Metrics is Publish to Mes
                 ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
 
 DataMetricsMQTT004-Disable ReadingsPersisted And Verify Metrics isn't Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  Payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  payload
     And Set Test Variable  ${device_name}  readings-persisted-false
     And Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
     And Create Device For device-virtual With Name ${device_name}

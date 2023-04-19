@@ -265,7 +265,7 @@ Run Redis Subscriber Progress And Output
     Set Test Variable  ${handle_redis}  ${handle}
 
 Run MQTT Subscriber Progress And Output
-    [Arguments]  ${topic}  ${keyword}=CorrelationID  ${expected_msg_count}=1  ${port}=${BROKER_PORT}
+    [Arguments]  ${topic}  ${keyword}=correlationID  ${expected_msg_count}=1  ${port}=${BROKER_PORT}
     ...          ${secure}=${SECURITY_SERVICE_NEEDED}  ${duration}=30  # duration only enabled when expected_msg_count=-1
     ${current_time}  get current epoch time
     Set Test Variable  ${subscriber_file}  mqtt-subscriber-${current_time}.log
@@ -279,7 +279,7 @@ Run MQTT Subscriber Progress And Output
 Decode Base64 String
     [Arguments]  ${string}
     ${last_msg_json}  Evaluate  json.loads('''${string}''')
-    ${decode_payload}  Evaluate  base64.b64decode('${last_msg_json}[Payload]').decode('utf-8')  modules=base64
+    ${decode_payload}  Evaluate  base64.b64decode('${last_msg_json}[payload]').decode('utf-8')  modules=base64
     ${payload}  Evaluate  json.loads('''${decode_payload}''')
     Log  ${payload}
     [Return]  ${payload}
