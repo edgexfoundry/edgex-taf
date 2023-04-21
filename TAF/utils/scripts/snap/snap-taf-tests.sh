@@ -24,7 +24,7 @@ snap_taf_patch_files()
     # TODO: Some of these changes should be submitted as Pull Requests to update the tests. 
 
     # 1: with snaps, everything is running on localhost. The Docker host names therefore need to be replaced
-    sed -i -e 's@Host=edgex-support-scheduler@Host=localhost@' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-scheduler/intervalaction/POST-Positive.robot
+    sed -i -e 's@Host=edgex-support-scheduler@Host=localhost@' $WORK_DIR/TAF/testScenarios/functionalTest/API/support-scheduler/intervalaction/POST-Positive.robot
     sed -i -e 's@edgex-core-data@localhost@' $WORK_DIR/TAF/testScenarios/integrationTest/UC_data_clean_up/clean_up_events_and_readings.robot
     sed -i -e 's@edgex-core-command@localhost@' $WORK_DIR/TAF/testScenarios/integrationTest/UC_kuiper/export_by_kuiper_rules.robot
 
@@ -46,7 +46,7 @@ snap_taf_patch_files()
 
     # 4: for the tokens - change docker-specific commands and path names to snap-specific ones
     sed -i -e 's@docker exec edgex-core-consul cat /tmp/edgex/secrets/@cat /var/snap/edgexfoundry/current/secrets/@' $WORK_DIR/TAF/testCaseModules/keywords/common/commonKeywords.robot
-    sed -i -e 's@docker exec edgex-${app_service_name} cat /tmp/edgex/secrets@cat /var/snap/edgex-app-service-configurable/current@' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/app-service/secrets/POST.robot
+    sed -i -e 's@docker exec edgex-${app_service_name} cat /tmp/edgex/secrets@cat /var/snap/edgex-app-service-configurable/current@' $WORK_DIR/TAF/testScenarios/functionalTest/API/app-service/secrets/POST.robot
 
     sed -i -e 's@/tmp/edgex/secrets@/var/snap/edgexfoundry/current/secrets@' $WORK_DIR/TAF/utils/src/setup/redis-subscriber.py
 
@@ -56,17 +56,17 @@ snap_taf_patch_files()
 
     # 6. Other issues:
     # in case python2 is the default, replace it with python3 (can also be done by apt-get install python3-is-python)
-    sed -s -i -e 's@Start process  python @Start process  python3 @' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-notifications/transmission/*.robot
+    sed -s -i -e 's@Start process  python @Start process  python3 @' $WORK_DIR/TAF/testScenarios/functionalTest/API/support-notifications/transmission/*.robot
 
     #  remove system-agent tests - we don't run them because the system agent service has been deprecated since the Ireland release (2.0)
-    rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/system-agent/info
-    rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/system-agent/services
+    rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/API/system-agent/info
+    rm -rf $WORK_DIR/TAF/testScenarios/functionalTest/API/system-agent/services
 
     #  The notification sender is "core-metadata", not "edgex-core-metadata"
     sed -i -e 's@edgex-core-metadata@core-metadata@' $WORK_DIR/TAF/testScenarios/integrationTest/UC_metadata_notifications/metadata_notifications.robot
 
     # this test assumes we are running on two different IP addresses. Set DOCKER_IP to an invalid IP in this case as otherwise we get duplicate transmissions
-    sed -i -e 's@${DOCKER_HOST_IP}@"invalid-ip"@' $WORK_DIR/TAF/testScenarios/functionalTest/V2-API/support-notifications/transmission/GET-Positive.robot
+    sed -i -e 's@${DOCKER_HOST_IP}@"invalid-ip"@' $WORK_DIR/TAF/testScenarios/functionalTest/API/support-notifications/transmission/GET-Positive.robot
 
 
     # 7. changes having to do with mosquitto
@@ -107,18 +107,18 @@ snap_taf_run_functional_tests() # arg:  tests to run
    
     cd ${WORK_DIR}
 
-    # 2. Run V2 API Functional testing (using directories in TAF/testScenarios/functionalTest/V2-API )
+    # 2. Run API Functional testing (using directories in TAF/testScenarios/functionalTest/API )
     # 
-    rm -f $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
+    rm -f $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html
     
     if [ "$1" = "all" ]; then  
-        python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API/ -p default    
-        cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
-        >&2 echo "INFO:snap: Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html"
+        python3 -m TUC --exclude Skipped -u functionalTest/API/ -p default
+        cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html
+        >&2 echo "INFO:snap: Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html"
     elif [ ! -z "$1" ]; then
-        python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API/${1} -p default    
-        cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
-        >&2 echo "INFO:snap: V2 API Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html"
+        python3 -m TUC --exclude Skipped -u functionalTest/API/${1} -p default
+        cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html
+        >&2 echo "INFO:snap: API Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html"
     fi
   
 }
@@ -133,9 +133,9 @@ snap_taf_run_functional_device_tests()
     for profile in $@; do
         >&2 echo "INFO:snap: testing $profile"
         python3 -m TUC --exclude Skipped -u functionalTest/device-service -p ${profile}
-        rm -f $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/v2-${profile}-test.html 
-        cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-${profile}-test.html 
-        >&2 echo "INFO:snap: V2 API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-${profile}-test.html "
+        rm -f $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/${profile}-test.html
+        cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/${profile}-test.html
+        >&2 echo "INFO:snap: API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/${profile}-test.html "
     done    
 }
 
@@ -150,7 +150,7 @@ snap_taf_run_integration_tests()
     python3 -m TUC --exclude Skipped --include $INCLUDE_TESTS -u integrationTest -p device-virtual
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/$LOG_TARGET
 
-    >&2 echo "INFO:snap: V2 API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/"
+    >&2 echo "INFO:snap: API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/"
 
   
  }

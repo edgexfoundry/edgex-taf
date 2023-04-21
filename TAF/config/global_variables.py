@@ -6,7 +6,7 @@ LOG_LEVEL = "INFO"
 CONSUL_CONFIG_BASE_ENDPOINT = "/v1/kv/edgex/v3"
 
 # API Version
-API_VERSION = "v2"
+API_VERSION = "v3"
 
 # Deploy type: docker, manual
 DEPLOY_TYPE = "docker"

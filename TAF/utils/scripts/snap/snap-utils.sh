@@ -308,7 +308,7 @@ snap_maybe_switch_asc_profile()
     #   Check app-service is available
     #    ${port}=  Split String  ${url}  :
     #    Set Environment Variable  SNAP_APP_SERVICE_PORT  ${port}[2]
-    #    Check service is available  ${port}[2]   /api/v2/ping
+    #    Check service is available  ${port}[2]   /api/v3/ping
 
     # also - this script should not write anything but the token to stdout
     if [ ! -z "$SNAP_APP_SERVICE_PORT" ]; then

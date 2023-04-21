@@ -20,20 +20,20 @@ export WORK_DIR=${HOME}/edgex-taf
 ${ARCH}: x86_64 | arm64
 ${SECURITY_SERVICE_NEEDED}: false | true
 ${TEST_STRATEGY}: functional-test | integration-test
-${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/V2-API | mqtt (integration-test) | redis (integration-test)
+${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | mqtt (integration-test) | redis (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
 
 cd ${WORK_DIR}/TAF/utils/scripts/docker
 sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${TEST_SERVICE} ${DEPLOY_SERVICES}
 
-# If using x86_64, no need for secuity, adopt for functional-test, choose "v2-api" for test_service and edgex service are deployed in place, it should be:
-ex. sh run-tests.sh x86_64 false functional-test v2-api no-deployment
+# If using x86_64, no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:
+ex. sh run-tests.sh x86_64 false functional-test api no-deployment
 # If using x86_64, no need for secuity, adopt for integration-test, choose "mqtt" for test_service and edgex service are not deployed in place, it should be:
 ex. sh run-tests.sh x86_64 false integration-test mqtt 
 ```
 
 #### View the test report
-Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html
+Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html
 
 
 ### Use Python to run tests
@@ -75,7 +75,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     export COMPOSE_IMAGE=docker:20.10.18
     ```
 #### Run Tests
-`View the test report after finishing a python command, otherwise the report will be overridden after executing next command. Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/v2-api-test.html.`
+`View the test report after finishing a python command, otherwise the report will be overridden after executing next command. Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html.`
 1. Change directory to ${HOME}/edgex-taf
 2. Deploy edgex: Skipped, if the edgex services are deployed in place
     ``` bash
@@ -83,15 +83,15 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     python3 -m TUC --exclude Skipped --include deploy-base-service -u deploy.robot -p default
     ```
 3. Run Test
-    ###### Run V2 API Functional testing:
+    ###### Run API Functional testing:
     
     - Notice: Run Functional Test will get case: IntervalactionGET006 failure. The case needs to restart service.
     - For Core Data, Core Metadata, Support Notifications, and Support Scheduler:
     ``` bash
-    # ${ServiceDir}: Please use the directory name under TAF/testScenarios/functionalTest/V2-API
+    # ${ServiceDir}: Please use the directory name under TAF/testScenarios/functionalTest/API
     
     # Run Test Command
-    python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API/${ServiceDir} -p default
+    python3 -m TUC --exclude Skipped -u functionalTest/API/${ServiceDir} -p default
     ``` 
     - For APP Service:
     ``` bash
@@ -105,7 +105,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
    
     # Run Test Command
     export SECURITY_SERVICE_NEEDED=false  # Otherwise, will get test ErrSecretsPOST004 failed.
-    python3 -m TUC --exclude Skipped --include v2-api -u functionalTest/V2-API/app-service -p default
+    python3 -m TUC --exclude Skipped -u functionalTest/API/app-service -p default
     ```
     - Device Service:
     ``` bash

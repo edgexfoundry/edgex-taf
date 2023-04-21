@@ -1,10 +1,10 @@
 trigger_content={
-    "XML String": '<Event><ApiVersion>v2</ApiVersion><Id>92eb2e26-0f24-48aa-1111-de9dac3fb903</Id><DeviceName>Random-Integer-Device</DeviceName>'
+    "XML String": '<Event><ApiVersion>v3</ApiVersion><Id>92eb2e26-0f24-48aa-1111-de9dac3fb903</Id><DeviceName>Random-Integer-Device</DeviceName>'
                   '<ProfileName>Random-Integer-Device</ProfileName><SourceName>Int32</SourceName><Origin>1540855006469</Origin>'
                   '<Readings><Id>82eb2e26-0f24-48aa-ae4c-de9dac3fb920</Id><Origin>1540855006469</Origin>'
                   '<DeviceName>Random-Integer-Device</DeviceName><ResourceName>Int32</ResourceName><ProfileName>Random-Integer-Device</ProfileName>'
                   '<ValueType>Int32</ValueType><Units></Units><BinaryValue></BinaryValue><MediaType></MediaType><Value>123</Value></Readings></Event>',
-    "JSON String": '{"apiVersion": "v2", "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903", "deviceName": "Random-Integer-Device", "profileName": "Random-Integer-Device", '
+    "JSON String": '{"apiVersion": "v3", "id": "92eb2e26-0f24-48aa-1111-de9dac3fb903", "deviceName": "Random-Integer-Device", "profileName": "Random-Integer-Device", '
                    '"sourceName": "Int32", "origin": 1540855006469, "readings": [{"id": "82eb2e26-0f24-48aa-ae4c-de9dac3fb920", '
                    '"origin": 1540855006469, "deviceName": "Random-Integer-Device", "resourceName": "Int32", "profileName": "Random-Integer-Device", '
                    '"valueType": "Int32", "value": "123"}]}',

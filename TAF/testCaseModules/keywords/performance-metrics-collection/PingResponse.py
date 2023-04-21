@@ -31,7 +31,8 @@ def send_ping_request(port, token):
     else:
         service_url = "{}://{}:{}".format(SettingsInfo().constant.URI_SCHEME, SettingsInfo().constant.BASE_URL, port)
         requests.packages.urllib3.disable_warnings()  # disable ssl-warning
-    ping_url = "{}/api/v2/ping".format(service_url)
+        api_version = "{}".format(SettingsInfo().constant.API_VERSION)
+    ping_url = "{}/api/{}/ping".format(service_url, api_version)
     header = {"Authorization": "Bearer {}".format(token)}
     res = requests.get(ping_url, headers=header, verify=False)
     logger.info("response body: {}, reponse time: {}".format(res.content, res.elapsed.total_seconds()))

@@ -293,6 +293,7 @@ Dump Last 100 lines Log And Service Config  # For Debug use
 
 Store Secret Data With ${data}
     ${secrets_data}=  Load data file "all-services/secrets_data.json" and get variable "${data}"
+    Set To Dictionary  ${secrets_data}  apiVersion=${API_VERSION}
     Create Session  Secrets  url=${url}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  POST On Session  Secrets  api/${API_VERSION}/secret  json=${secrets_data}  headers=${headers}

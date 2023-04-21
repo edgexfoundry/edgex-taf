@@ -81,7 +81,7 @@ Create A Rule ${rule_id} With ${rule_sql} And ${action} Sink
 
 Set ${action} Action Value With Rule ${rule_id}
     ${action_data}  Load data file "kuiper/action.json" and get variable "${action}"
-    ${url}  Set Variable  http://edgex-core-command:59882/api/v2/device/name/${device_name}/Virtual_GenerateDeviceValue_INT16_RW
+    ${url}  Set Variable  http://edgex-core-command:59882/api/${API_VERSION}/device/name/${device_name}/Virtual_GenerateDeviceValue_INT16_RW
     Run Keyword If  '${action}' == 'REST' and '${rule_id}' == 'rest-rule-0'  Run Keywords
     ...              Set to dictionary  ${action_data}[0][rest]  url=${url}
     ...              AND  Set to dictionary  ${action_data}[0][rest]  dataTemplate={\"${kuiper_set_resource}\":\"123\"}
