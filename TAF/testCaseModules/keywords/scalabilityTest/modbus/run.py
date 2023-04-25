@@ -276,7 +276,7 @@ def create_device_with_port(port):
     logger.debug('▶ Created device {}'.format(json.dumps(device)))
 
     conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=global_variables.CORE_METADATA_PORT, timeout=5)
-    conn.request(method="POST", url="/api/v1/device", body=json.dumps(device))
+    conn.request(method="POST", url="/api/{}/device".format(global_variables.API_VERSION), body=json.dumps(device))
     try:
         r = conn.getresponse()
     except Exception as e:
@@ -293,10 +293,11 @@ def create_device_with_port(port):
 
 def remove_created_devices(created_devices):
     logger.info('▶ Test finished, clean devices', also_console=True)
-    url = '{}://{}:{}/api/v1/device/name'.format(
+    url = '{}://{}:{}/api/{}/device/name'.format(
         global_variables.URI_SCHEME,
         global_variables.BASE_URL,
         global_variables.CORE_METADATA_PORT,
+        global_variables.API_VERSION
     )
     for i in range(len(created_devices)):
         try:
@@ -342,7 +343,7 @@ def query_simulator_reading_count():
 def update_device_service_admin_state(admin_state):
     conn = http.client.HTTPConnection(host=SettingsInfo().constant.BASE_URL, port=59881, timeout=5)
     conn.request(method="PUT",
-                 url="/api/v1/deviceservice/name/{}/adminstate/{}".format(configuration.SERVICE_NAME, admin_state))
+                 url="/api/{}/deviceservice/name/{}/adminstate/{}".format(global_variables.API_VERSION, configuration.SERVICE_NAME, admin_state))
     try:
         r1 = conn.getresponse()
     except Exception as e:

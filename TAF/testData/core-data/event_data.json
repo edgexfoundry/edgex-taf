@@ -1,7 +1,7 @@
 {
   "Event": {
     "event": {
-      "apiVersion" : "v2",
+      "apiVersion" : "v3",
       "deviceName": "",
       "profileName": "",
       "sourceName": "",
@@ -12,7 +12,7 @@
   },
   "Event With Tags": {
     "event": {
-      "apiVersion" : "v2",
+      "apiVersion" : "v3",
       "deviceName": "",
       "profileName": "",
       "sourceName": "",

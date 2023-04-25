@@ -9,8 +9,8 @@ help()
     printf --  "Available options:\n"
     printf -- "  -s [filename] Test using specified local edgexfoundry snap [instead of --edge]\n"
     printf -- "  -a [filename] Test using specified local edgex-app-service-configurable snap [instead of --edge]\n"
-    printf -- "  -t [test]     Run V2 functional tests [all/app-service/core-command/core-data/core-metadata/support-notifications/support-scheduler/system-agent]\n"
-    printf -- "  -d [test]     Run V2 device tests [all/device-virtual/device-modbus]\n"
+    printf -- "  -t [test]     Run functional tests [all/app-service/core-command/core-data/core-metadata/support-notifications/support-scheduler/system-agent]\n"
+    printf -- "  -d [test]     Run device tests [all/device-virtual/device-modbus]\n"
     printf -- "  -n            Do not use security/API gateway\n"
     printf -- "  -i            Run integration tests\n"
     exit 0 
@@ -54,12 +54,12 @@ while [[ $# -gt 0 ]]; do
             shift # past value
             ;;
         -d)
-            V2_DEVICE_TESTS="$2"
+            DEVICE_TESTS="$2"
             shift # past argument
             shift # past value
             ;;
        -t|--test)
-            V2_FUNCTIONAL_TESTS="$2"
+            FUNCTIONAL_TESTS="$2"
             shift # past argument
             shift # past value
             ;;
@@ -99,18 +99,18 @@ snap_taf_update_consul
     sudo snap set edgexfoundry security-proxy=off
  fi
 
-if [ ! -z "$V2_FUNCTIONAL_TESTS" ]; then
-    echo "INFO:snap-TAF: running V2 API functional tests: $V2_FUNCTIONAL_TESTS ..." 
-    snap_taf_run_functional_tests $V2_FUNCTIONAL_TESTS
+if [ ! -z "$FUNCTIONAL_TESTS" ]; then
+    echo "INFO:snap-TAF: running API functional tests: $FUNCTIONAL_TESTS ..."
+    snap_taf_run_functional_tests $FUNCTIONAL_TESTS
 fi
 
-if [ ! -z "$V2_DEVICE_TESTS" ]; then
+if [ ! -z "$DEVICE_TESTS" ]; then
 
-    if [ $V2_DEVICE_TESTS = "all" ]; then
-        V2_DEVICE_TESTS="device-virtual device-modbus" 
+    if [ $DEVICE_TESTS = "all" ]; then
+        DEVICE_TESTS="device-virtual device-modbus"
     fi
 
-    echo "INFO:snap-TAF: running V2 API device tests: $V2_DEVICE_TESTS ..."
+    echo "INFO:snap-TAF: running API device tests: $DEVICE_TESTS ..."
     snap_taf_run_functional_device_tests $V2_DEVICE_TESTS
 fi
 

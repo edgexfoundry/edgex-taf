@@ -15,7 +15,7 @@ Setup Suite for App Service
 
 Check app-service is available
     ${port}=  Split String  ${url}  :
-    Check service is available  ${port}[2]   /api/v2/ping
+    Check service is available  ${port}[2]   /api/${API_VERSION}/ping
 
 Suite Teardown for App Service
     Suite Teardown
@@ -41,6 +41,7 @@ Trigger Function Pipeline With ${data}
     ${trigger_data}=  Run keyword if  '${data}' != 'Invalid Data'  set variable  Valid Data
     ...               ELSE  set variable  ${data}
     ${trigger_data}=  Load data file "app-service/trigger_data.json" and get variable "${trigger_data}"
+    Set To Dictionary  ${trigger_data}  apiVersion=${API_VERSION}
     Run keyword if  '${data}' == 'No Matching DeviceName'
     ...    Run keywords  set to dictionary  ${trigger_data}[event]  deviceName=DeiveNotMatch
     ...    AND  set to dictionary  ${trigger_data}[event][readings][0]  deviceName=DeviceNotMatch

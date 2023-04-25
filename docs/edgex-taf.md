@@ -173,7 +173,7 @@ Should Be True  ${status}  Failed Suite Setup
     
 *** Test Cases ***
 Test ping API
-When Send GET request "/api/v1/ping" to "${DEVICE_SERVICE_URL}"
+When Send GET request "/api/v3/ping" to "${DEVICE_SERVICE_URL}"
 Then Status code "${REST_RES.status_code}" should be "200"
 And Validate ${REST_RES.content} contains version element "1.1.0"
 ```

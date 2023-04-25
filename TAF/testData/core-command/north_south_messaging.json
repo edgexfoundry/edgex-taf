@@ -1,6 +1,6 @@
 {
   "GET": {
-    "apiVersion": "v2",
+    "apiVersion": "v3",
     "requestId": "",
     "ContentType": "application/json",
     "queryParams": {
@@ -9,13 +9,13 @@
      }
   },
   "SET": {
-    "apiVersion": "v2",
+    "apiVersion": "v3",
     "requestId": "",
     "ContentType": "application/json",
     "Payload": ""
   },
   "QUERY": {
-    "apiVersion": "v2",
+    "apiVersion": "v3",
     "requestId": "",
     "ContentType": "application/json",
     "queryParams": {

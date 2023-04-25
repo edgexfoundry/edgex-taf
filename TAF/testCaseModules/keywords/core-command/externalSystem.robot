@@ -16,6 +16,7 @@ Query Commands For ${device} From External MQTT Broker
                      ...       ELSE  Set Variable  ${device_name}
     ${topic}  Set Variable  edgex/commandquery/request/${topic_suffix}
     ${message_dict}  Load data file "core-command/north_south_messaging.json" and get variable "QUERY"
+    Set To Dictionary  ${message_dict}  apiVersion=${API_VERSION}
     Set To Dictionary  ${message_dict}  requestId=${requestId}
     Remove From Dictionary  ${message_dict}  queryParams
     ${message_str}  Convert To String  ${message_dict}
@@ -28,6 +29,7 @@ Query All Devices Commands With ${parameter}=${value} From External MQTT Broker
     Set Test Variable  ${requestId}  ${uuid}
     ${topic}  Set Variable  edgex/commandquery/request/all
     ${message_dict}  Load data file "core-command/north_south_messaging.json" and get variable "QUERY"
+    Set To Dictionary  ${message_dict}  apiVersion=${API_VERSION}
     Set To Dictionary  ${message_dict}  requestId=${requestId}
     Set To Dictionary  ${message_dict}[queryParams]  ${parameter}=${value}
     ${message_str}  Convert To String  ${message_dict}
@@ -40,6 +42,7 @@ Get Command From External MQTT Broker
     Set Test Variable  ${requestId}  ${uuid}
     ${topic}  Set Variable  edgex/command/request/${device_name}/${resource_name}/get
     ${message_dict}  Load data file "core-command/north_south_messaging.json" and get variable "GET"
+    Set To Dictionary  ${message_dict}  apiVersion=${API_VERSION}
     Set To Dictionary  ${message_dict}  requestId=${requestId}
     Remove From Dictionary  ${message_dict}  queryParams
     ${message_str}  Convert To String  ${message_dict}
@@ -52,6 +55,7 @@ Get Command With ${parameter}=${value} From External MQTT Broker
     Set Test Variable  ${requestId}  ${uuid}
     ${topic}  Set Variable  edgex/command/request/${device_name}/${resource_name}/get
     ${message_dict}  Load data file "core-command/north_south_messaging.json" and get variable "GET"
+    Set To Dictionary  ${message_dict}  apiVersion=${API_VERSION}
     Set To Dictionary  ${message_dict}  requestId=${requestId}
     Set To Dictionary  ${message_dict}[queryParams]  ${parameter}=${value}
     ${message_str}  Convert To String  ${message_dict}
@@ -65,8 +69,7 @@ Set Command From External MQTT Broker
     ${payload}  Encode Request Body ${reading_name}=${reading_value} To Base64
     ${topic}  Set Variable  edgex/command/request/${device_name}/${resource_name}/set
     ${message_dict}  Load data file "core-command/north_south_messaging.json" and get variable "SET"
-    #${random_value}  Get reading value with data type "${data_type}"
-    #${set_reading_value}  convert to string  ${random_value}
+    Set To Dictionary  ${message_dict}  apiVersion=${API_VERSION}
     Set To Dictionary  ${message_dict}  requestId=${requestId}
     Set To Dictionary  ${message_dict}  payload=${payload}
     ${message_str}  Convert To String  ${message_dict}
