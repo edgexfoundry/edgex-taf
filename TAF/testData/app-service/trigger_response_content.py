@@ -8,14 +8,9 @@ trigger_content={
                    '"sourceName": "Int32", "origin": 1540855006469, "readings": [{"id": "82eb2e26-0f24-48aa-ae4c-de9dac3fb920", '
                    '"origin": 1540855006469, "deviceName": "Random-Integer-Device", "resourceName": "Int32", "profileName": "Random-Integer-Device", '
                    '"valueType": "Int32", "value": "123"}]}',
-    "JSON-GZIP String": 'H4sIAAAAAAAA/4zPzUrDQBQF4Hc56wzMX0Jm1m66cSHiRlzcZm7ChXYmTNqAlL67WEEKKmZ7fw7fuYBmeeG6SMmIWC0aSEJEsLy3bDulR+uV74mUMcaoxCHR4MZ90'
-                        'A4NEq8y8CMdGRFPlFM5ql0+8cRVPdx2aDDXMsrhv6ulnOt31C6f3KelVJkkI5rW675tte58FxpUpiR5WhBfL1/e/qeX2A93Xqv/zttUo/KvxG3tVjqc+fl9vv+8zRB'
-                        'hrMP17foRAAD///89WASMAQAA',
-    "JSON-ZLIB String": 'eJyMz81Kw0AUBeB3OesMzF9CZtZuunEh4kZc3GZuwoV2JkzagJS+u1hBCipme38O37mAZnnhukjJiFgtGkhCRLC8t2w7pUfrle+JlDHGqMQh0eDGfdAODRKvMvAjHR'
-                        'kRT5RTOapdPvHEVT3cdmgw1zLK4b+rpZzrd9Qun9ynpVSZJCOa1uu+bbXufBcaVKYkeVoQXy9f3v6nl9gPd16r/87bVKPyr8Rt7VY6nPn5fb7/vM0QYazD9e36EQ'
-                        'AA//8mgnqY',
-    "JSON-ZLIB-AES String": 'L077Qk0zVTPo1yMs57rROBIpM6WSKNf0dhhcOCx3D22KtsQMJrl1lahswJYv6jbc3LFQs5/FjnJ5Xc8u+R2JlcV4Pgx9pbTVIP8V1/8N5ppBg1QSnFZqwzWW8'
-                            'Bq6TGb1mi1dVb6McNEGaqjFRPqOAjn0dAASB3B6Vtmx8LuBEK++7SMl7iA4ga1/xYX7g9xKbY8C3O9j9n3dtj6Ld8gn0tD3Y+A3SAjoRU2I9mS0o+pFFVWeGKC'
-                            '0cMEzy7HImcRQ2r7poWY0m+IzC+EUK8jj4w0FzJX1YSbGbUuWR5s/gZfz9fKmM9NZ3MGxTcA/x6oCd86lrpTRXJinAOJj+C9u/OHIBcaDm2o4pbSk3h0VCWQ='
-
+    "JSON-GZIP String": 'H4sIAAAAAAAA/4yPvWrDQBCE32VqHdyfhO7qNG5ShJAmpFjrVmLBvhMnWxCM3z3EgWBIQtTuzgzfdwHN8sJ1kZIRsTo0kISIYHlv2XZKj9Yr3xMpY4xRiUOiwY37oD+'
+                        'ziVcZ+JGOjIgnyqkc1S6feOKqHm4/NJhrGeXwX2op5/o9tcsnZ9GgVJkkI5rW675tte58FxpUpiR5WhBfL1+8/U9eYj/c8Vr9994mjcq/Im6zW+lw5uf3+b55uyHCWIf'
+                        'r2/UjAAD//8Ztc7GMAQAA',
+    "JSON-ZLIB String": 'eJyMj71qw0AQhN9lah3cn4Tu6jRuUoSQJqRY61Ziwb4TJ1sQjN89xIFgSELU7s4M33cBzfLCdZGSEbE6NJCEiGB5b9l2So/WK98TKWOMUYlDosGN+6A/s4lXGfiRjoyI'
+                        'J8qpHNUun3jiqh5uPzSYaxnl8F9qKef6PbXLJ2fRoFSZJCOa1uu+bbXufBcaVKYkeVoQXy9fvP1PXmI/3PFa/ffeJo3KvyJus1vpcObn9/m+ebshwliH69v1IwAA//8n/nqZ'
 }
