@@ -45,8 +45,6 @@ ErrProWatcherPOST003 - Create provision watcher with empty identifiers
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrProWatcherPOST004 - Create provision watcher with non-existent profile name
-    [Tags]  skipped
-    # Waiting for implementation
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  profileName=Invalid
     When Create Provision Watcher ${provisionwatcher}
@@ -54,20 +52,14 @@ ErrProWatcherPOST004 - Create provision watcher with non-existent profile name
     And Should Return Content-Type "application/json"
     And Item Index 1 Should Contain Status Code "404"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete multiple device services by names
-    ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
-    ...                  AND  Delete multiple device profiles by names
-    ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
+    [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
-ErrProWatcherPOST005 - Create provision watcher with non-existent service name
-    [Tags]  skipped
-    # Waiting for implementation
+ErrProWatcherPOST005 - Create provision watcher with empty service name
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
-    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  serviceName=Invalid
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=${EMPTY}
     When Create Provision Watcher ${provisionwatcher}
-    Then Should Return Status Code "207"
+    Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
-    And Item Index 1 Should Contain Status Code "404"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete multiple device services by names
     ...                       Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
@@ -111,7 +103,7 @@ ErrProWatcherPOST008 - Create provision watcher with invalid adminState
     ...                  AND  Delete multiple device profiles by names
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrProWatcherPOST008 - Create provision watcher with invalid DiscoveredDevice adminState
+ErrProWatcherPOST009 - Create provision watcher with invalid DiscoveredDevice adminState
     # adminState is not locked or unlocked
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  adminState=Invalid
