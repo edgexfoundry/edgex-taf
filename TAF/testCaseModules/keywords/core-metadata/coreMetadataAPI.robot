@@ -728,7 +728,7 @@ Set provision watcher values
     [Arguments]  ${device_service_name}  ${device_profile_name}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/provisionwatcher_data.json  encoding=UTF-8
     ${provisionwatcher}=  Evaluate  json.loads('''${data}''')  json
-    Set To Dictionary  ${provisionwatcher}[discoveredDevice]  serviceName=${device_service_name}
+    Set To Dictionary  ${provisionwatcher}  serviceName=${device_service_name}
     Set To Dictionary  ${provisionwatcher}[discoveredDevice]  profileName=${device_profile_name}
     [Return]  ${provisionwatcher}
 
