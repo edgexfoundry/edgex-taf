@@ -12,10 +12,9 @@ ${url}            ${URI_SCHEME}://${BASE_URL}:${SERVICE_PORT}
 *** Test Cases ***
 SecretsPOST001 - Stores secrets to the secret client with Path
     When Store Secret Data With Path
-    Then Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'
-         ...  Run keywords  Should Return Status Code "201"
-         ...  AND  Service ${SERVICE_NAME} Secrets Should be Stored
-         ...  ELSE  Should Return Status Code "500"
+    Then Should Return Status Code "201"
+    And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Service ${SERVICE_NAME} Secrets Should be Stored
+        ...       ELSE  Secrets Should be Stored To Consul  ${SERVICE_NAME}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrSecretsPOST001 - Stores secrets to the secret client fails (empty path)
