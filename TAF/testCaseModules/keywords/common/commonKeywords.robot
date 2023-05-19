@@ -245,6 +245,15 @@ Update Service Configuration On Consul
     ${resp}=  PUT On Session  Consul  ${path}  data=${value}  headers=${headers}  expected_status=200
     Sleep  1s  # Waiting for the configuration updating
 
+Query Service Configuration On Consul
+    [Arguments]  ${path}
+    ${consul_token}  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Get Consul Token
+    ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
+    ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
+    Create Session  Consul  url=${url}  disable_warnings=true
+    ${resp}=  Get On Session  Consul  ${path}  headers=${headers}  expected_status=200
+    Set Response to Test Variables  ${resp}
+
 Get Consul Token
     ${command}  Set Variable  cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
     ${result}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/execute-command-in-docker.sh core-consul "${command}"
@@ -319,3 +328,16 @@ Service ${service} Secrets Should be Stored
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
     Should Contain  ${content}[data]  ${secrets_key}  ${secrets_value}
+
+Secrets Should be Stored To Consul
+    [Arguments]  ${service}
+    # Validate Secret Name
+    ${secrets_name_path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/Writable/InsecureSecrets/${secrets_name}/SecretName
+    Query Service Configuration On Consul  ${secrets_name_path}
+    ${secrets_name_consul_value}  Evaluate  base64.b64decode('${content}[0][Value]').decode('utf-8')  modules=base64
+    Should Be Equal  ${secrets_name_consul_value}  ${secrets_name}
+    # Validate Secret Data
+    ${secrets_data_path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/Writable/InsecureSecrets/${secrets_name}/SecretData/${secrets_key}
+    Query Service Configuration On Consul  ${secrets_data_path}
+    ${secrets_key_consul_value}  Evaluate  base64.b64decode('${content}[0][Value]').decode('utf-8')  modules=base64
+    Should Be Equal  ${secrets_key_consul_value}  ${secrets_value}
