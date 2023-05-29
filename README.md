@@ -24,7 +24,7 @@ Those tests can separate to different suites:
 
 # Community
 
-- EdgeXFoundry Github Discussion: https://github.com/orgs/edgexfoundry/discussions
+- Discussion: https://github.com/orgs/edgexfoundry/discussions
 - Mailing lists: https://lists.edgexfoundry.org/mailman/listinfo
 
 # License
