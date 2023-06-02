@@ -78,7 +78,7 @@ snap_taf_update_consul()
 
 snap_set_messagebus_to_mqtt()
 {
-    # note that the integration tests use mqtt as the bus https://github.com/edgexfoundry/edgex-compose/blob/main/taf/docker-compose-taf-mqtt-bus.yml
+    # note that the integration tests use mqtt as the bus https://github.com/edgexfoundry/edgex-compose/blob/minnesota/taf/docker-compose-taf-mqtt-bus.yml
     #      
     # rules-engine
  #   snap set edgexfoundry env.app-service-configurable.edgex-message-bus.port="1883"
