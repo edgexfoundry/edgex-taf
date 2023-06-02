@@ -2,7 +2,7 @@
 # # set default values
 USE_ARCH=${1:-x86_64}
 USE_SECURITY=${2:--}
-USE_SHA1=${3:-main}
+USE_SHA1=${3:-minnesota}
 
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"

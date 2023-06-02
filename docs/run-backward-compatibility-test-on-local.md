@@ -1,5 +1,5 @@
 # Run Backward Compatibility Test On Local Environment
-
+### *** Not Support For Minnesota Version ***
 ### Test Scenarios
 #### Case 1
 1. Deploy edgex with Jakarta release.

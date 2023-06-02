@@ -61,13 +61,13 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     # Arguments for get-compose-file.sh
     ${ARCH}: x86_64 | arm64
     ${USE_SECURITY}: - (false) | -security- (true)
-    ${USE_SHA1}:main
+    ${USE_SHA1}:minnesota
     ${TEST_STRATEGY}: functional-test | integration-test
 
     # Fetch the latest docker-compose file
     cd ${HOME}/edgex-taf/TAF/utils/scripts/docker
     sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
-    # ex. sh get-compose-file.sh x86_64 - main functional-test
+    # ex. sh get-compose-file.sh x86_64 - minnesota functional-test
     
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
