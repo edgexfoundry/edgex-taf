@@ -1,5 +1,4 @@
 #!/bin/sh
-# Not Support For Minnesota Version
 UN=`uname -m`
 case $UN in
   aarch64)
