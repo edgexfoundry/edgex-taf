@@ -79,6 +79,7 @@ def fetch_by_service(service):
         container = client.containers.get(containerName)
 
         execResult = container.stats(stream=False)
+        logger.info("{} Docker Stats Result: {}".format(containerName, execResult))
         cpuUsage = calculateCPUPercent(execResult)
         memoryUsage = calculate_memory_usage(execResult)
 
@@ -173,12 +174,16 @@ def get_service_mem_aggregation_value(service, resource_list):
 
 def calculate_memory_usage(d):
     memory_usage = 0
+
     try:
         if "cache" in d["memory_stats"]["stats"]:
+            logger.info("Calculating memory usage by usage - cache")
             memory_usage = d["memory_stats"]["usage"] - d["memory_stats"]["stats"]["cache"]
         elif "total_inactive_file" in d["memory_stats"]["stats"]:  # cgroup v1
+            logger.info("Calculating memory usage by usage - total_inactive_file")
             memory_usage = d["memory_stats"]["usage"] - d["memory_stats"]["stats"]["total_inactive_file"]
         else:  # cgroup v2
+            logger.info("Calculating memory usage by usage - inactive_file")
             memory_usage = d["memory_stats"]["usage"] - d["memory_stats"]["stats"]["inactive_file"]
     except:
         logger.error("fail to calculate memory usage")
