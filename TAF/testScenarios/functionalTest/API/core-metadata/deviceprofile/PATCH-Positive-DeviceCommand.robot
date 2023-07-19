@@ -12,7 +12,9 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile
 *** Test Cases ***
 ProfileCommandPATCH001 - Update one Command on device profile
     # one command > one profile
-    Given Generate a profile and command sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_command}  CurrentStatus
+    And Create profile ${test_profile} and generate command ${test_command} sample for updating
     When Update command ${commandUpdate}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
@@ -35,6 +37,20 @@ ProfileCommandPATCH002 - Update multiple Command on multiple device profiles
     And Profile Test-Profile-2 command isHidden Should Be ${false}
     And Profile Test-Profile-3 command isHidden Should Be ${false}
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
+
+ProfileCommandPATCH003 - Update Command when command name contains Chinese and space character
+    # one command > one profile
+    Given Set Test Variable  ${test_profile}  Test-Profile-5
+    And Set Test Variable  ${test_command}  中文测试命令 UINT16
+    And Upload Device Profile ${test_profile}.yaml
+    And Create profile ${test_profile} and generate command ${test_command} sample for updating
+    When Update command ${commandUpdate}
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "200"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Profile ${test_profile} command isHidden Should Be ${false}
+    [Teardown]  Delete Device Profile By Name  ${test_profile}
 
 *** Keywords ***
 Generate multiple command samples for updating

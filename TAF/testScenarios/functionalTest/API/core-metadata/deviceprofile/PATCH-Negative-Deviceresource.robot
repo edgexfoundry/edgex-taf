@@ -12,7 +12,9 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile
 *** Test Cases ***
 ErrProfileResourcePATCH001 - Update deviceResource with Non-existent profile name
     # non-existent device profile name
-    Given Generate a profile and a resource sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_resource}  DeviceValue_Boolean_RW
+    And Create profile ${test_profile} and generate resource ${test_resource} sample for updating
     And Set To Dictionary  ${resourceUpdate}[0]  profileName=non-existent
     When Update resource ${resourceupdate}
     Then Should Return Status Code "207"
@@ -24,7 +26,9 @@ ErrProfileResourcePATCH001 - Update deviceResource with Non-existent profile nam
 ErrProfileResourcePATCH002 - Update deviceResource with resource name validation error
     # deviceResources > deviceResource with non-existent resource name
     # Contains valid profile body
-    Given Generate a profile and a resource sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_resource}  DeviceValue_Boolean_RW
+    And Create profile ${test_profile} and generate resource ${test_resource} sample for updating
     And Set To Dictionary  ${resourceUpdate}[0][resource]  name=non-existent
     When Update resource ${resourceupdate}
     Then Should Return Status Code "207"
@@ -36,7 +40,9 @@ ErrProfileResourcePATCH002 - Update deviceResource with resource name validation
 ErrProfileResourcePATCH003 - Update deviceResource with isHidden validation error
     # deviceResources > deviceResource invalid isHidden
     # Contains valid profile body
-    Given Generate a profile and a resource sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_resource}  DeviceValue_Boolean_RW
+    And Create profile ${test_profile} and generate resource ${test_resource} sample for updating
     And Set To Dictionary  ${resourceUpdate}[0][resource]  isHidden=${EMPTY}
     When Update resource ${resourceupdate}
     Then Should Return Status Code "400"

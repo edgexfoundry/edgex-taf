@@ -20,8 +20,22 @@ CommandSET001 - Set specified device write command
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Command Virtual_DeviceValue_INT8_RW Vaule Have Been Updated
+    And Command Virtual_DeviceValue_INT8_RW Vaule 32 On ${device_name} Have Been Updated
     [Teardown]  Delete device by name ${device_name}
+
+CommandSET002 - Set specified device write command which command name contains Chinese and space character
+    ${set_data}  Create Dictionary  中文測試資源 UINT32=1000000
+    ${device_name}  Set Variable  Test-Device
+    ${test_command_url}  Set Variable  %E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6%E5%91%BD%E4%BB%A4%20UINT32  #中文測試命令 UINT32
+    ${test_resource_url}  Set Variable  %E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%BA%90%20UINT32  #中文測試資源 UINT32
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-5
+    When Set Specified Device ${device_name} Write Command ${test_command_url} With ${set_data}
+    Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Command ${test_resource_url} Vaule 1000000 On ${device_name} Have Been Updated
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...      AND  Delete Device Profile By Name  Test-Profile-5
 
 ErrCommandSET001 - Set specified device write command with non-existent device
     ${set_data}=  Create Dictionary  Virtual_DeviceValue_INT8_W=32
@@ -52,6 +66,6 @@ ErrCommandSET003 - Set specified device write command when device is locked
 
 
 *** Keywords ***
-Command ${command} Vaule Have Been Updated
-  Get Specified Device Random-Integer-Device Read Command ${command}
-  Should Be True  "${content}[event][readings][0][value]" == "32"
+Command ${command} Vaule ${value} On ${device} Have Been Updated
+  Get Specified Device ${device} Read Command ${command}
+  Should Be True  "${content}[event][readings][0][value]" == "${value}"

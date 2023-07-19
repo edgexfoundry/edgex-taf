@@ -46,6 +46,18 @@ ProfileResourcePOST003 - Add multiple Resources on device profile with valid uni
     [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  ${test_profile}
 
+ProfileResourcePOST004 - Add Resources with Chinese and space character in resource name
+    Given Set Test Variable  ${test_profile}  Test-Profile-3
+    And Set Test Variable  ${resource_name}  測試中文名稱 String
+    And Upload Device Profile ${test_profile}.yaml
+    When Create Device Resource With Resource Name ${resource_name} To ${test_profile}
+    Then Should Return Status Code "207"
+    And Item Index 0 Should Contain Status Code "201"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Resource Should Be Added in ${test_profile}
+    [Teardown]  Delete Device Profile By Name  ${test_profile}
+
 *** Keywords ***
 Resources Should Be Added in ${profile_name}
     Query device profile by name  ${profile_name}
@@ -65,3 +77,10 @@ Resources Should Be Created in Profiles
         Resources Should Be Added in ${profile}
     END
 
+Resource Should Be Added in ${profile_name}
+    Query device profile by name  ${profile_name}
+    ${resource_name_list}  Create List
+    FOR  ${resource}  IN  @{content}[profile][deviceResources]
+            Append To List  ${resource_name_list}  ${resource}[name]
+    END
+    List Should Contain Value  ${resource_name_list}  ${resource_name}

@@ -72,6 +72,23 @@ ProfilePOST006 - Create device profile by upload file and the update file contai
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
     ...                  AND  Delete Profile Files  NEW-Test-Profile-1.yaml
 
+ProfilePOST007 - Create device profile which contains Chinese and space character in source name
+    Given Generate a device profile sample  Test-Profile-5
+    When Create device profile ${deviceProfile}
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Device Profile By Name  Test-Profile-5
+
+ProfilePOST008 - Upload device profile which contains Chinese and space character in source name
+    When Upload Device Profile Test-Profile-5.yaml
+    Then Should Return Status Code "201"
+    And Should Return Content-Type "application/json"
+    And Should Contain "id"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Device Profile By Name  Test-Profile-5
+
 *** Keywords ***
 Upload Device Profile With Empty DeviceResources And DeviceCommands
     Set Test Variable  ${profile_name}  Test-Profile-4

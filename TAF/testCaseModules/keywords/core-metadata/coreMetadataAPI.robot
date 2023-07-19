@@ -479,6 +479,13 @@ Generate a profile and a resource sample for updating
     Generate updating resource  ${resource}
     Set to Dictionary  ${resourceUpdate}[0]  profileName=${test_profile}
 
+Create profile ${profile_name} and generate resource ${resource_name} sample for updating
+    Generate A Device Profile Sample  ${profile_name}
+    Create Device Profile ${deviceProfile}
+    ${resource}=  Create Dictionary  name=${resource_name}  description=Dcp_ABC  isHidden=${false}
+    Generate updating resource  ${resource}
+    Set to Dictionary  ${resourceUpdate}[0]  profileName=${profile_name}
+
 Generate updating resource
     [Arguments]  @{data_list}
     ${profile_list}=  Create List
@@ -489,13 +496,12 @@ Generate updating resource
     END
     Set Test Variable  ${resourceUpdate}  ${profile_list}
 
-Generate a profile and command sample for updating
-    Set Test Variable  ${test_profile}  Test-Profile-1
-    Generate A Device Profile Sample  ${test_profile}
+Create profile ${profile_name} and generate command ${command_name} sample for updating
+    Generate A Device Profile Sample  ${profile_name}
     Create Device Profile ${deviceProfile}
-    ${command}=  Create Dictionary  name=CurrentStatus  isHidden=${false}
+    ${command}=  Create Dictionary  name=${command_name}  isHidden=${false}
     Generate updating command  ${command}
-    Set to Dictionary  ${commandUpdate}[0]  profileName=${test_profile}
+    Set to Dictionary  ${commandUpdate}[0]  profileName=${profile_name}
 
 Generate updating command
     [Arguments]  @{data_list}
@@ -812,3 +818,12 @@ Create Device Resources Contain ${valid} Units Value
         Set To Dictionary   ${resourceProfile}[${INDEX}][resource][properties]  units=${unit}
     END
     Create New resource ${resourceProfile}
+
+Create Device Resource With Resource Name ${resource_name} To ${profile_name}
+    ${resource_data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/resource_profile.json  encoding=UTF-8
+    ${resourceProfile}=  Evaluate  json.loads(r'''${resource_data}''')  json
+    ${new_resourceProfile}  Get Slice From List  ${resourceProfile}  0  1
+    Set To Dictionary  ${new_resourceProfile}[0]  apiVersion=${API_VERSION}
+    Set To Dictionary  ${new_resourceProfile}[0]  profileName=${profile_name}
+    Set To Dictionary  ${new_resourceProfile}[0][resource]  name=${resource_name}
+    Create New resource ${new_resourceProfile}
