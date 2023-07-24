@@ -12,7 +12,9 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-deviceprofile
 *** Test Cases ***
 ProfileResourcePATCH001 - Update one resource on one device profile
     # one resource > one profile
-    Given Generate a profile and a resource sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_resource}  DeviceValue_Boolean_RW
+    And Create profile ${test_profile} and generate resource ${test_resource} sample for updating
     When Update resource ${resourceUpdate}
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
@@ -36,6 +38,19 @@ ProfileResourcePATCH002 - Update multiple resources on multiple device profiles
     And Resource DeviceValue_FLOAT32_R in Profile Test-Profile-3 Should Be Updated
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
+ProfileResourcePATCH003 - Update resource field when resource name contains Chinese and space character
+    Given Set Test Variable  ${test_profile}  Test-Profile-5
+    And Set Test Variable  ${test_resource}  中文測試資源 Boolean
+    And Set Test Variable  ${test_resource_url}  %E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%BA%90%20Boolean
+    And Create profile ${test_profile} and generate resource ${test_resource} sample for updating
+    When Update resource ${resourceUpdate}
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "200"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Resource ${test_resource_url} in Profile ${test_profile} Should Be Updated
+    [Teardown]  Delete Device Profile By Name  ${test_profile}
+
 *** Keywords ***
 Generate multiple resource sample for updating
     ${resource_1}=  Create Dictionary  name=DeviceValue_Boolean_RW  description=Dcp_ABC  isHidden=${false}
@@ -52,5 +67,6 @@ Resource ${resource_name} in Profile ${profile_name} Should Be Updated
     ...             Run Keywords  Should Be Equal  ${content}[resource][description]   Dcp_ABC
     ...                      AND  Should Be Equal  ${content}[resource][isHidden]   ${false}
     ...    ELSE IF  "${profile_name}" == "Test-Profile-2"  Should Be Equal  ${content}[resource][description]   Dcp_ABC
-    ...    ELSE IF  "${profile_name}" == "Test-Profile-3"  Should Be Equal  ${content}[resource][isHidden]   ${false}
+    ...    ELSE IF  "${profile_name}" == "Test-Profile-3" or "${profile_name}" == "Test-Profile-5"
+    ...             Should Be Equal  ${content}[resource][isHidden]   ${false}
 

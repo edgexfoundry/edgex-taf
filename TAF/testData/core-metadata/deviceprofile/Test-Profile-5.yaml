@@ -1,0 +1,45 @@
+name: "Test-Profile-5"
+description: "Test with Chinese and space character in source name"
+manufacturer: "IOTech"
+model: "ABC123"
+labels:
+  - "Chinese"
+
+deviceResources:
+  - name: "中文測試資源 Boolean"
+    description: "Generate device boolean value"
+    isHidden: true
+    tag: "status"
+    properties:
+      valueType: "Bool"
+      readWrite: "RW"
+      minimum: 0
+      maximum: 1
+      defaultValue: "true"
+  - name: "中文测试资源 UINT16"
+    description: "Generate device UINT16 value"
+    isHidden: false
+    properties:
+      valueType: "Uint16"
+      readWrite: "RW"
+      minimum: 100
+      defaultValue: "3000"
+  - name: "中文測試資源 UINT32"
+    description: "Generate device UINT32 value"
+    isHidden: true
+    properties:
+      valueType: "UINT32"
+      readWrite: "RW"
+      units: "kHz"
+
+deviceCommands:
+  - name: "中文测试命令 UINT16"
+    isHidden: true
+    readWrite: RW
+    resourceOperations:
+      - deviceResource: "中文测试资源 UINT16"
+  - name: "中文測試命令 UINT32"
+    isHidden: false
+    readWrite: RW
+    resourceOperations:
+      - deviceResource: "中文測試資源 UINT32"

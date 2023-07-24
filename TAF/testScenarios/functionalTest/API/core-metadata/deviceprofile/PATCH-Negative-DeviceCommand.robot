@@ -21,7 +21,9 @@ ErrProfileCommandPATCH001 - Update deviceCommand with device profile name valida
 ErrProfileCommandPATCH002 - Update deviceCommand with deviceCommand name validation error
     # deviceCommands > deviceCommand with non-existent command name
     # Contains valid profile body
-    Given Generate a profile and command sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_command}  CurrentStatus
+    And Create profile ${test_profile} and generate command ${test_command} sample for updating
     And Set To Dictionary  ${commandUpdate}[0][devicecommand]  name=non-existent
     When Update command ${commandUpdate}
     Then Should Return Status Code "207"
@@ -33,7 +35,9 @@ ErrProfileCommandPATCH002 - Update deviceCommand with deviceCommand name validat
 ErrProfileCommandPATCH003 - Update deviceCommand with deviceCommand isHidden validation error
     # deviceCommands > deviceCommand invalid isHidden
     # Contains valid profile body
-    Given Generate a profile and command sample for updating
+    Given Set Test Variable  ${test_profile}  Test-Profile-1
+    And Set Test Variable  ${test_command}  CurrentStatus
+    And Create profile ${test_profile} and generate command ${test_command} sample for updating
     And Set To Dictionary  ${commandUpdate}[0][devicecommand]  isHidden=${EMPTY}
     When Update command ${commandUpdate}
     Then Should Return Status Code "400"

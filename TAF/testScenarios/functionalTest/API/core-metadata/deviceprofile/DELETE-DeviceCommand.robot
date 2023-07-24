@@ -18,8 +18,21 @@ ProfileCommandDELETE001 - Delete deviceCommand on one device profile with device
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Command ${command_name} Should Be Deleted
+    And Device Command ${command_name} In ${profile_name} Should Be Deleted
     [Teardown]  Delete device profile by name  ${profile_name}
+
+ProfileCommandDELETE002 - Delete deviceCommand by name which contains Chinese and space character
+    Given Set Test Variable  ${test_profile}  Test-Profile-5
+    And Set Test Variable  ${test_command}  中文测试命令 UINT16
+    And Set Test Variable  ${test_command_url}  %E4%B8%AD%E6%96%87%E6%B5%8B%E8%AF%95%E5%91%BD%E4%BB%A4%20UINT16
+    And Generate A Device Profile Sample  ${test_profile}
+    And Create device profile ${deviceProfile}
+    When Delete deviceCommand by Name ${test_command_url} in ${test_profile}
+    Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Device Command ${test_command} In ${test_profile} Should Be Deleted
+    [Teardown]  Delete device profile by name  ${test_profile}
 
 ErrProfileCommandDELETE001 - Delete deviceCommand by non-existent profile name
     # non-existent profile name
@@ -46,7 +59,7 @@ ErrProfileCommandDELETE003 - Delete deviceCommand which profile used by device
     Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Command ${command_name} Should Not Be Deleted
+    And Device Command ${command_name} In ${profile_name} Should Not Be Deleted
     [Teardown]  Run Keywords  Delete Device By Name Test-Device
      ...                  AND  Delete Device Service By Name  Test-Device-Service
      ...                  AND  Delete Device Profile By Name  ${profile_name}
@@ -61,7 +74,7 @@ ErrProfileCommandDELETE004 - Delete deviceCommand when StrictDeviceProfileChange
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Command ${command_name} Should Not Be Deleted
+    And Device Command ${command_name} In ${profile_name} Should Not Be Deleted
     [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Consul
      ...                  AND  Delete Device Profile By Name  ${profile_name}
 
@@ -83,12 +96,12 @@ Get All Device Command From Profile
     END
     [Return]  ${commands}
 
-Device Command ${command_name} Should Be Deleted
-    Query device profile by name  ${profile_name}
+Device Command ${command_name} In ${profile} Should Be Deleted
+    Query device profile by name  ${profile}
     ${commands}  Get All Device Command From Profile  ${content}
     List Should Not Contain Value  ${commands}  ${command_name}  The DeviceCommand is still existed
 
-Device Command ${command_name} Should Not Be Deleted
-    Query device profile by name  ${profile_name}
+Device Command ${command_name} In ${profile} Should Not Be Deleted
+    Query device profile by name  ${profile}
     ${commands}  Get All Device Command From Profile  ${content}
     List Should Contain Value  ${commands}  ${command_name}  The DeviceCommand is not existed

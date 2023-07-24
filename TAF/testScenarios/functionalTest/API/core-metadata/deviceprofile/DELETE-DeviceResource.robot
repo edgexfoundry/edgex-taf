@@ -14,11 +14,11 @@ ProfileResourceDELETE001 - Delete deviceResource by name
     Given Set Test Variable  ${profile_name}  Test-Profile-1
     And Generate A Device Profile Sample  ${profile_name}
     And Create device profile ${deviceProfile}
-    When Delete Unused deviceResource
+    When Delete Unused deviceResource From ${profile_name}
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Resource ${resource_name} Should Be Deleted
+    And Device Resource ${resource_name} In ${profile_name} Should Be Deleted
     [Teardown]  Delete device profile by name  ${profile_name}
 
 ErrProfileResourceDELETE001 - Delete deviceResource by non-existent deviceResource name
@@ -42,11 +42,11 @@ ErrProfileResourceDELETE002 - Delete deviceResource by non-existent device profi
 ErrProfileResourceDELETE003 - Delete deviceResource which profile used by device
     Given Set Test Variable  ${profile_name}  Test-Profile-2
     And Create A Device Sample With Associated device-virtual And ${profile_name}
-    When Delete Unused deviceResource
+    When Delete Unused deviceResource From ${profile_name}
     Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Resource ${resource_name} Should Not Be Deleted
+    And Device Resource ${resource_name} In ${profile_name} Should Not Be Deleted
     [Teardown]  Run Keywords  Delete Device By Name Test-Device
     ...                  AND  Delete Device Service By Name  Test-Device-Service
     ...                  AND  Delete Device Profile By Name  ${profile_name}
@@ -55,11 +55,11 @@ ErrProfileResourceDELETE004 - Delete deviceResource which used by deviceCommand
     Given Set Test Variable  ${profile_name}  Test-Profile-3
     And Generate A Device Profile Sample  ${profile_name}
     And Create device profile ${deviceProfile}
-    When Delete Used deviceResource
+    When Delete Used deviceResource From ${profile_name}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Resource ${resource_name} Should Not Be Deleted
+    And Device Resource ${resource_name} In ${profile_name} Should Not Be Deleted
     [Teardown]  Delete Device Profile By Name  ${profile_name}
 
 ErrProfileResourceDELETE005 - Delete deviceResource when StrictDeviceProfileChanges config is enabled
@@ -68,27 +68,33 @@ ErrProfileResourceDELETE005 - Delete deviceResource when StrictDeviceProfileChan
     And Set Test Variable  ${profile_name}  Test-Profile-4
     And Generate A Device Profile Sample  ${profile_name}
     And Create device profile ${deviceProfile}
-    When Delete Unused deviceResource
+    When Delete Unused deviceResource From ${profile_name}
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    And Device Resource ${resource_name} Should Not Be Deleted
+    And Device Resource ${resource_name} In ${profile_name} Should Not Be Deleted
     [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Consul
     ...                  AND  Delete Device Profile By Name  ${profile_name}
 
-*** Keywords ***
-Delete Unused deviceResource
-    Query device profile by name  ${profile_name}
-    ${resources}  Get Unused Device Resources From Profile
-    ${resource}  Evaluate  random.choice(@{resources})  random
-    Delete deviceResource by Name ${resource} in ${profile_name}
-    Set Test Variable  ${resource_name}  ${resource}
+ProfileResourceDELETE006 - Delete deviceResource by name which contains Chinese and space character
+    Given Set Test Variable  ${test_profile}  Test-Profile-5
+    And Generate A Device Profile Sample  ${test_profile}
+    And Create device profile ${deviceProfile}
+    When Delete Unused deviceResource From ${test_profile}
+    Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Device Resource ${resource_name} In ${test_profile} Should Be Deleted
+    [Teardown]  Delete device profile by name  ${test_profile}
 
-Delete Used deviceResource
-    Query device profile by name  ${profile_name}
-    ${resources}  Get Used Device Resources From Profile
+*** Keywords ***
+Delete ${action} deviceResource From ${profile}
+    Query device profile by name  ${profile}
+    ${resources}  Run Keyword If  "${action}" == "Unused"  Get Unused Device Resources From Profile
+                  ...    ELSE IF  "${action}" == "Used"  Get Used Device Resources From Profile
+                  ...    ELSE     Fail  Incorrect Action !!
     ${resource}  Evaluate  random.choice(@{resources})  random
-    Delete deviceResource by Name ${resource} in ${profile_name}
+    Delete deviceResource by Name ${resource} in ${profile}
     Set Test Variable  ${resource_name}  ${resource}
 
 Get All Device Resources From Profile
@@ -122,12 +128,12 @@ Get Used Device Resources From Profile
     ${usedResources}  Remove Duplicates  ${allUsedResources}
     [Return]  ${usedResources}
 
-Device Resource ${resource_name} Should Be Deleted
-    Query device profile by name  ${profile_name}
+Device Resource ${resource_name} In ${profile} Should Be Deleted
+    Query device profile by name  ${profile}
     ${resources}  Get All Device Resources From Profile  ${content}
     List Should Not Contain Value  ${resources}  ${resource_name}  The DeviceResource is still existed
 
-Device Resource ${resource_name} Should Not Be Deleted
-    Query device profile by name  ${profile_name}
+Device Resource ${resource_name} In ${profile} Should Not Be Deleted
+    Query device profile by name  ${profile}
     ${resources}  Get All Device Resources From Profile  ${content}
     List Should Contain Value  ${resources}  ${resource_name}  The DeviceResource is not existed

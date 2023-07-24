@@ -79,14 +79,26 @@ CommandGET006 - Get specified device read command when ds-returnevent is false
     [Teardown]  Delete device by name ${device_name}
 
 CommandGET007 - Get specified device read command when ds-pushevent is true
-    ${device_name}  Set Variable  Random-Float-Device
-    Given Create Device For device-virtual With Name ${device_name}
+    Given Set Test Variable  ${device_name}  Random-Float-Device
+    And Create Device For device-virtual With Name ${device_name}
     When Get Device ${device_name} Read Command Virtual_GenerateDeviceValue_FLOAT32_R With ds-pushevent=true
     Then Should Return Status Code "200" And event
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Event Has Been Pushed To Core Data
     [Teardown]  Delete device by name ${device_name}
+
+CommandGET008 - Get specified device read command which command name contains Chinese and space character
+    Given Set Test Variable  ${device_name}  Test-Device
+    And Set Test Variable  ${test_command_url}  %E4%B8%AD%E6%96%87%E6%B5%8B%E8%AF%95%E8%B5%84%E6%BA%90%20UINT16  # 中文测试资源 UINT16
+    And Create A Device Sample With Associated device-virtual And Test-Profile-5
+    When Get Device ${device_name} Read Command ${test_command_url} With ds-pushevent=true
+    Then Should Return Status Code "200" And event
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Event Has Been Pushed To Core Data
+    [Teardown]  Run Keywords  Delete device by name ${device_name}
+                ...      AND  Delete Device Profile By Name  Test-Profile-5
 
 *** Keywords ***
 Event Has Been Pushed To Core Data
@@ -96,7 +108,7 @@ Event Has Been Pushed To Core Data
     ${resp}=  GET On Session  Core Data  ${coreDataEventUri}/id/${id}  headers=${headers}
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
-    Should Be True  "${content}[event][deviceName]" == "Random-Float-Device"
+    Should Be True  "${content}[event][deviceName]" == "${device_name}"
 
 All deviceCoreCommands Should Contain parameters In Each coreCommand
     ${deivceCoreCommands}=  Set Variable  ${content}[deviceCoreCommands]
@@ -117,3 +129,11 @@ Command Contains Parameters
     FOR  ${command}  IN  @{coreCommands}
         Dictionary Should Contain Key  ${command}  parameters
     END
+
+Create Device For
+    ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
+    Set To Dictionary  ${device}  name=${name}
+    Generate Devices  ${device}
+    Create Device With ${Device}
+    sleep  500ms
+    Set Test Variable  ${device_name}  ${name}
