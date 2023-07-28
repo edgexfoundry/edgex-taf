@@ -35,6 +35,7 @@ for compose in ${COMPOSE_FILE}; do
     sed -n "/^\ \ ${profile}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${profile}.yml  # print device-service
     sed -i 's/\CONFIG_DIR_PLACE_HOLDER/${CONFIG_DIR}/g' tmp/${profile}.yml
     sed -i "s/\PROFILE_VOLUME_PLACE_HOLDER/\${WORK_DIR}\/TAF\/config\/${profile}/g" tmp/${profile}.yml
+
     # Enable Delayed Start
     if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${USE_SECURITY}" = '-security-' ] \
       && [ "${DELAYED_START}" = 'true' ]; then
@@ -105,6 +106,30 @@ for compose in ${COMPOSE_FILE}; do
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' ${compose}.yml
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' ${compose}.yml
     fi
+
+    # Multiple Instance of device-modbus
+    sed -n "/^\ \ device-modbus:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/device-modbus_1.yml
+    sed -i 's/device-modbus/device-modbus_1/g' tmp/device-modbus_1.yml
+    sed -i "s/device-modbus_1${USE_ARM64}:latest/device-modbus${USE_ARM64}:latest/g" tmp/device-modbus_1.yml
+    if [ "${USE_SECURITY}" = '-security-' ]; then
+      sed -i 's/- \/device-modbus_1/- \/device-modbus/g' tmp/device-modbus_1.yml
+    fi
+    sed -i 's/published: \"59901\"/published: "59911"/g' tmp/device-modbus_1.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_INSTANCE_NAME: 1' tmp/device-modbus_1.yml
+    sed -i "/services:/ r tmp/device-modbus_1.yml" ${compose}.yml
+    # Add secrets for device-modbus_1
+    if [ "${USE_SECURITY}" = '-security-' ]; then
+      sed -i '/EDGEX_ADD_REGISTRY_ACL_ROLES/ s/$/,device-modbus_1/' ${compose}.yml
+      sed -i '/EDGEX_ADD_KNOWN_SECRETS/ s/$/,redisdb[device-modbus_1],message-bus[device-modbus_1]/' ${compose}.yml
+      sed -i '/EDGEX_ADD_SECRETSTORE_TOKENS/ s/$/,device-modbus_1/' ${compose}.yml
+    fi
+
+    # Add second modbus simulator
+    sed -n "/^\ \ modbus-simulator:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/modbus-sim_1.yml
+    sed -i 's/modbus-simulator/modbus-simulator_1/g' tmp/modbus-sim_1.yml
+    sed -i "s/modbus-simulator_1${USE_ARM64}:latest/modbus-simulator${USE_ARM64}:latest/g" tmp/modbus-sim_1.yml
+    sed -i 's/published: \"1502\"/published: "1512"/g' tmp/modbus-sim_1.yml
+    sed -i "/services:/ r tmp/modbus-sim_1.yml" ${compose}.yml
   fi
 
   # Update services which use DOCKER_HOST_IP

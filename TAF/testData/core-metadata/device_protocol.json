@@ -8,6 +8,15 @@
             "IdleTimeout":"60"
         }
     },
+    "device-modbus_1": {
+        "modbus-tcp": {
+            "Address": "edgex-modbus-simulator_1",
+            "Port": "1502",
+            "UnitID": "1",
+            "Timeout":"60",
+            "IdleTimeout":"60"
+        }
+    },
     "device-virtual": {
         "other": {
             "Address": "simple01",
