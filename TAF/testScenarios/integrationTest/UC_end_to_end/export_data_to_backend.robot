@@ -34,7 +34,6 @@ Export002 - Export events/readings to MQTT Server
     ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log
     And Sleep  1s  # Waiting for above process is ready
     And Set Test Variable  ${device_name}  mqtt-export-device
-    And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With MQTT Export To Vault
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW
     Then Device data has recevied by mqtt subscriber

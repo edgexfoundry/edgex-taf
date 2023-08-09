@@ -89,7 +89,9 @@ Set ${action} Action Value With Rule ${rule_id}
     ...              Set to dictionary  ${action_data}[0][rest]  url=${url}
     ...              AND  Set to dictionary  ${action_data}[0][rest]  dataTemplate={\"${kuiper_set_resource}\":\"-123\"}
     Run Keyword If  '${action}' == 'MQTT'
-    ...      Set to dictionary  ${action_data}[0][mqtt]  server=tcp://edgex-taf-mqtt-broker:${BROKER_PORT}
+    ...      Run Keywords  Set to dictionary  ${action_data}[0][mqtt]  server=tcp://edgex-taf-mqtt-broker:${BROKER_PORT}
+    ...               AND  Set to dictionary  ${action_data}[0][mqtt]  username=${EX_BROKER_USER}
+    ...               AND  Set to dictionary  ${action_data}[0][mqtt]  password=${EX_BROKER_PASSWD}
     [Return]  ${action_data}
 
 Execute Get Command ${command} To Trigger ${device_name}

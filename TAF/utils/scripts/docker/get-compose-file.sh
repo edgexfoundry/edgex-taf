@@ -59,17 +59,6 @@ for compose in ${COMPOSE_FILE}; do
     done
   fi
 
-  # Enable North-South Messaging
-  if [ "${TEST_STRATEGY}" = "integration-test" ]; then
-    sed -n "/^\ \ core-command:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-command.yml
-    sed -i '/EXTERNALMQTT_URL/d' tmp/core-command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_ENABLED: true' tmp/core-command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/core-command.yml
-    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_RETAIN: false' tmp/core-command.yml
-    sed -i "/^\ \ core-command:/,/^  [a-z].*:$/{//!d}; /^\ \ core-command:/d" ${compose}.yml
-    sed -i "/services:/ r tmp/core-command.yml" ${compose}.yml
-  fi
-
   # Update app-sample PerTopicPipeline
   sed -n '/^\ \ app-sample:/,/^  [a-z].*:$/p' ${compose}.yml | sed '$d' > tmp/app-sample.yml
   sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_HTTPEXPORT_PARAMETERS_URL: http:\/\/${DOCKER_HOST_IP}:7770' tmp/app-sample.yml
@@ -78,6 +67,45 @@ for compose in ${COMPOSE_FILE}; do
   sed -i '$a\ \ \ \ -\ \"${DOCKER_HOST_IP}:host-gateway"' tmp/app-sample.yml
   sed -i '/^\ \ app-sample:/,/^  [a-z].*:$/{//!d}; /^\ \ app-sample:/d' ${compose}.yml
   sed -i '/services:/ r tmp/app-sample.yml' ${compose}.yml
+
+  # Enable North-South Messaging
+  if [ "${TEST_STRATEGY}" = "integration-test" ]; then
+    sed -n "/^\ \ core-command:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-command.yml
+    sed -i '/EXTERNALMQTT_URL/d' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_ENABLED: true' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_URL: tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_RETAIN: false' tmp/core-command.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EXTERNALMQTT_AUTHMODE: usernamepassword' tmp/core-command.yml
+    if [ "${USE_SECURITY}" = '-security-' ]; then
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_SECRETSFILE: \/tmp\/secrets.json' tmp/core-command.yml
+      sed -i '/SECRETSTORE_SECRETSFILE/a \ \ \ \ \ \ SECRETSTORE_DISABLESCRUBSECRETSFILE: true' tmp/core-command.yml
+    else
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' tmp/core-command.yml
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' tmp/core-command.yml
+    fi
+    sed -i "/^\ \ core-command:/,/^  [a-z].*:$/{//!d}; /^\ \ core-command:/d" ${compose}.yml
+    sed -i "/services:/ r tmp/core-command.yml" ${compose}.yml
+    # External MQTT
+    sed -n "/^\ \ mqtt-taf-broker:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/external-mqtt.yml
+    sed -i "s/mosquitto-no-auth.conf/etc\/mosquitto\/mosquitto.conf/g" tmp/external-mqtt.yml
+    sed -i '$a\ \ \ \ volumes:' tmp/external-mqtt.yml
+    sed -i '/\ \ \ \ volumes:/a \ \ \ \ - \/${WORK_DIR}\/TAF\/utils\/scripts\/docker\/mosquitto:\/etc\/mosquitto:z' tmp/external-mqtt.yml
+    sed -i "/^\ \ mqtt-taf-broker:/,/^  [a-z].*:$/{//!d}; /^\ \ mqtt-taf-broker:/d" ${compose}.yml
+    sed -i "/services:/ r tmp/external-mqtt.yml" ${compose}.yml
+
+    # Set External MQTT Auth at mqtt-export of app-service
+    sed -i '/TRIGGER_EXTERNALMQTT_URL/a \ \ \ \ \ \ TRIGGER_EXTERNALMQTT_AUTHMODE: usernamepassword' ${compose}.yml
+    if [ "${USE_SECURITY}" = '-security-' ]; then
+      sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_AUTHMODE: usernamepassword' ${compose}.yml
+      sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ SECRETSTORE_SECRETSFILE: \/tmp\/secrets.json' ${compose}.yml
+      sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ SECRETSTORE_DISABLESCRUBSECRETSFILE: true' ${compose}.yml
+      sed -i '/\ \ \ \ volumes:/a \ \ \ \ - \/${WORK_DIR}\/TAF\/testData\/all-services\/secrets.json:\/tmp\/secrets.json' ${compose}.yml
+    else
+      sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_AUTHMODE: usernamepassword' ${compose}.yml
+      sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' ${compose}.yml
+      sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' ${compose}.yml
+    fi
+  fi
 
   # Update services which use DOCKER_HOST_IP
   for service in support-notifications app-http-export; do
