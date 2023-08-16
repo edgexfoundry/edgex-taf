@@ -19,14 +19,14 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 
 *** Test Cases ***
 Export001 - Export events/readings to HTTP Server
-    ${handle}=  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
+    ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
     Given Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With HTTP Export To Vault
     And Create Device For device-virtual With Name http-export-device
     When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then HTTP Server received event is the same with exported from service app-http-export
     [Teardown]  Run keywords  Delete device by name http-export-device
                 ...           AND  Delete all events by age
-                ...           AND  Terminate All Processes  kill=True
+                ...           AND  Terminate Process  ${handle}  kill=True
 
 Export002 - Export events/readings to MQTT Server
     [Setup]  Run Keyword And Ignore Error  Stop Services  app-scalability-test-mqtt-export

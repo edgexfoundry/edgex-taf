@@ -297,7 +297,7 @@ Dump Last 100 lines Log And Service Config  # For Debug use
     [Arguments]  ${service_name}  ${url}
     Set Test Variable  ${url}  ${url}
     Query Config
-    ${logs}  Run Process  docker logs edgex-${service_name} -n 100  shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ${logs}  Run Process  docker logs edgex-${service_name} -n 100  shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     Log  ${logs.stdout}
 
 Store Secret Data With ${data}
