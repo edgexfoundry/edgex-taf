@@ -27,7 +27,6 @@ StoreAndForward001 - Stored data is exported after connecting to http server
     And Start HTTP Server And Received Exported Data Contains ${PREFIX}_GenerateDeviceValue_UINT8_RW
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
-                ...           AND  Terminate Process  ${handle}  kill=True
 
 StoreAndForward002 - Stored data is cleared after the maximum configured retires
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
@@ -62,7 +61,7 @@ StoreAndForward004 - Retry loop interval is set by the Writeable.StoreAndForward
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ds-pushevent=true
     Sleep  12s  # wait until retry fails
-    Then Found Retry Log 4 Times In app-http-export Logs From ${timestamp}
+    Then Wait Until Keyword Succeeds   3x  3s  Found Retry Log 4 Times In app-http-export Logs From ${timestamp}
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...           AND  Delete all events by age
 
@@ -91,16 +90,17 @@ Set ${configurations} For ${service_name} On Consul
 
 Start HTTP Server And Received Exported Data Contains ${keyword}
     ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True
-    Set Test Variable  ${handle}  ${handle}
     Sleep  3s
     ${http_server_received}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/httpd-server.log  ${keyword}
     ${http_received_length}  run keyword if  r'''${http_server_received}''' == '${EMPTY}'  fail  No export log found on http-server
                              ...       ELSE  Get Line Count  ${http_server_received}
     Should Be Equal As Integers  1  ${http_received_length}
+    Terminate Process  ${handle}  kill=True
 
 Found Retry Log ${number} Times In ${service_name} Logs From ${timestamp}
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
+    Log  ${logs.stdout}
     ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     ${retry_times}  Get Line Count  ${retry_lines}
     Should Be Equal As Integers  ${retry_times}  ${number}
@@ -115,8 +115,6 @@ Found Remove Log In ${service_name} Logs From ${timestamp}
 Modify PersistOnError to ${value} On Consul
     ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
     Update Service Configuration On Consul  ${path}  ${value}
-    Restart Services  app-http-export
-    Sleep  4s
 
 Found Retry Log From ${timestamp} After Restarting ${service_name}
     # Show last 100 lines for debug
@@ -124,6 +122,7 @@ Found Retry Log From ${timestamp} After Restarting ${service_name}
 
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
+    Log  ${logs.stdout}
     ${retry_lines}  Get Lines Containing String  ${logs.stdout}.encode()  1 stored data items found for retrying
     Should Not Be Empty   ${retry_lines}
 
