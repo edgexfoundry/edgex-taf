@@ -117,11 +117,18 @@ for compose in ${COMPOSE_FILE}; do
     sed -i 's/published: \"59901\"/published: "59911"/g' tmp/device-modbus_1.yml
     sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_INSTANCE_NAME: 1' tmp/device-modbus_1.yml
     sed -i "/services:/ r tmp/device-modbus_1.yml" ${compose}.yml
-    # Add secrets for device-modbus_1
+
     if [ "${USE_SECURITY}" = '-security-' ]; then
+      # Add secrets for device-modbus_1
       sed -i '/EDGEX_ADD_REGISTRY_ACL_ROLES/ s/$/,device-modbus_1/' ${compose}.yml
       sed -i '/EDGEX_ADD_KNOWN_SECRETS/ s/$/,redisdb[device-modbus_1],message-bus[device-modbus_1]/' ${compose}.yml
       sed -i '/EDGEX_ADD_SECRETSTORE_TOKENS/ s/$/,device-modbus_1/' ${compose}.yml
+      # Enable CORS Configuration
+      sed -n "/^\ \ security-proxy-setup:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/security-proxy-setup.yml
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_SERVICE_CORSCONFIGURATION_ENABLECORS: true' tmp/security-proxy-setup.yml
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_SERVICE_CORSCONFIGURATION_CORSALLOWCREDENTIALS: true' tmp/security-proxy-setup.yml
+      sed -i "/^\ \ security-proxy-setup:/,/^  [a-z].*:$/{//!d}; /^\ \ security-proxy-setup:/d" ${compose}.yml
+      sed -i "/services:/ r tmp/security-proxy-setup.yml" ${compose}.yml
     fi
 
     # Add second modbus simulator

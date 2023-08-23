@@ -341,3 +341,6 @@ Secrets Should be Stored To Consul
     Query Service Configuration On Consul  ${secrets_data_path}
     ${secrets_key_consul_value}  Evaluate  base64.b64decode('${content}[0][Value]').decode('utf-8')  modules=base64
     Should Be Equal  ${secrets_key_consul_value}  ${secrets_value}
+
+Should Return Status Code "${statusCode_0}" or "${statusCode_1}"
+    Should Match Regexp  "${response}"  (${statusCode_0}|${statusCode_1})

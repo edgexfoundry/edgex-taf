@@ -101,7 +101,3 @@ ErrCommandGET012 - Get unavailable Modbus device read command
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}
-
-*** Keywords ***
-Should Return Status Code "500" or "503"
-    Should Match Regexp  "${response}"  (500|503)
