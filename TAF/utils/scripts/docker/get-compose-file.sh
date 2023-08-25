@@ -7,6 +7,8 @@ USE_SHA1=${3:-main}
 TEST_STRATEGY=${4:-}
 DELAYED_START=${5:-false}
 
+. $(dirname "$0")/common-taf.env
+
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
 
@@ -83,6 +85,15 @@ for compose in ${COMPOSE_FILE}; do
     else
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' tmp/core-command.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' tmp/core-command.yml
+      # Uri for files
+      if [ "${compose}" = "docker-compose" ]; then
+        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_HOST: edgex-redis' tmp/core-command.yml
+        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_HOST: edgex-redis' tmp/core-command.yml
+        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_HOST: edgex-core-consul' tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_COMMON_CONFIG: ${HTTP_SERVER_DIR}/common-config.yaml" tmp/core-command.yml
+        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_CONFIG_PROVIDER: none' tmp/core-command.yml
+      fi
+      ###
     fi
     sed -i "/^\ \ core-command:/,/^  [a-z].*:$/{//!d}; /^\ \ core-command:/d" ${compose}.yml
     sed -i "/services:/ r tmp/core-command.yml" ${compose}.yml
@@ -123,12 +134,16 @@ for compose in ${COMPOSE_FILE}; do
       sed -i '/EDGEX_ADD_REGISTRY_ACL_ROLES/ s/$/,device-modbus_1/' ${compose}.yml
       sed -i '/EDGEX_ADD_KNOWN_SECRETS/ s/$/,redisdb[device-modbus_1],message-bus[device-modbus_1]/' ${compose}.yml
       sed -i '/EDGEX_ADD_SECRETSTORE_TOKENS/ s/$/,device-modbus_1/' ${compose}.yml
+
       # Enable CORS Configuration
       sed -n "/^\ \ security-proxy-setup:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/security-proxy-setup.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_SERVICE_CORSCONFIGURATION_ENABLECORS: true' tmp/security-proxy-setup.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_SERVICE_CORSCONFIGURATION_CORSALLOWCREDENTIALS: true' tmp/security-proxy-setup.yml
       sed -i "/^\ \ security-proxy-setup:/,/^  [a-z].*:$/{//!d}; /^\ \ security-proxy-setup:/d" ${compose}.yml
       sed -i "/services:/ r tmp/security-proxy-setup.yml" ${compose}.yml
+
+      # Add proxy route for device-onvif-camera
+      sed -i '/EDGEX_ADD_PROXY_ROUTE/ s/$/,device-onvif-camera.http:\/\/edgex-device-onvif-camera:59984/' ${compose}.yml
     fi
 
     # Add second modbus simulator
@@ -137,6 +152,24 @@ for compose in ${COMPOSE_FILE}; do
     sed -i "s/modbus-simulator_1${USE_ARM64}:latest/modbus-simulator${USE_ARM64}:latest/g" tmp/modbus-sim_1.yml
     sed -i 's/published: \"1502\"/published: "1512"/g' tmp/modbus-sim_1.yml
     sed -i "/services:/ r tmp/modbus-sim_1.yml" ${compose}.yml
+
+    # URI for files
+    if [ "${compose}" = "docker-compose" ]; then
+      sed -n "/^\ \ device-onvif-camera:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/device-onvif-camera.yml
+      if [ "${USE_SECURITY}" = '-' ]; then
+        sed -n "/^\ \ core-metadata:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-metadata.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ UOM_UOMFILE: ${HTTP_SERVER_DIR}/uom.yaml" tmp/core-metadata.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_CONFIG_FILE: ${HTTP_SERVER_DIR}/config.yaml" tmp/device-onvif-camera.yml
+        sed -i "/^\ \ core-metadata:/,/^  [a-z].*:$/{//!d}; /^\ \ core-metadata:/d" ${compose}.yml
+        sed -i "/services:/ r tmp/core-metadata.yml" ${compose}.yml
+      else
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DEVICE_PROFILESDIR: .\/res" tmp/device-onvif-camera.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DEVICE_DEVICESDIR: .\/res" tmp/device-onvif-camera.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DEVICE_PROVISIONWATCHERSDIR: .\/res" tmp/device-onvif-camera.yml
+      fi
+      sed -i "/^\ \ device-onvif-camera:/,/^  [a-z].*:$/{//!d}; /^\ \ device-onvif-camera:/d" ${compose}.yml
+      sed -i "/services:/ r tmp/device-onvif-camera.yml" ${compose}.yml
+    fi
   fi
 
   # Update services which use DOCKER_HOST_IP
@@ -161,5 +194,13 @@ for compose in ${COMPOSE_FILE}; do
 
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' ${compose}.yml
   sed -i '/METRICSMECHANISM/d' ${compose}.yml  # remove METRICSMECHANISM env variable to allow change on Consul
+
+  # Put HTTP Server On the top of compose file
+  if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${compose}" = "docker-compose" ]; then
+    sed -i "/services:/ r httpd/tools_yaml" ${compose}.yml
+
+    # Download test data for URI for files
+    sh get-uri-test-files.sh ${USE_SECURITY}
+  fi
 done
 rm -rf tmp

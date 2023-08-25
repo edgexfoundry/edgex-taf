@@ -1,0 +1,12 @@
+  httpd:
+    restart: always
+    image: httpd:alpine
+    volumes:
+      - ${WORK_DIR}/TAF/testData/httpd:/usr/local/apache2/htdocs/files
+      - ${WORK_DIR}/TAF/utils/scripts/docker/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ${WORK_DIR}/TAF/utils/scripts/docker/httpd/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+      - ${WORK_DIR}/TAF/utils/scripts/docker/httpd/htaccess:/usr/local/apache2/.htaccess
+      - ${WORK_DIR}/TAF/utils/scripts/docker/httpd/htpasswd:/usr/local/apache2/.htpasswd
+    networks:
+      edgex-network: null
+    container_name: httpd-auth

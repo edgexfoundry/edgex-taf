@@ -251,7 +251,7 @@ Query Service Configuration On Consul
     ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
     ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
     Create Session  Consul  url=${url}  disable_warnings=true
-    ${resp}=  Get On Session  Consul  ${path}  headers=${headers}  expected_status=200
+    ${resp}=  Get On Session  Consul  ${path}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
 Get Consul Token
