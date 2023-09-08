@@ -72,6 +72,18 @@ IntervalGET006 - Query Interval by name
     And Should Be Equal As Strings  interval-test  ${content}[interval][name]
     [Teardown]  Delete interval by name interval-test
 
+IntervalGET007 - Query Interval by chinese name
+    Given Set Test Variable  ${test_interval_name}  间隔24小时
+    And General An Interval Sample
+    And Set To Dictionary  ${intervals}[0][interval]  name=${test_interval_name}
+    And Create Interval  ${intervals}
+    When Query Interval By Name ${test_interval_name}
+    Then Should Return Status Code "200" And interval
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Should Be Equal As Strings  ${test_interval_name}  ${content}[interval][name]
+    [Teardown]  Delete interval by name ${test_interval_name}
+
 ErrIntervalGET001 - Query Interval by not existed name
     When Query Interval By Name not-existed
     Then Should Return Status Code "404"

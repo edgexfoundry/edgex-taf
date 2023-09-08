@@ -21,18 +21,20 @@ SubscriptionPOST001 - Create subscription
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keyword And Ignore Error  Delete Multiple Subscriptions By Names  @{subscription_names}
 
+SubscriptionPOST002 - Create subscription with chinese name
+    Given Set Test Variable  ${test_subscription_name}  测试中文訂閱名称
+    And Generate A Subscription Sample With REST Channel
+    And Set To Dictionary  ${subscription}[0][subscription]  name=${test_subscription_name}
+    When Create Subscription ${subscription}
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Subscription By Name ${test_subscription_name}
+
 ErrSubscriptionPOST001 - Create subscription with empty name
     Given Generate 3 Subscriptions Sample
     And Set To Dictionary  ${subscription}[1][subscription]  name=${EMPTY}
-    When Create Subscription ${subscription}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrSubscriptionPOST002 - Create subscription with invalid name
-    # https://tools.ietf.org/html/rfc3986#section-2.3, which should be ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~
-    Given Generate 3 Subscriptions Sample
-    And Set To Dictionary  ${subscription}[1][subscription]  name=invalid name
     When Create Subscription ${subscription}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"

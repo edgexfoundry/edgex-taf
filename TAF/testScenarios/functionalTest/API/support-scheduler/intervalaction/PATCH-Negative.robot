@@ -22,18 +22,6 @@ ErrIntervalactionPATCH001 - Update intervalaction with empty name
     [Teardown]  Run Keywords  Delete IntervalAction By Name ${intervalAction_name}
     ...         AND  Delete interval by name ${Interval_name}
 
-ErrIntervalactionPATCH002 - Update intervalaction with invalid name
-    # name contains invalid character @
-    Given Create An Interval And Generate An Intervalaction Sample
-    And Create Intervalaction  ${intervalActions}
-    And Set To Dictionary  ${intervalActions}[0][action]  name=Invalid@Name
-    When Update IntervalActions  ${intervalActions}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete IntervalAction By Name ${intervalAction_name}
-    ...         AND  Delete interval by name ${Interval_name}
-
 ErrIntervalactionPATCH003 - Update intervalaction with empty intervalName
     Given Create An Interval And Generate An Intervalaction Sample
     And Create Intervalaction  ${intervalActions}

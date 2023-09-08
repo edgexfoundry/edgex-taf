@@ -30,6 +30,16 @@ IntervalactionPOST002 - Create pre-created intervalaction with pre-created inter
     [Teardown]  Run Keywords  Set support-scheduler configs ScheduleIntervalTime=500 And LogLevel=INFO
     ...   AND   Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
 
+IntervalactionPOST003 - Create intervalaction with chinese name
+    Given Create Interval And Generate 2 Intervalaction Sample With Chinese Name
+    When Create Intervalaction  ${intervalActions}
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete Multiple IntervalActions By Names  @{intervalAction_names}
+    ...         AND  Delete interval by name ${test_interval_name}
+
 *** Keywords ***
 Set support-scheduler configs ScheduleIntervalTime=${millisecond} And LogLevel=${logLevel}
     Set Test Variable  ${consul_path}    ${CONSUL_CONFIG_BASE_ENDPOINT}/support-scheduler
@@ -75,7 +85,7 @@ Pre-Created Interval And IntervalAction Should Be Created
 IntervalAction Should Be Executed Every ScheduleIntervalTime
     ${keyword}=  Set Variable  1 action need to be executed with interval ${interval_name}
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh support-scheduler ${timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=5s
     ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
     ${times}=  Get Regexp Matches  ${return_log}  :([0-5][0-9]:[0-5][0-9].[0-9]+)  1
     ${time_diff}=  Subtract Time From Time  ${times}[1]  ${times}[0]
@@ -84,3 +94,21 @@ IntervalAction Should Be Executed Every ScheduleIntervalTime
 Ping Scheduler Service
     Query Ping
     Should return status code "200"
+
+Create Interval And Generate ${number} Intervalaction Sample With Chinese Name
+    [Arguments]  ${address}=RESTAddress
+    General An Interval Sample
+    Set Test Variable  ${test_interval_name}  间隔12小时
+    Set To Dictionary  ${intervals}[0][interval]  name=${test_interval_name}
+    Create Interval  ${intervals}
+    ${intervalAction_list}  Create List
+    FOR  ${INDEX}  IN RANGE  0  ${number}
+        ${index}=  Get current milliseconds epoch time
+        ${address}=  Evaluate  random.choice(['RESTAddress', 'MQTTAddress', 'EmailAddress'])
+        ${intervalAction}=  Load data file "support-scheduler/interval_action.json" and get variable "${address}"
+        Set To Dictionary  ${intervalAction}  name=间隔12小时刪除事件_${index}
+        Set To Dictionary  ${intervalAction}  intervalName=${test_interval_name}
+        Append To List  ${intervalAction_list}  ${intervalAction}
+    END
+    Generate IntervalActions  @{intervalAction_list}
+    Set To Dictionary  ${intervalActions}[0][action]  intervalName=${test_interval_name}

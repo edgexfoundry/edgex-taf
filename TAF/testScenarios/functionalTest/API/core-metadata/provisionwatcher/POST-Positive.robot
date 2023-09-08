@@ -52,3 +52,19 @@ ProWatcherPOST004 - Create provision watcher with non-existent service name
     And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
+
+ProWatcherPOST005 - Create provision watcher with chinese name
+    Given Set Test Variable  ${test_proWatcher_name}  自动寻找監測
+    And Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  name=${test_proWatcher_name}
+    When Create Provision Watcher ${provisionwatcher}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete Multiple Provision Watchers By Names
+                ...           Test-Provision-Watcher  ${test_proWatcher_name}  Test-Provision-Watcher-AutoEvents
+                ...      AND  Delete multiple device services by names
+                ...           Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+                ...      AND  Delete multiple device profiles by names
+                ...           Test-Profile-1  Test-Profile-2  Test-Profile-3

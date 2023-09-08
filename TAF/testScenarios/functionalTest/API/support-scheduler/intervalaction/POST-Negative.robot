@@ -20,16 +20,6 @@ ErrIntervalactionPOST001 - Create intervalaction with empty name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
 
-ErrIntervalactionPOST002 - Create intervalaction with invalid name
-    # name contains space
-    Given Generate 3 Invervals And IntervalActions Sample
-    And Set To Dictionary  ${intervalActions}[1][action]  name=invalid name
-    When Create Intervalaction  ${intervalActions}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Intervals By Names  @{Interval_names}
-
 ErrIntervalactionPOST003 - Create intervalaction with empty intervalName
     Given Generate 3 Invervals And IntervalActions Sample
     And Set To Dictionary  ${intervalActions}[2][action]  intervalName=${EMPTY}

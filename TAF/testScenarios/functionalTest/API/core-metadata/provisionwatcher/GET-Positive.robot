@@ -68,8 +68,25 @@ ProWatcherGET005 - Query provision watcher by name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
+ProWatcherGET006 - Query provision watcher by chinese name
+    Given Set Test Variable  ${test_proWatcher_name}  自动寻找監測-1
+    And Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
+    And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  name=${test_proWatcher_name}
+    And Create Provision Watcher ${provisionwatcher}
+    When Query Provision Watchers By Name  ${test_proWatcher_name}
+    Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Should Be Equal As Strings  ${test_proWatcher_name}  ${content}[provisionWatcher][name]
+    [Teardown]  Run Keywords  Delete Multiple Provision Watchers By Names
+                ...           Test-Provision-Watcher  ${test_proWatcher_name}  Test-Provision-Watcher-AutoEvents
+                ...      AND  Delete multiple device services by names
+                ...           Device-Service-${index}-1  Device-Service-${index}-2  Device-Service-${index}-3
+                ...      AND  Delete multiple device profiles by names
+                ...           Test-Profile-1  Test-Profile-2  Test-Profile-3
+
 # /provisionwatcher/profile/name/{name}
-ProWatcherGET006 - Query provision watcher by specified device profile
+ProWatcherGET007 - Query provision watcher by specified device profile
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers By profileName  Test-Profile-1
@@ -81,7 +98,7 @@ ProWatcherGET006 - Query provision watcher by specified device profile
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
-ProWatcherGET007 - Query provision watcher by specified device profile with offset
+ProWatcherGET008 - Query provision watcher by specified device profile with offset
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
     And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
@@ -95,7 +112,7 @@ ProWatcherGET007 - Query provision watcher by specified device profile with offs
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
-ProWatcherGET008 - Query provision watcher by specified device profile with limit
+ProWatcherGET009 - Query provision watcher by specified device profile with limit
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
     And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher][discoveredDevice]  profileName=Test-Profile-1
@@ -110,7 +127,7 @@ ProWatcherGET008 - Query provision watcher by specified device profile with limi
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
 # /provisionwatcher/service/name/{name}
-ProWatcherGET009 - Query provision watcher by specified device service
+ProWatcherGET010 - Query provision watcher by specified device service
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Create Provision Watcher ${provisionwatcher}
     When Query All Provision Watchers By serviceName  Device-Service-${index}-1
@@ -122,7 +139,7 @@ ProWatcherGET009 - Query provision watcher by specified device service
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
-ProWatcherGET010 - Query provision watcher by specified device service with offset
+ProWatcherGET011 - Query provision watcher by specified device service with offset
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=Device-Service-${index}-1
     And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  serviceName=Device-Service-${index}-1
@@ -136,7 +153,7 @@ ProWatcherGET010 - Query provision watcher by specified device service with offs
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
 
-ProWatcherGET011 - Query provision watcher by specified device service with limit
+ProWatcherGET012 - Query provision watcher by specified device service with limit
     Given Create Multiple Profiles/Services And Generate Multiple Provision Watchers Sample
     And Set To Dictionary  ${provisionwatcher}[1][provisionwatcher]  serviceName=Device-Service-${index}-1
     And Set To Dictionary  ${provisionwatcher}[2][provisionwatcher]  serviceName=Device-Service-${index}-1

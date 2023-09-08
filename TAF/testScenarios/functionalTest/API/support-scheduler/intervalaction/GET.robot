@@ -77,6 +77,19 @@ IntervalactionGET006 - Query Intervalaction by name
     [Teardown]  Run Keywords  Delete intervalAction by name ${intervalAction_name}
     ...         AND  Delete interval by name ${Interval_name}
 
+IntervalactionGET007 - Query Intervalaction by chinese name
+    Given Set Test Variable  ${test_action_name}  间隔24小时刪除事件
+    And Create An Interval And Generate An Intervalaction Sample
+    And Set To Dictionary  ${intervalActions}[0][action]  name=${test_action_name}
+    And Create Intervalaction  ${intervalActions}
+    When Query Intervalaction By Name ${test_action_name}
+    Then Should Return Status Code "200" And action
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Should Be Equal As Strings  ${test_action_name}  ${content}[action][name]
+    [Teardown]  Run Keywords  Delete intervalAction by name ${test_action_name}
+    ...         AND  Delete interval by name ${Interval_name}
+
 ErrIntervalactionGET001 - Query Intervalaction by not existed name
     When Query Intervalaction By Name Non-Existed
     Then Should Return Status Code "404"

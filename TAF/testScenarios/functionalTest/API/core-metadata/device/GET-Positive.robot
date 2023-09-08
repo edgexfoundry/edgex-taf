@@ -63,7 +63,7 @@ DeviceGET005 - Query device by name
     And Should Be True  "${content}[device][name]" == "Test-Device"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device By Name Test-Device\
+    [Teardown]  Run Keywords  Delete Device By Name Test-Device
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 DeviceGET006 - Check device exists by name
@@ -72,7 +72,7 @@ DeviceGET006 - Check device exists by name
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Delete Device By Name Test-Device\
+    [Teardown]  Run Keywords  Delete Device By Name Test-Device
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
 
 *** Keywords ***

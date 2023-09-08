@@ -44,3 +44,16 @@ DevicePOST003 - Create device with uuid
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
+
+DevicePOST004 - Create device with Chinese naming
+    Given Set Test Variable  ${test_device_name}  测试中文設備名称
+    And Set Test Variable  ${test_profile_name}  测试中文設備資料名称
+    And Generate a Device Sample With Associated device-virtual And Chinese Profile Name
+    And Set To Dictionary  ${Device}[0][device]  name=${test_device_name}
+    When Create Device With ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete device by name ${test_device_name}
+                ...      AND  Delete device profile by name  ${test_profile_name}

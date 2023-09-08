@@ -117,6 +117,18 @@ ProfileGET017 - Query device resource by resourceName and profileName
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Device Profile By Name  Test-Profile-1
 
+ProfileGET018 - Query device profile by chinese name
+    Given Set Test Variable  ${test_profile_name}  测试中文設備資料名称
+    And Generate A Device Profile Sample  Test-Profile-5
+    And Set To Dictionary  ${deviceProfile}[0][profile]  name=${test_profile_name}
+    And Create Device Profile ${deviceProfile}
+    When Query Device Profile By Name  ${test_profile_name}
+    Then Should Return Status Code "200" And profile
+    And Should Be True  "${content}[profile][name]" == "${test_profile_name}"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Device Profile By Name  ${test_profile_name}
+
 *** Keywords ***
 Create Multiple Device Profiles Sample With Different Device Info
     Generate Multiple Device Profiles Sample

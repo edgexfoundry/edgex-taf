@@ -112,6 +112,18 @@ SubscriptionGET014 - Query subscriptions by name
     And Should Be Equal As Strings  subscription-test  ${content}[subscription][name]
     [Teardown]  Delete Subscription By Name subscription-test
 
+SubscriptionGET015 - Query subscriptions by chinese name
+    Given Set Test Variable  ${test_subscription_name}  测试中文訂閱名称-1
+    And Generate A Subscription Sample With REST Channel
+    And Set To Dictionary  ${subscription}[0][subscription]  name=${test_subscription_name}
+    And Create Subscription ${subscription}
+    When Query Subscription By Name ${test_subscription_name}
+    Then Should Return Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Should Be Equal As Strings  ${test_subscription_name}  ${content}[subscription][name]
+    [Teardown]  Delete Subscription By Name ${test_subscription_name}
+
 *** Keywords ***
 Subscriptions Should Be Linked To Specified Label: ${label}
     ${subscriptions}=  Set Variable  ${content}[subscriptions]

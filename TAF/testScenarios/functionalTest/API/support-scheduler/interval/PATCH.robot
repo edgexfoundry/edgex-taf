@@ -31,16 +31,6 @@ ErrIntervalPATCH001 - Update interval with empty name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete interval by name ${Interval_name}
 
-ErrIntervalPATCH002 - Update interval with invalid name
-    Given General An Interval Sample
-    And Create Interval  ${intervals}
-    And Set To Dictionary  ${intervals}[0][interval]  name=invalid name
-    When Update Intervals  ${intervals}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete interval by name ${Interval_name}
-
 ErrIntervalPATCH003 - Update interval with empty interval value
     Given General An Interval Sample
     And Create Interval  ${intervals}
