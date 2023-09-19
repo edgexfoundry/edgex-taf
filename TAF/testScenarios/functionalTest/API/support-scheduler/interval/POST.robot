@@ -20,17 +20,20 @@ IntervalPOST001 - Create interval
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Intervals By Names  @{interval_names}
 
+IntervalPOST002 - Create interval with chinese name
+    Given Set Test Variable  ${test_interval_name}  间隔1小时
+    And General An Interval Sample
+    And Set To Dictionary  ${intervals}[0][interval]  name=${test_interval_name}
+    And Create Interval  ${intervals}
+    Then Should Return Status Code "207"
+    And Should Return Content-Type "application/json"
+    And Item Index All Should Contain Status Code "201" And id
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete interval by name ${test_interval_name}
+
 ErrIntervalPOST001 - Create interval with empty name
     Given Generate 3 Intervals Sample
     And Set To Dictionary  ${intervals}[1][interval]  name=${EMPTY}
-    When Create Interval  ${intervals}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrIntervalPOST002 - Create interval with invalid name
-    Given Generate 3 Intervals Sample
-    And Set To Dictionary  ${intervals}[1][interval]  name=invalid name
     When Create Interval  ${intervals}
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"

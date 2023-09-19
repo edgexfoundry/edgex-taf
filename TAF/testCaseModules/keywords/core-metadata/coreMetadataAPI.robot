@@ -654,6 +654,13 @@ Create A Device Sample With Associated ${device_service} And ${device_profile_na
     Generate Devices  ${device}
     Create Device With ${Device}
 
+Generate a Device Sample With Associated ${device_service} And Chinese Profile Name
+    Generate A Device Profile Sample  Test-Profile-1
+    Set To Dictionary  ${deviceProfile}[0][profile]  name=${test_profile_name}
+    Create Device Profile ${deviceProfile}
+    ${device}  Set device values  ${device_service}  ${test_profile_name}
+    Generate Devices  ${device}
+
 Set device values
     [Arguments]  ${device_service_name}  ${device_profile_name}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/device_data.json  encoding=UTF-8

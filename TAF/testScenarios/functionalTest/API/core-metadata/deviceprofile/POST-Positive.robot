@@ -81,13 +81,13 @@ ProfilePOST007 - Create device profile which contains Chinese and space characte
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Device Profile By Name  Test-Profile-5
 
-ProfilePOST008 - Upload device profile which contains Chinese and space character in source name
-    When Upload Device Profile Test-Profile-5.yaml
+ProfilePOST008 - Upload device profile with Chinese profile name
+    When Upload Device Profile With Chinese Name
     Then Should Return Status Code "201"
     And Should Return Content-Type "application/json"
     And Should Contain "id"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Device Profile By Name  Test-Profile-5
+    [Teardown]  Delete Device Profile By Name  ${test_profile_name}
 
 *** Keywords ***
 Upload Device Profile With Empty DeviceResources And DeviceCommands
@@ -109,3 +109,11 @@ Upload Device Profile Without DeviceResources And DeviceCommands
     ${yaml}=  yaml.Safe Dump  ${yaml_dict}
     Create File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/${upload_profile}  ${yaml}
     Upload Device Profile ${upload_profile}
+
+Upload Device Profile With Chinese Name
+    Set Test Variable  ${test_profile_name}  测试中文設備資料名称
+    ${dict}  Load yaml file "core-metadata/deviceprofile/Test-Profile-5.yaml" and convert to dictionary
+    Set To Dictionary  ${dict}  name=${test_profile_name}
+    ${yaml}=  yaml.Safe Dump  ${dict}
+    Create File  ${WORK_DIR}/TAF/testData/core-metadata/deviceprofile/chinese_profile.yaml  ${yaml}
+    Upload Device Profile chinese_profile.yaml

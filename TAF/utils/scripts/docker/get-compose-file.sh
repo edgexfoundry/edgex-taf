@@ -170,6 +170,13 @@ for compose in ${COMPOSE_FILE}; do
       sed -i "/^\ \ device-onvif-camera:/,/^  [a-z].*:$/{//!d}; /^\ \ device-onvif-camera:/d" ${compose}.yml
       sed -i "/services:/ r tmp/device-onvif-camera.yml" ${compose}.yml
     fi
+
+  elif [ "${TEST_STRATEGY}" = "functional-test" ]; then
+    # Enable name field escape
+      sed -n "/^\ \ core-common-config-bootstrapper:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-common-config-bootstrapper.yml
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ ALL_SERVICES_SERVICE_ENABLENAMEFIELDESCAPE: true' tmp/core-common-config-bootstrapper.yml
+      sed -i "/^\ \ core-common-config-bootstrapper:/,/^  [a-z].*:$/{//!d}; /^\ \ core-common-config-bootstrapper:/d" ${compose}.yml
+      sed -i "/services:/ r tmp/core-common-config-bootstrapper.yml" ${compose}.yml
   fi
 
   # Update services which use DOCKER_HOST_IP
