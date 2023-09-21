@@ -1,1 +1,3 @@
-["prowatcher.yaml"]
+{
+  "Generic-Onvif-Provision-Watcher":"prowatcher.yaml"
+}

@@ -1,1 +1,3 @@
-["profile.yaml"]
+{
+  "onvif-camera":"profile.yaml"
+}
