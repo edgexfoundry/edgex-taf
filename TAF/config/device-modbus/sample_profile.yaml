@@ -24,7 +24,7 @@ deviceResources:
   name: "Modbus_DeviceValue_Boolean_R"
   description: "Generate device boolean value"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: 1 }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: 1 }
   properties:
     valueType: "BOOL"
     readWrite: "R"

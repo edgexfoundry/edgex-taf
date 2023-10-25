@@ -380,7 +380,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "11" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "11" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -394,7 +394,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "12" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "12" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -408,7 +408,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "13" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "13" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -422,7 +422,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "14" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "14" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -437,7 +437,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "15" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "15" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -451,7 +451,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "16" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "16" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -465,7 +465,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "17" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "17" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -479,7 +479,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "18" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "18" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -493,7 +493,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "19" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "19" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
@@ -507,7 +507,7 @@ deviceResources:
   isHidden: true
   tag: "status"
   attributes:
-    { primaryTable: "DISCRETES_INPUT", startingAddress: "20" }
+    { primaryTable: "DISCRETE_INPUTS", startingAddress: "20" }
   properties:
     valueType: "BOOL"
     readWrite: "RW"
