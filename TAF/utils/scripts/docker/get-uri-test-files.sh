@@ -1,20 +1,21 @@
 #!/bin/sh
 USE_SECURITY=${1:--}
+USE_SHA1=${USE_SHA1:-napa}
 GITHUB_URL="https://raw.githubusercontent.com/edgexfoundry"
-UOM_URL="${GITHUB_URL}/edgex-go/main/cmd/core-metadata/res"
+UOM_URL="${GITHUB_URL}/edgex-go/${USE_SHA1}/cmd/core-metadata/res"
 
 . $(dirname "$0")/common-taf.env
 
 # Download files to test URI for files
 cd ../../../testData/httpd
 ## Download UOM file
-curl -o uom.yaml ${GITHUB_URL}/edgex-go/main/cmd/core-metadata/res/uom.yaml
+curl -o uom.yaml ${GITHUB_URL}/edgex-go/${USE_SHA1}/cmd/core-metadata/res/uom.yaml
 
 ## Update UoM file
 sed -i '$a\ \ \ \ \ \ -\ uritest' uom.yaml
 
 ## Download device-onvif-camera files
-ONVIF_URL="${GITHUB_URL}/device-onvif-camera/main/cmd/res"
+ONVIF_URL="${GITHUB_URL}/device-onvif-camera/${USE_SHA1}/cmd/res"
 curl -o profile.yaml ${ONVIF_URL}/profiles/camera.yaml
 curl -o device.yaml ${ONVIF_URL}/devices/camera.yaml.example
 curl -o prowatcher.yaml ${ONVIF_URL}/provisionwatchers/generic.provision.watcher.yaml
@@ -28,7 +29,7 @@ if [ "${USE_SECURITY}" = "-"  ]; then
   sed -i "s#./res/provisionwatchers#${HTTP_SERVER_DIR}/provisionwatcher.json#g" config.yaml
 
   # Download common-configuration file
-  curl -o common-config.yaml ${GITHUB_URL}/edgex-go/main/cmd/core-common-config-bootstrapper/res/configuration.yaml
+  curl -o common-config.yaml ${GITHUB_URL}/edgex-go/${USE_SHA1}/cmd/core-common-config-bootstrapper/res/configuration.yaml
 fi
 
 ## Update onvif-camera sample files
