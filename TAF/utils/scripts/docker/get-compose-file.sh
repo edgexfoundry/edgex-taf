@@ -3,7 +3,7 @@
 # # set default values
 USE_ARCH=${1:--x86_64}
 USE_SECURITY=${2:--}
-USE_SHA1=${3:-main}
+USE_SHA1=${3:-napa}
 TEST_STRATEGY=${4:-}
 DELAYED_START=${5:-false}
 
@@ -121,7 +121,7 @@ for compose in ${COMPOSE_FILE}; do
     # Multiple Instance of device-modbus
     sed -n "/^\ \ device-modbus:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/device-modbus_1.yml
     sed -i 's/device-modbus/device-modbus_1/g' tmp/device-modbus_1.yml
-    sed -i "s/device-modbus_1${USE_ARM64}:latest/device-modbus${USE_ARM64}:latest/g" tmp/device-modbus_1.yml
+    sed -i "s/device-modbus_1${USE_ARM64}:3.1.0/device-modbus${USE_ARM64}:3.1.0/g" tmp/device-modbus_1.yml
     if [ "${USE_SECURITY}" = '-security-' ]; then
       sed -i 's/- \/device-modbus_1/- \/device-modbus/g' tmp/device-modbus_1.yml
     fi
