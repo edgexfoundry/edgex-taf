@@ -1,6 +1,6 @@
 #!/bin/sh
 USE_SECURITY=${1:--}
-USE_SHA1=${USE_SHA1:-napa}
+USE_SHA1=${USE_SHA1:-main}
 GITHUB_URL="https://raw.githubusercontent.com/edgexfoundry"
 UOM_URL="${GITHUB_URL}/edgex-go/${USE_SHA1}/cmd/core-metadata/res"
 
