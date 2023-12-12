@@ -77,7 +77,7 @@ Body Should Match ${type}
 
 MAC and Decrypted Response both are Correct
     ${result}  Run Process  python ${WORK_DIR}/TAF/utils/src/setup/aes256-decrypt.py ${secrets_value} ${content} &
-    ...           shell=True  stderr=STDOUT
+    ...           shell=True  stderr=STDOUT  timeout=10s
     Run Keyword If  '${result.stdout}' == 'Incorrect MAC'  Fail  MAC Value is Incorrect
     ...       ELSE  Decrypted Response Should be Correct  ${result.stdout}
 

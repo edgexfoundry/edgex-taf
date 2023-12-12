@@ -22,7 +22,7 @@ Query Commands For ${device} From External MQTT Broker
     ${message_str}  Convert To String  ${message_dict}
     ${message}  Replace String  ${message_str}  '  "
     Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${topic} '${message}' ${EX_BROKER_PORT} false
-    ...          shell=True
+    ...          shell=True  timeout=10s
 
 Query All Devices Commands With ${parameter}=${value} From External MQTT Broker
     ${uuid}  Evaluate  str(uuid.uuid4())
@@ -35,7 +35,7 @@ Query All Devices Commands With ${parameter}=${value} From External MQTT Broker
     ${message_str}  Convert To String  ${message_dict}
     ${message}  Replace String  ${message_str}  '  "
     Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${topic} '${message}' ${EX_BROKER_PORT} false
-    ...          shell=True
+    ...          shell=True  timeout=10s
 
 Get Command From External MQTT Broker
     ${uuid}=  Evaluate  str(uuid.uuid4())
@@ -48,7 +48,7 @@ Get Command From External MQTT Broker
     ${message_str}  Convert To String  ${message_dict}
     ${message}  Replace String  ${message_str}  '  "
     Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${topic} '${message}' ${EX_BROKER_PORT} false
-    ...          shell=True
+    ...          shell=True  timeout=10s
 
 Get Command With ${parameter}=${value} From External MQTT Broker
     ${uuid}  Evaluate  str(uuid.uuid4())
@@ -61,7 +61,7 @@ Get Command With ${parameter}=${value} From External MQTT Broker
     ${message_str}  Convert To String  ${message_dict}
     ${message}  Replace String  ${message_str}  '  "
     Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${topic} '${message}' ${EX_BROKER_PORT} false
-    ...          shell=True
+    ...          shell=True  timeout=10s
 
 Set Command From External MQTT Broker
     ${uuid}  Evaluate  str(uuid.uuid4())
@@ -75,7 +75,7 @@ Set Command From External MQTT Broker
     ${message_str}  Convert To String  ${message_dict}
     ${message}  Replace String  ${message_str}  '  "
     Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${topic} '${message}' ${EX_BROKER_PORT} false
-    ...          shell=True
+    ...          shell=True  timeout=10s
 
 Should Return Error Code 0 And Response Payload With GET Command Should Be Correct
     ${last_msg}  Get Response Message

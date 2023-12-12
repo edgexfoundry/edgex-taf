@@ -175,7 +175,7 @@ Catch logs for service "${service_name}" with keyword "${keyword}"
     ${current_timestamp}=  Get current epoch time
     ${timestamp}=  evaluate   int(${current_timestamp}-1)
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
     [Return]  ${return_log}
 
@@ -257,7 +257,7 @@ Query Service Configuration On Consul
 Get Consul Token
     ${command}  Set Variable  cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
     ${result}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/execute-command-in-docker.sh core-consul "${command}"
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${token}  Evaluate  json.loads('''${result.stdout}''')  json
     [Return]  ${token}[SecretID]
 

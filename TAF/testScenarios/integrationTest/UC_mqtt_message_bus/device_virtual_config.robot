@@ -82,7 +82,7 @@ Retrive device data by device ${device_name} and command ${command}
 
 Event Has Been Recevied By MQTT Subscriber
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh device-virtual ${log_timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Correlation-ID
     ${correlation_id}  Fetch From Right  ${correlation_line}  X-Correlation-ID:
     ${correlation_id}  Fetch From Left  ${correlation_id.strip()}  "
@@ -93,7 +93,7 @@ Event Has Been Recevied By MQTT Subscriber
 
 Verify MQTT Broker Qos
     ${result} =  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh mqtt-broker ${log_timestamp}
-    ...          shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...          shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     Log  ${result.stdout}
     ${publish_log}  Get Lines Containing String  ${result.stdout}  Received PUBLISH from device-virtual
     Should Contain  ${publish_log}  q2

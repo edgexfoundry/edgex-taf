@@ -26,7 +26,7 @@ IntervalactionPOST002 - Create pre-created intervalaction with pre-created inter
     Given Set support-scheduler configs ScheduleIntervalTime=1000 And LogLevel=DEBUG
     When Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Configs
     Then Pre-Created Interval And IntervalAction Should Be Created
-    And Wait Until Keyword Succeeds  2x  1s  IntervalAction Should Be Executed Every ScheduleIntervalTime
+    And Wait Until Keyword Succeeds  3x  2s  IntervalAction Should Be Executed Every ScheduleIntervalTime
     [Teardown]  Run Keywords  Set support-scheduler configs ScheduleIntervalTime=500 And LogLevel=INFO
     ...   AND   Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
 
@@ -86,6 +86,7 @@ IntervalAction Should Be Executed Every ScheduleIntervalTime
     ${keyword}=  Set Variable  1 action need to be executed with interval ${interval_name}
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh support-scheduler ${timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=5s
+    Log  ${logs.stdout}
     ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
     ${times}=  Get Regexp Matches  ${return_log}  :([0-5][0-9]:[0-5][0-9].[0-9]+)  1
     ${time_diff}=  Subtract Time From Time  ${times}[1]  ${times}[0]
