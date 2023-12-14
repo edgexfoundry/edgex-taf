@@ -86,7 +86,7 @@ APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is P
     And Create Device For device-virtual With Name ${device_name}
     And Set Telemetry Metrics/InvalidMessagesReceived=true For app-sample On Consul
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py edgex/events/${device_name} "${publish_msg}" ${BROKER_PORT} ${SECURITY_SERVICE_NEEDED}
-         ...          shell=True
+         ...          shell=True  timeout=10s
     And Sleep  ${interval_ex}
     Then Metrics InvalidMessagesReceived With counter-count Should Be Received
     [Teardown]  Run keywords  Terminate Process  ${handle_mqtt}  kill=True   # Stop MQTT Subscribe Process

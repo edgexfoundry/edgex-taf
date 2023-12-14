@@ -43,7 +43,7 @@ Deploy edgex with creating containers and get startup time
     @{total_startup_time_list}=  Create List
     @{service_startup_time_list}=  Create List
     FOR  ${index}    IN RANGE  0  ${STARTUP_TIME_LOOP_TIMES}
-        ${result}=  Run Process  ${clear_mem_cache}  shell=True
+        ${result}=  Run Process  ${clear_mem_cache}  shell=True  timeout=10s
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem.log
         Start time is recorded
         Deploy EdgeX  PerformanceMetrics
@@ -58,7 +58,7 @@ Deploy edgex with creating containers and get startup time
 Deploy edgex without creating containers and get startup time
     @{service_startup_time_list}=  Create List
     FOR  ${index}    IN RANGE  0  ${STARTUP_TIME_LOOP_TIMES}
-        ${result}=  Run Process  ${clear_mem_cache}  shell=True
+        ${result}=  Run Process  ${clear_mem_cache}  shell=True  timeout=10s
                     ...          stdout=${WORK_DIR}/TAF/testArtifacts/logs/clear_mem_cache.log
         Start time is recorded
         Start Services
@@ -118,7 +118,7 @@ Start Services
   ...          docker run --rm -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
   ...          --env WORK_DIR=${WORK_DIR}  --security-opt label:disable ${COMPOSE_IMAGE} docker compose \
   ...          -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" start
-  Run Process  ${command}  shell=True
+  Run Process  ${command}  shell=True  timeout=10s
   sleep  8s
   ${result}=  Run Process  docker ps -a | grep -Ev security-proxy-setup | grep Exited  shell=True
   Check Services Startup  ["data","metadata","command","support-notifications","support-scheduler","device-virtual","app-service-rules-engine"]

@@ -18,7 +18,7 @@ DelayedStart001-Trace Delayed Start In Service Log
     ${keyword}  Set Variable  successfully got token from spiffe-token-provider
     FOR  ${service}  IN  @{service_list}
         ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service} 0
-        ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+        ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
         Log  ${logs.stdout}
         ${return_log}  Get Lines Containing String  str(${logs.stdout})  ${keyword}
         Run Keyword And Continue On Failure  Should Not Be Empty  ${return_log}

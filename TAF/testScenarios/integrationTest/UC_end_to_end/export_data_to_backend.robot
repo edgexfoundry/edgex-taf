@@ -90,7 +90,7 @@ No exported logs found on configurable application service
     ${current_timestamp}=  get current epoch time
     ${timestamp}=  evaluate  ${current_timestamp}-1
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${app_service_name} ${timestamp}
-    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8
+    ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${app_service_str}=  convert to string  ${logs.stdout}
     should not contain  ${app_service_str}  Sent data
 
