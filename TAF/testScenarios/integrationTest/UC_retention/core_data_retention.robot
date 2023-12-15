@@ -23,7 +23,7 @@ ${interval}  2s
 CoreDataRetention001 - core-data retention is executed if reading count is over MaxCap value
     When Create 3 Events
     And Sleep  ${interval}
-    And Wait Until Keyword Succeeds  5  1s  Found Purge Log in core-data
+    And Wait Until Keyword Succeeds  3x  2s  Found Purge Log in core-data
     Then Stored Event Count Should Be Equal 1
     And Stored Readings Are Belong To Stored Events
     [Teardown]  Delete all events by age

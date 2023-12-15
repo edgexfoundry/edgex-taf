@@ -58,8 +58,6 @@ Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Confi
     FOR  ${kv}  IN  &{intervalAction}
       Update Service Configuration On Consul  ${consul_path}/IntervalActions/${intervalAction_name}/${kv}[0]  ${kv}[1]
     END
-    ${timestamp}=  Get current epoch time
-    Set Test Variable  ${timestamp}  ${timestamp}
     Restart Services  support-scheduler
     Wait Until Keyword Succeeds  10x  1s  Ping Scheduler Service
 
@@ -79,6 +77,9 @@ Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
 Pre-Created Interval And IntervalAction Should Be Created
     Query Interval By Name ${interval_name}
     Should Return Status Code "200"
+    # Get timestamp for querying logs in keyword IntervalAction Should Be Executed Every ScheduleIntervalTime
+    ${timestamp}=  Get current epoch time
+    Set Test Variable  ${timestamp}  ${timestamp}
     Query IntervalAction By Name ${intervalAction_name}
     Should Return Status Code "200"
 

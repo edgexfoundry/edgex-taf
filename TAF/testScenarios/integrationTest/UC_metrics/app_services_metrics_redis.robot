@@ -93,7 +93,7 @@ APPServicesMetricsRedis005-Enable InvalidMessagesReceived And Verify Metrics is 
                 ...      AND  Set Telemetry Metrics/InvalidMessagesReceived=false For app-sample On Consul
 
 APPServicesMetricsRedis006-Enable PipelineMessagesProcessed And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessagesProcessed  telemetry  6
+    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessagesProcessed  telemetry  9
     And Set Test Variable  ${device_name}  pipeline-messages-processed
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Set Telemetry Metrics/PipelineMessagesProcessed=true For app-sample On Consul
@@ -106,7 +106,7 @@ APPServicesMetricsRedis006-Enable PipelineMessagesProcessed And Verify Metrics i
                 ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed=false For app-sample On Consul
 
 APPServicesMetricsRedis007-Enable PipelineMessageProcessingTime And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessageProcessingTime  telemetry  6
+    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineMessageProcessingTime  telemetry  9
     And Set Test Variable  ${device_name}  pipeline-messages-processing-time
     And Set Topics For app-samle PerTopicPipelines On Consul
     And Create Device For device-virtual With Name ${device_name}
@@ -119,7 +119,7 @@ APPServicesMetricsRedis007-Enable PipelineMessageProcessingTime And Verify Metri
                 ...      AND  Set Telemetry Metrics/PipelineMessageProcessingTime=false For app-sample On Consul
 
 APPServicesMetricsRedis008-Enable PipelineProcessingErrors And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineProcessingErrors  telemetry  6
+    Given Run Redis Subscriber Progress And Output  edgex.telemetry.app-sample.PipelineProcessingErrors  telemetry  9
     And Set Test Variable  ${device_name}  pipeline-processing-errors
     And Set app-sample Functions HTTPExport
     And Set PerTopicPipelines float ExecutionOrder HTTPExport
