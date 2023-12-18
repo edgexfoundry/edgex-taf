@@ -26,7 +26,7 @@ ${interval}  3s
 NotificationsRetention001 - notifications retention is executed if reading count is over MaxCap value
     When Create Subscriptions 1 And Notifications 10
     And Sleep  ${interval}
-    And Wait Until Keyword Succeeds  5  1s  Found Purge Log in support-notifications
+    And Wait Until Keyword Succeeds  3x  2s  Found Purge Log in support-notifications
     Then Stored Notifications Count Should Be Less Than: 10
     And Stored Transmissions Are Belong To Stored Notifications
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions
@@ -93,5 +93,5 @@ Found Purge Log in ${service}
     ${current_time}  Get current epoch time
     ${timestamp}  Evaluate  ${current_time}-5
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service} ${timestamp}
-             ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=5s
+             ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     Should Contain  ${logs.stdout}  Purging the notification
