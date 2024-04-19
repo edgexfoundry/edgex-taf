@@ -56,7 +56,7 @@ esac
 
 
 TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common${USE_ARM64}:latest
-COMPOSE_IMAGE=docker:20.10.18
+COMPOSE_IMAGE=docker:26.0.1
 
 
 if [ "$SECURITY_SERVICE_NEEDED" = true ]; then
