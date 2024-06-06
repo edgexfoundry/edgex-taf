@@ -120,8 +120,9 @@ for compose in ${COMPOSE_FILE}; do
 
     # Multiple Instance of device-modbus
     sed -n "/^\ \ device-modbus:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/device-modbus_1.yml
+    VERSION_NUM=$(grep image tmp/device-modbus_1.yml|cut -d ':' -f3)
     sed -i 's/device-modbus/device-modbus_1/g' tmp/device-modbus_1.yml
-    sed -i "s/device-modbus_1${USE_ARM64}:3.1.0/device-modbus${USE_ARM64}:3.1.0/g" tmp/device-modbus_1.yml
+    sed -i "s/device-modbus_1${USE_ARM64}:${VERSION_NUM}/device-modbus${USE_ARM64}:${VERSION_NUM}/g" tmp/device-modbus_1.yml
     if [ "${USE_SECURITY}" = '-security-' ]; then
       sed -i 's/- \/device-modbus_1/- \/device-modbus/g' tmp/device-modbus_1.yml
     fi
