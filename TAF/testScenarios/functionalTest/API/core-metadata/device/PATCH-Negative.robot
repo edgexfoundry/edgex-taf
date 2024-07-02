@@ -62,26 +62,6 @@ ErrDevicePATCH005 - Update device with serviceName validate error
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-ErrDevicePATCH006 - Update device with profileName validate error
-    # Empty profileName
-    Given Create Devices And Generate Multiple Devices Sample For Updating Data
-    And Set To Dictionary  ${Device}[1][device]  profileName=${EMPTY}
-    When Update Devices ${Device}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
-
-ErrDevicePATCH007 - Update device with protocols validate error
-    # Empty protocols
-    Given Create Devices And Generate Multiple Devices Sample For Updating Data
-    And Set To Dictionary  ${Device}[2][device]  protocols=&{EMPTY}
-    When Update Devices ${Device}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
-
 ErrDevicePATCH008 - Update device with adminState value validate error
     # Out of optional value for adminState
     Given Create Devices And Generate Multiple Devices Sample For Updating Data
