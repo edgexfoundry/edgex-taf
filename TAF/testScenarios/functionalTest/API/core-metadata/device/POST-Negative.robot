@@ -68,28 +68,6 @@ ErrDevicePOST005 - Create device with serviceName validate error
     [Teardown]  Delete multiple device profiles by names
     ...         Test-Profile-1  Test-Profile-2  Test-Profile-3
 
-ErrDevicePOST006 - Create device with profileName validate error
-    # Empty profileName
-    Given Create Multiple Profiles And Generate Multiple Devices Sample
-    And Set To Dictionary  ${Device}[1][device]  profileName=${EMPTY}
-    When Create Device With ${Device}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete multiple device profiles by names
-    ...         Test-Profile-1  Test-Profile-2  Test-Profile-3
-
-ErrDevicePOST007 - Create device with protocols validate error
-    # Empty protocols
-    Given Create Multiple Profiles And Generate Multiple Devices Sample
-    And Set To Dictionary  ${Device}[1][device]  protocols=&{EMPTY}
-    When Create Device With ${Device}
-    Then Should Return Status Code "400"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete multiple device profiles by names
-    ...         Test-Profile-1  Test-Profile-2  Test-Profile-3
-
 ErrDevicePOST008 - Create device with adminState value validate error
     # Out of optional value for adminState
     Given Create Multiple Profiles And Generate Multiple Devices Sample

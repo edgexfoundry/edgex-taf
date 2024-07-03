@@ -57,3 +57,23 @@ DevicePOST004 - Create device with Chinese naming
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete device by name ${test_device_name}
                 ...      AND  Delete device profile by name  ${test_profile_name}
+
+DevicePOST005 - Create device with empty profileName
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
+    And Set To Dictionary  ${Device}[1][device]  profileName=${EMPTY}
+    When Create Device With ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
+
+DevicePOST006 - Create device with empty protocol
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
+    And Set To Dictionary  ${Device}[2][device]  protocols=&{EMPTY}
+    When Create Device With ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample

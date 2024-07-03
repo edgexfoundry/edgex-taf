@@ -33,6 +33,26 @@ DevicePATCH002 - Update device with device service and profile
     And Device Profile/Device Should Be Updated
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
+DevicePATCH003 - Update device with empty protocol
+    Given Create Devices And Generate Multiple Devices Sample For Updating Data
+    And Set To Dictionary  ${Device}[2][device]  protocols=&{EMPTY}
+    When Update Devices ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
+
+DevicePATCH004 - Update device with empty profileName
+    Given Create Devices And Generate Multiple Devices Sample For Updating Data
+    And Set To Dictionary  ${Device}[1][device]  profileName=${EMPTY}
+    When Update Devices ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
+
 *** Keywords ***
 Device ${type} Should Be Updated
     ${list}=  Create List  Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
