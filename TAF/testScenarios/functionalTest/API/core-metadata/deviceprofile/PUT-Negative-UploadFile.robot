@@ -96,27 +96,27 @@ ErrProfilePUTUpload007 - Update device profile by upload file with deivceCommand
     ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
 
 ErrProfilePUTUpload008 - Update device profile by upload file when StrictDeviceProfileChanges is true
-    Given Set ProfileChange.StrictDeviceProfileChanges=true For Core-Metadata On Consul
+    Given Set ProfileChange.StrictDeviceProfileChanges=true For Core-Metadata On Registry Service
     And Upload Device Profile Test-Profile-3.yaml
     And Generate New Test-Profile-3.yaml With "profile" Property "manufacturer" Value "Mfr_ABC"
     When Upload File NEW-Test-Profile-3.yaml To Update Device Profile
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Consul
+    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Registry Service
     ...                  AND  Delete Device Profile By Name  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
 
 ErrProfilePUTUpload009 - Update device profile by upload file and the update file contains invalid unit value
     Given Upload Device Profile Test-Profile-3.yaml
-    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Update Configuration On Registry Service  ${uomValidationPath}  true
     And Update Units Value In Profile Test-Profile-3 To invalid
     When Upload File NEW-Test-Profile-3.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Not Be Updated in Test-Profile-3
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
 

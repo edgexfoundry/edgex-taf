@@ -8,16 +8,16 @@ Suite Setup  Run keywords  Setup Suite
              ...      AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
              ...      AND  Cleanup All Notifications And Transmissions
              ...      AND  Enable Notifications Retention
-             ...      AND  Update Service Configuration On Consul  ${CONSOL_PATH}/Writable/LogLevel  DEBUG
+             ...      AND  Update Configuration On Registry Service  ${CONSOL_PATH}/Writable/LogLevel  DEBUG
 Suite Teardown  Run Keywords  Disable Notifications Retention
-                ...      AND  Update Service Configuration On Consul  ${CONSOL_PATH}/Writable/LogLevel  INFO
+                ...      AND  Update Configuration On Registry Service  ${CONSOL_PATH}/Writable/LogLevel  INFO
                 ...      AND  Run Teardown Keywords
 Force Tags      MessageBus=redis
 
 *** Variables ***
 ${SUITE}          support-notifications Retention
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-notifications_retention.log
-${CONSOL_PATH}  ${CONSUL_CONFIG_BASE_ENDPOINT}/support-notifications
+${CONSOL_PATH}  /support-notifications
 ${maxCap}  5
 ${minCap}  2
 ${interval}  3s
@@ -48,7 +48,7 @@ Enable Notifications Retention
     ${values}  Create List  true  3s  ${maxCap}  ${minCap}
     FOR  ${key}  ${value}  IN ZIP  ${keys}  ${values}
         ${path}=  Set Variable  ${CONSOL_PATH}/Retention/${key}
-        Update Service Configuration On Consul  ${path}  ${value}
+        Update Configuration On Registry Service  ${path}  ${value}
     END
     Restart Services  support-notifications
 
@@ -82,7 +82,7 @@ Stored Transmissions Are Belong To Stored Notifications
 
 Disable Notifications Retention
     ${path}=  Set Variable  ${CONSOL_PATH}/Retention/Enabled
-    Update Service Configuration On Consul  ${path}  false
+    Update Configuration On Registry Service  ${path}  false
     Restart Services  support-notifications
 
 Create Subscriptions ${subscriptions_num} And Notifications ${notifications_num}

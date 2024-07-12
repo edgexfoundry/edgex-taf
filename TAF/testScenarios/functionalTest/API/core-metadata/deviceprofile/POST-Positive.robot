@@ -52,23 +52,23 @@ ProfilePOST004 - Create device profile by upload file without deviceResources an
     ...                  AND  Delete Profile Files  ${upload_profile}
 
 ProfilePOST005 - Create device profile with json body and contains valid unit value
-    Given Update Service Configuration On Consul  ${uomValidationPath}  true
+    Given Update Configuration On Registry Service  ${uomValidationPath}  true
     When Create A Profile Test-Profile-1 With valid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201" And id
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ProfilePOST006 - Create device profile by upload file and the update file contains valid unit value
-    Given Update Service Configuration On Consul  ${uomValidationPath}  true
+    Given Update Configuration On Registry Service  ${uomValidationPath}  true
     When Modify Device Profile Test-Profile-1 With valid Units Value
     Then Should Return Status Code "201"
     And Should Return Content-Type "application/json"
     And Should Contain "id"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
     ...                  AND  Delete Profile Files  NEW-Test-Profile-1.yaml
 

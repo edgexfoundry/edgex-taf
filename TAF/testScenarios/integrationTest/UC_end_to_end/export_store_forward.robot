@@ -4,9 +4,9 @@ Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource         TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup      Run keywords  Setup Suite
 ...                       AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                       AND  Modify PersistOnError to true On Consul
-Suite Teardown   Run keywords  Run Teardown Keywords
-...                       AND  Modify PersistOnError to false On Consul
+...                       AND  Modify PersistOnError to true On Registry Service
+Suite Teardown   Run keywords  Modify PersistOnError to false On Registry Service
+...                       AND  Run Teardown Keywords
 Force Tags       MessageBus=redis
 
 *** Variables ***
@@ -18,7 +18,7 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_store_and_fo
 StoreAndForward001 - Stored data is exported after connecting to http server
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=4
     ${device_name}  Set Variable  store-device-1
-    Given Set ${configurations} For app-http-export On Consul
+    Given Set ${configurations} For app-http-export On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     ${timestamp}  get current epoch time
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
@@ -32,7 +32,7 @@ StoreAndForward001 - Stored data is exported after connecting to http server
 StoreAndForward002 - Stored data is cleared after the maximum configured retires
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=3
     ${device_name}  Set Variable  store-device-2
-    Given Set ${configurations} For app-http-export On Consul
+    Given Set ${configurations} For app-http-export On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     ${timestamp}  get current epoch time
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT16_RW with ds-pushevent=true
@@ -45,7 +45,7 @@ StoreAndForward002 - Stored data is cleared after the maximum configured retires
 StoreAndForward003 - Exporting data didn't retry when Writeable.StoreAndForward.Enabled is false
     ${configurations}  Create Dictionary  Enabled=false  RetryInterval=1s  MaxRetryCount=3
     ${device_name}  Set Variable  store-device-3
-    Given Set ${configurations} For app-http-export On Consul
+    Given Set ${configurations} For app-http-export On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     ${timestamp}  get current epoch time
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT32_RW with ds-pushevent=true
@@ -57,7 +57,7 @@ StoreAndForward003 - Exporting data didn't retry when Writeable.StoreAndForward.
 StoreAndForward004 - Retry loop interval is set by the Writeable.StoreAndForward.RetryInterval config setting
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=2s  MaxRetryCount=4
     ${device_name}  Set Variable  store-device-4
-    Given Set ${configurations} For app-http-export On Consul
+    Given Set ${configurations} For app-http-export On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     ${timestamp}  get current epoch time
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ds-pushevent=true
@@ -70,7 +70,7 @@ StoreAndForward004 - Retry loop interval is set by the Writeable.StoreAndForward
 StoreAndForward005 - Export retries will resume after application service is restarted
     ${configurations}  Create Dictionary  Enabled=true  RetryInterval=3s  MaxRetryCount=4
     ${device_name}  Set Variable  store-device-5
-    Given Set ${configurations} For app-http-export On Consul
+    Given Set ${configurations} For app-http-export On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Get device ${device_name} read command ${PREFIX}_GenerateDeviceValue_UINT16_RW with ds-pushevent=true
     And Restart app-http-export Service
@@ -81,12 +81,12 @@ StoreAndForward005 - Export retries will resume after application service is res
 
 
 *** Keywords ***
-Set ${configurations} For ${service_name} On Consul
+Set ${configurations} For ${service_name} On Registry Service
     ${config_key}  Get Dictionary Keys  ${configurations}  sort_keys=false
     ${config_value}  Get Dictionary Values  ${configurations}  sort_keys=false
     FOR  ${key}  ${value}  IN ZIP  ${config_key}  ${config_value}
-        ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/StoreAndForward/${key}
-        Update Service Configuration On Consul  ${path}  ${value}
+        ${path}=  Set Variable  /${service_name}/Writable/StoreAndForward/${key}
+        Update Configuration On Registry Service  ${path}  ${value}
     END
 
 Start HTTP Server And Received Exported Data Contains ${keyword}
@@ -120,9 +120,9 @@ Found Remove Log In ${service_name} Logs From ${timestamp}
     ${retry_times}  Get Line Count  ${retry_lines}
     Should Be Equal As Integers  ${retry_times}  1
 
-Modify PersistOnError to ${value} On Consul
-    ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
-    Update Service Configuration On Consul  ${path}  ${value}
+Modify PersistOnError to ${value} On Registry Service
+    ${path}  Set Variable  /app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
+    Update Configuration On Registry Service  ${path}  ${value}
 
 Found Retry Log From ${timestamp} After Restarting ${service_name}
     # Show last 100 lines for debug

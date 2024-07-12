@@ -12,13 +12,13 @@ Force Tags   MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}              Core-Data-Configrations
-${DATA_CONSOL_PATH}   ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data
+${DATA_CONSOL_PATH}   /core-data
 
 *** Test Cases ***
 CoreConfig001 - Set core-data MessageBus.BaseTopicPrefix not match device-virtual BaseTopicPrefix
     Given Run MQTT Subscriber Progress And Output  edgex/events/device/#
     And Set Test Variable  ${device_name}  messagebus-mqtt-core-2
-    And Set MessageBus BaseTopicPrefix=custom For core-data On Consul
+    And Set MessageBus BaseTopicPrefix=custom For core-data On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Then Should Return Status Code "200" And event
@@ -26,13 +26,13 @@ CoreConfig001 - Set core-data MessageBus.BaseTopicPrefix not match device-virtua
     And Event Is Not Pushed To Core Data
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
-                ...      AND  Set MessageBus BaseTopicPrefix=edgex For core-data On Consul
+                ...      AND  Set MessageBus BaseTopicPrefix=edgex For core-data On Registry Service
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 CoreConfig002 - Set core-data MessageBus.Optional.Qos (SUBSCRIBE)
     [Tags]  backward-skip
     Given Set Test Variable  ${device_name}  messagebus-mqtt-core-4
-    And Set MessageBus Optional/Qos=2 For core-data On Consul
+    And Set MessageBus Optional/Qos=2 For core-data On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Then Should Return Status Code "200" And event
@@ -40,14 +40,14 @@ CoreConfig002 - Set core-data MessageBus.Optional.Qos (SUBSCRIBE)
     And Wait Until Keyword Succeeds  3x  2s  Verify MQTT Broker Qos
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
-                ...      AND  Set MessageBus Optional/Qos=0 For core-data On Consul
+                ...      AND  Set MessageBus Optional/Qos=0 For core-data On Registry Service
 
 *** Keywords ***
-Set MessageBus ${key}=${value} For core-data On Consul
+Set MessageBus ${key}=${value} For core-data On Registry Service
     ${timestamp}  get current epoch time
     Set Test Variable  ${log_timestamp}  ${timestamp}
     ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageBus/${key}
-    Update Service Configuration On Consul  ${path}  ${value}
+    Update Configuration On Registry Service  ${path}  ${value}
     Restart Services  core-data
     Wait Until Keyword Succeeds  10x  1s  Ping Data Service
 

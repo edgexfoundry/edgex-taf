@@ -14,7 +14,7 @@ SecretsPOST001 - Stores secrets to the secret client with Path
     When Store Secret Data With Path
     Then Should Return Status Code "201"
     And Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Service ${SERVICE_NAME} Secrets Should be Stored
-        ...       ELSE  Secrets Should be Stored To Consul  ${SERVICE_NAME}
+        ...       ELSE  Secrets Should be Stored To Registry Service  ${SERVICE_NAME}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrSecretsPOST001 - Stores secrets to the secret client fails (empty path)

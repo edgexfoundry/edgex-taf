@@ -40,6 +40,7 @@ ErrEventGET004 - Query events by start/end time fails (Invalid End)
 
 ErrEventGET005 - Query events by start/end time fails (Start>End)
     ${start_time}=  Get current nanoseconds epoch time
+    Sleep  1ms
     ${end_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Events By Start/End Time  ${end_time}  ${start_time}
     Then Should Return Status Code "400"
@@ -47,8 +48,8 @@ ErrEventGET005 - Query events by start/end time fails (Start>End)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrEventGET006 - Query event fails when persistData is false
-    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data/Writable/PersistData
-    Given Update Service Configuration On Consul  ${path}  false
+    ${path}=  Set Variable  /core-data/Writable/PersistData
+    Given Update Configuration On Registry Service  ${path}  false
     And Generate Event Sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Simple Reading
     And Create Event With Service-Test-001 And Profile-Test-001 And Device-Test-001 And Command-Test-001
     When Query Event By Event Id "${id}"
@@ -56,4 +57,4 @@ ErrEventGET006 - Query event fails when persistData is false
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete All Events By Age
-    ...                  AND  Update Service Configuration On Consul  ${path}  true
+    ...                  AND  Update Configuration On Registry Service  ${path}  true

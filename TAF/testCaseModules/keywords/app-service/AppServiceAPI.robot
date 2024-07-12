@@ -22,20 +22,20 @@ Suite Teardown for App Service
     Run Teardown Keywords
 
 Set ${service} Functions ${functions}
-    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/Writable/Pipeline/ExecutionOrder
-    Update Service Configuration On Consul  ${path}  ${functions}
+    ${path}=  Set variable  /${service}/Writable/Pipeline/ExecutionOrder
+    Update Configuration On Registry Service  ${path}  ${functions}
 
 Set Transform Type ${type}
-    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
-    Update Service Configuration On Consul  ${path}  ${type}
+    ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
+    Update Configuration On Registry Service  ${path}  ${type}
 
 Set Compress Algorithm ${algorithm}
-    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
-    Update Service Configuration On Consul  ${path}  ${algorithm}
+    ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
+    Update Configuration On Registry Service  ${path}  ${algorithm}
 
 Set Encrypt Algorithm ${algorithm}
-    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
-    Update Service Configuration On Consul  ${path}  ${algorithm}
+    ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
+    Update Configuration On Registry Service  ${path}  ${algorithm}
 
 Trigger Function Pipeline With ${data}
     ${trigger_data}=  Run keyword if  '${data}' != 'Invalid Data'  set variable  Valid Data

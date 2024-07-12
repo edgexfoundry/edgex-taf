@@ -5,7 +5,8 @@ USE_ARCH=${1:--x86_64}
 USE_SECURITY=${2:--}
 USE_SHA1=${3:-main}
 TEST_STRATEGY=${4:-}
-DELAYED_START=${5:-false}
+REGISTRY_SERVICE=${5:-Consul}
+DELAYED_START=${6:-false}
 
 . $(dirname "$0")/common-taf.env
 
@@ -15,17 +16,29 @@ DELAYED_START=${5:-false}
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
+# # Consul or Keeper
+if [ "$REGISTRY_SERVICE" = "Keeper" ]; then
+  USE_KEEPER="-keeper"
+  REGISTRY_HOST=edgex-core-keeper
+  REGISTRY_PORT=59890
+  REGISTRY_TYPE=keeper
+else
+  REGISTRY_HOST=edgex-core-consul
+  REGISTRY_PORT=8500
+  REGISTRY_TYPE=consul
+fi
+
 # # pre-release or other release
 mkdir -p tmp
 # generate single file docker-compose.yml for target configuration without
 # default device services, i.e. no device-virtual service
-./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
-cp docker-compose-taf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yml
+./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}"
+cp docker-compose-taf${USE_NO_SECURITY}${USE_KEEPER}${USE_ARM64}.yml docker-compose.yml
 
 if [ "${TEST_STRATEGY}" = "integration-test" ]; then
   # sync compose file for mqtt message bus
-  ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "" "-mqtt-bus"
-  cp docker-compose-taf${USE_NO_SECURITY}-mqtt-bus${USE_ARM64}.yml docker-compose-mqtt-bus.yml
+  ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}" "" "-mqtt-bus"
+  cp docker-compose-taf${USE_NO_SECURITY}-mqtt-bus${USE_KEEPER}${USE_ARM64}.yml docker-compose-mqtt-bus.yml
   # Set Compose files variable
   COMPOSE_FILE="docker-compose docker-compose-mqtt-bus"
 else
@@ -89,7 +102,9 @@ for compose in ${COMPOSE_FILE}; do
       if [ "${compose}" = "docker-compose" ]; then
         sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_HOST: edgex-redis' tmp/core-command.yml
         sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_HOST: edgex-redis' tmp/core-command.yml
-        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_HOST: edgex-core-consul' tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_HOST: $REGISTRY_HOST" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_PORT: $REGISTRY_PORT" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_TYPE: $REGISTRY_TYPE" tmp/core-command.yml
         sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_COMMON_CONFIG: ${HTTP_SERVER_DIR}/common-config.yaml" tmp/core-command.yml
         sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_CONFIG_PROVIDER: none' tmp/core-command.yml
       fi
@@ -101,7 +116,7 @@ for compose in ${COMPOSE_FILE}; do
     sed -n "/^\ \ mqtt-taf-broker:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/external-mqtt.yml
     sed -i "s/mosquitto-no-auth.conf/etc\/mosquitto\/mosquitto.conf/g" tmp/external-mqtt.yml
     sed -i '$a\ \ \ \ volumes:' tmp/external-mqtt.yml
-    sed -i '/\ \ \ \ volumes:/a \ \ \ \ - \/${WORK_DIR}\/TAF\/utils\/scripts\/docker\/mosquitto:\/etc\/mosquitto:z' tmp/external-mqtt.yml
+    sed -i '/\ \ \ \ volumes:/a \ \ \ \ \ \ - \/${WORK_DIR}\/TAF\/utils\/scripts\/docker\/mosquitto:\/etc\/mosquitto:z' tmp/external-mqtt.yml
     sed -i "/^\ \ mqtt-taf-broker:/,/^  [a-z].*:$/{//!d}; /^\ \ mqtt-taf-broker:/d" ${compose}.yml
     sed -i "/services:/ r tmp/external-mqtt.yml" ${compose}.yml
 
@@ -111,7 +126,7 @@ for compose in ${COMPOSE_FILE}; do
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_AUTHMODE: usernamepassword' ${compose}.yml
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ SECRETSTORE_SECRETSFILE: \/tmp\/secrets.json' ${compose}.yml
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ SECRETSTORE_DISABLESCRUBSECRETSFILE: true' ${compose}.yml
-      sed -i '/\ \ \ \ volumes:/a \ \ \ \ - \/${WORK_DIR}\/TAF\/testData\/all-services\/secrets.json:\/tmp\/secrets.json' ${compose}.yml
+      sed -i '/\ \ \ \ volumes:/a \ \ \ \ \ \ - \/${WORK_DIR}\/TAF\/testData\/all-services\/secrets.json:\/tmp\/secrets.json' ${compose}.yml
     else
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_AUTHMODE: usernamepassword' ${compose}.yml
       sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' ${compose}.yml
@@ -200,7 +215,7 @@ for compose in ${COMPOSE_FILE}; do
   fi
 
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' ${compose}.yml
-  sed -i '/METRICSMECHANISM/d' ${compose}.yml  # remove METRICSMECHANISM env variable to allow change on Consul
+  sed -i '/METRICSMECHANISM/d' ${compose}.yml  # remove METRICSMECHANISM env variable to allow change on Registry Service
 
   # Put HTTP Server On the top of compose file
   if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${compose}" = "docker-compose" ]; then

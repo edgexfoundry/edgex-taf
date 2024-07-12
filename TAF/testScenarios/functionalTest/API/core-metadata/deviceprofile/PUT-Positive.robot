@@ -54,7 +54,7 @@ ProfilePUT003 - Update device profiles by upload file
 ProfilePUT004 - Update a device profile with valid unit value
     Given Generate A Device Profile Sample  Test-Profile-1
     And Create Device Profile ${deviceProfile}
-    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Update Configuration On Registry Service  ${uomValidationPath}  true
     And Set Profile Units Value To valid
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "207"
@@ -62,19 +62,19 @@ ProfilePUT004 - Update a device profile with valid unit value
     And Item Index 0 Should Contain Status Code "200"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Be Updated in Test-Profile-1
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ProfilePUT005 - Update device profiles by upload file and the update file contains valid unit value
     Given Upload Device Profile Test-Profile-2.yaml
-    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Update Configuration On Registry Service  ${uomValidationPath}  true
     And Update Units Value In Profile Test-Profile-2 To valid
     When Upload File NEW-Test-Profile-2.yaml To Update Device Profile
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Be Updated in Test-Profile-2
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-2
     ...                  AND  Delete Profile Files  NEW-Test-Profile-2.yaml
 

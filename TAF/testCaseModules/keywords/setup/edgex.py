@@ -50,6 +50,7 @@ def restart_services(*args):
             SettingsInfo().constant.DEPLOY_TYPE)
     cmd = ["sh", script_path, *args]
     run_command(cmd)
+    checker.check_services_startup(list(args))
 
 
 def remove_services(*args):

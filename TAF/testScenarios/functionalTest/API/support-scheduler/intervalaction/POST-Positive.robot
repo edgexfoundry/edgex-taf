@@ -42,9 +42,9 @@ IntervalactionPOST003 - Create intervalaction with chinese name
 
 *** Keywords ***
 Set support-scheduler configs ScheduleIntervalTime=${millisecond} And LogLevel=${logLevel}
-    Set Test Variable  ${consul_path}    ${CONSUL_CONFIG_BASE_ENDPOINT}/support-scheduler
-    Update Service Configuration On Consul  ${consul_path}/Writable/LogLevel  ${logLevel}
-    Update Service Configuration On Consul  ${consul_path}/ScheduleIntervalTime  ${millisecond}
+    Set Test Variable  ${path}    /support-scheduler
+    Update Configuration On Registry Service  ${path}/Writable/LogLevel  ${logLevel}
+    Update Configuration On Registry Service  ${path}/ScheduleIntervalTime  ${millisecond}
 
 Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Configs
     Set Test Variable  ${interval_name}  HalfSecond
@@ -52,11 +52,13 @@ Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Confi
     ${interval}=  Create Dictionary  Name=${interval_name}  Interval=500ms  Start=20200101T000000
     ${intervalAction}=  Create Dictionary  Name=${intervalAction_name}  Interval=${interval_name}  Method=GET  Port=59861
     ...                 Host=edgex-support-scheduler  Path=/api/${API_VERSION}/ping  AdminState=UNLOCKED
-    FOR  ${kv}  IN  &{interval}
-        Update Service Configuration On Consul  ${consul_path}/Intervals/${interval_name}/${kv}[0]  ${kv}[1]
+    Set Test Variable  ${interval_dict}  ${interval}
+    Set Test Variable  ${intervalAction_dict}  ${intervalAction}
+    FOR  ${kv}  IN  &{interval_dict}
+        Update Configuration On Registry Service  ${path}/Intervals/${interval_name}/${kv}[0]  ${kv}[1]
     END
-    FOR  ${kv}  IN  &{intervalAction}
-      Update Service Configuration On Consul  ${consul_path}/IntervalActions/${intervalAction_name}/${kv}[0]  ${kv}[1]
+    FOR  ${kv}  IN  &{intervalAction_dict}
+        Update Configuration On Registry Service  ${path}/IntervalActions/${intervalAction_name}/${kv}[0]  ${kv}[1]
     END
     Restart Services  support-scheduler
     Wait Until Keyword Succeeds  10x  1s  Ping Scheduler Service
@@ -64,14 +66,12 @@ Create Pre-Created HalfSecond Interval And PingScheduler Intervalaction By Confi
 Delete Pre-Created HalfSecond Interval And PingScheduler IntervalAction
     Delete intervalAction by name ${intervalAction_name}
     Delete interval by name ${interval_name}
-    ${consul_token}  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Get Consul Token
-    ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
-    ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
-    Create Session  Consul  url=${url}  disable_warnings=true
-    DELETE On Session  Consul  ${consul_path}/IntervalActions/${intervalAction_name}  params=recurse=true  headers=${headers}
-    ...  expected_status=200
-    DELETE On Session  Consul  ${consul_path}/Intervals/${interval_name}  params=recurse=true  headers=${headers}
-    ...  expected_status=200
+    FOR  ${kv}  IN  &{intervalAction_dict}
+        Delete Configuration On Registry Service  ${path}/IntervalActions/${intervalAction_name}/${kv}[0]
+    END
+    FOR  ${kv}  IN  &{interval_dict}
+        Delete Configuration On Registry Service  ${path}/Intervals/${interval_name}/${kv}[0]
+    END
     Restart Services  support-scheduler
 
 Pre-Created Interval And IntervalAction Should Be Created

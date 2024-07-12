@@ -46,6 +46,7 @@ ErrTransmissionGET013 - Query transmissions by start/end time fails (Invalid End
 
 ErrTransmissionGET014 - Query transmissions by start/end time fails (Start>End)
     ${end}  Get current milliseconds epoch time
+    Sleep  1ms
     ${start}  Get current milliseconds epoch time
     When Query Transmissions By Start/End Time  ${start}  ${end}
     Then Should Return Status Code "400"

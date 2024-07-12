@@ -34,7 +34,7 @@ CORS002-Enable CORS and receive an actual request
     And Header Should Contain  ${expected_headers}
 
 CORS003-Enable CORS and receive a prefligt request with CORSAllowCredentials=false
-    [Setup]  Run Keywords  Set Service.CORSConfiguration.CORSAllowCredentials to false For core-metadata On Consul
+    [Setup]  Run Keywords  Set Service.CORSConfiguration.CORSAllowCredentials to false For core-metadata On Registry Service
              ...      AND  Restart Services  core-metadata
     ${header_keys}  Create List  Access-Control-Request-Method  Origin
     ${header_values}  Create List  GET  http://localhost
@@ -47,7 +47,7 @@ CORS003-Enable CORS and receive a prefligt request with CORSAllowCredentials=fal
     And Header Should Not Contain  ${unexpected_headers}
 
 CORS004-Enable CORS and receive an actual request with CORSAllowCredentials=false
-    [Setup]  Run Keywords  Set Service.CORSConfiguration.CORSAllowCredentials to false For core-metadata On Consul
+    [Setup]  Run Keywords  Set Service.CORSConfiguration.CORSAllowCredentials to false For core-metadata On Registry Service
              ...      AND  Restart Services  core-metadata
     ${header_keys}  Create List  Access-Control-Request-Method  Origin
     ${header_values}  Create List  GET  http://localhost
@@ -66,9 +66,9 @@ CORS005-Not enable CORS
     And Header Should Not Contain  ${unexpected_headers}
 
 *** Keywords ***
-Set Service.CORSConfiguration.${config} to ${value} For ${service_name} On Consul
-    ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Service/CORSConfiguration/${config}
-    Update Service Configuration On Consul  ${path}  ${value}
+Set Service.CORSConfiguration.${config} to ${value} For ${service_name} On Registry Service
+    ${path}=  Set Variable  /${service_name}/Service/CORSConfiguration/${config}
+    Update Configuration On Registry Service  ${path}  ${value}
 
 Send ${method} Request With Headers
     [Arguments]  ${header_keys}  ${header_values}
@@ -104,10 +104,10 @@ Header Should Not Contain
     END
 
 Enable CORS For Individual Service
-    Set Service.CORSConfiguration.EnableCORS to true For core-metadata On Consul
-    Set Service.CORSConfiguration.CORSAllowCredentials to true For core-metadata On Consul
+    Set Service.CORSConfiguration.EnableCORS to true For core-metadata On Registry Service
+    Set Service.CORSConfiguration.CORSAllowCredentials to true For core-metadata On Registry Service
     Restart Services  core-metadata
 
 Disable CORS For Individual Service
-    Set Service.CORSConfiguration.EnableCORS to false For core-metadata On Consul
+    Set Service.CORSConfiguration.EnableCORS to false For core-metadata On Registry Service
     Restart Services  core-metadata

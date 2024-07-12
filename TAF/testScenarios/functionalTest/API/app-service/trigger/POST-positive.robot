@@ -8,11 +8,13 @@ Suite Teardown   Suite Teardown for App Service
 *** Variables ***
 ${SUITE}          App-Service Trigger POST Positive Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-trigger-positive.log
-${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIOAL_TESTS_PORT}
+${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIONAL_TESTS_PORT}
+${APP_SERVICE_NAME}  app-functional-tests
 
 *** Test Cases ***
 TriggerPOST001 - Trigger pipeline (no match)
-    Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
+    Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With No Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match Empty
@@ -20,8 +22,9 @@ TriggerPOST001 - Trigger pipeline (no match)
 
 TriggerPOST002 - Trigger pipeline (XML)
     [Tags]  SmokeTest
-    Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
+    Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
     And Set Transform Type xml
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/xml"
@@ -29,8 +32,9 @@ TriggerPOST002 - Trigger pipeline (XML)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST003 - Trigger pipeline (JSON)
-    Given Set app-functional-tests Functions FilterByDeviceName, Transform, SetResponseData
+    Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
     And Set Transform Type json
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
@@ -38,18 +42,20 @@ TriggerPOST003 - Trigger pipeline (JSON)
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST004 - Trigger pipeline (JSON-GZIP)
-    Given Set app-functional-tests Functions FilterByDeviceName, Transform, Compress, SetResponseData
+    Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, Compress, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm gzip
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON-GZIP String
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
-    Given Set app-functional-tests Functions FilterByDeviceName, Transform, Compress, SetResponseData
+    Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, Compress, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm zlib
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"
@@ -59,8 +65,9 @@ TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
 TriggerPOST006 - Trigger pipeline (AES26)
     [Setup]  Skip If  $SECURITY_SERVICE_NEEDED == 'false'
     Given Store Secret Data With AES256 Auth
-    And Set app-functional-tests Functions FilterByDeviceName, Encrypt, SetResponseData
+    And Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Encrypt, SetResponseData
     And Set Encrypt Algorithm aes256
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"

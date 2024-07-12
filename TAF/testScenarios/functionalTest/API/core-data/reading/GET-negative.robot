@@ -59,6 +59,7 @@ ErrReadingGET007 - Query readings by start/end time fails (Invalid End)
 
 ErrReadingGET008 - Query readings by start/end time fails (Start>End)
     ${start_time}=  Get current nanoseconds epoch time
+    Sleep  1ms
     ${end_time}=  Get current nanoseconds epoch time
     When Run Keyword And Expect Error  *  Query Readings By Start/End Time  ${end_time}  ${start_time}
     Then Should Return Status Code "400"
@@ -81,6 +82,7 @@ ErrReadingGET010 - Query readings by rsource and start/end time fails (Invalid E
 
 ErrReadingGET011 - Query readings by rsource and start/end time fails (Start>End)
     ${start_time}=  Get current nanoseconds epoch time
+    Sleep  1ms
     ${end_time}=  Get current nanoseconds epoch time
     When Query Readings By Resource And Start/End Time  Test_Resource  ${end_time}  ${start_time}
     Then Should Return Status Code "400"
