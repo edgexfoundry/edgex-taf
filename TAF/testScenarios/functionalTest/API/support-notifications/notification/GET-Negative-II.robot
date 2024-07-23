@@ -42,6 +42,7 @@ ErrNotificationGET013 - Query notifications by start/end time fails (Invalid End
 
 ErrNotificationGET014 - Query notifications by start/end time fails (Start>End)
     ${start}=  Get current milliseconds epoch time
+    Sleep  1ms
     ${end}=  Get current milliseconds epoch time
     When Run Keyword And Expect Error  *  Query Notifications By Start/End Time  ${end}  ${start}
     Then Should Return Status Code "400"

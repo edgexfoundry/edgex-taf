@@ -11,6 +11,8 @@ Library   TAF/testCaseModules/keywords/setup/setup_teardown.py
 
 *** Variables ***
 ${default_response_time_threshold}  1200
+${CONSUL_CONFIG_BASE_ENDPOINT}      /v1/kv/edgex/${CONFIG_VERSION}
+${KEEPER_CONFIG_BASE_ENDPOINT}      /api/${API_VERSION}/kvs/key/edgex/${CONFIG_VERSION}
 
 *** Keywords ***
 Setup Suite
@@ -242,7 +244,7 @@ Update Service Configuration On Consul
     ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
     ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
     Create Session  Consul  url=${url}  disable_warnings=true
-    ${resp}=  PUT On Session  Consul  ${path}  data=${value}  headers=${headers}  expected_status=200
+    ${resp}=  PUT On Session  Consul  ${CONSUL_CONFIG_BASE_ENDPOINT}/${path}  data=${value}  headers=${headers}  expected_status=200
     Sleep  1s  # Waiting for the configuration updating
 
 Query Service Configuration On Consul
@@ -251,8 +253,17 @@ Query Service Configuration On Consul
     ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
     ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
     Create Session  Consul  url=${url}  disable_warnings=true
-    ${resp}=  Get On Session  Consul  ${path}  headers=${headers}  expected_status=any
+    ${resp}=  Get On Session  Consul  ${CONSUL_CONFIG_BASE_ENDPOINT}/${path}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
+
+Delete Service Configuration On Consul
+    [Arguments]  ${path}
+    ${consul_token}  Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Get Consul Token
+    ${headers}=  Create Dictionary  X-Consul-Token=${consul_token}
+    ${url}  Set Variable  http://${BASE_URL}:${REGISTRY_PORT}
+    Create Session  Consul  url=${url}  disable_warnings=true
+    DELETE On Session  Consul  ${CONSUL_CONFIG_BASE_ENDPOINT}/${path}  params=recurse=true  headers=${headers}
+    ...  expected_status=200
 
 Get Consul Token
     ${command}  Set Variable  cat /tmp/edgex/secrets/consul-acl-token/bootstrap_token.json
@@ -260,6 +271,48 @@ Get Consul Token
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${token}  Evaluate  json.loads('''${result.stdout}''')  json
     [Return]  ${token}[SecretID]
+
+Update Service Configuration On Keeper
+    [Arguments]  ${path}  ${value}
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${url}  Set Variable  ${URI_SCHEME}://${BASE_URL}:${CORE_KEEPER_PORT}
+    Create Session  Keeper  url=${url}  disable_warnings=true
+    ${body}  Create Dictionary  value=${value}
+    ${resp}=  PUT On Session  Keeper  ${KEEPER_CONFIG_BASE_ENDPOINT}/${path}
+    ...   json=${body}  headers=${headers}  expected_status=200
+    Sleep  1s  # Waiting for the configuration updating
+
+Query Service Configuration On Keeper
+    [Arguments]  ${path}
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${url}  Set Variable  ${URI_SCHEME}://${BASE_URL}:${CORE_KEEPER_PORT}
+    Create Session  Keeper  url=${url}  disable_warnings=true
+    ${resp}=  GET On Session  Keeper  ${KEEPER_CONFIG_BASE_ENDPOINT}/${path}
+    ...   headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Delete Service Configuration On Keeper
+    [Arguments]  ${path}
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${url}  Set Variable  ${URI_SCHEME}://${BASE_URL}:${CORE_KEEPER_PORT}
+    Create Session  Keeper  url=${url}  disable_warnings=true
+    ${resp}=  DELETE On Session  Keeper  ${KEEPER_CONFIG_BASE_ENDPOINT}/${path}
+    ...   headers=${headers}  expected_status=200
+
+Update Configuration On Registry Service
+    [Arguments]  ${path}  ${value}
+    Run Keyword If  "${REGISTRY_SERVICE}" == "Consul"  Update Service Configuration On Consul  ${path}  ${value}
+    ...    ELSE IF  "${REGISTRY_SERVICE}" == "Keeper"  Update Service Configuration On Keeper  ${path}  ${value}
+
+Query Configuration On Registry Service
+    [Arguments]  ${path}
+    Run Keyword If  "${REGISTRY_SERVICE}" == "Consul"  Query Service Configuration On Consul  ${path}
+    ...    ELSE IF  "${REGISTRY_SERVICE}" == "Keeper"  Query Service Configuration On Keeper  ${path}
+
+Delete Configuration On Registry Service
+    [Arguments]  ${path}
+    Run Keyword If  "${REGISTRY_SERVICE}" == "Consul"  Delete Service Configuration On Consul  ${path}
+    ...    ELSE IF  "${REGISTRY_SERVICE}" == "Keeper"  Delete Service Configuration On Keeper  ${path}
 
 Run Redis Subscriber Progress And Output
     [Arguments]  ${topic}  ${keyword}  ${expected_msg_count}=1  ${duration}=30
@@ -329,18 +382,21 @@ Service ${service} Secrets Should be Stored
     Set Response to Test Variables  ${resp}
     Should Contain  ${content}[data]  ${secrets_key}  ${secrets_value}
 
-Secrets Should be Stored To Consul
+Secrets Should be Stored To Registry Service
     [Arguments]  ${service}
-    # Validate Secret Name
-    ${secrets_name_path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/Writable/InsecureSecrets/${secrets_name}/SecretName
-    Query Service Configuration On Consul  ${secrets_name_path}
-    ${secrets_name_consul_value}  Evaluate  base64.b64decode('${content}[0][Value]').decode('utf-8')  modules=base64
-    Should Be Equal  ${secrets_name_consul_value}  ${secrets_name}
-    # Validate Secret Data
-    ${secrets_data_path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service}/Writable/InsecureSecrets/${secrets_name}/SecretData/${secrets_key}
-    Query Service Configuration On Consul  ${secrets_data_path}
-    ${secrets_key_consul_value}  Evaluate  base64.b64decode('${content}[0][Value]').decode('utf-8')  modules=base64
-    Should Be Equal  ${secrets_key_consul_value}  ${secrets_value}
+    # Validate Secret Name and Secret Data
+    FOR  ${value}  IN  name  data
+        ${path}  Run Keyword If  "${value}" == "name"  Set Variable  SecretName
+                 ...    ELSE IF  "${value}" == "data"  Set Variable  SecretData/${secrets_key}
+        ${secrets_path}  Set Variable  ${service}/Writable/InsecureSecrets/${secrets_name}/${path}
+        Query Configuration On Registry Service  ${secrets_path}
+        ${name_base64_value}  Run Keyword If  "${REGISTRY_SERVICE}" == "Consul"  Set Variable  ${content}[0][Value]
+                         ...    ELSE IF  "${REGISTRY_SERVICE}" == "Keeper"  Set Variable  ${content}[response][0][value]
+        ${stored_value}  Evaluate  base64.b64decode('${name_base64_value}').decode('utf-8')  modules=base64
+        ${set_value}  Run Keyword If  "${value}" == "name"  Set Variable  ${secrets_name}
+                 ...    ELSE IF  "${value}" == "data"  Set Variable  ${secrets_value}
+        Should Be Equal  ${stored_value}  ${set_value}
+    END
 
 Should Return Status Code "${statusCode_0}" or "${statusCode_1}"
     Should Match Regexp  "${response}"  (${statusCode_0}|${statusCode_1})

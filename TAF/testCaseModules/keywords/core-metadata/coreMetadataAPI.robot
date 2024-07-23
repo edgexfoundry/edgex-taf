@@ -18,7 +18,7 @@ ${deviceResourceUri}  /api/${API_VERSION}/deviceresource
 ${deviceUri}         /api/${API_VERSION}/device
 ${provisionWatcherUri}  /api/${API_VERSION}/provisionwatcher
 ${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/coreMetadataAPI.log
-${uomValidationPath}   ${CONSUL_CONFIG_BASE_ENDPOINT}/core-metadata/Writable/UoM/Validation
+${uomValidationPath}   /core-metadata/Writable/UoM/Validation
 @{device_service_list}  device-virtual  device-modbus  device-rest
 
 *** Keywords ***
@@ -762,9 +762,9 @@ Create A Provision Watcher Sample With Associated Test-Device-Service And ${devi
     Generate Provision Watchers  ${provisionwatcher}
     Create provision watcher ${provisionwatcher}
 
-Set ProfileChange.${config}=${value} For Core-Metadata On Consul
-   ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-metadata/Writable/ProfileChange/${config}
-   Update Service Configuration On Consul  ${path}  ${value}
+Set ProfileChange.${config}=${value} For Core-Metadata On Registry Service
+   ${path}=  Set Variable  /core-metadata/Writable/ProfileChange/${config}
+   Update Configuration On Registry Service  ${path}  ${value}
 
 ## UoM
 Query UoM

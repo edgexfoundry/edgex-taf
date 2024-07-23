@@ -6,36 +6,36 @@ Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run keywords  Setup Suite
 ...                   AND  Set Suite Variable  ${interval}  2
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                   AND  Set Telemetry Interval=${interval}s For core-data On Consul
+...                   AND  Set Telemetry Interval=${interval}s For ${TEST_SERVICE} On Registry Service
 Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
-...                      AND  Set Telemetry Interval=30s For core-data On Consul
+...                      AND  Set Telemetry Interval=30s For ${TEST_SERVICE} On Registry Service
 ...                      AND  Run Teardown Keywords
 Force Tags      MessageBus=MQTT  backward-skip
 
 *** Variables ***
 ${SUITE}          Core Data Metrics Test - MQTT bus
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core_data_metrics_mqtt.log
-
+${TEST_SERVICE}  core-data
 
 
 *** Test Cases ***
 DataMetricsMQTT001-Enable EventsPersisted And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/EventsPersisted  payload  2
     And Set Test Variable  ${device_name}  events-persisted-true
-    And Set Telemetry Metrics/EventsPersisted=true For core-data On Consul
+    And Set Telemetry Metrics/EventsPersisted=true For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Create multiple events
     And Sleep  ${interval}
     Then Metrics EventsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
+                ...      AND  Set Telemetry Metrics/EventsPersisted=false For ${TEST_SERVICE} On Registry Service
 
 DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/EventsPersisted  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/EventsPersisted  payload  2
     And Set Test Variable  ${device_name}  events-persisted-false
-    And Set Telemetry Metrics/EventsPersisted=false For core-data On Consul
+    And Set Telemetry Metrics/EventsPersisted=false For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Create multiple events
     And Sleep  ${interval}
@@ -44,25 +44,24 @@ DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to M
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
 DataMetricsMQTT003-Enable ReadingsPersisted And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/ReadingsPersisted  payload  2
     And Set Test Variable  ${device_name}  readings-persisted-true
-    And Set Telemetry Metrics/ReadingsPersisted=true For core-data On Consul
+    And Set Telemetry Metrics/ReadingsPersisted=true For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Create multiple events
     And Sleep  ${interval}
     Then Metrics ReadingsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
+                ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For ${TEST_SERVICE} On Registry Service
 
 DataMetricsMQTT004-Disable ReadingsPersisted And Verify Metrics isn't Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/core-data/ReadingsPersisted  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/ReadingsPersisted  payload  2
     And Set Test Variable  ${device_name}  readings-persisted-false
-    And Set Telemetry Metrics/ReadingsPersisted=false For core-data On Consul
+    And Set Telemetry Metrics/ReadingsPersisted=false For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
     When Create multiple events
     And Sleep  ${interval}
     Then No Metrics With Name ReadingsPersisted Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-

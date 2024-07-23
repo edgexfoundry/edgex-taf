@@ -36,14 +36,14 @@ ProfileResourcePOST002 - Add multiple Resources on multiple device profiles
 
 ProfileResourcePOST003 - Add multiple Resources on device profile with valid units property
     Given Create A Device Profile And Generate Multiple Resources Entity
-    And Update Service Configuration On Consul  ${uomValidationPath}  true
+    And Update Configuration On Registry Service  ${uomValidationPath}  true
     When Create Device Resources Contain valid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "201"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resources Should Be Added in ${test_profile}
-    [Teardown]  Run Keywords  Update Service Configuration On Consul  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  ${test_profile}
 
 ProfileResourcePOST004 - Add Resources with Chinese and space character in resource name

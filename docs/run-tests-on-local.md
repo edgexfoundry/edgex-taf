@@ -19,11 +19,13 @@ export WORK_DIR=${HOME}/edgex-taf
 # Arguments for run-tests.sh
 ${ARCH}: x86_64 | arm64
 ${SECURITY_SERVICE_NEEDED}: false | true
+${REGISTRY_SERVICE}: Consul | Keeper
 ${TEST_STRATEGY}: functional-test | integration-test
 ${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | mqtt (integration-test) | redis (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
 
 cd ${WORK_DIR}/TAF/utils/scripts/docker
+export REGISTRY_SERVICE=${REGISTRY_SERVICE}
 sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${TEST_SERVICE} ${DEPLOY_SERVICES}
 
 # If using x86_64, no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:
@@ -90,6 +92,10 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ``` bash
     # ${ServiceDir}: Please use the directory name under TAF/testScenarios/functionalTest/API
     
+    # Before launching Service, please export the following variables.
+    export EDGEX_SECURITY_SECRET_STORE=false
+    export REGISTRY_SERVICE=${REGISTRY_SERVICE}
+
     # Run Test Command
     python3 -m TUC --exclude Skipped -u functionalTest/API/${ServiceDir} -p default
     ``` 
@@ -100,6 +106,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
    
     # Before launching APP Service, please export the following variables.
     export EDGEX_SECURITY_SECRET_STORE=false
+    export REGISTRY_SERVICE=${REGISTRY_SERVICE}
     export SERVICE_PORT=59705 (For functional-tests)
     export SERVICE_PORT=59704 (For http-export)
    
@@ -111,6 +118,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ``` bash
     # Before launching Device Service, please export the following variables.
     export EDGEX_SECURITY_SECRET_STORE=false
+    export REGISTRY_SERVICE=${REGISTRY_SERVICE}
    
     # Modify the ProfilesDir value on configuration.toml under ${HOME}/edgex-taf/TAF/config/${profile}
     ProfilesDir = ${HOME}/edgex-taf/TAF/config/${profile}

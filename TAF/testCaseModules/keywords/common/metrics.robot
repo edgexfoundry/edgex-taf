@@ -6,18 +6,21 @@ Library      String
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 
-*** Keywords ***
-Set Telemetry ${config}=${value} For ${service_name} On Consul
-    ${telemetry_path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/${service_name}/Writable/Telemetry
-    ${path}  Set Variable   ${telemetry_path}/${config}
-    Update Service Configuration On Consul  ${path}  ${value}
+*** Variables ***
+${APP_SERVICE_NAME}  app-sample
 
-Set Topics For app-samle PerTopicPipelines On Consul
+*** Keywords ***
+Set Telemetry ${config}=${value} For ${service_name} On Registry Service
+    ${telemetry_path}  Set Variable  /${service_name}/Writable/Telemetry
+    ${path}  Set Variable   ${telemetry_path}/${config}
+    Update Configuration On Registry Service  ${path}  ${value}
+
+Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     ${perTopics}  Create List  float  int8-16
-    ${path}  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/Pipeline/PerTopicPipelines
+    ${path}  Set Variable  /${APP_SERVICE_NAME}/Writable/Pipeline/PerTopicPipelines
     FOR  ${ITEM}  IN  @{perTopics}
         ${topics_path}  Set Variable  ${path}/${ITEM}/Topics
-        Update Service Configuration On Consul  ${topics_path}  edgex/events/device/+/+/${device_name}/#
+        Update Configuration On Registry Service  ${topics_path}  events/device/+/+/${device_name}/#
     END
 
 Metrics ${metrics_name} With ${field_name} Should Be Received
@@ -37,7 +40,7 @@ Metrics ${metrics_name} With ${field_name} Should Be Received
         ...        AND  Exit For Loop
     END
 
-Recieved Metrics ${metrics_name} For All Pipelines And ${field_name} Should Not Be 0
+Received Metrics ${metrics_name} For All Pipelines And ${field_name} Should Not Be 0
     Wait Until Keyword Succeeds  10x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     @{pipeline_ids}  Create List  default-pipeline  float-pipeline  int8-16-pipeline
     @{message_ids}  Create List
@@ -101,5 +104,5 @@ Get First Lines
     [Return]  ${list}
 
 Set PerTopicPipelines ${perTopicPipeline} ExecutionOrder ${functions}
-    ${path}=  Set variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/Pipeline/PerTopicPipelines/${perTopicPipeline}/ExecutionOrder
-    Update Service Configuration On Consul  ${path}  ${functions}
+    ${path}=  Set variable  /${APP_SERVICE_NAME}/Writable/Pipeline/PerTopicPipelines/${perTopicPipeline}/ExecutionOrder
+    Update Configuration On Registry Service  ${path}  ${functions}

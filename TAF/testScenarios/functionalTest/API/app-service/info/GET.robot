@@ -7,7 +7,7 @@ Suite Teardown   Suite Teardown for App Service
 *** Variables ***
 ${SUITE}          App-Service GET Testcases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/app-service-get.log
-${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIOAL_TESTS_PORT}
+${AppServiceUrl_functional}  http://${BASE_URL}:${APP_FUNCTIONAL_TESTS_PORT}
 
 *** Test Cases ***
 InfoGET001 - Query ping

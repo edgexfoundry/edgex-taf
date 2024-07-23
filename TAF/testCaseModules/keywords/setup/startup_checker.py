@@ -45,7 +45,13 @@ services = {
                                     "pingUrl": "/api/{}/ping".format(SettingsInfo().constant.API_VERSION)},
         "app-service-mqtt-export": {"composeName": "app-service-mqtt-export",
                                     "port": SettingsInfo().constant.APP_MQTT_EXPORT_PORT,
-                                    "pingUrl": "/api/{}/ping".format(SettingsInfo().constant.API_VERSION)}
+                                    "pingUrl": "/api/{}/ping".format(SettingsInfo().constant.API_VERSION)},
+        "app-functional-tests": {"composeName": "app-functional-tests",
+                                 "port": SettingsInfo().constant.APP_FUNCTIONAL_TESTS_PORT,
+                                 "pingUrl": "/api/{}/ping".format(SettingsInfo().constant.API_VERSION)},
+        "app-sample": {"composeName": "app-sample",
+                       "port": SettingsInfo().constant.APP_SAMPLE_PORT,
+                       "pingUrl": "/api/{}/ping".format(SettingsInfo().constant.API_VERSION)}
     }
 
 httpConnTimeout = 5

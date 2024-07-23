@@ -27,6 +27,7 @@ ErrReadingGET014 - Query readings by device name and resource name between start
 
 ErrReadingGET015 - Query readings by device name and resource name between start/end time fails (Start>End)
     ${start_time}=  Get current nanoseconds epoch time
+    Sleep  1ms
     ${end_time}=  Get current nanoseconds epoch time
     When Query readings by device and resource between start/end time  Test_Device  Test_Resource  ${end_time}  ${start_time}
     Then Should Return Status Code "400"

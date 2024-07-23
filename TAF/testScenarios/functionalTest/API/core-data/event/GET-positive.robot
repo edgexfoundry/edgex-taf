@@ -21,7 +21,7 @@ EventGET001 - Query all events
     [Teardown]  Delete All Events By Age
 
 EventGET002 - Query all events by limit = -1 and MaxResultCount= 5
-    Given Set MaxResultCount=5 For Core-Data On Consul
+    Given Set MaxResultCount=5 For Core-Data On Registry Service
     And Create Multiple Events
     When Query All Events With limit=-1
     Then Should Return Status Code "200"
@@ -30,7 +30,7 @@ EventGET002 - Query all events by limit = -1 and MaxResultCount= 5
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete All Events By Age
-    ...         AND  Set MaxResultCount=50000 For Core-Data On Consul
+    ...         AND  Set MaxResultCount=50000 For Core-Data On Registry Service
 
 EventGET003 - Query event by ID
     [Tags]  SmokeTest
@@ -99,7 +99,7 @@ Events Should Be Created Between ${start} And ${end}
     Should Be True  ${end} >= ${content}[events][${index}][origin] >=${start}
   END
 
-Set MaxResultCount=${number} For Core-Data On Consul
-   ${path}=  Set Variable  ${CONSUL_CONFIG_BASE_ENDPOINT}/core-data/Service/MaxResultCount
-   Update Service Configuration On Consul  ${path}  ${number}
+Set MaxResultCount=${number} For Core-Data On Registry Service
+   ${path}=  Set Variable  /core-data/Service/MaxResultCount
+   Update Configuration On Registry Service  ${path}  ${number}
    Restart Services  core-data

@@ -4,11 +4,13 @@ Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource     TAF/testCaseModules/keywords/common/metrics.robot
 Suite Setup  Run keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                   AND  Set Telemetry Interval=${interval}s For app-sample On Consul
-...                   AND  Update Service Configuration On Consul  ${CONSUL_CONFIG_BASE_ENDPOINT}/app-sample/Writable/LogLevel  DEBUG
+...                   AND  Set Telemetry Interval=${interval}s For ${APP_SERVICE_NAME} On Registry Service
+...                   AND  Update Configuration On Registry Service  /${APP_SERVICE_NAME}/Writable/LogLevel  DEBUG
+...                   AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
-...                      AND  Set Telemetry Interval=30s For app-sample On Consul
+...                      AND  Set Telemetry Interval=30s For ${APP_SERVICE_NAME} On Registry Service
+...                      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 ...                      AND  Run Teardown Keywords
 Force Tags      backward-skip  MessageBus=MQTT
 
@@ -26,7 +28,7 @@ ${FLOAT32_CMD}    ${PREFIX}_GenerateDeviceValue_FLOAT32_RW
 
 *** Test Cases ***
 APPServicesMetricsMQTT001-No Telemery Metrics isn't Published to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/#  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/#  payload
     And Set Test Variable  ${device_name}  telemetry-metrics
     And Set All Telemetry Metrics To False
     And Create Device For device-virtual With Name ${device_name}
@@ -39,10 +41,11 @@ APPServicesMetricsMQTT001-No Telemery Metrics isn't Published to MessageBus
 APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to MessageBus
     ${handle_http}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
     Sleep  1s  # Waiting for Http Server startup
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/HttpExportSize  payload  2
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/HttpExportSize  payload  2
     And Set Test Variable  ${device_name}  http-export-size
-    And Set app-sample Functions HTTPExport
-    And Set Telemetry Metrics/HttpExportSize=true For app-sample On Consul
+    And Set ${APP_SERVICE_NAME} Functions HTTPExport
+    And Set Telemetry Metrics/HttpExportSize=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
@@ -50,98 +53,111 @@ APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_http}  kill=True
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/HttpExportSize=false For app-sample On Consul
-                ...      AND  Set app-sample Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
+                ...      AND  Set Telemetry Metrics/HttpExportSize=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set ${APP_SERVICE_NAME} Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/MqttExportSize  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MqttExportSize  payload
     And Set Test Variable  ${device_name}  mqtt-export-size
-    And Set app-sample Functions MQTTExport
-    And Set Telemetry Metrics/MqttExportSize=true For app-sample On Consul
+    And Set ${APP_SERVICE_NAME} Functions MQTTExport
+    And Set Telemetry Metrics/MqttExportSize=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
     Then Metrics MqttExportSize With histogram-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/MqttExportSize=false For app-sample On Consul
-                ...      AND  Set app-sample Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
+                ...      AND  Set Telemetry Metrics/MqttExportSize=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set ${APP_SERVICE_NAME} Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/MessagesReceived  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MessagesReceived  payload
     And Set Test Variable  ${device_name}  message-received
-    And Set Telemetry Metrics/MessagesReceived=true For app-sample On Consul
+    And Set Telemetry Metrics/MessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
     Then Metrics MessagesReceived With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/MessagesReceived=false For app-sample On Consul
+                ...      AND  Set Telemetry Metrics/MessagesReceived=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is Publish to MessageBus
     ${publish_msg}  Set Variable  Invalid Message
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/InvalidMessagesReceived  payload  2
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/InvalidMessagesReceived  payload  2
     And Set Test Variable  ${device_name}  invalid-message-received
     And Create Device For device-virtual With Name ${device_name}
-    And Set Telemetry Metrics/InvalidMessagesReceived=true For app-sample On Consul
+    And Set Telemetry Metrics/InvalidMessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py edgex/events/${device_name} "${publish_msg}" ${BROKER_PORT} ${SECURITY_SERVICE_NEEDED}
          ...          shell=True  timeout=10s
     And Sleep  ${interval_ex}
     Then Metrics InvalidMessagesReceived With counter-count Should Be Received
     [Teardown]  Run keywords  Terminate Process  ${handle_mqtt}  kill=True   # Stop MQTT Subscribe Process
-                ...      AND  Set Telemetry Metrics/InvalidMessagesReceived=false For app-sample On Consul
+                ...      AND  Set Telemetry Metrics/InvalidMessagesReceived=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is Publish to MessageBus
     Given Set Test Variable  ${device_name}  pipeline-messages-processed
-    And Set Topics For app-samle PerTopicPipelines On Consul
+    And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessagesProcessed  payload  6
-    And Set Telemetry Metrics/PipelineMessagesProcessed=true For app-sample On Consul
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessagesProcessed  payload  6
+    And Set Telemetry Metrics/PipelineMessagesProcessed=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
-    Then Recieved Metrics PipelineMessagesProcessed For All Pipelines And counter-count Should Not Be 0
+    Then Received Metrics PipelineMessagesProcessed For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed=false For app-sample On Consul
+                ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metrics is Publish to MessageBus
     Given Set Test Variable  ${device_name}  pipeline-messages-processing-time
-    And Set Topics For app-samle PerTopicPipelines On Consul
+    And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineMessageProcessingTime  payload  6
-    And Set Telemetry Metrics/PipelineMessageProcessingTime=true For app-sample On Consul
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessageProcessingTime  payload  6
+    And Set Telemetry Metrics/PipelineMessageProcessingTime=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
-    Then Recieved Metrics PipelineMessageProcessingTime For All Pipelines And timer-count Should Not Be 0
+    Then Received Metrics PipelineMessageProcessingTime For All Pipelines And timer-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/PipelineMessageProcessingTime=false For app-sample On Consul
+                ...      AND  Set Telemetry Metrics/PipelineMessageProcessingTime=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is Publish to MessageBus
     Given Set Test Variable  ${device_name}  pipeline-processing-errors
-    And Set app-sample Functions HTTPExport
+    And Set ${APP_SERVICE_NAME} Functions HTTPExport
     And Set PerTopicPipelines float ExecutionOrder HTTPExport
     And Set PerTopicPipelines int8-16 ExecutionOrder HTTPExport
-    And Set Topics For app-samle PerTopicPipelines On Consul
+    And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/app-sample/PipelineProcessingErrors  payload  6
-    And Set Telemetry Metrics/PipelineProcessingErrors=true For app-sample On Consul
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineProcessingErrors  payload  6
+    And Set Telemetry Metrics/PipelineProcessingErrors=true For ${APP_SERVICE_NAME} On Registry Service
+    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
-    Then Recieved Metrics PipelineProcessingErrors For All Pipelines And counter-count Should Not Be 0
+    Then Received Metrics PipelineProcessingErrors For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/PipelineProcessingErrors=false For app-sample On Consul
-                ...      AND  Set app-sample Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
+                ...      AND  Set Telemetry Metrics/PipelineProcessingErrors=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set ${APP_SERVICE_NAME} Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
                 ...      AND  Set PerTopicPipelines float ExecutionOrder TransformJson, SetResponseData
                 ...      AND  Set PerTopicPipelines int8-16 ExecutionOrder TransformXml, Compress, SetResponseData
+                ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 *** Keywords ***
 Set All Telemetry Metrics To False
     ${range}  Get Length  ${APP_METRICS}
     FOR  ${INDEX}  IN RANGE  ${range}
-        Set Telemetry Metrics/${APP_METRICS}[${INDEX}]=false For app-sample On Consul
+        Set Telemetry Metrics/${APP_METRICS}[${INDEX}]=false For ${APP_SERVICE_NAME} On Registry Service
     END
 
 Get Multiple Device Data With Commands ${commands}
