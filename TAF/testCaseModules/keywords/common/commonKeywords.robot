@@ -279,8 +279,9 @@ Update Service Configuration On Keeper
     Create Session  Keeper  url=${url}  disable_warnings=true
     ${body}  Create Dictionary  value=${value}
     ${resp}=  PUT On Session  Keeper  ${KEEPER_CONFIG_BASE_ENDPOINT}/${path}
-    ...   json=${body}  headers=${headers}  expected_status=200
+    ...   json=${body}  headers=${headers}  expected_status=any
     Sleep  1s  # Waiting for the configuration updating
+    Set Response to Test Variables  ${resp}
 
 Query Service Configuration On Keeper
     [Arguments]  ${path}
@@ -297,7 +298,8 @@ Delete Service Configuration On Keeper
     ${url}  Set Variable  ${URI_SCHEME}://${BASE_URL}:${CORE_KEEPER_PORT}
     Create Session  Keeper  url=${url}  disable_warnings=true
     ${resp}=  DELETE On Session  Keeper  ${KEEPER_CONFIG_BASE_ENDPOINT}/${path}
-    ...   headers=${headers}  expected_status=200
+    ...   headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
 
 Update Configuration On Registry Service
     [Arguments]  ${path}  ${value}
