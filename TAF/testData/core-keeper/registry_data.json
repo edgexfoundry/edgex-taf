@@ -1,0 +1,10 @@
+{
+  "serviceId": "",
+  "host": "",
+  "port": 0,
+  "healthCheck": {
+    "interval": "10s",
+    "path": "/api/v3/ping",
+    "type": "http"
+  }
+}

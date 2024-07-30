@@ -3,7 +3,6 @@ Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags    Skipped
 
 *** Variables ***
 ${SUITE}          Core Keeper Key/Value GET Test Cases
@@ -11,21 +10,50 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-keeper-kvs-get.log
 
 *** Test Cases ***
 KVsGET001 - Value should be returned when query by configuration name(key)
-    When Query Configuration By Key
+    Given Set Test Variable  ${path}  testKVsGetService/Writable/key
+    And Update Service Configuration On Keeper  ${path}  value
+    When Query Service Configuration On Keeper  ${path}
     Then Should Return Status Code "200" And response
-    And Configuration Value Should Be Correct
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Should Be Equal As Strings  ${content}[response][0][key]  edgex/${CONFIG_VERSION}/${path}
+    [Teardown]  Delete Service Configuration On Keeper  ${path}
 
 KVsGET002 - Only service configurations are listed if query by service level
-    When Query Configuration By Service Level
+    Given Set Test Variable  ${service}  testKVsGetService
+    And Add Multiple Configurations
+    When Query Service Configuration On Keeper  ${service}
     Then Should Return Status Code "200" And response
-    And Only Service Configurations Are Listed
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Only Service Configurations Are Listed
+    [Teardown]  Delete Multiple Configurations
 
 ErrKVsGET001 - Should return error when query by invalid configuration name(key)
-    When Query Configuration By Invalid Key
+    When Query Service Configuration On Keeper  testKVsGetServiceErr/invalidKey
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+
+*** Keywords ***
+Only Service Configurations Are Listed
+    ${count}  Get Length  ${content}[response]
+    FOR  ${INDEX}  IN RANGE  ${count}
+        Should Match Regexp  ${content}[response][${INDEX}][key]  edgex\/${CONFIG_VERSION}\/${service}\/*
+        ...                  msg=${content}[response][${INDEX}][key] does not belong to ${service}
+    END
+
+Add Multiple Configurations
+    ${path}  Set Variable  ${service}/Writable
+    ${key_list}  Create List  key1  key2  key3
+    ${value_list}  Create List  value1  value2  value3
+    FOR  ${key}  ${value}  IN ZIP  ${key_list}  ${value_list}
+        Update Service Configuration On Keeper  ${path}/${key}  ${value}
+    END
+    Set Test Variable  ${key_list}  ${key_list}
+    Set Test Variable  ${path}  ${path}
+
+Delete Multiple Configurations
+    FOR  ${key}  IN  @{key_list}
+        Delete Service Configuration On Keeper  ${path}/${key}
+    END
