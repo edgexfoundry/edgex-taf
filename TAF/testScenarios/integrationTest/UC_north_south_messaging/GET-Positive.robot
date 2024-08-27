@@ -88,8 +88,8 @@ Should Return Error Code 0 And Commands For All Devices Should Be Also Returned
     # Response for Query Command
     ${last_msg}  Get Response Message
     ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
-    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
     ${payload}  Decode Base64 String  ${last_msg}
+    Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
     ${devices_list}  Get deviceCoreCommands Devices List From ${payload}
     # Retrieve devices by core-command API
     Query All DeviceCoreCommands
