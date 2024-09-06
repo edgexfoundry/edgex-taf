@@ -27,7 +27,7 @@ DeviceGET002 - Query all devices with offset
     And Set Test Variable  ${offset}  2
     When Query All Devices With offset=${offset}
     Then Should Return Status Code "200" And devices
-    And And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount-offset
+    And totalCount Is Greater Than Zero And ${content}[devices] Count Should Match totalCount-offset
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample

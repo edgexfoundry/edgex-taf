@@ -20,7 +20,7 @@ Config001 - Set MessageBus.Protocol to MQTT  # Set protocol on deployment
     And Create Device For device-virtual With Name ${device_name}
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW
     Then Should Return Status Code "200" And event
-    And Event Has Been Recevied By MQTT Subscriber
+    And Event Has Been Received By MQTT Subscriber
     And Event Has Been Pushed To Core Data
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
@@ -35,7 +35,7 @@ Config002 - Modify MessageBus.BaseTopicPrefix and receive data from the topic co
     When Retrive device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then Should Return Status Code "200" And event
     And Event Has Been Pushed To Core Data
-    And Event Has Been Recevied By MQTT Subscriber
+    And Event Has Been Received By MQTT Subscriber
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
@@ -80,7 +80,7 @@ Retrive device data by device ${device_name} and command ${command}
     Set Test Variable  ${log_timestamp}  ${timestamp}
     sleep  500ms
 
-Event Has Been Recevied By MQTT Subscriber
+Event Has Been Received By MQTT Subscriber
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh device-virtual ${log_timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${correlation_line}  Get Lines Containing String  ${logs.stdout}.encode()  Correlation-ID

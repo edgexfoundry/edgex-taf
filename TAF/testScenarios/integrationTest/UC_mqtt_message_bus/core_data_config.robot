@@ -22,7 +22,7 @@ CoreConfig001 - Set core-data MessageBus.BaseTopicPrefix not match device-virtua
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_UINT8_RW with ds-pushevent=true
     Then Should Return Status Code "200" And event
-    And Event Has Been Recevied By MQTT Subscriber
+    And Event Has Been Received By MQTT Subscriber
     And Event Is Not Pushed To Core Data
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
@@ -56,7 +56,7 @@ Ping Data Service
     Query Ping
     Should return status code "200"
 
-Event Has Been Recevied By MQTT Subscriber
+Event Has Been Received By MQTT Subscriber
     ${received_event}  Get file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     Should Contain  ${received_event}  ${device_name}  No Event is not received by mqtt subscriber
     Should Contain  ${received_event}  correlationID  No CorrelationID Found in Event

@@ -19,8 +19,8 @@ ExternalTrigger001 - Test external mqtt trigger works
     And Subscribe MQTT Broker Topics ${mqtt_export_topic} With ${EX_BROKER_PORT}  # Subscribe export mqtt broker
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py ${mqtt_trigger_topic} "${publish_msg}" ${EX_BROKER_PORT} false
          ...          shell=True  timeout=10s
-    Then Message Is Recevied By ${mqtt_trigger_topic} Topic
-    And Message Is Recevied By ${mqtt_export_topic} Topic
+    Then Message Is Received By ${mqtt_trigger_topic} Topic
+    And Message Is Received By ${mqtt_export_topic} Topic
     [Teardown]  Terminate All Processes  kill=True
 
 
@@ -30,7 +30,7 @@ Subscribe MQTT Broker Topics ${topic} With ${Port}
         ...                shell=True  stdout=${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log
     Sleep  1s  # Waiting for subscriber is ready
 
-Message Is Recevied By ${topic} Topic
+Message Is Received By ${topic} Topic
     Wait Until Keyword Succeeds  6x  1 sec  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log
     ${subscribe_msg}  Grep File  ${WORK_DIR}/TAF/testArtifacts/logs/${topic}.log  ${publish_msg}
     Should Not Be Empty  ${subscribe_msg}
