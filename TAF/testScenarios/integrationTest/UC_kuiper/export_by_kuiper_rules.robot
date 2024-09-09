@@ -28,7 +28,7 @@ Kuiper001 - Add a new rule and export to MQTT
     Given Create A Rule mqtt-rule With ${rule_sql} And MQTT Sink
     And Create Device For device-virtual With Name ${device_name}
     When Execute Get Command ${command} To Trigger ${device_name}
-    Then Device data with keyword "${resource}" has recevied by mqtt subscriber
+    Then Device data with keyword "${resource}" has received by mqtt subscriber
     [Teardown]  Run Keywords  Delete device by name ${device_name}
                 ...      AND  Delete Rules mqtt-rule
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
@@ -118,7 +118,7 @@ Delete Stream
     ...       expected_status=any
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
 
-Device data with keyword "${keyword}" has recevied by mqtt subscriber
+Device data with keyword "${keyword}" has received by mqtt subscriber
     Dump Last 100 lines Log And Service Config  app-rules-engine  http://localhost:59701
     ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  ${keyword}
     run keyword if  """${mqtt_broker_received}""" == '${EMPTY}'

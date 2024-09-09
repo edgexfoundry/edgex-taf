@@ -20,7 +20,7 @@ Scheduler001-Set scheduler for each 30s to clean up events
     And Create interval action with interval delete events for core-data
     And Create events by get device command
     When sleep  30s
-    Then Query device events after exeucting deletion, and no event found
+    Then Query device events after executing deletion, and no event found
     [Teardown]  run keywords  Delete intervalAction by name ${intervalAction_name}
     ...                       AND  Delete interval by name ${interval_name}
     ...                       AND  Delete device by name ${device_name}
@@ -31,7 +31,7 @@ Scheduler002-Set scheduler for each 60s to clean up events
     And Create interval action with interval delete events for core-data
     And Create events by get device command
     When sleep  60s
-    Then Query device events after exeucting deletion, and no event found
+    Then Query device events after executing deletion, and no event found
     [Teardown]  run keywords  Delete intervalAction by name ${intervalAction_name}
     ...                       AND  Delete interval by name ${interval_name}
     ...                       AND  Delete device by name ${device_name}
@@ -67,7 +67,7 @@ Create events by get device command
     ${events_length}=   GET LENGTH  ${content}[events]
     run keyword if  ${events_length} == 0  fail  Events didn't create before clean up
 
-Query device events after exeucting deletion, and no event found
+Query device events after executing deletion, and no event found
     Query all events
     should be equal as integers  ${response}  200
     ${events_length}=   GET LENGTH  ${content}[events]
