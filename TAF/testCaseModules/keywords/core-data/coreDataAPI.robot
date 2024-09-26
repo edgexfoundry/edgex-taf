@@ -127,7 +127,7 @@ Query event by event id "${event_id}"
     ${api}=  Set Variable   ${coreDataEventUri}/id/${event_id}
     ${resp}=  GET On Session  Core Data    ${api}   headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
-    [Return]  ${resp.status_code}  ${resp.content}
+    RETURN  ${resp.status_code}  ${resp.content}
 
 Query all events
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
@@ -241,3 +241,9 @@ Create multiple events twice to get start/end time
   Create Multiple Events
   Set Test Variable  ${start_time}  ${start_time}
   Set Test Variable  ${end_time}  ${end_time}
+
+Query device events after executing deletion, and no event found
+    Query all events
+    should be equal as integers  ${response}  200
+    ${events_length}   GET LENGTH  ${content}[events]
+    run keyword if  ${events_length} != 0  fail  Found events after executing deletion

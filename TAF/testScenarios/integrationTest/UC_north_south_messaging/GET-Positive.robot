@@ -123,5 +123,5 @@ Get deviceCoreCommands Devices List From ${string}
     FOR  ${INDEX}  IN RANGE  len(${data_json}[deviceCoreCommands])
         Append To List  ${devices_list}  ${data_json}[deviceCoreCommands][${INDEX}][deviceName]
     END
-    [Return]  ${devices_list}
+    RETURN  ${devices_list}
 

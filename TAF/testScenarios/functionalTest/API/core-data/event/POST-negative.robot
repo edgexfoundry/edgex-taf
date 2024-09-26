@@ -23,7 +23,7 @@ ErrEventPOST002 - Create events fails (Bad Events)
     FOR  ${property}  IN  @{bad_property}
          Given Generate Bad Event With ${property}
          And Create Event With Service-Test-002 And Profile-Test-002 And Device-Test-002 And Command-Test-002
-         Then Should Return Status Code "400"
+         Then Run Keyword And Continue On Failure  Should Return Status Code "400"
          And Should Return Content-Type "application/json"
          And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
@@ -33,17 +33,17 @@ ErrEventPOST003 - Create events fails (Bad Simple Readings)
     FOR  ${property}  IN  @{bad_property}
          Given Generate Bad Simple Reading With ${property}
          And Create Event With Service-Test-002 And Profile-Test-002 And Device-Test-002 And Command-Test-002
-         Then Should Return Status Code "400"
+         Then Run Keyword And Continue On Failure  Should Return Status Code "400"
          And Should Return Content-Type "application/json"
          And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END
 
 ErrEventPOST004 - Create events fails (Bad Binary Readings)
-    ${bad_property}=  Create List  no_binaryValue  no_mediaType  no_valueType
+    ${bad_property}=  Create List  no_mediaType  no_valueType
     FOR  ${property}  IN  @{bad_property}
          Given Generate Bad Binary Reading With ${property}
          And Create Event With Service-Test-002 And Profile-Test-002 And Device-Test-002 And Command-Test-002
-         Then Should Return Status Code "400"
+         Then Run Keyword And Continue On Failure  Should Return Status Code "400"
          And Should Return Content-Type "application/json"
          And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     END

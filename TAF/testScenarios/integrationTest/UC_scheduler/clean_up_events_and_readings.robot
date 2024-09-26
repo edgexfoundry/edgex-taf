@@ -7,7 +7,7 @@ Resource         TAF/testCaseModules/keywords/support-scheduler/supportScheduler
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
-Force Tags       MessageBus=redis
+Force Tags       MessageBus=redis  DB=redis
 
 *** Variables ***
 ${SUITE}         Clean Up Events/Readings By Scheduler
@@ -55,21 +55,3 @@ Create interval action with interval delete events for core-data
     Create intervalAction  ${intervalActions}
     Should Return Status Code "207"
     Item Index 0 Should Contain Status Code "201" And id
-
-Create events by get device command
-    FOR  ${INDEX}  IN RANGE  0  5
-        @{data_type_skip_write_only}  Get All Read Commands
-        ${random_command}  Get random "commandName" from "${data_type_skip_write_only}"
-        Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${random_command}
-    END
-    Query all events
-    should be equal as integers  ${response}  200
-    ${events_length}=   GET LENGTH  ${content}[events]
-    run keyword if  ${events_length} == 0  fail  Events didn't create before clean up
-
-Query device events after executing deletion, and no event found
-    Query all events
-    should be equal as integers  ${response}  200
-    ${events_length}=   GET LENGTH  ${content}[events]
-    run keyword if  ${events_length} != 0  fail  Found events after executing deletion
-

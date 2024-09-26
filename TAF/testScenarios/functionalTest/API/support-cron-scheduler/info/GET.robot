@@ -1,13 +1,15 @@
 *** Settings ***
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
+Resource     TAF/testCaseModules/keywords/support-cron-scheduler/supportCronSchedulerAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags    Skipped
+Force Tags      DB=postgres
 
 *** Variables ***
 ${SUITE}          Support Cron Scheduler Info GET Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-cron-scheduler-info.log
+${url}            ${supportCronSchedulerUrl}
 
 *** Test Cases ***
 InfoGET001 - Query ping

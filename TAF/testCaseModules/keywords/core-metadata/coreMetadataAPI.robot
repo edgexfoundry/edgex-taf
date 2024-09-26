@@ -154,7 +154,7 @@ Query device profile by name
     Set Response to Test Variables  ${resp}
     ${resp_length}=  get length  ${resp.content}  #bytes dict: length of empty list ("[]") is 3
     run keyword if  ${response} != 200 or ${resp_length} == 3  fail  "The device profile ${device_profile_name} is not found"
-    [Return]  ${resp.content}
+    RETURN  ${resp.content}
 
 Query device resource by resourceName and profileName
     [Arguments]   ${resource_name}  ${profile_name}
@@ -674,7 +674,7 @@ Set device values
     Set To Dictionary  ${device}  protocols=${protocols}
     Set To Dictionary  ${device}  serviceName=${device_service_name}
     Set To Dictionary  ${device}  profileName=${device_profile_name}
-    [Return]  ${device}
+    RETURN  ${device}
 
 Set autoEvents values
     [Arguments]  ${interval}  ${onChange}  ${sourceName}
@@ -684,7 +684,7 @@ Set autoEvents values
     ${onChange}=  Convert To Boolean  ${onChange}
     Set To Dictionary  ${autoEvent}  onChange=${onChange}
     Set To Dictionary  ${autoEvent}  sourceName=${sourceName}
-    [Return]  ${autoEvent}
+    RETURN  ${autoEvent}
 
 Create Devices And Generate Multiple Devices Sample For Updating ${type}
     Create Multiple Profiles And Generate Multiple Devices Sample
@@ -743,7 +743,7 @@ Set provision watcher values
     ${provisionwatcher}=  Evaluate  json.loads('''${data}''')  json
     Set To Dictionary  ${provisionwatcher}  serviceName=${device_service_name}
     Set To Dictionary  ${provisionwatcher}[discoveredDevice]  profileName=${device_profile_name}
-    [Return]  ${provisionwatcher}
+    RETURN  ${provisionwatcher}
 
 Delete Multiple Provision Watchers Sample, Profiles Sample And Services Sample
     Delete Multiple Provision Watchers By Names

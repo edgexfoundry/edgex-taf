@@ -29,7 +29,7 @@ Get All Read Commands
           Continue For Loop If   '${item["readWrite"]}' == 'W'
           Append To List    ${data_types_skip_write_only}    ${item}
     END
-    [Return]   ${data_types_skip_write_only}
+    RETURN   ${data_types_skip_write_only}
 
 Skip read only commands
     @{data_types_skip_read_only}=    Create List
@@ -37,21 +37,21 @@ Skip read only commands
           Continue For Loop If   '${item["readWrite"]}' == 'R'
           Append To List    ${data_types_skip_read_only}    ${item}
     END
-    [Return]  ${data_types_skip_read_only}
+    RETURN  ${data_types_skip_read_only}
 
 Get All Write Only Commands
     @{data_types_write_only}=    Create List
     FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
           Run Keyword If  '${item["readWrite"]}' == 'W'  Append To List    ${data_types_write_only}    ${item}
     END
-    [Return]   ${data_types_write_only}
+    RETURN   ${data_types_write_only}
 
 Get All Write Commands
     @{data_types_all_write}=    Create List
     FOR    ${item}    IN    @{SUPPORTED_DATA_TYPES}
           Run Keyword If  '${item["readWrite"]}' != 'R'  Append To List    ${data_types_all_write}    ${item}
     END
-    [Return]   ${data_types_all_write}
+    RETURN   ${data_types_all_write}
 
 Skip data types BOOL and STRING only commands "${SUPPORTED_DATA}"
     @{data_types_skip_bool_string}=    Create List
@@ -59,7 +59,7 @@ Skip data types BOOL and STRING only commands "${SUPPORTED_DATA}"
           Continue For Loop If   '${item["dataType"]}' == 'BOOL' or '${item["dataType"]}' == 'STRING'
           Append To List    ${data_types_skip_bool_string}    ${item}
     END
-    [Return]  ${data_types_skip_bool_string}
+    RETURN  ${data_types_skip_bool_string}
 
 Skip read only and write only commands "${SUPPORTED_DATA}"
     @{data_types_get_rw}=    Create List
@@ -67,7 +67,7 @@ Skip read only and write only commands "${SUPPORTED_DATA}"
           Continue For Loop If   '${item["readWrite"]}' == 'R' or '${item["readWrite"]}' == 'W'
           Append To List    ${data_types_get_rw}    ${item}
     END
-    [Return]  ${data_types_get_rw}
+    RETURN  ${data_types_get_rw}
 
 Get reading value with data type "${data_type}"
     # Boolean
@@ -91,7 +91,7 @@ Get reading value with data type "${data_type}"
 Get random "${value}" from "${list}"
     ${random}=  Evaluate  random.choice(@{list})  random
     ${random_value}=  convert to string  ${random}[${value}]
-    [Return]  ${random_value}
+    RETURN  ${random_value}
 
 Get "${property}" from multi-status item ${index}
     ${item_value}=  Set Variable  ${content}[${index}][${property}]
@@ -126,9 +126,18 @@ totalCount Is Greater Than Zero And ${query_count} Count Should Match ${option}
     # option: totalCount, totalCount-offset, limit
     Should contain  ${content}  totalCount
     Should be true  '${content}[totalCount]' > '0'
-    Run Keyword If  "${option}" == "totalCount"  Should Be True  len(${query_count}) == ${content}[totalCount]
-    ...    ELSE IF  "${option}" == "totalCount-offset"  Should Be True  len(${query_count}) == ${content}[totalCount]-${offset}
-    ...    ELSE IF  "${option}" == "limit"  Should Be True  len(${query_count}) <= ${limit}
+
+    IF  ${content}[totalCount] > 20
+         Should Be True  len(${query_count}) == 20
+    ELSE
+        IF  "${option}" == "totalCount"
+            Should Be True  len(${query_count}) == ${content}[totalCount]
+        ELSE IF  "${option}" == "totalCount-offset"
+            Should Be True  len(${query_count}) == ${content}[totalCount]-${offset}
+        ELSE IF  "${option}" == "limit"
+            Should Be True  len(${query_count}) <= ${limit}
+        END
+    END
 
 Item Index ${index} Should Contain Status Code "${status_code}"
     ${content_type}=  Evaluate  type($content).__name__
@@ -156,22 +165,22 @@ Item Index ${index} Should Contain Status Code "${status_code}" And ${element}
 Get current milliseconds epoch time
     ${current_epoch_time}=  Get current epoch time
     ${millisec_epoch_time}=    evaluate   int(${current_epoch_time}*1000)
-    [Return]  ${millisec_epoch_time}
+    RETURN  ${millisec_epoch_time}
 
 Get current nanoseconds epoch time
     ${current_epoch_time}=  Get current epoch time
     ${nonosec_epoch_time}=    evaluate   int(${current_epoch_time}*1000*1000000)
-    [Return]  ${nonosec_epoch_time}
+    RETURN  ${nonosec_epoch_time}
 
 Get current epoch time
     ${data}=  get current date
     ${current_epoch_time}=  convert date    ${data}  epoch
-    [Return]  ${current_epoch_time}
+    RETURN  ${current_epoch_time}
 
 Get current ISO 8601 time
     ${current_date}  get current date  UTC
     ${current_ISO_8601_time}  Convert Date  ${current_date}  result_format=%Y%m%dT%H%M%S
-    [Return]  ${current_ISO_8601_time}
+    RETURN  ${current_ISO_8601_time}
 
 Catch logs for service "${service_name}" with keyword "${keyword}"
     ${current_timestamp}=  Get current epoch time
@@ -179,7 +188,7 @@ Catch logs for service "${service_name}" with keyword "${keyword}"
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${return_log}=  Get Lines Containing String  str(${logs.stdout})  ${keyword}
-    [Return]  ${return_log}
+    RETURN  ${return_log}
 
 Found "${keyword}" in service "${service_name}" log
     ${return_log}=  Catch logs for service "${service_name}" with keyword "${keyword}"
@@ -198,12 +207,12 @@ Remove Token
 Load data file "${json_file}" and get variable "${use_variable}"
     ${json_data}=  Get File  ${WORK_DIR}/TAF/testData/${json_file}  encoding=UTF-8
     ${json_string}=  Evaluate  json.loads(r'''${json_data}''')  json
-    [Return]    ${json_string}[${use_variable}]
+    RETURN    ${json_string}[${use_variable}]
 
 Load yaml file "${yaml_file}" and convert to dictionary
     ${yaml_data}=  Get Binary File  ${WORK_DIR}/TAF/testData/${yaml_file}
     ${dict}=  yaml.Safe Load  ${yaml_data}
-    [Return]  ${dict}
+    RETURN  ${dict}
 
 Set Response to Test Variables
     [Arguments]  ${resp}
@@ -270,7 +279,7 @@ Get Consul Token
     ${result}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/execute-command-in-docker.sh core-consul "${command}"
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     ${token}  Evaluate  json.loads('''${result.stdout}''')  json
-    [Return]  ${token}[SecretID]
+    RETURN  ${token}[SecretID]
 
 Update Service Configuration On Keeper
     [Arguments]  ${path}  ${value}
@@ -346,7 +355,7 @@ Decode Base64 String
     ${decode_payload}  Evaluate  base64.b64decode('${last_msg_json}[payload]').decode('utf-8')  modules=base64
     ${payload}  Evaluate  json.loads('''${decode_payload}''')
     Log  ${payload}
-    [Return]  ${payload}
+    RETURN  ${payload}
 
 Dump Last 100 lines Log And Service Config  # For Debug use
     [Arguments]  ${service_name}  ${url}

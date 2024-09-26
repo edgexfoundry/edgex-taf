@@ -7,6 +7,7 @@ USE_SHA1=${3:-main}
 TEST_STRATEGY=${4:-}
 REGISTRY_SERVICE=${5:-Consul}
 DELAYED_START=${6:-false}
+USE_DB=${USE_DB:-}
 
 . $(dirname "$0")/common-taf.env
 
@@ -28,17 +29,47 @@ else
   REGISTRY_TYPE=consul
 fi
 
+# # USE POSTGRES
+if [ "$USE_SECURITY" != '-security-' ]; then
+  CORE_COMMAND_MESSAGE_AUTH=none
+else
+  CORE_COMMAND_MESSAGE_AUTH=usernamepassword
+fi
+if [ "$USE_DB" = "postgres" ]; then
+  USE_POSTGRES=-postgres
+  MQTT_BUS=-mqtt-bus
+  DATABASE_HOST=edgex-postgres
+  DATABASE_PORT=5432
+  DATABASE_TYPE=postgres
+  MESSAGEBUS_PROTOCOL=tcp
+  MESSAGEBUS_HOST=edgex-mqtt-broker
+  MESSAGEBUS_PORT=1883
+  MESSAGEBUS_SECRETNAME=message-bus
+  MESSAGEBUS_AUTHMODE=${CORE_COMMAND_MESSAGE_AUTH}
+  MESSAGEBUS_TYPE=mqtt
+else
+  DATABASE_HOST="edgex-redis"
+  DATABASE_PORT=6379
+  DATABASE_TYPE=redis
+  MESSAGEBUS_PROTOCOL=redis
+  MESSAGEBUS_HOST="edgex-redis"
+  MESSAGEBUS_PORT=6379
+  MESSAGEBUS_SECRETNAME=redisdb
+  MESSAGEBUS_AUTHMODE=${CORE_COMMAND_MESSAGE_AUTH}
+  MESSAGEBUS_TYPE=redis
+fi
+
 # # pre-release or other release
 mkdir -p tmp
 # generate single file docker-compose.yml for target configuration without
 # default device services, i.e. no device-virtual service
-./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}"
-cp docker-compose-taf${USE_NO_SECURITY}${USE_KEEPER}${USE_ARM64}.yml docker-compose.yml
+./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}" "" "${USE_POSTGRES}" "${MQTT_BUS}"
+cp docker-compose-taf${USE_NO_SECURITY}${MQTT_BUS}${USE_KEEPER}${USE_POSTGRES}${USE_ARM64}.yml docker-compose.yml
 
 if [ "${TEST_STRATEGY}" = "integration-test" ]; then
   # sync compose file for mqtt message bus
-  ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}" "" "-mqtt-bus"
-  cp docker-compose-taf${USE_NO_SECURITY}-mqtt-bus${USE_KEEPER}${USE_ARM64}.yml docker-compose-mqtt-bus.yml
+  ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}" "" "${USE_POSTGRES}" "-mqtt-bus"
+  cp docker-compose-taf${USE_NO_SECURITY}-mqtt-bus${USE_KEEPER}${USE_POSTGRES}${USE_ARM64}.yml docker-compose-mqtt-bus.yml
   # Set Compose files variable
   COMPOSE_FILE="docker-compose docker-compose-mqtt-bus"
 else
@@ -100,8 +131,15 @@ for compose in ${COMPOSE_FILE}; do
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' tmp/core-command.yml
       # Uri for files
       if [ "${compose}" = "docker-compose" ]; then
-        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_HOST: edgex-redis' tmp/core-command.yml
-        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_HOST: edgex-redis' tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_HOST: ${DATABASE_HOST}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_PORT: ${DATABASE_PORT}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_TYPE: ${DATABASE_TYPE}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_PROTOCOL: ${MESSAGEBUS_PROTOCOL}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_HOST: ${MESSAGEBUS_HOST}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_PORT: ${MESSAGEBUS_PORT}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_SECRETNAME: ${MESSAGEBUS_SECRETNAME}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_AUTHMODE: ${MESSAGEBUS_AUTHMODE}" tmp/core-command.yml
+        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_TYPE: ${MESSAGEBUS_TYPE}" tmp/core-command.yml
         sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_HOST: $REGISTRY_HOST" tmp/core-command.yml
         sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_PORT: $REGISTRY_PORT" tmp/core-command.yml
         sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_TYPE: $REGISTRY_TYPE" tmp/core-command.yml

@@ -62,7 +62,7 @@ Get Readings Ids From Event API
             Append To List  ${ids}  ${content}[events][${EVENT_INDEX}][readings][${READING_INDEX}][id]
         END
     END
-    [Return]  ${ids}
+    RETURN  ${ids}
 
 Stored Readings Are Belong To Stored Events
     ${event_reading_ids}  Get Readings Ids From Event API

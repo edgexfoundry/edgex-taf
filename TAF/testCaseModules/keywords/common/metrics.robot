@@ -101,7 +101,7 @@ Get First Lines
         ${line}  Get Line  ${string}  ${INDEX}
         Append To List  ${list}  ${line}
     END
-    [Return]  ${list}
+    RETURN  ${list}
 
 Set PerTopicPipelines ${perTopicPipeline} ExecutionOrder ${functions}
     ${path}=  Set variable  /${APP_SERVICE_NAME}/Writable/Pipeline/PerTopicPipelines/${perTopicPipeline}/ExecutionOrder

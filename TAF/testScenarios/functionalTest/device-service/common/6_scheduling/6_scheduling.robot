@@ -27,7 +27,7 @@ Get last support reading
     @{data_types_skip_write_only}=  Get All Read Commands
     ${support_data_length}=  get length  ${data_types_skip_write_only}
     ${last_reading}=  evaluate   ${support_data_length}-1
-    [Return]   ${last_reading}
+    RETURN   ${last_reading}
 
 Create AutoEvent Device With Parameters
     [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}

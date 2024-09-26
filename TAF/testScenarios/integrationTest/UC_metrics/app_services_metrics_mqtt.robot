@@ -58,7 +58,7 @@ APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to
                 ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MqttExportSize  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MqttExportSize  payload  2
     And Set Test Variable  ${device_name}  mqtt-export-size
     And Set ${APP_SERVICE_NAME} Functions MQTTExport
     And Set Telemetry Metrics/MqttExportSize=true For ${APP_SERVICE_NAME} On Registry Service
@@ -74,7 +74,7 @@ APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to
                 ...      AND  Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MessagesReceived  payload
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MessagesReceived  payload  2
     And Set Test Variable  ${device_name}  message-received
     And Set Telemetry Metrics/MessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
     And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}

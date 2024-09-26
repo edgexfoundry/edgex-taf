@@ -105,7 +105,7 @@ Get All Device Resources From Profile
         ${name}  Set Variable  ${profile}[profile][deviceResources][${INDEX}][name]
         Append To List  ${resources}  ${name}
     END
-    [Return]  ${resources}
+    RETURN  ${resources}
 
 Get Unused Device Resources From Profile
     ${resources}  Get All Device Resources From Profile  ${content}
@@ -113,7 +113,7 @@ Get Unused Device Resources From Profile
     FOR  ${usedResource}  IN  @{usedResource_list}
         Remove Values From List  ${resources}  ${usedResource}
     END
-    [Return]  ${resources}
+    RETURN  ${resources}
 
 Get Used Device Resources From Profile
     ${allUsedResources}  Create List
@@ -126,7 +126,7 @@ Get Used Device Resources From Profile
         END
     END
     ${usedResources}  Remove Duplicates  ${allUsedResources}
-    [Return]  ${usedResources}
+    RETURN  ${usedResources}
 
 Device Resource ${resource_name} In ${profile} Should Be Deleted
     Query device profile by name  ${profile}

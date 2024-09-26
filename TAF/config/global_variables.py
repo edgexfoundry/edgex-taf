@@ -46,6 +46,7 @@ if SECURITY_SERVICE_NEEDED == 'true':
     SUPPORT_SCHEDULER_PORT = "8443/support-scheduler"
     RULESENGINE_PORT = "8443/rules-engine"
     ONVIF_CAMERA_PORT = "8443/device-onvif-camera"
+    SUPPORT_CRON_SCHEDULER_PORT = "8443/support-cron-scheduler"
 else:
     URI_SCHEME = "http"
     CORE_DATA_PORT = 59880
@@ -56,6 +57,7 @@ else:
     SUPPORT_SCHEDULER_PORT = 59861
     RULESENGINE_PORT = 59720
     ONVIF_CAMERA_PORT = 59984
+    SUPPORT_CRON_SCHEDULER_PORT = 59863
 
 if REGISTRY_SERVICE == 'Consul':
     REGISTRY_PORT = CONSUL_PORT

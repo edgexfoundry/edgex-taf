@@ -6,7 +6,14 @@ TEST_STRATEGY=${3:-functional-test} # option: functional-test, integration-test
 TEST_SERVICE=${4:-api}
 REGISTRY_SERVICE=${5:-Consul}
 DEPLOY_SERVICES=${6:-} # no-deployment or empty
+USE_DB=${USE_DB:-redis}
 
+if [ "$USE_DB" = "postgres" ]; then
+  export USE_DB=$USE_DB
+  export EXCLUDE_DB=redis
+else
+  export EXCLUDE_DB=postgres
+fi
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
 
@@ -37,7 +44,7 @@ if [ "$DEPLOY_SERVICES" != "no-deployment" ]; then
   # Install base service
   docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
           -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
-          -e USE_DB=${USE_DB} --security-opt label:disable \
+          --security-opt label:disable -e REGISTRY_SERVICE=$REGISTRY_SERVICE \
           -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
           --exclude Skipped --include ${RUN_TAG} -u deploy.robot -p default
   cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/deploy-base.html
@@ -69,7 +76,7 @@ case ${TEST_STRATEGY} in
                 -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
                 --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
                 -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-                --exclude Skipped -u functionalTest/API -p default
+                --exclude Skipped --exclude DB=${EXCLUDE_DB} -u functionalTest/API -p default
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html
       ;;
       *)
@@ -92,7 +99,7 @@ case ${TEST_STRATEGY} in
             -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
             --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
             -v /tmp/edgex/secrets:/tmp/edgex/secrets:z \
-            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} --exclude DB=${EXCLUDE_DB} \
             --exclude Skipped --include MessageBus=${TEST_SERVICE} -u integrationTest -p device-virtual
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html
   ;;

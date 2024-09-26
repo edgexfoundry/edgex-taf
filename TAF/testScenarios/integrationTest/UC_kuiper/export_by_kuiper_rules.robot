@@ -92,7 +92,7 @@ Set ${action} Action Value With Rule ${rule_id}
     ...      Run Keywords  Set to dictionary  ${action_data}[0][mqtt]  server=tcp://edgex-taf-mqtt-broker:${BROKER_PORT}
     ...               AND  Set to dictionary  ${action_data}[0][mqtt]  username=${EX_BROKER_USER}
     ...               AND  Set to dictionary  ${action_data}[0][mqtt]  password=${EX_BROKER_PASSWD}
-    [Return]  ${action_data}
+    RETURN  ${action_data}
 
 Execute Get Command ${command} To Trigger ${device_name}
     Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${command}

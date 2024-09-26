@@ -21,8 +21,7 @@ def deploy_edgex(*args):
            *args]
     run_command(cmd)
 
-    checker.check_services_startup(["data", "metadata", "command", "support-notifications", "support-scheduler",
-                                    "device-virtual"])
+    checker.check_services_startup(["data", "metadata", "command", "support-notifications", "device-virtual"])
 
 
 def shutdown_services(*args):

@@ -4,6 +4,7 @@ Resource     TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
+Force Tags      DB=redis
 
 *** Variables ***
 ${SUITE}          Support Scheduler Intervalaction GET Test Cases
