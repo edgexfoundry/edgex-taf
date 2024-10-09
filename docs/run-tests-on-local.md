@@ -11,6 +11,8 @@ git clone https://github.com/edgexfoundry/edgex-taf.git
 ``` 
 # Required variables
 export WORK_DIR=${HOME}/edgex-taf
+export REGISTRY_SERVICE=${REGISTRY_SERVICE}
+export USE_DB=${TEST_DB}
 ```
 
 #### Run test by shell script with arguments
@@ -23,9 +25,10 @@ ${REGISTRY_SERVICE}: Consul | Keeper
 ${TEST_STRATEGY}: functional-test | integration-test
 ${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | mqtt (integration-test) | redis (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
-
+${TEST_DB}: postgres | redis
 cd ${WORK_DIR}/TAF/utils/scripts/docker
-export REGISTRY_SERVICE=${REGISTRY_SERVICE}
+
+
 sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${TEST_SERVICE} ${DEPLOY_SERVICES}
 
 # If using x86_64, no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:

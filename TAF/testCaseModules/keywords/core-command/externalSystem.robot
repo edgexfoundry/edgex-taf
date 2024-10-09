@@ -109,7 +109,7 @@ Get Response Message
     ${count}  Get Line Count  ${content}
     ${last_msg}  Run Keyword If  ${count} > 1  Get Line  ${content}  -1
                  ...       ELSE  Set Variable  ${content}
-    [Return]  ${last_msg}
+    RETURN  ${last_msg}
 
 Set Random Read Command
     @{data_type_skip_write_only}  Get All Read Commands
@@ -126,4 +126,4 @@ Encode Request Body ${key}=${value} To Base64
     ${req_json}  Evaluate  json.dumps(${req_dict})
     ${payload}  Evaluate  base64.b64encode(bytes('${req_json}', 'UTF-8'))  modules=base64
     ${payload}  Decode Bytes To String  ${payload}  UTF-8
-    [Return]  ${payload}
+    RETURN  ${payload}

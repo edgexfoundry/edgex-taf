@@ -72,7 +72,7 @@ Get exported data length from "${app_service}" service log
     ${app_service_log}=  Fetch From Right  ${app_service_log}  Sent
     ${sent_data_length}=  Fetch From Left  ${app_service_log}   bytes
     ${sent_data_length}  convert to number  ${sent_data_length}
-    [Return]  ${sent_data_length}
+    RETURN  ${sent_data_length}
 
 Get device data by device ${device_name} and command ${command}
     Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${command}
@@ -83,7 +83,7 @@ Device data has Received by mqtt subscriber
     ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/mqtt-subscriber.log  origin
     run keyword if  "${device_name}" not in """${mqtt_broker_received}"""
     ...             fail  No export log found on mqtt subscriber
-    [Return]    ${mqtt_broker_received}
+    RETURN    ${mqtt_broker_received}
 
 No exported logs found on configurable application service
     [Arguments]  ${app_service_name}

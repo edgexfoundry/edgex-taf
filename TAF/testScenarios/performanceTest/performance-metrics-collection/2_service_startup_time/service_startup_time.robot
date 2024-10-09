@@ -53,7 +53,7 @@ Deploy edgex with creating containers and get startup time
         Check service is stopped or not
     END
     log  ${service_startup_time_list}
-    [Return]  ${service_startup_time_list}
+    RETURN  ${service_startup_time_list}
 
 Deploy edgex without creating containers and get startup time
     @{service_startup_time_list}=  Create List
@@ -68,7 +68,7 @@ Deploy edgex without creating containers and get startup time
         Check service is stopped or not
     END
     log  ${service_startup_time_list}
-    [Return]  ${service_startup_time_list}
+    RETURN  ${service_startup_time_list}
 
 Get startup time and add to dictionary
     [Arguments]  ${services_startup_time}
@@ -85,7 +85,7 @@ Get startup time and add to dictionary
         ${service_aggregations}=  create dictionary  ${service}=${aggregation_value}
         APPEND TO LIST  ${service_aggregation_list}  ${service_aggregations}
     END
-    [Return]  ${service_aggregation_list}
+    RETURN  ${service_aggregation_list}
 
 Get service startup time list
     [Arguments]  ${services_startup_time}  ${service}  ${startup_key}
@@ -100,7 +100,7 @@ Get service startup time list
                            ...    ELSE     Convert milliseconds to seconds  ${startup_value_str}
         append to list  ${service_data_list}  ${startup_value}
     END
-    [Return]  ${service_data_list}
+    RETURN  ${service_data_list}
 
 Convert milliseconds to seconds
     [Arguments]  ${time}
@@ -111,7 +111,7 @@ Convert milliseconds to seconds
     ${startup_value}=  run keyword if  ${check_time_ms} == True  EVALUATE  ${time_num} / 1000
                        ...    ELSE IF  ${check_time_µs} == True  EVALUATE  ${time_num} / 1000000
                        ...    ELSE     SET VARIABLE  ${time_num}
-    [Return]  ${startup_value}
+    RETURN  ${startup_value}
 
 Start Services
   ${command}=  Catenate

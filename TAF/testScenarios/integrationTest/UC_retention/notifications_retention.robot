@@ -68,7 +68,7 @@ Get Notification Ids
     FOR  ${INDEX}  IN RANGE  len(${content}[notifications])
         Append To List  ${ids}  ${content}[notifications][${INDEX}][id]
     END
-    [Return]  ${ids}
+    RETURN  ${ids}
 
 Stored Transmissions Are Belong To Stored Notifications
     ${stored_notifiction_ids}  Get Notification Ids

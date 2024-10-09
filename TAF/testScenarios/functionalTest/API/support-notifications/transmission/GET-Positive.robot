@@ -52,7 +52,6 @@ TransmissionGET003 - Query all transmissions by offset
                 ...      AND  Cleanup All Notifications And Transmissions
 
 TransmissionGET004 - Query all transmissions by limit
-    Query All Subscriptions
     Given Create Subscriptions And Notifications Make Less Than 20 Transmission Created
     When Query All Transmissions With limit=2
     Then Should Return Status Code "200" And transmissions
@@ -65,7 +64,6 @@ TransmissionGET004 - Query all transmissions by limit
 
 # /transmission/status/{status}
 TransmissionGET005 - Query transmissions with specified status
-    Query All Subscriptions
     Given Create Subscriptions And Notifications Make Less Than 20 Transmission Created
     And Query All Transmissions
     When Query Transmissions By Specified Status  SENT
@@ -79,7 +77,6 @@ TransmissionGET005 - Query transmissions with specified status
                 ...      AND  Cleanup All Notifications And Transmissions
 
 TransmissionGET006 - Query transmissions with specified status by offset
-    Query All Subscriptions
     Given Create Subscriptions And Notifications Make Less Than 20 Transmission Created
     When Query Transmissions By Specified Status SENT With offset=1
     Then Should Return Status Code "200" And transmissions
@@ -92,7 +89,6 @@ TransmissionGET006 - Query transmissions with specified status by offset
                 ...      AND  Cleanup All Notifications And Transmissions
 
 TransmissionGET007 - Query transmissions with specified status by limit
-    Query All Subscriptions
     Given Create Subscriptions And Notifications Make Less Than 20 Transmission Created
     When Query Transmissions By Specified Status SENT With limit=1
     Then Should Return Status Code "200" And transmissions

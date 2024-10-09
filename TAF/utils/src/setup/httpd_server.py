@@ -7,7 +7,9 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+import os
 
+WORK_DIR = os.getenv('WORK_DIR')
 
 class S(BaseHTTPRequestHandler):
     def _set_response(self):
@@ -30,7 +32,7 @@ class S(BaseHTTPRequestHandler):
 
 
 def run(server_class=HTTPServer, handler_class=S, port=7770):
-    logging.basicConfig(level=logging.INFO, datefmt='%m-%d %H:%M', filename='../testArtifacts/logs/httpd-server.log')
+    logging.basicConfig(level=logging.INFO, datefmt='%m-%d %H:%M', filename=WORK_DIR+'/TAF/testArtifacts/logs/httpd-server.log')
     try:
         server_address = ('', port)
         httpd = server_class(server_address, handler_class)

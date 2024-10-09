@@ -27,3 +27,11 @@ EventPOST002 - Create event with binary data
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
+EventPOST003 - Create events with null binary data
+    Given Generate Event Sample  Event With Tags  Device-Test-002  Profile-Test-002  Command-Test-002  Binary Reading
+    And Set To Dictionary  ${event}[event][readings][0]  binaryValue=${EMPTY}
+    When Create Event With Service-Test-002 And Profile-Test-002 And Device-Test-002 And Command-Test-002
+    Then Should Return Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete All Events By Age

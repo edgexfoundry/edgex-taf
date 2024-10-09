@@ -27,7 +27,7 @@ ErrSET001 - Test DS actuates commands to device/sensor by name with invalid requ
     Given Get A Write Command
     And Create Device For ${SERVICE_NAME} With Name Update-Command-Device
     When Invoke SET command by device ${device_name} and command ${command} with request body ${reading_name}:invalid_value
-    Then Should return status code "500"
+    Then Should return status code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete device by name ${device_name}

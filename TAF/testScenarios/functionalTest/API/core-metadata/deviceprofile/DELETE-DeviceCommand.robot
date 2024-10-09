@@ -94,7 +94,7 @@ Get All Device Command From Profile
         ${name}  Set Variable  ${profile}[profile][deviceCommands][${INDEX}][name]
         Append To List  ${commands}  ${name}
     END
-    [Return]  ${commands}
+    RETURN  ${commands}
 
 Device Command ${command_name} In ${profile} Should Be Deleted
     Query device profile by name  ${profile}

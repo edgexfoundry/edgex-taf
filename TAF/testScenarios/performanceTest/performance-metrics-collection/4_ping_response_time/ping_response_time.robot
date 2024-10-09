@@ -53,7 +53,7 @@ Response time is less than threshold setting
     [Arguments]  ${service}  ${response}
     ${response_time}=    evaluate  ${response}[seconds] * 1000
     ${compare_result}  evaluate   ${response_time} < ${PING_RES_THRESHOLD}
-     [Return]  ${compare_result}
+     RETURN  ${compare_result}
 
 Ping API for service
     [Arguments]  ${service_name}  ${service_port}
@@ -70,7 +70,7 @@ Ping API for service
     ${RES_LIST}=  Eliminate max and min values from ${RES_LIST}
     Run Keyword If  ${failure_count} > ${ALLOWABLE_OUTLIER}  Run Keyword And Continue On Failure
     ...             Fail  ${failure_count} times that response time is over than ${PING_RES_THRESHOLD}ms when ping ${service_name}
-    [Return]  ${RES_LIST}
+    RETURN  ${RES_LIST}
 
 Eliminate max and min values from ${res_list}
     @{response_time_list}=  Create List
@@ -81,4 +81,4 @@ Eliminate max and min values from ${res_list}
     ${max}=  Evaluate  ${response_time_list}.index(max(${response_time_list}))
     ${min}=  Evaluate  ${response_time_list}.index(min(${response_time_list}))
     Remove Values From List  ${res_list}  ${res_list}[${max}]  ${res_list}[${min}]
-    [Return]  ${res_list}
+    RETURN  ${res_list}

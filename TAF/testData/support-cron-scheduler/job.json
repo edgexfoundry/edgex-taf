@@ -1,0 +1,7 @@
+{
+  "name": "test_job_1",
+  "definition": {},
+  "actions": [],
+  "adminState": "UNLOCKED",
+  "autoTriggerMissedRecords": true
+}
