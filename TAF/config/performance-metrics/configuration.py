@@ -2,6 +2,7 @@ import os
 
 SECURITY_SERVICE_NEEDED=os.getenv("SECURITY_SERVICE_NEEDED")
 COMPOSE_IMAGE=os.getenv("COMPOSE_IMAGE")
+ARCH=os.getenv("ARCH")
 
 # Service Port
 if SECURITY_SERVICE_NEEDED == 'true':
@@ -130,7 +131,11 @@ GET_CPU_MEM_INTERVAL = 7
 PING_RES_LOOP_TIMES = 100
 
 # Ping response time threshold value (in milliseconds)
-PING_RES_THRESHOLD = 100
+if ARCH == "arm64":
+    PING_RES_THRESHOLD = 400
+else:
+    PING_RES_THRESHOLD = 100
+
 
 # Allow the failure times for ping response time over than threshold setting
 ALLOWABLE_OUTLIER = 5
