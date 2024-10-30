@@ -11,17 +11,16 @@ Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
 ...                      AND  Set Telemetry Interval=30s For ${TEST_SERVICE} On Registry Service
 ...                      AND  Run Teardown Keywords
-Force Tags      MessageBus=redis  backward-skip
 
 *** Variables ***
-${SUITE}          Core Data Metrics Test - Redis Bus
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core_data_metrics_redis.log
+${SUITE}          Core Data Metrics Test - MQTT bus
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core_data_metrics_mqtt.log
 ${TEST_SERVICE}  core-data
 
 
 *** Test Cases ***
-DataMetricsRedis001-Enable EventsPersisted And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.${TEST_SERVICE}.EventsPersisted  telemetry
+DataMetricsMQTT001-Enable EventsPersisted And Verify Metrics is Publish to MessageBus
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/EventsPersisted  payload  2
     And Set Test Variable  ${device_name}  events-persisted-true
     And Set Telemetry Metrics/EventsPersisted=true For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
@@ -29,11 +28,11 @@ DataMetricsRedis001-Enable EventsPersisted And Verify Metrics is Publish to Mess
     And Sleep  ${interval}
     Then Metrics EventsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...      AND  Terminate Process  ${handle_redis}  kill=True
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
                 ...      AND  Set Telemetry Metrics/EventsPersisted=false For ${TEST_SERVICE} On Registry Service
 
-DataMetricsRedis002-Disable EventsPersisted And Verify Metrics isn't Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.${TEST_SERVICE}.EventsPersisted  telemetry
+DataMetricsMQTT002-Disable EventsPersisted And Verify Metrics isn't Publish to MessageBus
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/EventsPersisted  payload  2
     And Set Test Variable  ${device_name}  events-persisted-false
     And Set Telemetry Metrics/EventsPersisted=false For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
@@ -41,10 +40,10 @@ DataMetricsRedis002-Disable EventsPersisted And Verify Metrics isn't Publish to 
     And Sleep  ${interval}
     Then No Metrics With Name EventsPersisted Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...      AND  Terminate Process  ${handle_redis}  kill=True
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
 
-DataMetricsRedis003-Enable ReadingsPersisted And Verify Metrics is Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.${TEST_SERVICE}.ReadingsPersisted  telemetry
+DataMetricsMQTT003-Enable ReadingsPersisted And Verify Metrics is Publish to MessageBus
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/ReadingsPersisted  payload  2
     And Set Test Variable  ${device_name}  readings-persisted-true
     And Set Telemetry Metrics/ReadingsPersisted=true For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
@@ -52,11 +51,11 @@ DataMetricsRedis003-Enable ReadingsPersisted And Verify Metrics is Publish to Me
     And Sleep  ${interval}
     Then Metrics ReadingsPersisted With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...      AND  Terminate Process  ${handle_redis}  kill=True
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True
                 ...      AND  Set Telemetry Metrics/ReadingsPersisted=false For ${TEST_SERVICE} On Registry Service
 
-DataMetricsRedis004-Disable ReadingsPersisted And Verify Metrics isn't Publish to MessageBus
-    Given Run Redis Subscriber Progress And Output  edgex.telemetry.${TEST_SERVICE}.ReadingsPersisted  telemetry
+DataMetricsMQTT004-Disable ReadingsPersisted And Verify Metrics isn't Publish to MessageBus
+    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${TEST_SERVICE}/ReadingsPersisted  payload  2
     And Set Test Variable  ${device_name}  readings-persisted-false
     And Set Telemetry Metrics/ReadingsPersisted=false For ${TEST_SERVICE} On Registry Service
     And Create Device For device-virtual With Name ${device_name}
@@ -64,4 +63,4 @@ DataMetricsRedis004-Disable ReadingsPersisted And Verify Metrics isn't Publish t
     And Sleep  ${interval}
     Then No Metrics With Name ReadingsPersisted Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
-                ...      AND  Terminate Process  ${handle_redis}  kill=True
+                ...      AND  Terminate Process  ${handle_mqtt}  kill=True

@@ -101,5 +101,5 @@ Events Should Be Created Between ${start} And ${end}
 
 Set MaxResultCount=${number} For Core-Data On Registry Service
    ${path}=  Set Variable  /core-data/Service/MaxResultCount
-   Update Configuration On Registry Service  ${path}  ${number}
+   Update Service Configuration  ${path}  ${number}
    Restart Services  core-data

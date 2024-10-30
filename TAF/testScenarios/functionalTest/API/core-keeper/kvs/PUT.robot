@@ -12,23 +12,23 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-keeper-kvs-put.log
 KVsPUT001 - Create a new configuration
     Given Set Test Variable  ${path}  testKVsPutService/Writable/LogLevel
     And Set Test Variable  ${set_value}  ERROR
-    When Update Service Configuration On Keeper  ${path}  ${set_value}
+    When Update Service Configuration  ${path}  ${set_value}
     Then Should Return Status Code "200" And response
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Query Configuration And Value Should Be Correct
-    [Teardown]  Delete Service Configuration On Keeper  ${path}
+    [Teardown]  Delete Service Configuration  ${path}
 
 KVsPUT002 - Update a existed configuration and validate value should be updated
     Given Set Test Variable  ${path}  testKVsPutService/Writable/LogLevel
-    And Update Service Configuration On Keeper  ${path}  ERROR
+    And Update Service Configuration  ${path}  ERROR
     And Set Test Variable  ${set_value}  WARN
-    When Update Service Configuration On Keeper  ${path}  ${set_value}
+    When Update Service Configuration  ${path}  ${set_value}
     Then Should Return Status Code "200" And response
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Query Configuration And Value Should Be Correct
-    [Teardown]  Delete Service Configuration On Keeper  ${path}
+    [Teardown]  Delete Service Configuration  ${path}
 
 ErrKVsPUT001 - Should return error when updating configuration without JSON body
     When Update Configuration  testKVsPutService/Writable/LogLevel  key:value
@@ -38,7 +38,7 @@ ErrKVsPUT001 - Should return error when updating configuration without JSON body
 
 *** Keywords ***
 Query Configuration And Value Should Be Correct
-    Query Service Configuration On Keeper  ${path}
+    Query Service Configuration  ${path}
     ${decode_value}  Evaluate  base64.b64decode('${content}[response][0][value]').decode('utf-8')  modules=base64
     Should Be Equal As Strings  ${set_value}  ${decode_value}
 

@@ -4,16 +4,8 @@ USE_ARCH=${1:-x86_64}
 SECURITY_SERVICE_NEEDED=${2:-false}
 TEST_STRATEGY=${3:-functional-test} # option: functional-test, integration-test
 TEST_SERVICE=${4:-api}
-REGISTRY_SERVICE=${5:-Consul}
-DEPLOY_SERVICES=${6:-} # no-deployment or empty
-USE_DB=${USE_DB:-redis}
+DEPLOY_SERVICES=${5:-} # no-deployment or empty
 
-if [ "$USE_DB" = "postgres" ]; then
-  export USE_DB=$USE_DB
-  export EXCLUDE_DB=redis
-else
-  export EXCLUDE_DB=postgres
-fi
 # # x86_64 or arm64
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
 
@@ -31,22 +23,16 @@ fi
 
 if [ "$DEPLOY_SERVICES" != "no-deployment" ]; then
   # Get compose file from edgex-compose
-  sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY} ${REGISTRY_SERVICE}
+  sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
 
   # Create backup report directory
   mkdir -p ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex
-  if [ "$TEST_STRATEGY" = "integration-test" ] && [ "$TEST_SERVICE" = "mqtt" ]; then
-    RUN_TAG=mqtt-bus
-  else
- 	  RUN_TAG=deploy-base-service
-  fi
 
   # Install base service
   docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
           -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
-          --security-opt label:disable -e REGISTRY_SERVICE=$REGISTRY_SERVICE \
-          -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-          --exclude Skipped --include ${RUN_TAG} -u deploy.robot -p default
+          --security-opt label:disable -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
+          --exclude Skipped --include deploy-base-service -u deploy.robot -p default
   cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/deploy-base.html
 fi
 
@@ -57,7 +43,7 @@ case ${TEST_STRATEGY} in
       device-virtual)
         docker run --rm --network host --name taf-common -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
               --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
-              -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
+              -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
               -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
               --exclude Skipped -u functionalTest/device-service -p device-virtual
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/virtual.html
@@ -65,7 +51,7 @@ case ${TEST_STRATEGY} in
       device-modbus)
         docker run --rm --network host --name taf-common -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
               --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
-              -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
+              -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
               -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
               --exclude Skipped -u functionalTest/device-service -p device-modbus
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/modbus.html
@@ -73,16 +59,16 @@ case ${TEST_STRATEGY} in
       api)
         docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
                 --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
-                -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
+                -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
                 --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
                 -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-                --exclude Skipped --exclude DB=${EXCLUDE_DB} -u functionalTest/API -p default
+                --exclude Skipped -u functionalTest/API -p default
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html
       ;;
       *)
         docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
                 --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
-                -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
+                -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
                 --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
                 -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
                 --exclude Skipped -u functionalTest/API/${TEST_SERVICE} -p default
@@ -96,10 +82,10 @@ case ${TEST_STRATEGY} in
 
     docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
             --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
-            -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} -e REGISTRY_SERVICE=${REGISTRY_SERVICE} \
+            -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
             --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
             -v /tmp/edgex/secrets:/tmp/edgex/secrets:z \
-            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} --exclude DB=${EXCLUDE_DB} \
+            -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
             --exclude Skipped --include MessageBus=${TEST_SERVICE} -u integrationTest -p device-virtual
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html
   ;;

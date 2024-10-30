@@ -88,10 +88,10 @@ ErrProfilePOST008 - Create device profile with deviceCommands deviceResources va
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrProfilePOST009 - Create device profile with invalid units value
-    Given Update Configuration On Registry Service  ${uomValidationPath}  true
+    Given Update Service Configuration  ${uomValidationPath}  true
     When Create A Profile Test-Profile-1 With invalid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Update Configuration On Registry Service  ${uomValidationPath}  false
+    [Teardown]  Update Service Configuration  ${uomValidationPath}  false

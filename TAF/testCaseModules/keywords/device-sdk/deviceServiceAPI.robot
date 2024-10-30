@@ -99,17 +99,17 @@ Get device data by device ${device} and command ${command} with ${params}
     Should return status code "200"
     sleep  500ms
 
-Event With Device ${device_name} Should Not Be Received by Redis Subscriber ${filename}
-    ${redis_subscriber}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
-    Should Be Empty  ${redis_subscriber}
+Event With Device ${device_name} Should Not Be Received by MQTT Subscriber ${filename}
+    ${mqtt_subscriber}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
+    Should Be Empty  ${mqtt_subscriber}
 
-Event With Device ${device_name} Should Be Received by Redis Subscriber ${filename}
+Event With Device ${device_name} Should Be Received by MQTT Subscriber ${filename}
     Run Keyword And Continue On Failure  Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}
     # Show last 100 lines for debug
     Dump Last 100 lines Log And Service Config  device-virtual  ${deviceServiceUrl}
-    ${redis_subscriber}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
-    run keyword if  "${device_name}" not in """${redis_subscriber}"""
-    ...             fail  No data received by redis subscriber
+    ${mqtt_subscriber}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
+    run keyword if  "${device_name}" not in """${mqtt_subscriber}"""
+    ...             fail  No data received by mqtt subscriber
 
 Create Unavailable Modbus device
      ${service}  Set Variable  device-modbus

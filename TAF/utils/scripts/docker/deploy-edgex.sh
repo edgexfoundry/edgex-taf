@@ -24,20 +24,18 @@ else
     echo "  ProfilesDir: \"$CONFIG_DIR\"" >> ${WORK_DIR}/TAF/config/${PROFILE}/configuration.yaml
     echo "  DevicesDir: \"$CONFIG_DIR\"" >> ${WORK_DIR}/TAF/config/${PROFILE}/configuration.yaml
 
+    ## To set messagebus clientId
+    if [ "$PROFILE" = "device-modbus_1" ]; then
+      sed -i "s/device-modbus/device-modbus_1/" ${WORK_DIR}/TAF/config/${PROFILE}/configuration.yaml
+    fi
+
   done
 
-  if [ "$TEST_STRATEGY" = "MQTTMessageBus" ]; then
-    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
+  docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
           --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
           --add-host=host.docker.internal:host-gateway \
           --env WORK_DIR=${WORK_DIR} --env CONFIG_DIR=${CONFIG_DIR} --security-opt label:disable ${COMPOSE_IMAGE} \
-          docker compose -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose-mqtt-bus.yml" up -d
-  else
-    docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-          --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
-          --env WORK_DIR=${WORK_DIR} --env CONFIG_DIR=${CONFIG_DIR} --security-opt label:disable ${COMPOSE_IMAGE} \
           docker compose -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose.yml" up -d
-  fi
 fi
 
 # Waiting for all services startup

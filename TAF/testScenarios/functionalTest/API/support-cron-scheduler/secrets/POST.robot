@@ -4,7 +4,6 @@ Resource  TAF/testCaseModules/keywords/support-cron-scheduler/supportCronSchedul
 Suite Setup      Run Keywords  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
                  ...           AND  Setup Suite
 Suite Teardown   Run Teardown Keywords
-Force Tags      DB=postgres
 
 *** Variables ***
 ${SUITE}          Support-Cron-Scheduler Secrets POST Testcases

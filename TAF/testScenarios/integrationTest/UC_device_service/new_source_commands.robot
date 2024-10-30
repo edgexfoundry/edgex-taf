@@ -6,7 +6,6 @@ Suite Setup  Run Keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keywords  Delete all events by age
                 ...      AND  Run Teardown Keywords
-Force Tags  MessageBus=redis
 
 *** Variables ***
 ${SUITE}              Get Command For New Resource And Command

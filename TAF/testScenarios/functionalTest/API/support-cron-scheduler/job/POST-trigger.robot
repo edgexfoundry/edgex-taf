@@ -4,7 +4,6 @@ Resource     TAF/testCaseModules/keywords/support-cron-scheduler/supportCronSche
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags      DB=postgres
 
 *** Variables ***
 ${SUITE}          Support Cron Scheduler Job POST Trigger Test Cases
@@ -20,19 +19,19 @@ CronSchedJobTriggerPOST001 - Trigger job by manual
     And Job Has Been Triggered
     [Teardown]  Delete Job By Name  ${job_name}
 
+CronSchedJobTriggerPOST002 - Trigger job by manual with the startTimestamp is not arrived yet
+    Given Create A Job Which startTimestamp Is Not Arrived Yet
+    When Trigger Job By Name  ${job_name}
+    Then Should Return Status Code "202"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Job By Name  ${job_name}
+
 ErrCronSchedJobTriggerPOST001 - Trigger job by manual with non-existent job
     When Trigger Job By Name  not-existent
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-
-ErrCronSchedJobTriggerPOST002 - Trigger job by manual with the startTimestamp is not arrived yet
-    Given Create A Job Which startTimestamp Is Not Arrived Yet
-    When Trigger Job By Name  ${job_name}
-    Then Should Return Status Code "500"
-    And Should Return Content-Type "application/json"
-    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Delete Job By Name  ${job_name}
 
 *** Keywords ***
 Job Has Been Triggered

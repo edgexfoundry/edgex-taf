@@ -1,4 +1,5 @@
 *** Settings ***
+Library      uuid
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/support-notifications/notificationAPI.robot
 Resource     TAF/testCaseModules/keywords/support-notifications/subscriptionAPI.robot
@@ -37,7 +38,8 @@ NotificationDELETE002 - Delete notification by age
                 ...      AND  Delete Multiple Subscriptions By Names  ${subscription_names}[0]  ESCALATION
 
 ErrNotificationDELETE001 - Delete notification by non-existed id
-    When Delete Notification By ID Non-Existed
+    ${random_uuid}  Evaluate  str(uuid.uuid4())
+    When Delete Notification By ID ${random_uuid}
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

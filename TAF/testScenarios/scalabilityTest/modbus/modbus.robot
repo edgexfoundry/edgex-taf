@@ -17,7 +17,7 @@ ${LOG_FILE_PATH}      ${WORK_DIR}/TAF/testArtifacts/logs/modbus_scalability_test
 
 *** Test Cases ***
 Test Modbus scalability
-     Given Update Configuration On Registry Service  /core-data/Writable/PersistData  false
+     Given Update Service Configuration  /core-data/Writable/PersistData  false
      And Deploy services  edgex-scalability-test-mqtt-export
      sleep  30
      ${report_info}  ${records} =  When run scalability testing

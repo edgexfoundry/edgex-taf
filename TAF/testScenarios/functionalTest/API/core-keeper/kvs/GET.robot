@@ -11,18 +11,18 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-keeper-kvs-get.log
 *** Test Cases ***
 KVsGET001 - Value should be returned when query by configuration name(key)
     Given Set Test Variable  ${path}  testKVsGetService/Writable/key
-    And Update Service Configuration On Keeper  ${path}  value
-    When Query Service Configuration On Keeper  ${path}
+    And Update Service Configuration  ${path}  value
+    When Query Service Configuration  ${path}
     Then Should Return Status Code "200" And response
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be Equal As Strings  ${content}[response][0][key]  edgex/${CONFIG_VERSION}/${path}
-    [Teardown]  Delete Service Configuration On Keeper  ${path}
+    [Teardown]  Delete Service Configuration  ${path}
 
 KVsGET002 - Only service configurations are listed if query by service level
     Given Set Test Variable  ${service}  testKVsGetService
     And Add Multiple Configurations
-    When Query Service Configuration On Keeper  ${service}
+    When Query Service Configuration  ${service}
     Then Should Return Status Code "200" And response
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -30,7 +30,7 @@ KVsGET002 - Only service configurations are listed if query by service level
     [Teardown]  Delete Multiple Configurations
 
 ErrKVsGET001 - Should return error when query by invalid configuration name(key)
-    When Query Service Configuration On Keeper  testKVsGetServiceErr/invalidKey
+    When Query Service Configuration  testKVsGetServiceErr/invalidKey
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -48,12 +48,12 @@ Add Multiple Configurations
     ${key_list}  Create List  key1  key2  key3
     ${value_list}  Create List  value1  value2  value3
     FOR  ${key}  ${value}  IN ZIP  ${key_list}  ${value_list}
-        Update Service Configuration On Keeper  ${path}/${key}  ${value}
+        Update Service Configuration  ${path}/${key}  ${value}
     END
     Set Test Variable  ${key_list}  ${key_list}
     Set Test Variable  ${path}  ${path}
 
 Delete Multiple Configurations
     FOR  ${key}  IN  @{key_list}
-        Delete Service Configuration On Keeper  ${path}/${key}
+        Delete Service Configuration  ${path}/${key}
     END

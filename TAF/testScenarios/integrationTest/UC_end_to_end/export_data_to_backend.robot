@@ -11,7 +11,6 @@ Resource         TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
-Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}         Export data to backend
@@ -20,7 +19,7 @@ ${LOG_FILE_PATH}          ${WORK_DIR}/TAF/testArtifacts/logs/export_data_to_back
 *** Test Cases ***
 Export001 - Export events/readings to HTTP Server
     ${handle}  Start process  python ${WORK_DIR}/TAF/utils/src/setup/httpd_server.py &  shell=True   # Start HTTP Server
-    Given Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With HTTP Export To Vault
+    Given Run Keyword If  $SECURITY_SERVICE_NEEDED == 'true'  Store Secret With HTTP Export To Secret Store
     And Create Device For device-virtual With Name http-export-device
     When Get device data by device http-export-device and command ${PREFIX}_GenerateDeviceValue_INT8_RW
     Then HTTP Server received event is the same with exported from service app-http-export
@@ -48,13 +47,13 @@ ExportErr001 - Export events/readings to unreachable HTTP backend
                 ...           AND  Delete all events by age
 
 ExportErr002 - Export events/readings to unreachable MQTT backend
-    Given Run Keyword And Ignore Error  Stop Services  mqtt-broker  mqtt-taf-broker
+    Given Run Keyword And Ignore Error  Stop Services  mqtt-taf-broker
     And Create Device For device-virtual With Name mqtt-export-error-device
     When Get device data by device mqtt-export-error-device and command ${PREFIX}_GenerateDeviceValue_INT64_RW
     Then No exported logs found on configurable application service  app-mqtt-export
     [Teardown]  Run keywords  Delete device by name mqtt-export-error-device
                 ...           AND  Delete all events by age
-                ...           AND  Run Keyword And Ignore Error  Restart Services  mqtt-broker  mqtt-taf-broker
+                ...           AND  Run Keyword And Ignore Error  Restart Services  mqtt-taf-broker
 
 
 *** Keywords ***
@@ -94,7 +93,7 @@ No exported logs found on configurable application service
     ${app_service_str}=  convert to string  ${logs.stdout}
     should not contain  ${app_service_str}  Sent data
 
-Store Secret With ${service} Export To Vault
+Store Secret With ${service} Export To Secret Store
     ${APP_SERVICE_PORT}  Run Keyword If  '${service}' == 'MQTT'  Set Variable  ${APP_MQTT_EXPORT_PORT}
                          ...    ELSE IF  '${service}' == 'HTTP'  Set Variable  ${APP_HTTP_EXPORT_PORT}
     Set Test Variable  ${url}  http://${BASE_URL}:${APP_SERVICE_PORT}

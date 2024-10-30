@@ -12,28 +12,28 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-keeper-kvs-delete.log
 KVsDELETE001 - Delete an existed configuration
     Given Set Test Variable  ${path}  testKVsDelService/Writable/Key1
     And Set Test Variable  ${set_value}  value1
-    And Update Service Configuration On Keeper  ${path}  ${set_value}
-    When Delete Service Configuration On Keeper  ${path}
+    And Update Service Configuration  ${path}  ${set_value}
+    When Delete Service Configuration  ${path}
     Then Should Return Status Code "200" And response
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Configuration Should Not Exist
 
 ErrKVsDELETE001 - Should return error when deleting an absent configuration
-    When Delete Service Configuration On Keeper  testKVsDelService/Writable/KeyAbsent
+    When Delete Service Configuration  testKVsDelService/Writable/KeyAbsent
     Then Should Return Status Code "404"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrKVsDELETE002 - Should return error when deleting configuration which contains associated configuration
     Given Set Test Variable  ${path}  testKVsDelService/Writable
-    And Update Service Configuration On Keeper  ${path}/Key1  value1
-    When Delete Service Configuration On Keeper  ${path}
+    And Update Service Configuration  ${path}/Key1  value1
+    When Delete Service Configuration  ${path}
     Then Should Return Status Code "409"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 *** Keywords ***
 Configuration Should Not Exist
-    Query Service Configuration On Keeper  ${path}
+    Query Service Configuration  ${path}
     Should Return Status Code "404"

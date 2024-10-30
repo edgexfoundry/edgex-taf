@@ -13,7 +13,7 @@ ${APP_SERVICE_NAME}  app-functional-tests
 *** Test Cases ***
 ErrTriggerPOST001 - Trigger pipeline fails (Invalid Data)
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Invalid Data
     Then Should Return Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -21,7 +21,7 @@ ErrTriggerPOST001 - Trigger pipeline fails (Invalid Data)
 ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
     And Update Target Type To raw
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Invalid Data
     Then Should Return Status Code "422"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
@@ -30,5 +30,5 @@ ErrTriggerPOST002 - Trigger pipeline fails (Unprocessable Entity)
 *** Keywords ***
 Update Target Type To ${value}
     ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/TargetType
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
 

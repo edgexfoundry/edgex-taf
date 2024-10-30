@@ -7,7 +7,6 @@ Suite Setup      Run keywords  Setup Suite
 ...                       AND  Modify PersistOnError to true On Registry Service
 Suite Teardown   Run keywords  Modify PersistOnError to false On Registry Service
 ...                       AND  Run Teardown Keywords
-Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}         Store And Forward Capability
@@ -86,7 +85,7 @@ Set ${configurations} For ${service_name} On Registry Service
     ${config_value}  Get Dictionary Values  ${configurations}  sort_keys=false
     FOR  ${key}  ${value}  IN ZIP  ${config_key}  ${config_value}
         ${path}=  Set Variable  /${service_name}/Writable/StoreAndForward/${key}
-        Update Configuration On Registry Service  ${path}  ${value}
+        Update Service Configuration  ${path}  ${value}
     END
 
 Start HTTP Server And Received Exported Data Contains ${keyword}
@@ -122,7 +121,7 @@ Found Remove Log In ${service_name} Logs From ${timestamp}
 
 Modify PersistOnError to ${value} On Registry Service
     ${path}  Set Variable  /app-http-export/Writable/Pipeline/Functions/HTTPExport/Parameters/PersistOnError
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
 
 Found Retry Log From ${timestamp} After Restarting ${service_name}
     # Show last 100 lines for debug

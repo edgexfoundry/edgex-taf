@@ -14,7 +14,7 @@ ${APP_SERVICE_NAME}  app-functional-tests
 *** Test Cases ***
 TriggerPOST001 - Trigger pipeline (no match)
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With No Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match Empty
@@ -24,7 +24,7 @@ TriggerPOST002 - Trigger pipeline (XML)
     [Tags]  SmokeTest
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
     And Set Transform Type xml
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/xml"
@@ -34,7 +34,7 @@ TriggerPOST002 - Trigger pipeline (XML)
 TriggerPOST003 - Trigger pipeline (JSON)
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, SetResponseData
     And Set Transform Type json
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "application/json"
@@ -45,7 +45,7 @@ TriggerPOST004 - Trigger pipeline (JSON-GZIP)
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, Compress, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm gzip
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Body Should Match JSON-GZIP String
@@ -55,7 +55,7 @@ TriggerPOST005 - Trigger pipeline (JSON-ZLIB)
     Given Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Transform, Compress, SetResponseData
     And Set Transform Type json
     And Set Compress Algorithm zlib
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"
@@ -67,7 +67,7 @@ TriggerPOST006 - Trigger pipeline (AES26)
     Given Store Secret Data With AES256 Auth
     And Set ${APP_SERVICE_NAME} Functions FilterByDeviceName, Encrypt, SetResponseData
     And Set Encrypt Algorithm aes256
-    And Run Keyword If  "${REGISTRY_SERVICE}" == "Keeper"  Restart Services  ${APP_SERVICE_NAME}
+    And Restart Services  ${APP_SERVICE_NAME}
     When Trigger Function Pipeline With Matching DeviceName
     Then Should Return Status Code "200"
     And Should Return Content-Type "text/plain"

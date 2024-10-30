@@ -5,11 +5,10 @@ Suite Setup  Run keywords  Setup Suite
              ...      AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
              ...      AND  Delete all events by age
              ...      AND  Enable Core-Data Retention
-             ...      AND  Update Configuration On Registry Service  ${DATA_CONSOL_PATH}/Writable/LogLevel  DEBUG
+             ...      AND  Update Service Configuration  ${DATA_CONSOL_PATH}/Writable/LogLevel  DEBUG
 Suite Teardown  Run Keywords  Disable Core-Data Retention
-                ...      AND  Update Configuration On Registry Service  ${DATA_CONSOL_PATH}/Writable/LogLevel  INFO
+                ...      AND  Update Service Configuration  ${DATA_CONSOL_PATH}/Writable/LogLevel  INFO
                 ...      AND  Run Teardown Keywords
-Force Tags      MessageBus=redis
 
 *** Variables ***
 ${SUITE}          core-data Retention
@@ -41,7 +40,7 @@ Enable Core-Data Retention
     ${values}  Create List  true  3s  ${maxCap}  ${minCap}
     FOR  ${key}  ${value}  IN ZIP  ${keys}  ${values}
         ${path}=  Set Variable  ${DATA_CONSOL_PATH}/Retention/${key}
-        Update Configuration On Registry Service  ${path}  ${value}
+        Update Service Configuration  ${path}  ${value}
     END
     Restart Services  core-data
 
@@ -76,7 +75,7 @@ Stored Readings Are Belong To Stored Events
 
 Disable Core-Data Retention
     ${path}=  Set Variable  ${DATA_CONSOL_PATH}/Retention/Enabled
-    Update Configuration On Registry Service  ${path}  false
+    Update Service Configuration  ${path}  false
     Restart Services  core-data
 
 Found Purge Log in ${service}
