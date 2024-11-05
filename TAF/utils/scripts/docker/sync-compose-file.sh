@@ -9,15 +9,12 @@ USE_NO_SECURITY=$2
 USE_ARM64=$3
 
 TAF=$4
-USE_KEEPER=$5
-TAF_PERF=$6
-USE_POSTGRES=$7
-TAF_MESSAGE_BUS=$8
+TAF_PERF=$5
 
 # Handle TAF specific compose files
 [ "$TAF" = "-taf" ] && TAF_SUB_FOLDER="/taf"
 
 NIGHTLY_BUILD_URL="https://raw.githubusercontent.com/edgexfoundry/edgex-compose/${USE_SHA1}${TAF_SUB_FOLDER}"
 
-COMPOSE_FILE="docker-compose${TAF}${TAF_PERF}${USE_NO_SECURITY}${TAF_MESSAGE_BUS}${USE_KEEPER}${USE_POSTGRES}${USE_ARM64}.yml"
+COMPOSE_FILE="docker-compose${TAF}${TAF_PERF}${USE_NO_SECURITY}${USE_ARM64}.yml"
 curl -o ${COMPOSE_FILE} "${NIGHTLY_BUILD_URL}/${COMPOSE_FILE}"

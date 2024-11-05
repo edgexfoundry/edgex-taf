@@ -16,6 +16,9 @@ binaryStartupTimeRegex = r"\d*.\d*[mµ]?s"
 
 
 services = {
+    "core-keeper": {"containerName": "edgex-core-keeper",
+                    "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
+                    "binaryStartupTimeRegex": binaryStartupTimeRegex},
     "core-data": {"containerName": "edgex-core-data",
                   "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
                   "binaryStartupTimeRegex": binaryStartupTimeRegex},
@@ -28,9 +31,9 @@ services = {
     "support-notifications": {"containerName": "edgex-support-notifications", "msgRegex": msgRegex,
                               "startupDatetimeRegex": startupDatetimeRegex,
                               "binaryStartupTimeRegex": binaryStartupTimeRegex},
-    "support-scheduler": {"containerName": "edgex-support-scheduler",
-                          "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
-                          "binaryStartupTimeRegex": binaryStartupTimeRegex},
+    "support-cron-scheduler": {"containerName": "edgex-support-cron-scheduler",
+                               "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
+                               "binaryStartupTimeRegex": binaryStartupTimeRegex},
     "app-service": {"containerName": "edgex-app-rules-engine",
                     "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
                     "binaryStartupTimeRegex": binaryStartupTimeRegex},

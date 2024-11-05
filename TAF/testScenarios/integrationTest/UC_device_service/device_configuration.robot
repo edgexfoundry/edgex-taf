@@ -6,7 +6,6 @@ Suite Setup  Run Keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keywords  Delete all events by age
                 ...      AND  Run Teardown Keywords
-Force Tags  MessageBus=redis
 
 *** Variables ***
 ${SUITE}              Configrations
@@ -65,12 +64,12 @@ Config004 - Verfiy reading contains units when ReadingUnits is false
 *** Keywords ***
 Set Device ${config} to ${value} For ${service_name} On Registry Service
     ${path}=  Set Variable  /${service_name}/Device/${config}
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
     Restart Services  device-virtual
 
 Set Writable.Reading.ReadingUnits to ${value} For ${service_name} On Registry Service
     ${path}=  Set Variable  /${service_name}/Writable/Reading/ReadingUnits
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
 
 Retrive device data by device ${device_name} and command ${command}
     ${timestamp}  Get current milliseconds epoch time

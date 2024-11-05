@@ -18,6 +18,9 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/performance-metric-collecti
 
 *** Test Cases ***
 Measure the ping response time
+    ${KEEPER_RES_LIST}=  Ping API for service  core-keeper  ${CORE_KEEPER_PORT}
+    Record response   edgex-core-keeper              ${KEEPER_RES_LIST}
+
     ${DATA_RES_LIST}=  Ping API for service  core-data  ${CORE_DATA_PORT}
     Record response   edgex-core-data              ${DATA_RES_LIST}
 
@@ -27,8 +30,8 @@ Measure the ping response time
     ${COMMAND_RES_LIST}=  Ping API for service  core-command  ${CORE_COMMAND_PORT}
     Record response   edgex-core-command           ${COMMAND_RES_LIST}
 
-    ${SCHEDULER_RES_LIST}=  Ping API for service  support-scheduler  ${SUPPORT_SCHEDULER_PORT}
-    Record response   edgex-support-scheduler      ${SCHEDULER_RES_LIST}
+    ${SCHEDULER_RES_LIST}=  Ping API for service  support-cron-scheduler  ${SUPPORT_CRON_SCHEDULER_PORT}
+    Record response   edgex-support-cron-scheduler      ${SCHEDULER_RES_LIST}
 
     ${NOTIFICATIONS_RES_LIST}=  Ping API for service  support-notifications  ${SUPPORT_NOTIFICATIONS_PORT}
     Record response   edgex-support-notifications  ${NOTIFICATIONS_RES_LIST}

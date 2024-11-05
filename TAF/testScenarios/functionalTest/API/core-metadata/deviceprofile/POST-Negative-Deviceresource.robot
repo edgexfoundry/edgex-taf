@@ -95,14 +95,14 @@ ErrProfileResourcePOST008 - Add deviceResource with readWrite validation error
 
 ErrProfileResourcePOST009 - Add deviceResource with invalid units value
     Given Create A Device Profile And Generate Multiple Resources Entity
-    And Update Configuration On Registry Service  ${uomValidationPath}  true
+    And Update Service Configuration  ${uomValidationPath}  true
     When Create Device Resources Contain invalid Units Value
     Then Should Return Status Code "207"
     And Should Return Content-Type "application/json"
     And Item Index All Should Contain Status Code "400"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resources Should Not Be Added in ${test_profile}
-    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Service Configuration  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  ${test_profile}
 
 *** Keywords ***

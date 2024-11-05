@@ -23,19 +23,19 @@ Suite Teardown for App Service
 
 Set ${service} Functions ${functions}
     ${path}=  Set variable  /${service}/Writable/Pipeline/ExecutionOrder
-    Update Configuration On Registry Service  ${path}  ${functions}
+    Update Service Configuration  ${path}  ${functions}
 
 Set Transform Type ${type}
     ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/Functions/Transform/Parameters/Type
-    Update Configuration On Registry Service  ${path}  ${type}
+    Update Service Configuration  ${path}  ${type}
 
 Set Compress Algorithm ${algorithm}
     ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/Functions/Compress/Parameters/Algorithm
-    Update Configuration On Registry Service  ${path}  ${algorithm}
+    Update Service Configuration  ${path}  ${algorithm}
 
 Set Encrypt Algorithm ${algorithm}
     ${path}=  Set variable  /app-functional-tests/Writable/Pipeline/Functions/Encrypt/Parameters/Algorithm
-    Update Configuration On Registry Service  ${path}  ${algorithm}
+    Update Service Configuration  ${path}  ${algorithm}
 
 Trigger Function Pipeline With ${data}
     ${trigger_data}=  Run keyword if  '${data}' != 'Invalid Data'  set variable  Valid Data

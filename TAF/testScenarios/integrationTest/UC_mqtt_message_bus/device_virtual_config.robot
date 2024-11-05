@@ -7,7 +7,6 @@ Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 ...                        AND  Run Keyword And Ignore Error  Stop Services  app-scalability-test-mqtt-export  app-mqtt-export  # No data received from the both services
 Suite Teardown  Run Teardown Keywords
-Force Tags   MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}              Configrations
@@ -60,7 +59,7 @@ Config003 - Set device-virtual MessageBus.Optional.Qos (PUBLISH)
 *** Keywords ***
 Set MessageBus ${key}=${value} For ${service} On Registry Service
     ${path}=  Set Variable  /${service}/MessageBus/${key}
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
     Restart Services  ${service}
     Run Keyword If  '${service}' == 'device-virtual'  Set Test Variable  ${url}  ${deviceServiceUrl}
     ...    ELSE IF  '${service}' == 'core-data'  Set Test Variable  ${url}  ${coreDataUrl}
@@ -72,7 +71,7 @@ Set MessageBus ${key}=${value} For ${service} On Registry Service
 
 Set Writable LogLevel To Debug For ${service_name} On Registry Service
     ${path}=  Set Variable  /${service_name}/Writable/LogLevel
-    Update Configuration On Registry Service  ${path}  DEBUG
+    Update Service Configuration  ${path}  DEBUG
 
 Retrive device data by device ${device_name} and command ${command}
     ${timestamp}  get current epoch time

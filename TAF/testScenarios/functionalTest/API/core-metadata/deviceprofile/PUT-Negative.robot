@@ -112,7 +112,7 @@ ErrProfilePUT008 - Update device profile when StrictDeviceProfileChanges is true
 ErrProfilePUT009 - Update device profile with invalid units value
     Given Generate A Device Profile Sample  Test-Profile-1
     And Create Device Profile ${deviceProfile}
-    And Update Configuration On Registry Service  ${uomValidationPath}  true
+    And Update Service Configuration  ${uomValidationPath}  true
     And Set Profile Units Value To invalid
     When Update Device Profile ${deviceProfile}
     Then Should Return Status Code "207"
@@ -120,7 +120,7 @@ ErrProfilePUT009 - Update device profile with invalid units value
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Not Be Updated in Test-Profile-1
-    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Service Configuration  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 *** Keywords ***

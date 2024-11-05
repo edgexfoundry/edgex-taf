@@ -19,11 +19,11 @@ from robot.api import logger
 client = docker.from_env()
 
 global services
-services = ["edgex-core-consul", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
-            "edgex-support-notifications", "edgex-support-scheduler", "edgex-core-common-config-bootstrapper",
-            "edgex-app-rules-engine", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-redis"]
+services = ["edgex-core-keeper", "edgex-core-data", "edgex-core-metadata", "edgex-core-command",
+            "edgex-support-notifications", "edgex-support-cron-scheduler", "edgex-core-common-config-bootstrapper",
+            "edgex-app-rules-engine", "edgex-device-virtual", "edgex-device-rest", "edgex-kuiper", "edgex-postgres"]
 
-secty_services = ["edgex-security-secretstore-setup", "edgex-nginx", "edgex-vault", "edgex-security-bootstrapper"]
+secty_services = ["edgex-security-secretstore-setup", "edgex-nginx", "edgex-secret-store", "edgex-security-bootstrapper"]
 
 
 class RetrieveResourceUsage(object):

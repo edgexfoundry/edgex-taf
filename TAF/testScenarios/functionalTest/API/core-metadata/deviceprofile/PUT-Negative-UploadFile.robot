@@ -109,14 +109,14 @@ ErrProfilePUTUpload008 - Update device profile by upload file when StrictDeviceP
 
 ErrProfilePUTUpload009 - Update device profile by upload file and the update file contains invalid unit value
     Given Upload Device Profile Test-Profile-3.yaml
-    And Update Configuration On Registry Service  ${uomValidationPath}  true
+    And Update Service Configuration  ${uomValidationPath}  true
     And Update Units Value In Profile Test-Profile-3 To invalid
     When Upload File NEW-Test-Profile-3.yaml To Update Device Profile
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Resource Units Should Not Be Updated in Test-Profile-3
-    [Teardown]  Run Keywords  Update Configuration On Registry Service  ${uomValidationPath}  false
+    [Teardown]  Run Keywords  Update Service Configuration  ${uomValidationPath}  false
     ...                  AND  Delete Device Profile By Name  Test-Profile-3
     ...                  AND  Delete Profile Files  NEW-Test-Profile-3.yaml
 

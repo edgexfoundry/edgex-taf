@@ -6,7 +6,6 @@ Resource        TAF/testCaseModules/keywords/support-cron-scheduler/supportCronS
 Suite Setup     Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
-Force Tags      backward-skip  MessageBus=MQTT  DB=postgres
 
 *** Variables ***
 ${SUITE}         Trigger Cron Scheduler

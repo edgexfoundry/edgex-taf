@@ -6,7 +6,6 @@ Resource         TAF/testCaseModules/keywords/core-command/coreCommandAPI.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
-Force Tags       MessageBus=redis
 
 *** Variables ***
 ${SUITE}         URI for files with username-passward in URI
@@ -35,7 +34,7 @@ URI003-Test Common configuration file with username-password in URI
     Given Set Test Variable  ${url}  ${coreCommandUrl}
     FOR  ${validate}  IN  config  registry
         When Run Keyword If  "${validate}" == "config"  Query Config
-             ...    ELSE IF  "${validate}" == "registry"  Query Configuration On Registry Service  ${path}
+             ...    ELSE IF  "${validate}" == "registry"  Query Service Configuration  ${path}
         Then Run Keyword If  "${validate}" == "config"  Should Return Status Code "200" And config
              ...    ELSE IF  "${validate}" == "registry"  Should return status code "404"
     END
@@ -58,7 +57,7 @@ Update core-metadata Configuration On Registry Service
     ${path}  Set Variable  /core-metadata/UoM/UoMFile
     ${value}  Set Variable  http://httpd-auth:80/files/uom.yaml?edgexSecretName=httpserver
     Store Secret With HTTP Server To core-metadata
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
     Restart Services  core-metadata
 
 Update device-onvif-camera Configuration On Registry Service
@@ -68,6 +67,6 @@ Update device-onvif-camera Configuration On Registry Service
     FOR  ${var_name}  ${file}  IN ZIP  ${var_name_list}  ${file_list}
         ${path}  Set Variable  /device-onvif-camera/Device/${var_name}
         ${value}  Set Variable  http://httpd-auth:80/files/${file}.json?edgexSecretName=httpserver
-        Update Configuration On Registry Service  ${path}  ${value}
+        Update Service Configuration  ${path}  ${value}
     END
     Restart Services  device-onvif-camera

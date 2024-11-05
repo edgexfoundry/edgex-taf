@@ -764,7 +764,7 @@ Create A Provision Watcher Sample With Associated Test-Device-Service And ${devi
 
 Set ProfileChange.${config}=${value} For Core-Metadata On Registry Service
    ${path}=  Set Variable  /core-metadata/Writable/ProfileChange/${config}
-   Update Configuration On Registry Service  ${path}  ${value}
+   Update Service Configuration  ${path}  ${value}
 
 ## UoM
 Query UoM

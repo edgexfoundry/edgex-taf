@@ -8,7 +8,6 @@ Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword And Ignore Error  Stop Services  app-scalability-test-mqtt-export  app-mqtt-export  # No data received from the both services
 Suite Teardown  Run Keywords  Run Teardown Keywords
 ...             AND  Terminate All Processes  kill=True
-Force Tags   MessageBus=MQTT
 
 *** Variables ***
 ${SUITE}              Core-Data-Configrations
@@ -47,7 +46,7 @@ Set MessageBus ${key}=${value} For core-data On Registry Service
     ${timestamp}  get current epoch time
     Set Test Variable  ${log_timestamp}  ${timestamp}
     ${path}=  Set Variable  ${DATA_CONSOL_PATH}/MessageBus/${key}
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
     Restart Services  core-data
     Wait Until Keyword Succeeds  10x  1s  Ping Data Service
 

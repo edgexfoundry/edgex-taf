@@ -5,9 +5,7 @@ USE_ARCH=${1:--x86_64}
 USE_SECURITY=${2:--}
 USE_SHA1=${3:-main}
 TEST_STRATEGY=${4:-}
-REGISTRY_SERVICE=${5:-Consul}
-DELAYED_START=${6:-false}
-USE_DB=${USE_DB:-}
+DELAYED_START=${5:-false}
 
 . $(dirname "$0")/common-taf.env
 
@@ -17,64 +15,30 @@ USE_DB=${USE_DB:-}
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
 
-# # Consul or Keeper
-if [ "$REGISTRY_SERVICE" = "Keeper" ]; then
-  USE_KEEPER="-keeper"
-  REGISTRY_HOST=edgex-core-keeper
-  REGISTRY_PORT=59890
-  REGISTRY_TYPE=keeper
-else
-  REGISTRY_HOST=edgex-core-consul
-  REGISTRY_PORT=8500
-  REGISTRY_TYPE=consul
-fi
-
 # # USE POSTGRES
 if [ "$USE_SECURITY" != '-security-' ]; then
   CORE_COMMAND_MESSAGE_AUTH=none
 else
   CORE_COMMAND_MESSAGE_AUTH=usernamepassword
 fi
-if [ "$USE_DB" = "postgres" ]; then
-  USE_POSTGRES=-postgres
-  MQTT_BUS=-mqtt-bus
-  DATABASE_HOST=edgex-postgres
-  DATABASE_PORT=5432
-  DATABASE_TYPE=postgres
-  MESSAGEBUS_PROTOCOL=tcp
-  MESSAGEBUS_HOST=edgex-mqtt-broker
-  MESSAGEBUS_PORT=1883
-  MESSAGEBUS_SECRETNAME=message-bus
-  MESSAGEBUS_AUTHMODE=${CORE_COMMAND_MESSAGE_AUTH}
-  MESSAGEBUS_TYPE=mqtt
-else
-  DATABASE_HOST="edgex-redis"
-  DATABASE_PORT=6379
-  DATABASE_TYPE=redis
-  MESSAGEBUS_PROTOCOL=redis
-  MESSAGEBUS_HOST="edgex-redis"
-  MESSAGEBUS_PORT=6379
-  MESSAGEBUS_SECRETNAME=redisdb
-  MESSAGEBUS_AUTHMODE=${CORE_COMMAND_MESSAGE_AUTH}
-  MESSAGEBUS_TYPE=redis
-fi
+DATABASE_HOST=edgex-postgres
+DATABASE_PORT=5432
+DATABASE_TYPE=postgres
+MESSAGEBUS_PROTOCOL=tcp
+MESSAGEBUS_HOST=edgex-mqtt-broker
+MESSAGEBUS_PORT=1883
+MESSAGEBUS_SECRETNAME=message-bus
+MESSAGEBUS_AUTHMODE=${CORE_COMMAND_MESSAGE_AUTH}
+MESSAGEBUS_TYPE=mqtt
 
 # # pre-release or other release
 mkdir -p tmp
 # generate single file docker-compose.yml for target configuration without
 # default device services, i.e. no device-virtual service
-./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}" "" "${USE_POSTGRES}" "${MQTT_BUS}"
-cp docker-compose-taf${USE_NO_SECURITY}${MQTT_BUS}${USE_KEEPER}${USE_POSTGRES}${USE_ARM64}.yml docker-compose.yml
+./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
+cp docker-compose-taf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yml
 
-if [ "${TEST_STRATEGY}" = "integration-test" ]; then
-  # sync compose file for mqtt message bus
-  ./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "${USE_KEEPER}" "" "${USE_POSTGRES}" "-mqtt-bus"
-  cp docker-compose-taf${USE_NO_SECURITY}-mqtt-bus${USE_KEEPER}${USE_POSTGRES}${USE_ARM64}.yml docker-compose-mqtt-bus.yml
-  # Set Compose files variable
-  COMPOSE_FILE="docker-compose docker-compose-mqtt-bus"
-else
-  COMPOSE_FILE="docker-compose"
-fi
+COMPOSE_FILE="docker-compose"
 
 for compose in ${COMPOSE_FILE}; do
   for profile in device-virtual device-modbus; do
@@ -96,7 +60,7 @@ for compose in ${COMPOSE_FILE}; do
   # Enable Delayed Start
   if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${USE_SECURITY}" = '-security-' ] \
         && [ "${DELAYED_START}" = 'true' ]; then
-    for service in support-notifications support-scheduler; do
+    for service in support-notifications support-cron-scheduler; do
       sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_ENABLED: "true"' tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_HOST: edgex-security-spiffe-token-provider' tmp/${service}.yml
@@ -130,22 +94,18 @@ for compose in ${COMPOSE_FILE}; do
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' tmp/core-command.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' tmp/core-command.yml
       # Uri for files
-      if [ "${compose}" = "docker-compose" ]; then
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_HOST: ${DATABASE_HOST}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_PORT: ${DATABASE_PORT}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_TYPE: ${DATABASE_TYPE}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_PROTOCOL: ${MESSAGEBUS_PROTOCOL}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_HOST: ${MESSAGEBUS_HOST}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_PORT: ${MESSAGEBUS_PORT}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_SECRETNAME: ${MESSAGEBUS_SECRETNAME}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_AUTHMODE: ${MESSAGEBUS_AUTHMODE}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_TYPE: ${MESSAGEBUS_TYPE}" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_HOST: $REGISTRY_HOST" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_PORT: $REGISTRY_PORT" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_TYPE: $REGISTRY_TYPE" tmp/core-command.yml
-        sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_COMMON_CONFIG: ${HTTP_SERVER_DIR}/common-config.yaml" tmp/core-command.yml
-        sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_CONFIG_PROVIDER: none' tmp/core-command.yml
-      fi
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_HOST: ${DATABASE_HOST}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_PORT: ${DATABASE_PORT}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ DATABASE_TYPE: ${DATABASE_TYPE}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_PROTOCOL: ${MESSAGEBUS_PROTOCOL}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_HOST: ${MESSAGEBUS_HOST}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_PORT: ${MESSAGEBUS_PORT}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_SECRETNAME: ${MESSAGEBUS_SECRETNAME}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_AUTHMODE: ${MESSAGEBUS_AUTHMODE}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_TYPE: ${MESSAGEBUS_TYPE}" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ REGISTRY_HOST: edgex-core-keeper" tmp/core-command.yml
+      sed -i "/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_COMMON_CONFIG: ${HTTP_SERVER_DIR}/common-config.yaml" tmp/core-command.yml
+      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_CONFIG_PROVIDER: none' tmp/core-command.yml
       ###
     fi
     sed -i "/^\ \ core-command:/,/^  [a-z].*:$/{//!d}; /^\ \ core-command:/d" ${compose}.yml
@@ -174,6 +134,7 @@ for compose in ${COMPOSE_FILE}; do
     # Multiple Instance of device-modbus
     sed -n "/^\ \ device-modbus:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/device-modbus_1.yml
     sed -i 's/device-modbus/device-modbus_1/g' tmp/device-modbus_1.yml
+    sed -i 's/modbus-simulator/modbus-simulator_1/g' tmp/device-modbus_1.yml
     sed -i "s/device-modbus_1${USE_ARM64}:latest/device-modbus${USE_ARM64}:latest/g" tmp/device-modbus_1.yml
     if [ "${USE_SECURITY}" = '-security-' ]; then
       sed -i 's/- \/device-modbus_1/- \/device-modbus/g' tmp/device-modbus_1.yml
@@ -184,8 +145,7 @@ for compose in ${COMPOSE_FILE}; do
 
     if [ "${USE_SECURITY}" = '-security-' ]; then
       # Add secrets for device-modbus_1
-      sed -i '/EDGEX_ADD_REGISTRY_ACL_ROLES/ s/$/,device-modbus_1/' ${compose}.yml
-      sed -i '/EDGEX_ADD_KNOWN_SECRETS/ s/$/,redisdb[device-modbus_1],message-bus[device-modbus_1]/' ${compose}.yml
+      sed -i '/EDGEX_ADD_KNOWN_SECRETS/ s/$/,postgres[device-modbus_1],message-bus[device-modbus_1]/' ${compose}.yml
       sed -i '/EDGEX_ADD_SECRETSTORE_TOKENS/ s/$/,device-modbus_1/' ${compose}.yml
 
       # Enable CORS Configuration
@@ -243,17 +203,8 @@ for compose in ${COMPOSE_FILE}; do
   done
 
   sed -i '/PROFILE_VOLUME_PLACE_HOLDER: {}/d' ${compose}.yml
-
-  # Update for backward competibility test
-  if [ "${USE_SHA1}" = "jakarta" ]; then
-    # Supported version:  Ireland, Jakarta, Kamakura
-    sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/${EXTERNAL_BROKER_HOSTNAME}/g' ${compose}.yml
-  else
-    sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883/g' ${compose}.yml
-  fi
-
+  sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883/g' ${compose}.yml
   sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' ${compose}.yml
-  sed -i '/METRICSMECHANISM/d' ${compose}.yml  # remove METRICSMECHANISM env variable to allow change on Registry Service
 
   # Put HTTP Server On the top of compose file
   if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${compose}" = "docker-compose" ]; then

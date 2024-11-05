@@ -108,8 +108,8 @@ Create A Subscriptions And Notifications
 
 Set Writable configs: resendInterval=${resendInterval} and resendLimit=${resendLimit}
     ${path}=  Set variable  /support-notifications/Writable
-    Update Configuration On Registry Service  ${path}/ResendInterval  ${resendInterval}
-    Update Configuration On Registry Service  ${path}/ResendLimit  ${resendLimit}
+    Update Service Configuration  ${path}/ResendInterval  ${resendInterval}
+    Update Service Configuration  ${path}/ResendLimit  ${resendLimit}
 
 Get Transmission Id
     Query All Transmissions

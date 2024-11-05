@@ -8,11 +8,10 @@ Suite Setup  Run keywords  Setup Suite
              ...      AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
              ...      AND  Cleanup All Notifications And Transmissions
              ...      AND  Enable Notifications Retention
-             ...      AND  Update Configuration On Registry Service  ${CONSOL_PATH}/Writable/LogLevel  DEBUG
+             ...      AND  Update Service Configuration  ${CONSOL_PATH}/Writable/LogLevel  DEBUG
 Suite Teardown  Run Keywords  Disable Notifications Retention
-                ...      AND  Update Configuration On Registry Service  ${CONSOL_PATH}/Writable/LogLevel  INFO
+                ...      AND  Update Service Configuration  ${CONSOL_PATH}/Writable/LogLevel  INFO
                 ...      AND  Run Teardown Keywords
-Force Tags      MessageBus=redis
 
 *** Variables ***
 ${SUITE}          support-notifications Retention
@@ -48,7 +47,7 @@ Enable Notifications Retention
     ${values}  Create List  true  3s  ${maxCap}  ${minCap}
     FOR  ${key}  ${value}  IN ZIP  ${keys}  ${values}
         ${path}=  Set Variable  ${CONSOL_PATH}/Retention/${key}
-        Update Configuration On Registry Service  ${path}  ${value}
+        Update Service Configuration  ${path}  ${value}
     END
     Restart Services  support-notifications
 
@@ -82,7 +81,7 @@ Stored Transmissions Are Belong To Stored Notifications
 
 Disable Notifications Retention
     ${path}=  Set Variable  ${CONSOL_PATH}/Retention/Enabled
-    Update Configuration On Registry Service  ${path}  false
+    Update Service Configuration  ${path}  false
     Restart Services  support-notifications
 
 Create Subscriptions ${subscriptions_num} And Notifications ${notifications_num}

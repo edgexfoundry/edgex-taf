@@ -13,14 +13,14 @@ ${APP_SERVICE_NAME}  app-sample
 Set Telemetry ${config}=${value} For ${service_name} On Registry Service
     ${telemetry_path}  Set Variable  /${service_name}/Writable/Telemetry
     ${path}  Set Variable   ${telemetry_path}/${config}
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
 
 Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     ${perTopics}  Create List  float  int8-16
     ${path}  Set Variable  /${APP_SERVICE_NAME}/Writable/Pipeline/PerTopicPipelines
     FOR  ${ITEM}  IN  @{perTopics}
         ${topics_path}  Set Variable  ${path}/${ITEM}/Topics
-        Update Configuration On Registry Service  ${topics_path}  events/device/+/+/${device_name}/#
+        Update Service Configuration  ${topics_path}  events/device/+/+/${device_name}/#
     END
 
 Metrics ${metrics_name} With ${field_name} Should Be Received
@@ -105,4 +105,4 @@ Get First Lines
 
 Set PerTopicPipelines ${perTopicPipeline} ExecutionOrder ${functions}
     ${path}=  Set variable  /${APP_SERVICE_NAME}/Writable/Pipeline/PerTopicPipelines/${perTopicPipeline}/ExecutionOrder
-    Update Configuration On Registry Service  ${path}  ${functions}
+    Update Service Configuration  ${path}  ${functions}

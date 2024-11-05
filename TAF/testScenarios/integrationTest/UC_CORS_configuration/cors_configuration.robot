@@ -5,7 +5,6 @@ Suite Setup  Run Keywords   Setup Suite
              ...      AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'false'  Enable CORS For Individual Service
 Suite Teardown  Run Keywords  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'false'  Disable CORS For Individual Service
                 ...      AND  Run Teardown Keywords
-Force Tags      MessageBus=redis
 
 *** Variables ***
 ${SUITE}  CORS Configuration
@@ -68,7 +67,7 @@ CORS005-Not enable CORS
 *** Keywords ***
 Set Service.CORSConfiguration.${config} to ${value} For ${service_name} On Registry Service
     ${path}=  Set Variable  /${service_name}/Service/CORSConfiguration/${config}
-    Update Configuration On Registry Service  ${path}  ${value}
+    Update Service Configuration  ${path}  ${value}
 
 Send ${method} Request With Headers
     [Arguments]  ${header_keys}  ${header_values}
