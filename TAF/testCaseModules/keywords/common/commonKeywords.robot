@@ -117,6 +117,11 @@ apiVersion Should be ${API_VERSION}
     Should contain "apiVersion"
     Should be true  '${content}[apiVersion]' == '${API_VERSION}'
 
+Version Should Contain Release Version
+    ${full_version}  Fetch From Left  ${content}[version]  -
+    ${version_num}  Split String  ${full_version}  .
+    Should Be Equal As Strings  ${REL_MAJOR_VERSION}  ${version_num}[0].${version_num}[1]
+
 totalCount Should be ${value}
     Should contain  ${content}  totalCount
     Should be true  '${content}[totalCount]' == '${value}'

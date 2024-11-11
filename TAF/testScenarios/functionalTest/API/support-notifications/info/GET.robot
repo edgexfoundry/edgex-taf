@@ -20,6 +20,7 @@ InfoGET001 - Query ping
 InfoGET002 - Query version
     When Query Version
     Then Should Return Status Code "200" And version
+    And Version Should Contain Release Version
     And apiVersion Should be ${API_VERSION}
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
