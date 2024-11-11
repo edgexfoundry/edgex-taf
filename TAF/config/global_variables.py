@@ -2,6 +2,9 @@ import os
 
 LOG_LEVEL = "INFO"
 
+# Release Version
+REL_MAJOR_VERSION = "4.0"
+
 # API Version
 API_VERSION = "v3"
 
