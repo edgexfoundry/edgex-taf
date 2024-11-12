@@ -4,10 +4,10 @@ Library     String
 Resource    TAF/testCaseModules/keywords/common/commonKeywords.robot
 
 *** Variables ***
-${supportCronSchedulerUrl}  ${URI_SCHEME}://${BASE_URL}:${SUPPORT_CRON_SCHEDULER_PORT}
+${supportSchedulerUrl}  ${URI_SCHEME}://${BASE_URL}:${SUPPORT_SCHEDULER_PORT}
 ${jobUri}    /api/${API_VERSION}/job
 ${scheduleActionRecordUri}    /api/${API_VERSION}/scheduleactionrecord
-${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/supportCronSchedulerAPI.log
+${LOG_FILE_PATH}     ${WORK_DIR}/TAF/testArtifacts/logs/supportSchedulerAPI.log
 
 *** Keywords ***
 ##  Job
@@ -45,7 +45,7 @@ Generate Job Action
 General A Job Sample
     [Arguments]  ${definition}  ${definition_interval}  ${action}  ${action_field1}  ${action_field2}=${EMPTY}
     ...          ${action_payload}=${EMPTY}
-    ${job_data}  Get File  ${WORK_DIR}/TAF/testData/support-cron-scheduler/job.json  encoding=UTF-8
+    ${job_data}  Get File  ${WORK_DIR}/TAF/testData/support-scheduler/job.json  encoding=UTF-8
     ${job}  Evaluate  json.loads('''${job_data}''')  json
     ${currentTime}  Get Current Milliseconds Epoch Time
     ${name}  Set Variable  job_${currentTime}
@@ -94,27 +94,27 @@ Generate Multiple Job
 
 Create Jobs
     [Arguments]  ${entity}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  POST On Session  Support Cron Scheduler  ${jobUri}  json=${entity}  headers=${headers}
+    ${resp}  POST On Session  Support Scheduler  ${jobUri}  json=${entity}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 207  log to console  ${content}
 
 Update Jobs
     [Arguments]  ${entity}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  PATCH On Session  Support Cron Scheduler  ${jobUri}  json=${entity}  headers=${headers}
+    ${resp}  PATCH On Session  Support Scheduler  ${jobUri}  json=${entity}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 207  log to console  ${content}
 
 Delete Job By Name
     [Arguments]  ${name}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  DELETE On Session  Support Cron Scheduler  ${jobUri}/name/${name}  headers=${headers}
+    ${resp}  DELETE On Session  Support Scheduler  ${jobUri}/name/${name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
@@ -127,26 +127,26 @@ Delete Multiple Jobs
 
 Query Job By Name
     [Arguments]  ${name}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${jobUri}/name/${name}  headers=${headers}
+    ${resp}  GET On Session  Support Scheduler  ${jobUri}/name/${name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Query All Jobs
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${jobUri}/all  headers=${headers}
+    ${resp}  GET On Session  Support Scheduler  ${jobUri}/all  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Trigger Job By Name
     [Arguments]  ${name}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  POST On Session  Support Cron Scheduler  ${jobUri}/trigger/name/${name}  headers=${headers}
+    ${resp}  POST On Session  Support Scheduler  ${jobUri}/trigger/name/${name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 202  log to console  ${content}
@@ -166,52 +166,52 @@ Create A Job
 ## Query Schedule Action Record
 Query Schedule Action Record By Job Name
     [Arguments]  ${name}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/job/name/${name}  headers=${headers}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/job/name/${name}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Query All Schedule Action Record
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/all  headers=${headers}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/all  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Query All Schedule Action Record With ${parameter}=${value}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/all  params=${parameter}=${value}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/all  params=${parameter}=${value}
     ...      headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Query Latest Schedule Action Record By Job Name
     [Arguments]  ${name}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/latest/job/name/${name}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/latest/job/name/${name}
     ...      headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Query Schedule Action Record By Status
     [Arguments]  ${status}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/status/${status}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/status/${status}
     ...      headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
 Query Schedule Action Record By Job Name And Status
     [Arguments]  ${name}  ${status}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/job/name/${name}/status/${status}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/job/name/${name}/status/${status}
     ...      headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}

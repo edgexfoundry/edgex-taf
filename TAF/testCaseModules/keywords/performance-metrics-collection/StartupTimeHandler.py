@@ -31,7 +31,7 @@ services = {
     "support-notifications": {"containerName": "edgex-support-notifications", "msgRegex": msgRegex,
                               "startupDatetimeRegex": startupDatetimeRegex,
                               "binaryStartupTimeRegex": binaryStartupTimeRegex},
-    "support-cron-scheduler": {"containerName": "edgex-support-cron-scheduler",
+    "support-scheduler": {"containerName": "edgex-support-scheduler",
                                "msgRegex": msgRegex, "startupDatetimeRegex": startupDatetimeRegex,
                                "binaryStartupTimeRegex": binaryStartupTimeRegex},
     "app-service": {"containerName": "edgex-app-rules-engine",

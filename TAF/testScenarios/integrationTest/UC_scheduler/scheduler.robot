@@ -2,16 +2,16 @@
 Resource        TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource        TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource        TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
-Resource        TAF/testCaseModules/keywords/support-cron-scheduler/supportCronSchedulerAPI.robot
+Resource        TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup     Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
 
 *** Variables ***
-${SUITE}         Trigger Cron Scheduler
+${SUITE}         Trigger Scheduler
 
 *** Test Cases ***
-CronScheduler001 - Create schedule job with INTERVAL definition and REST action to clean up events and readings
+Scheduler001 - Create schedule job with INTERVAL definition and REST action to clean up events and readings
     ${job}  General A Job Sample  INTERVAL  3s  REST
             ...                   http://edgex-core-data:59880/api/${API_VERSION}/event/age/0  DELETE
     Given Create Device For device-virtual With Name interval-rest-test
@@ -23,7 +23,7 @@ CronScheduler001 - Create schedule job with INTERVAL definition and REST action 
     [Teardown]  Run Keywords  Delete Device By Name ${device_name}
                 ...      AND  Delete Multiple Jobs  @{job_names}
 
-CronScheduler002 - Create schedule job with INTERVAL definition and DEVICECONTROL action to set device command
+Scheduler002 - Create schedule job with INTERVAL definition and DEVICECONTROL action to set device command
     ${set_value}  Set Variable  ${3333}
     ${command}  Set Variable  ${PREFIX}_GenerateDeviceValue_INT32_RW
     ${device_name}  Set Variable  interval-devicecontrol-test
@@ -36,7 +36,7 @@ CronScheduler002 - Create schedule job with INTERVAL definition and DEVICECONTRO
     [Teardown]  Run Keywords  Delete Device By Name ${device_name}
                 ...      AND  Delete Multiple Jobs  @{job_names}
 
-CronScheduler003 - Create schedule job with CRON definition to send message to app-service
+Scheduler003 - Create schedule job with CRON definition to send message to app-service
     [Setup]  Start app-mqtt-export Service
     Given Create Device For device-virtual With Name cron-test
     And Generate Job With Event Payload
