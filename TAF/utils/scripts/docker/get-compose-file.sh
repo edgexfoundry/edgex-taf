@@ -60,7 +60,7 @@ for compose in ${COMPOSE_FILE}; do
   # Enable Delayed Start
   if [ "${TEST_STRATEGY}" = "integration-test" ] && [ "${USE_SECURITY}" = '-security-' ] \
         && [ "${DELAYED_START}" = 'true' ]; then
-    for service in support-notifications support-cron-scheduler; do
+    for service in support-notifications support-scheduler; do
       sed -n "/^\ \ ${service}:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_ENABLED: "true"' tmp/${service}.yml
       sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ SECRETSTORE_RUNTIMETOKENPROVIDER_HOST: edgex-security-spiffe-token-provider' tmp/${service}.yml

@@ -1,16 +1,16 @@
 *** Settings ***
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
-Resource     TAF/testCaseModules/keywords/support-cron-scheduler/supportCronSchedulerAPI.robot
+Resource     TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
 
 *** Variables ***
-${SUITE}          Support Cron Scheduler Job PATCH Test Cases
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-cron-scheduler-patch.log
+${SUITE}          Support Scheduler Job PATCH Test Cases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-scheduler-patch.log
 
 *** Test Cases ***
-CronSchedJobPATCH001 - Update jobs
+SchedulerJobPATCH001 - Update jobs
     # Update different field on each job
     Given Create Jobs And Generate Update Body
     When Update Jobs  ${jobs}
@@ -21,7 +21,7 @@ CronSchedJobPATCH001 - Update jobs
     And Jobs Should Be Updated
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH001 - Update job with empty definition type
+ErrSchedulerJobPATCH001 - Update job with empty definition type
     Given Create Jobs And Generate Update Body
     And Set To Dictionary  ${jobs}[0][scheduleJob][definition]  type=${EMPTY}
     When Update Jobs  ${jobs}
@@ -30,7 +30,7 @@ ErrCronSchedJobPATCH001 - Update job with empty definition type
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH002 - Update job with empty definition scheduledef
+ErrSchedulerJobPATCH002 - Update job with empty definition scheduledef
     Given Create Jobs And Generate Update Body
     And Set To Dictionary  ${jobs}[0][scheduleJob][definition]  crontab=${EMPTY}
     When Update Jobs  ${jobs}
@@ -39,7 +39,7 @@ ErrCronSchedJobPATCH002 - Update job with empty definition scheduledef
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH003 - Update job with invalid definition type
+ErrSchedulerJobPATCH003 - Update job with invalid definition type
     Given Create Jobs And Generate Update Body
     And Set To Dictionary  ${jobs}[0][scheduleJob][definition]  type=INVALID
     When Update Jobs  ${jobs}
@@ -48,7 +48,7 @@ ErrCronSchedJobPATCH003 - Update job with invalid definition type
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH004 - Update job with empty actions type
+ErrSchedulerJobPATCH004 - Update job with empty actions type
     Given Create Jobs And Generate Update Body
     And Set To Dictionary  ${jobs}[3][scheduleJob][actions][0]  type=${EMPTY}
     Log  ${jobs}
@@ -58,7 +58,7 @@ ErrCronSchedJobPATCH004 - Update job with empty actions type
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH005 - Update job with invalid actions type
+ErrSchedulerJobPATCH005 - Update job with invalid actions type
     Given Create Jobs And Generate Update Body
     And Set To Dictionary  ${jobs}[1][scheduleJob][actions][0]  type=INVALID
     Log  ${jobs}
@@ -68,7 +68,7 @@ ErrCronSchedJobPATCH005 - Update job with invalid actions type
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH006 - Update job with invalid admin state
+ErrSchedulerJobPATCH006 - Update job with invalid admin state
     Given Create Jobs And Generate Update Body
     And Set To Dictionary  ${jobs}[2][scheduleJob]  adminState=INVALID
     When Update Jobs  ${jobs}
@@ -77,7 +77,7 @@ ErrCronSchedJobPATCH006 - Update job with invalid admin state
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Jobs
 
-ErrCronSchedJobPATCH007 - Update job with startTimestamp > endTimestamp
+ErrSchedulerJobPATCH007 - Update job with startTimestamp > endTimestamp
     ${currentTime}  Get Current Milliseconds Epoch Time
     ${endTime}  Evaluate  ${currentTime}-60000
     Given Create Jobs And Generate Update Body

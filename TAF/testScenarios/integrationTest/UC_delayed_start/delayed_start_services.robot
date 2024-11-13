@@ -11,7 +11,7 @@ ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/delayed_start.log
 
 *** Test Cases ***
 DelayedStart001-Trace Delayed Start In Service Log
-    @{service_list}  Create List  support-notifications  support-cron-scheduler  device-virtual  device-modbus
+    @{service_list}  Create List  support-notifications  support-scheduler  device-virtual  device-modbus
     ${keyword}  Set Variable  successfully got token from spiffe-token-provider
     FOR  ${service}  IN  @{service_list}
         ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service} 0

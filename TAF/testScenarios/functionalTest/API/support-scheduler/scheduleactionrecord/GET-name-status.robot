@@ -1,16 +1,16 @@
 *** Settings ***
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
-Resource     TAF/testCaseModules/keywords/support-cron-scheduler/supportCronSchedulerAPI.robot
+Resource     TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Teardown Keywords
 
 *** Variables ***
-${SUITE}          Support Cron Scheduler Action Record Get By Name And Status Test Cases
-${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-cron-scheduler-action-record-get-name-status.log
+${SUITE}          Support Scheduler Action Record Get By Name And Status Test Cases
+${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/support-scheduler-action-record-get-name-status.log
 
 *** Test Cases ***
-CronSchedActionAllGET001 - Query schedule action record by name and status
+SchedulerActionAllGET001 - Query schedule action record by name and status
     Given Create Jobs For Query Schedule Action Record
     And Sleep  3s  # Wait For Running Schedule Job
     And Set Test Variable  ${job_name}  ${job_names}[0]
@@ -23,7 +23,7 @@ CronSchedActionAllGET001 - Query schedule action record by name and status
     And Job Name ${job_name} And Status ${status} Should Be Correct
     [Teardown]  Delete Multiple Jobs  @{job_names}
 
-CronSchedActionAllGET002 - Query schedule action record by name and status with start
+SchedulerActionAllGET002 - Query schedule action record by name and status with start
     ${currentTime}  Get Current Milliseconds Epoch Time
     ${time}  Evaluate  ${currentTime}+1400
     ${params}  Create Dictionary  start=${time}
@@ -39,7 +39,7 @@ CronSchedActionAllGET002 - Query schedule action record by name and status with 
     And Job Name ${job_name} And Status ${status} Should Be Correct
     [Teardown]  Delete Multiple Jobs  @{job_names}
 
-CronSchedActionAllGET003 - Query schedule action record by name and status with end
+SchedulerActionAllGET003 - Query schedule action record by name and status with end
     ${currentTime}  Get Current Milliseconds Epoch Time
     ${time}  Evaluate  ${currentTime}+3000
     ${params}  Create Dictionary  end=${time}
@@ -55,7 +55,7 @@ CronSchedActionAllGET003 - Query schedule action record by name and status with 
     And Job Name ${job_name} And Status ${status} Should Be Correct
     [Teardown]  Delete Multiple Jobs  @{job_names}
 
-CronSchedActionAllGET004 - Query schedule action record by name and status with start/end
+SchedulerActionAllGET004 - Query schedule action record by name and status with start/end
     ${currentTime}  Get Current Milliseconds Epoch Time
     ${startTime}  Evaluate  ${currentTime}+1400
     ${endTime}  Evaluate  ${currentTime}+6400
@@ -72,7 +72,7 @@ CronSchedActionAllGET004 - Query schedule action record by name and status with 
     And Job Name ${job_name} And Status ${status} Should Be Correct
     [Teardown]  Delete Multiple Jobs  @{job_names}
 
-CronSchedActionAllGET005 - Query schedule action record by name and status with offset
+SchedulerActionAllGET005 - Query schedule action record by name and status with offset
     Set Test Variable  ${offset}  ${1}
     ${params}  Create Dictionary  offset=${offset}
     Given Create Jobs For Query Schedule Action Record
@@ -87,7 +87,7 @@ CronSchedActionAllGET005 - Query schedule action record by name and status with 
     And Job Name ${job_name} And Status ${status} Should Be Correct
     [Teardown]  Delete Multiple Jobs  @{job_names}
 
-CronSchedActionAllGET006 - Query schedule action record by name and status with limit
+SchedulerActionAllGET006 - Query schedule action record by name and status with limit
     Set Test Variable  ${limit}  ${1}
     ${params}  Create Dictionary  limit=${limit}
     Given Create Jobs For Query Schedule Action Record
@@ -105,9 +105,9 @@ CronSchedActionAllGET006 - Query schedule action record by name and status with 
 *** Keywords ***
 Query Schedule Action Record By Job Name And Status With Parameters
     [Arguments]  ${name}  ${status}  ${params_dict}
-    Create Session  Support Cron Scheduler  url=${supportCronSchedulerUrl}  disable_warnings=true
+    Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Cron Scheduler  ${scheduleActionRecordUri}/job/name/${name}/status/${status}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/job/name/${name}/status/${status}
     ...      params=${params_dict}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 200  log to console  ${content}

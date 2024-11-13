@@ -30,8 +30,8 @@ Measure the ping response time
     ${COMMAND_RES_LIST}=  Ping API for service  core-command  ${CORE_COMMAND_PORT}
     Record response   edgex-core-command           ${COMMAND_RES_LIST}
 
-    ${SCHEDULER_RES_LIST}=  Ping API for service  support-cron-scheduler  ${SUPPORT_CRON_SCHEDULER_PORT}
-    Record response   edgex-support-cron-scheduler      ${SCHEDULER_RES_LIST}
+    ${SCHEDULER_RES_LIST}=  Ping API for service  support-scheduler  ${SUPPORT_SCHEDULER_PORT}
+    Record response   edgex-support-scheduler      ${SCHEDULER_RES_LIST}
 
     ${NOTIFICATIONS_RES_LIST}=  Ping API for service  support-notifications  ${SUPPORT_NOTIFICATIONS_PORT}
     Record response   edgex-support-notifications  ${NOTIFICATIONS_RES_LIST}
