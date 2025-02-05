@@ -18,7 +18,7 @@ ErrReadingGET001 - Query all readings with non-int value on offset
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrReadingGET002 - Query all readings with offset out of range
-    When Run Keyword And Expect Error  *  Query All Readings With offset=-1
+    When Run Keyword And Expect Error  *  Query All Readings With offset=-2
     Then Should Return Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms

@@ -26,7 +26,7 @@ ErrDevicePATCH012 - Update device with non-existent profileName
     And Set To Dictionary  ${Device}[1][device]  profileName=Non-existent
     When Update Devices ${Device}
     And Item Index 0,2,3 Should Contain Status Code "200"
-    And Item Index 1 Should Contain Status Code "404"
+    And Item Index 1 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample

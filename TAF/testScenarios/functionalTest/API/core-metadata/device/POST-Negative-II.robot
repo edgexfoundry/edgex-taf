@@ -31,7 +31,7 @@ ErrDevicePOST011 - Create device with non-existent device profile name
     When Create Device With ${Device}
     Then Should Return Status Code "207"
     And Item Index 0,1,3 Should Contain Status Code "201" And id
-    And Item Index 2 Should Contain Status Code "404"
+    And Item Index 2 Should Contain Status Code "400"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Devices By Names
