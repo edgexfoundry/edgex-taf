@@ -1,0 +1,114 @@
+#############################################
+# Export Server
+#############################################
+services:
+  telegraf:
+    image: telegraf:1.28
+    container_name: telegraf
+    restart: always
+    hostname: telegraf
+    user: telegraf:${HOST_DOCKER_GROUP_ID}
+    networks:
+      edgex-network: null
+    volumes:
+      - ${WORK_DIR}/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/lib/sysstat/sadc:/usr/lib/sysstat/sadc:ro
+      - /usr/bin/sadf:/usr/bin/sadf:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-modbus:
+    command:
+      - /device-modbus
+      - --registry
+      - -cp=keeper.http://edgex-core-keeper:59890
+    container_name: edgex-device-modbus
+    depends_on:
+      core-common-config-bootstrapper:
+        condition: service_started
+        required: true
+      core-keeper:
+        condition: service_started
+        required: true
+      core-metadata:
+        condition: service_started
+        required: true
+      security-bootstrapper:
+        condition: service_started
+        required: true
+    entrypoint:
+      - /edgex-init/ready_to_run_wait_install.sh
+    environment:
+      EDGEX_MSG_BASE64_PAYLOAD: "true"
+      EDGEX_SECURITY_SECRET_STORE: "true"
+      PROXY_SETUP_HOST: edgex-security-proxy-setup
+      SECRETSTORE_HOST: edgex-secret-store
+      SERVICE_HOST: edgex-device-modbus
+      STAGEGATE_BOOTSTRAPPER_HOST: edgex-security-bootstrapper
+      STAGEGATE_BOOTSTRAPPER_STARTPORT: "54321"
+      STAGEGATE_DATABASE_HOST: edgex-postgres
+      STAGEGATE_DATABASE_PORT: "5432"
+      STAGEGATE_DATABASE_READYPORT: "5432"
+      STAGEGATE_PROXYSETUP_READYPORT: "54325"
+      STAGEGATE_READY_TORUNPORT: "54329"
+      STAGEGATE_REGISTRY_HOST: edgex-core-keeper
+      STAGEGATE_REGISTRY_PORT: "59890"
+      STAGEGATE_REGISTRY_READYPORT: "54324"
+      STAGEGATE_SECRETSTORESETUP_HOST: edgex-security-secretstore-setup
+      STAGEGATE_SECRETSTORESETUP_TOKENS_READYPORT: "54322"
+      STAGEGATE_WAITFOR_TIMEOUT: 60s
+      DEVICE_PROFILESDIR: /res/edgex/profiles
+      DEVICE_DEVICESDIR: /res/edgex/devices
+    hostname: edgex-device-modbus
+    image: edgexfoundry/device-modbus:4.0.0
+    networks:
+      edgex-network: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 59901
+        published: "59901"
+        protocol: tcp
+    read_only: true
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    user: 2002:2001
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${WORK_DIR}/simulators
+        target: /res/edgex
+        bind:
+          selinux: z
+          create_host_path: true
+      - type: volume
+        source: edgex-init
+        target: /edgex-init
+        read_only: true
+        volume: { }
+      - type: bind
+        source: /tmp/edgex/secrets/device-modbus
+        target: /tmp/edgex/secrets/device-modbus
+        read_only: true
+        bind:
+          selinux: z
+          create_host_path: true
+
+  core-metadata:
+    environment:
+      SERVICE_REQUESTTIMEOUT: "30s"
+
+  security-secretstore-setup:
+    environment:
+      EDGEX_ADD_KNOWN_SECRETS: message-bus[device-modbus]
+      EDGEX_ADD_SECRETSTORE_TOKENS: device-modbus

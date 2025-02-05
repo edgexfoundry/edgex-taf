@@ -1,0 +1,54 @@
+volumes:
+  influx-data:
+  influx-config:
+
+networks:
+  edgex-network:
+    name: edgex_edgex-network
+    driver: bridge
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10mb"
+    max-file: "20"
+
+#############################################
+# Export Server
+#############################################
+services:
+  influxdb:
+    image: influxdb:2.7.10-alpine
+    container_name: influxdb
+    hostname: influxdb
+    networks:
+      edgex-network: null
+    ports:
+      - "8086:8086"
+    restart: always
+    user: influxdb:influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin-password
+      DOCKER_INFLUXDB_INIT_ORG: my-org
+      DOCKER_INFLUXDB_INIT_BUCKET: my-bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: custom-token
+    volumes:
+      - influx-data:/var/lib/influxdb2
+      - influx-config:/etc/influxdb2
+    logging: *default-logging
+
+  external-mqtt:
+    command: "/usr/sbin/mosquitto -c /mosquitto-no-auth.conf"
+    image: eclipse-mosquitto:2.0.20
+    container_name: external-mqtt
+    hostname: external-mqtt
+    ports:
+      - "1884:1883"
+    networks:
+      edgex-network: null
+    restart: always
+    read_only: true
+    user: 2002:2001
+    logging: *default-logging
