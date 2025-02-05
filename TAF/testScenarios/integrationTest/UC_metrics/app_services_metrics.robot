@@ -73,10 +73,11 @@ APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish to MessageBus
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MessagesReceived  payload  2
-    And Set Test Variable  ${device_name}  message-received
+    Given Set Test Variable  ${device_name}  message-received
+    And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Set Telemetry Metrics/MessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MessagesReceived  payload  2
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
     And Sleep  ${interval}
@@ -88,11 +89,11 @@ APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish 
 
 APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is Publish to MessageBus
     ${publish_msg}  Set Variable  Invalid Message
-    Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/InvalidMessagesReceived  payload  2
-    And Set Test Variable  ${device_name}  invalid-message-received
+    Given Set Test Variable  ${device_name}  invalid-message-received
+    And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Create Device For device-virtual With Name ${device_name}
     And Set Telemetry Metrics/InvalidMessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
-    And Restart Services  ${APP_SERVICE_NAME}
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/InvalidMessagesReceived  payload  2
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py edgex/events/${device_name} "${publish_msg}" ${BROKER_PORT} ${SECURITY_SERVICE_NEEDED}
          ...          shell=True  timeout=10s
     And Sleep  ${interval_ex}
@@ -103,11 +104,12 @@ APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is P
 
 APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is Publish to MessageBus
     Given Set Test Variable  ${device_name}  pipeline-messages-processed
+    And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessagesProcessed  payload  6
     And Set Telemetry Metrics/PipelineMessagesProcessed=true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessagesProcessed  payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
     Then Received Metrics PipelineMessagesProcessed For All Pipelines And counter-count Should Not Be 0
@@ -118,11 +120,12 @@ APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is
 
 APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metrics is Publish to MessageBus
     Given Set Test Variable  ${device_name}  pipeline-messages-processing-time
+    And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessageProcessingTime  payload  6
     And Set Telemetry Metrics/PipelineMessageProcessingTime=true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessageProcessingTime  payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
     Then Received Metrics PipelineMessageProcessingTime For All Pipelines And timer-count Should Not Be 0
@@ -138,9 +141,9 @@ APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is 
     And Set PerTopicPipelines int8-16 ExecutionOrder HTTPExport
     And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineProcessingErrors  payload  6
     And Set Telemetry Metrics/PipelineProcessingErrors=true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
+    And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineProcessingErrors  payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
     And Sleep  ${interval_ex}
     Then Received Metrics PipelineProcessingErrors For All Pipelines And counter-count Should Not Be 0
