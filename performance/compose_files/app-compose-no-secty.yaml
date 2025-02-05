@@ -1,0 +1,53 @@
+  app-mqtt-export_APP_INDEX:
+    command:
+      - --registry
+      - -cp=keeper.http://edgex-core-keeper:59890
+    container_name: edgex-app-mqtt-export_APP_INDEX
+    depends_on:
+      core-common-config-bootstrapper:
+        condition: service_started
+        required: true
+      core-keeper:
+        condition: service_started
+        required: true
+      core-metadata:
+        condition: service_started
+        required: true
+    environment:
+      EDGEX_PROFILE: mqtt-export_APP_INDEX
+      EDGEX_SECURITY_SECRET_STORE: "false"
+      SERVICE_HOST: edgex-app-mqtt-export_APP_INDEX
+      SERVICE_STARTUPMSG: "app-mqtt-export_APP_INDEX has Started"
+      WRITABLE_PIPELINE_EXECUTIONORDER: "MQTTExport"
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS: BROKER_ADDRESS
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_TOPIC: "edgex/events/device/PROFILE_NAME"
+      WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_CLIENTID: "MQTT-Export_APP_INDEX"
+      MESSAGEBUS_OPTIONAL_CLIENTID: "app-mqtt-export_APP_INDEX"
+      TRIGGER_SUBSCRIBETOPICS: "events/device/SERVICE_NAME/PROFILE_NAME/#"
+    hostname: edgex-app-mqtt-export_APP_INDEX
+    image: nexus3.edgexfoundry.org:10004/app-service-configurable${USE_ARM64}:latest
+    networks:
+      edgex-network: null
+    read_only: true
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    user: 2002:2001
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${WORK_DIR}/app_dir
+        target: /res
+        read_only: true
+        bind:
+          create_host_path: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"

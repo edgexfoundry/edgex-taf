@@ -1,0 +1,329 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10mb"
+    max-file: "20"
+
+#############################################
+# Simulators
+#############################################
+services:
+  device-sim-1:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8030"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5020"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-1
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-1.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-2:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8031"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5021"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-2
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-2.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-3:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8032"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5022"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-3
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-3.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-4:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8033"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5023"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-4
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-4.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-5:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8034"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5024"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-5
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-5.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-6:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8035"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5025"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-6
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-6.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-7:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8036"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5026"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-7
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-7.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-8:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8037"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5027"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-8
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-8.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-9:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8038"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5028"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-9
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-9.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging
+
+  device-sim-10:
+    command:
+      - pymodbus.server
+      - --host
+      - 0.0.0.0
+      - --web-port
+      - "8039"
+      - --no-repl
+      - run
+      - --modbus-server
+      - tcp
+      - --modbus-port
+      - "5029"
+      - --framer
+      - socket
+      - --modbus-config
+      - /res/config.json
+      - --unit-id
+      - "1"
+      - --change-rate
+      - "100"
+    container_name: device-sim-10
+    image: iotechsys/modbus-sim:repl-v3.1.0
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${WORK_DIR}/simulators/pymodbus-config/device-sim-10.json
+        target: /res/config.json
+        read_only: true
+    logging: *default-logging

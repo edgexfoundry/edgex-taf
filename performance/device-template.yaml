@@ -1,0 +1,19 @@
+  - name: PROFILE_NAME-DEVICE_INDEX
+    profileName: PROFILE_NAME
+    autoEvents:
+      - interval: 100ms
+        onChange: true
+        sourceName: bc_1
+      - interval: 100ms
+        onChange: true
+        sourceName: 16c_1
+      - interval: 100ms
+        onChange: true
+        sourceName: 32c_1
+    protocols:
+      modbus-tcp:
+        Address: SIMULATOR_IP
+        Port: SIMULATOR_PORT
+        UnitID: 1
+        Timeout: 5
+        IdleTimeout: 5
