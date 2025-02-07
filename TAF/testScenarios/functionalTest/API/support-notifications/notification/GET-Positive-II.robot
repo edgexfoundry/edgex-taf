@@ -14,7 +14,7 @@ ${url}            ${supportNotificationsUrl}
 
 *** Test Cases ***
 # /notification/start/{start}/end/{end}
-NotificationGET010 - Query notifications with time range
+NotificationGET013 - Query notifications with time range
     Given Create Multiple Notifications With Different Categories And Labels
     When Query Notifications By Start/End Time  ${start}  ${end}
     Then Should Return Status Code "200" And notifications
@@ -24,7 +24,7 @@ NotificationGET010 - Query notifications with time range
     And totalCount Should be 6
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
-NotificationGET011 - Query notifications with time range by offset
+NotificationGET014 - Query notifications with time range by offset
     Given Create Multiple Notifications With Different Categories And Labels
     When Query Notifications Between Time ${start} And ${end} With offset=1
     Then Should Return Status Code "200" And notifications
@@ -34,7 +34,7 @@ NotificationGET011 - Query notifications with time range by offset
     And totalCount Should be 6
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
-NotificationGET012 - Query notifications with time range by limit
+NotificationGET015 - Query notifications with time range by limit
     Given Create Multiple Notifications With Different Categories And Labels
     When Query Notifications Between Time ${start} And ${end} With limit=3
     Then Should Return Status Code "200" And notifications
@@ -44,8 +44,19 @@ NotificationGET012 - Query notifications with time range by limit
     And totalCount Should be 6
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
+NotificationGET016 - Query notifications with time range by ack status
+    Given Create Multiple Notifications With Different Categories And Labels
+    ${id_to_set_ack}  Create List  ${notification_ids}[1]  ${notification_ids}[2]
+    And Update Notifications Ack Status to True By IDs  @{id_to_set_ack}
+    When Query Notifications Between Time ${start} And ${end} With ack=true
+    Then Should Return Status Code "200" And notifications
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Notification Number Should Be 2 And Are Created Between ${start} And ${end} With ack=${true}
+    [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
+
 # /notification/id/{id}
-NotificationGET013 - Query notifications By Id
+NotificationGET017 - Query notifications By Id
     Given Create Multiple Notifications With Different Categories And Labels
     When Query Notification By ID ${notification_ids}[2]
     Then Should Return Status Code "200" And notification
@@ -55,7 +66,7 @@ NotificationGET013 - Query notifications By Id
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
 # /notification/subscription/name/{name}
-NotificationGET014 - Query notifications that subscribed categories by subscription
+NotificationGET018 - Query notifications that subscribed categories by subscription
     Given Create Multiple Subscriptions With Different Categories And Labels
     And Set Test Variable  ${specified_subscription}  ${subscription_names}[0]
     And Create Multiple Notifications With Different Categories And Labels
@@ -69,7 +80,7 @@ NotificationGET014 - Query notifications that subscribed categories by subscript
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-NotificationGET015 - Query notifications that subscribed labels by subscription
+NotificationGET019 - Query notifications that subscribed labels by subscription
     Given Create Multiple Subscriptions With Different Categories And Labels
     And Set Test Variable  ${specified_subscription}  ${subscription_names}[1]
     And Create Multiple Notifications With Different Categories And Labels
@@ -83,7 +94,7 @@ NotificationGET015 - Query notifications that subscribed labels by subscription
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-NotificationGET016 - Query notifications that subscribed labels and categories by subscription
+NotificationGET020 - Query notifications that subscribed labels and categories by subscription
     Given Create Multiple Subscriptions With Different Categories And Labels
     And Set Test Variable  ${specified_subscription}  ${subscription_names}[2]
     And Create Multiple Notifications With Different Categories And Labels
@@ -97,7 +108,7 @@ NotificationGET016 - Query notifications that subscribed labels and categories b
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-NotificationGET017 - Query notifications by subscription by offset
+NotificationGET021 - Query notifications by subscription by offset
     Given Create Multiple Subscriptions With Different Categories And Labels
     And Set Test Variable  ${specified_subscription}  ${subscription_names}[2]
     And Create Multiple Notifications With Different Categories And Labels
@@ -111,7 +122,7 @@ NotificationGET017 - Query notifications by subscription by offset
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
 
-NotificationGET018 - Query notifications by subscription by limit
+NotificationGET022 - Query notifications by subscription by limit
     Given Create Multiple Subscriptions With Different Categories And Labels
     And Set Test Variable  ${specified_subscription}  ${subscription_names}[2]
     And Create Multiple Notifications With Different Categories And Labels
@@ -122,6 +133,20 @@ NotificationGET018 - Query notifications by subscription by limit
     And Should Be True  len(${content}[notifications]) == 2
     And totalCount Should be 6
     And Only Notifications That Subscribed By The Subscription Should Be Listed
+    [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
+                ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
+
+NotificationGET023 - Query notifications by subscription by ack status
+    Given Create Multiple Subscriptions With Different Categories And Labels
+    And Set Test Variable  ${specified_subscription}  ${subscription_names}[2]
+    And Create Multiple Notifications With Different Categories And Labels
+    ${id_to_set_ack}  Create List  ${notification_ids}[1]  ${notification_ids}[2]
+    And Update Notifications Ack Status to True By IDs  @{id_to_set_ack}
+    When Query All Notifications By Specified Subscription Name ${specified_subscription} With ack=true
+    Then Should Return Status Code "200" And notifications
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Notifications With Subscription And ack=${true} Should Be Listed
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  @{subscription_names}
 
@@ -157,6 +182,15 @@ Notification Count Should Be ${number} And Are Created Between ${start} And ${en
         Should Be True  ${end}>=${content}[notifications][${index}][created]>=${start}
     END
 
+Notification Number Should Be ${number} And Are Created Between ${start} And ${end} With ${parameter}=${bool}
+    ${count}=  Evaluate  len(${content}[notifications])
+    Should Be Equal As Integers  ${count}  ${number}
+    ${notifications}=  Set Variable  ${content}[notifications]
+    FOR  ${index}  IN RANGE  0  len(${notifications})
+        Should Be True  ${end}>=${content}[notifications][${index}][created]>=${start}
+        Should Be Equal  ${notifications}[${index}][acknowledged]  ${bool}
+    END
+
 Only Notifications That Subscribed By The Subscription Should Be Listed
     ${notifications}=  Set Variable  ${content}[notifications]
     FOR  ${index}  IN RANGE  0  len(${notifications})
@@ -164,4 +198,14 @@ Only Notifications That Subscribed By The Subscription Should Be Listed
         ${check_category}=  Run Keyword And Return Status  Run Keyword If  "category" in ${keys}  Should Be True  health-check  ${notifications}[${index}][category]
         ${check_label}=  Run Keyword And Return Status  Run Keyword If  "labels" in ${keys}  List Should Contain Value  ${notifications}[${index}][labels]  simple
         Run Keyword If  ${check_category}==${False} and ${check_label}==${False}  Fail  Contain Not Matched notifications
+    END
+
+Notifications With Subscription And ${parameter}=${bool} Should Be Listed
+    ${notifications}=  Set Variable  ${content}[notifications]
+    FOR  ${index}  IN RANGE  0  len(${notifications})
+        ${keys}=  Get Dictionary Keys  ${notifications}[${index}]
+        ${check_category}=  Run Keyword And Return Status  Run Keyword If  "category" in ${keys}  Should Be True  health-check  ${notifications}[${index}][category]
+        ${check_label}=  Run Keyword And Return Status  Run Keyword If  "labels" in ${keys}  List Should Contain Value  ${notifications}[${index}][labels]  simple
+        Run Keyword If  ${check_category}==${False} and ${check_label}==${False}  Fail  Contain Not Matched notifications
+        Should Be Equal  ${notifications}[${index}][acknowledged]  ${bool}
     END

@@ -38,6 +38,11 @@ Generate ${number} Notifications Sample
     END
     Generate Notifications  @{notification_list}
 
+Create Multiple Notifications With Different Categories
+    Generate 5 Notifications Sample
+    Set To Dictionary  ${notification}[0][notification]  category=testing
+    Create Notification ${notification}  # 4 notifications are in health-check category
+
 Create Notification ${entity}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
@@ -46,6 +51,24 @@ Create Notification ${entity}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 207  log to console  ${content}
     ...       ELSE  Retrieve Notification IDs
+
+Create Multiple Notifications And Generate queryCondition
+    ${start}=  Get current milliseconds epoch time
+    Create Multiple Notifications With Different Categories
+    ${end}=  Get current milliseconds epoch time
+    ${json}=  Create Dictionary
+    @{category}=  Create List  health-check
+    ${queryCondition}=  Create Dictionary   category=${category}  start=${start}  end=${end}
+    Set To Dictionary  ${json}  apiVersion=${API_VERSION}  queryCondition=${queryCondition}
+    Set Test Variable  ${start}  ${start}
+    Set Test Variable  ${end}  ${end}
+    Set Test Variable  ${queryCondition}  ${json}
+
+Notifications Should Be Linked To Specified Category: ${specified_category}
+    ${notifications}=  Set Variable  ${content}[notifications]
+    FOR  ${item}  IN  @{notifications}
+        Should Be Equal  ${item}[category]  ${specified_category}
+    END
 
 Retrieve Notification IDs
     ${notification_ids}=  Create list
@@ -64,9 +87,13 @@ Delete Notification By ID ${notificationId}
 
 Delete Multiple Notifications By IDs
     [Arguments]  @{notification_list}
-    FOR  ${id}  IN  @{notification_list}
-        Delete Notification By ID ${id}
-    END
+    ${notification_Id}  Evaluate  ",".join(${notification_list})
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  DELETE On Session  Support Notifications  ${notificationUri}/ids/${notificationId}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
 
 Delete Notifications By Age
     [Arguments]  ${age}=0
@@ -164,3 +191,37 @@ Query All Notifications By Status ${status} With ${parameter}=${value}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
+
+Update Notifications Ack Status to True By IDs
+    [Arguments]  @{notification_list}
+    ${notification_Id}  Evaluate  ",".join(${notification_list})
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PUT ON Session  Support Notifications  ${notificationUri}/acknowledge/ids/${notificationId}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Update Notifications Ack Status to False By IDs
+    [Arguments]  @{notification_list}
+    ${notification_Id}  Evaluate  ",".join(${notification_list})
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}=  PUT ON Session  Support Notifications  ${notificationUri}/unacknowledge/ids/${notificationId}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response} != 207  log to console  ${content}
+
+Query Notifications By Conditions
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}  json=${queryCondition}  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Query Notifications By Conditions With ${parameter}=${value}
+    Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Support Notifications  ${notificationUri}  json=${queryCondition}  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}

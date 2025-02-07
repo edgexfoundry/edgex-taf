@@ -48,8 +48,19 @@ NotificationGET003 - Query notifications with specified category by limit
     And Notifications Should Be Linked To Specified Category: ${category}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
+NotificationGET004- Query notifications with specified category by ack status
+    Given Create Multiple Notifications With Different Categories
+    ${id_to_set_ack}  Create List  ${notification_ids}[1]  ${notification_ids}[2]
+    And Update Notifications Ack Status to True By IDs  @{id_to_set_ack}
+    When Query All Notifications By Specified Category ${category} With ack=true
+    Then Should Return Status Code "200" And notifications
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Only Notifications With Specified Category ${category} And ack=${true} Should Be Listed
+    [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
+
 # /notification/label/{label}
-NotificationGET004 - Query notifications with specified label
+NotificationGET005 - Query notifications with specified label
     Given Create Multiple Notifications With Different Labels
     When Query All Notifications By Specified Label  ${label}
     Then Should Return Status Code "200" And notifications
@@ -60,7 +71,7 @@ NotificationGET004 - Query notifications with specified label
     And Notifications Should Be Linked To Specified Label: ${label}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
-NotificationGET005 - Query notifications with specified label by offset
+NotificationGET006 - Query notifications with specified label by offset
     Given Create Multiple Notifications With Different Labels
     When Query All Notifications By Specified Label ${label} With offset=2
     Then Should Return Status Code "200" And notifications
@@ -71,7 +82,7 @@ NotificationGET005 - Query notifications with specified label by offset
     And Notifications Should Be Linked To Specified Label: ${label}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
-NotificationGET006 - Query notifications with specified label by limit
+NotificationGET007 - Query notifications with specified label by limit
     Given Create Multiple Notifications With Different Labels
     When Query All Notifications By Specified Label ${label} With limit=2
     Then Should Return Status Code "200" And notifications
@@ -82,8 +93,19 @@ NotificationGET006 - Query notifications with specified label by limit
     And Notifications Should Be Linked To Specified Label: ${label}
     [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
 
+NotificationGET008 - Query notifications with specified label by ack status
+    Given Create Multiple Notifications With Different Labels
+    ${id_to_set_ack}  Create List  ${notification_ids}[1]  ${notification_ids}[2]
+    And Update Notifications Ack Status to True By IDs  @{id_to_set_ack}
+    When Query All Notifications By Specified Label ${label} With ack=true
+    Then Should Return Status Code "200" And notifications
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Only Notifications With Specified Label ${label} And ack=${true} Should Be Listed
+    [Teardown]  Delete Multiple Notifications By IDs  @{notification_ids}
+
 # /notification/status/{status}
-NotificationGET007 - Query notifications with specified status
+NotificationGET009 - Query notifications with specified status
     Given Create Subscriptions And Notifications For Different Status
     When Query All Notifications By Status  ESCALATED
     Then Should Return Status Code "200" And notifications
@@ -95,7 +117,7 @@ NotificationGET007 - Query notifications with specified status
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  ${subscription_names}[0]  ESCALATION
 
-NotificationGET008 - Query notifications with specified status by offset
+NotificationGET010 - Query notifications with specified status by offset
     Given Create Subscriptions And Notifications For Different Status
     When Query All Notifications By Status PROCESSED With offset=1
     Then Should Return Status Code "200" And notifications
@@ -106,7 +128,7 @@ NotificationGET008 - Query notifications with specified status by offset
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  ${subscription_names}[0]  ESCALATION
 
-NotificationGET009 - Query notifications with specified status by limit
+NotificationGET011 - Query notifications with specified status by limit
     Given Create Subscriptions And Notifications For Different Status
     When Query All Notifications By Status PROCESSED With limit=1
     Then Should Return Status Code "200" And notifications
@@ -117,12 +139,19 @@ NotificationGET009 - Query notifications with specified status by limit
     [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
                 ...      AND  Delete Multiple Subscriptions By Names  ${subscription_names}[0]  ESCALATION
 
-*** Keywords ***
-Create Multiple Notifications With Different Categories
-    Generate 5 Notifications Sample
-    Set To Dictionary  ${notification}[0][notification]  category=testing
-    Create Notification ${notification}  # 4 notifications are in health-check category
+NotificationGET012 - Query notifications with specified status by ack status
+    Given Create Subscriptions And Notifications For Different Status
+    ${id_to_set_ack}  Create List  ${notification_ids}[1]  ${notification_ids}[2]
+    And Update Notifications Ack Status to True By IDs  @{id_to_set_ack}
+    When Query All Notifications By Status PROCESSED With ack=true
+    Then Should Return Status Code "200" And notifications
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Notifications With Status PROCESSED And ack=${true} Should Be Listed
+    [Teardown]  Run Keywords  Cleanup All Notifications And Transmissions By Age
+                ...      AND  Delete Multiple Subscriptions By Names  ${subscription_names}[0]  ESCALATION
 
+*** Keywords ***
 Create Multiple Notifications With Different Labels
     ${new_labels}=  Create List  new_label
     Generate 5 Notifications Sample
@@ -134,6 +163,7 @@ Create Subscriptions And Notifications For Different Status
     Create ESCALATION Subscription Sample With REST Channel
     Generate A Subscription Sample With EMAIL Channel
     Set To Dictionary  ${subscription}[0][subscription]  resendInterval=1s
+    Set To Dictionary  ${subscription}[0][subscription]  resendLimit=${1}
     Create Subscription ${subscription}
     Generate 3 Notifications Sample
     Set To Dictionary  ${notification}[0][notification]  severity=CRITICAL  # resend fails and generate ESCALATED notification
@@ -142,10 +172,11 @@ Create Subscriptions And Notifications For Different Status
     Create Notification ${notification}
     sleep  8s  # for resending
 
-Notifications Should Be Linked To Specified Category: ${specified_category}
+Only Notifications With Specified Category ${category} And ack=${bool} Should Be Listed
     ${notifications}=  Set Variable  ${content}[notifications]
     FOR  ${item}  IN  @{notifications}
-        Should Be Equal  ${item}[category]  ${specified_category}
+        Should Be Equal  ${item}[category]  ${category}
+        Should Be Equal  ${item}[acknowledged]  ${bool}
     END
 
 Notifications Should Be Linked To Specified Label: ${specified_label}
@@ -154,8 +185,22 @@ Notifications Should Be Linked To Specified Label: ${specified_label}
         List Should Contain Value  ${item}[labels]  ${specified_label}
     END
 
+Only Notifications With Specified Label ${label} And ack=${bool} Should Be Listed
+    ${notifications}=  Set Variable  ${content}[notifications]
+    FOR  ${item}  IN  @{notifications}
+       List Should Contain Value  ${item}[labels]  ${label}
+       Should Be Equal  ${item}[acknowledged]  ${bool}
+    END
+
 Only Notifications With Status ${status} Should Be Listed
     ${notifications}=  Set Variable  ${content}[notifications]
     FOR  ${item}  IN  @{notifications}
         Should Be Equal  ${item}[status]  ${status}
+    END
+
+Notifications With Status ${status} And ack=${bool} Should Be Listed
+    ${notifications}=  Set Variable  ${content}[notifications]
+    FOR  ${item}  IN  @{notifications}
+        Should Be Equal  ${item}[status]  ${status}
+        Should Be Equal  ${item}[acknowledged]  ${bool}
     END
