@@ -84,7 +84,7 @@ Should Return Error Code 0 And Response Payload With GET Command Should Be Corre
     Should Be Equal As Integers  0  ${last_msg_json}[errorCode]
     Should Be Equal  ${requestId}  ${last_msg_json}[requestID]
     # Validate Payload Content
-    ${payload}  Decode Base64 String  ${last_msg}
+    ${payload}  Set Variable  ${last_msg_json}[payload]
     Should Be Equal As Strings  ${device_name}  ${payload}[event][deviceName]
     Should Be Equal As Strings  ${resource_name}  ${payload}[event][sourceName]
     Should Not Be Empty  ${payload}[event][readings][0][value]
@@ -99,7 +99,8 @@ Should Return Error Code 0 And Response Payload With SET Command Should Be Corre
 
 Should Return Error Code 1 And RequestID Should Be The Same As Request
     ${last_msg}  Get Response Message
-    ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
+    Log  ${last_msg}
+    ${last_msg_json}  Evaluate  json.loads(r'''${last_msg}''')
     Should Be Equal  ${requestId}  ${last_msg_json}[requestID]
     Should Be Equal As Integers  1  ${last_msg_json}[errorCode]
 

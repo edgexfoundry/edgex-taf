@@ -17,7 +17,8 @@ Scheduling001 - Test Resource and Interval for autoEvent
     @{data_types_all_read}  Get All Read Commands
     ${last_reading}  Get last support reading
     ${reading_name}  Set Variable  ${data_types_all_read}[${last_reading}][readingName]
-    When Create AutoEvent Device With Parameters  8s  false  ${reading_name}
+    Given Set Test Variable  ${device_name}  autoevent-device
+    When Create AutoEvent Device  8s  false  ${reading_name}
     Then Device autoEvents with ${reading_name} send by interval setting 8s
     [Teardown]  Delete device by name ${device_name}
 
@@ -28,19 +29,6 @@ Get last support reading
     ${support_data_length}=  get length  ${data_types_skip_write_only}
     ${last_reading}=  evaluate   ${support_data_length}-1
     RETURN   ${last_reading}
-
-Create AutoEvent Device With Parameters
-    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
-    ${index}  Get current milliseconds epoch time
-    ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
-    ${autoEvent}  Set autoEvents values  ${interval_value}  ${onChange_value}  ${sourceName}
-    ${autoEvents}=  Create List  ${autoEvent}
-    Set To Dictionary  ${device}  name=Device-${index}
-    Set To Dictionary  ${device}  autoEvents=${autoEvents}
-    Generate Devices  ${device}
-    Create Device With ${Device}
-    sleep  500ms
-    Set Test Variable  ${device_name}  ${device}[0][device][name]
 
 Device autoEvents with ${reading_name} send by interval setting ${interval_value}s
     ${sleep_time}=  evaluate  ${interval_value}

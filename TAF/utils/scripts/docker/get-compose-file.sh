@@ -141,6 +141,7 @@ for compose in ${COMPOSE_FILE}; do
     fi
     sed -i 's/published: \"59901\"/published: "59911"/g' tmp/device-modbus_1.yml
     sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ EDGEX_INSTANCE_NAME: 1' tmp/device-modbus_1.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ MESSAGEBUS_OPTIONAL_CLIENTID: device-modbus_1' tmp/device-modbus_1.yml
     sed -i "/services:/ r tmp/device-modbus_1.yml" ${compose}.yml
 
     if [ "${USE_SECURITY}" = '-security-' ]; then

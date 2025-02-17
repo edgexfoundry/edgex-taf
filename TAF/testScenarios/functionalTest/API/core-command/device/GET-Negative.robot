@@ -19,10 +19,12 @@ ErrCommandGET001 - Query all DeviceCoreCommands with non-int value on offset
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
 
 ErrCommandGET002 - Query all DeviceCoreCommands with invalid offset range
+    Given Create 2 Devices For device-virtual
     When Run Keyword And Expect Error  *  Query All DeviceCoreCommands With offset=8
     Then Should Return Status Code "416"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete multiple devices by names  @{device_list}
 
 ErrCommandGET003 - Query all DeviceCoreCommands with non-int value on limit
     When Run Keyword And Expect Error  *  Query All DeviceCoreCommands With limit=Invalid

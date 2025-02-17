@@ -67,7 +67,8 @@ Update Multiple Devices
 Single System Event Should Match With Source ${source}, Type ${type} and Action ${action}
     Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}
     ${received_content}  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  payload
-    ${payload}  Decode Base64 String  ${received_content}
+    ${msg_json}  Evaluate  json.loads('''${received_content}''')
+    ${payload}  Set Variable  ${msg_json}[payload]
     Should Be Equal As Strings  ${payload}[type]  ${type}
     Should Be Equal As Strings  ${payload}[action]  ${action}
     Should be Equal As Strings  ${payload}[source]  ${source}
@@ -79,7 +80,8 @@ Multiple ${numbers} System Events Should Match With Source ${source}, Type ${typ
     ${range}=  Get Length  ${messages}
     Should Be Equal As Strings  ${range}  ${numbers}  # Check the number of received system events
     FOR  ${system_events}  IN  @{messages}
-       ${payload}  Decode Base64 String  ${system_events}
+       ${msg_json}  Evaluate  json.loads('''${system_events}''')
+       ${payload}  Set Variable  ${msg_json}[payload]
        Should Be Equal As Strings  ${payload}[type]  ${type}
        Should Be Equal As Strings  ${payload}[action]  ${action}
        Should be Equal As Strings  ${payload}[source]  ${source}

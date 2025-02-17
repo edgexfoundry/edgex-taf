@@ -1,12 +1,14 @@
 *** Settings ***
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
+Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
+Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
 Suite Setup  Run keywords  Setup Suite
              ...      AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
              ...      AND  Delete all events by age
-             ...      AND  Enable Core-Data Retention
+             ...      AND  Set Core-Data Retention  ${interval}  ${maxCap}  ${minCap}  ${duration}
              ...      AND  Update Service Configuration  ${DATA_CONSOL_PATH}/Writable/LogLevel  DEBUG
-Suite Teardown  Run Keywords  Disable Core-Data Retention
+Suite Teardown  Run Keywords  Set Core-Data Retention  10m  -1  1  168h
                 ...      AND  Update Service Configuration  ${DATA_CONSOL_PATH}/Writable/LogLevel  INFO
                 ...      AND  Run Teardown Keywords
 
@@ -14,45 +16,57 @@ Suite Teardown  Run Keywords  Disable Core-Data Retention
 ${SUITE}          core-data Retention
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core_data_retention.log
 ${DATA_CONSOL_PATH}  /core-data
-${maxCap}  5
-${minCap}  2
+${maxCap}  4
+${minCap}  1
 ${interval}  2s
+${duration}  2s
 
 *** Test Cases ***
-CoreDataRetention001 - core-data retention is executed if reading count is over MaxCap value
-    When Create 3 Events
-    And Sleep  ${interval}
-    And Wait Until Keyword Succeeds  3x  2s  Found Purge Log in core-data
-    Then Stored Event Count Should Be Equal 1
-    And Stored Readings Are Belong To Stored Events
+CoreDataRetention001 - core-data retention is executed if reading count is over DefaultMaxCap value
+    Given Set Test Variable  ${deviceName}  data-retention-device1
+    And Create Events With AutoEvent Interval 100ms
+    And Sleep  3s
+    And Wait Until Keyword Succeeds  3x  1s  Purge Log Found in core-data
+    Then Stored Event Count Should Less Than ${maxCap} and Large Than ${minCap}
     [Teardown]  Delete all events by age
 
-CoreDataRetention002 - core-data retention is not executed if reading count is less than MaxCap value
-    When Create 2 Events
-    And Sleep  ${interval}
-    Then Stored Event Count Should Be Equal 2
-    And Stored Readings Are Belong To Stored Events
+CoreDataRetention002 - core-data retention is not executed if reading count is less than DefaultMaxCap value
+    Given Set Test Variable  ${deviceName}  data-retention-device2
+    And Create Events With AutoEvent Interval 1s
+    And Sleep  3s
+    Then No Purge Log Found in core-data
+    And Stored Event Count Should Less Than ${maxCap} and Large Than ${minCap}
     [Teardown]  Delete all events by age
 
 *** Keywords ***
-Enable Core-Data Retention
-    ${keys}  Create List  Enabled  Interval  MaxCap  MinCap
-    ${values}  Create List  true  3s  ${maxCap}  ${minCap}
+Set Core-Data Retention
+    [Arguments]  ${interval}  ${maxCap}  ${minCap}  ${duration}
+    ${keys}  Create List  Interval  DefaultMaxCap  DefaultMinCap  DefaultDuration
+    ${values}  Create List  ${interval}  ${maxCap}  ${minCap}  ${duration}
     FOR  ${key}  ${value}  IN ZIP  ${keys}  ${values}
         ${path}=  Set Variable  ${DATA_CONSOL_PATH}/Retention/${key}
         Update Service Configuration  ${path}  ${value}
     END
     Restart Services  core-data
 
-Create ${number} Events
-  FOR  ${index}  IN RANGE  0  ${number}   # Create 1 event and 2 readings every time
-    Generate Event Sample  Event  Device-Test-002  Profile-Test-001  Command-Test-002  Simple Reading  Simple Float Reading
-    Create Event With Service-Test-001 and Profile-Test-001 and Device-Test-002 and Command-Test-002
-  END
+Create ${range} events with ${command}
+    FOR  ${INDEX}  IN RANGE  ${range}
+        Get device data by device ${device_name} and command ${command} with ds-pushevent=true
+    END
+    sleep  500ms
 
-Stored Event Count Should Be Equal ${number}
+
+Stored Event Count Should Less Than ${max} and Large Than ${min}
+    ${time}  Get Current Nanoseconds Epoch Time
+    ${compare_time}  Evaluate  ${time} - 3000000000
+    ${count}  Set Variable  ${0}
     Query all events
-    Should Be True  ${content}[totalCount] == ${number}
+    FOR  ${INDEX}  IN RANGE  len(${content}[events])
+        IF  ${content}[events][${INDEX}][origin] <= ${compare_time}
+            ${count}  Evaluate  ${count} + 1
+        END
+    END
+    Should Be True  ${min} <= ${count} <= ${max}
 
 Get Readings Ids From Event API
     ${ids}  Create List
@@ -63,24 +77,28 @@ Get Readings Ids From Event API
     END
     RETURN  ${ids}
 
-Stored Readings Are Belong To Stored Events
-    ${event_reading_ids}  Get Readings Ids From Event API
-    Query All Readings
-    ${reading_ids}  Create List
-    FOR  ${INDEX}  IN RANGE  len(${content}[readings])
-        Append To List  ${reading_ids}  ${content}[readings][${INDEX}][id]
-    END
-    Remove Duplicates  ${reading_ids}
-    Lists Should Be Equal  ${event_reading_ids}  ${reading_ids}  ignore_order=True
+Purge Log Found in ${service}
+    ${logs}  Get Log in ${service}
+    Should Contain  ${logs}  purge events by duration
+    Delete Device By Name ${deviceName}
 
-Disable Core-Data Retention
-    ${path}=  Set Variable  ${DATA_CONSOL_PATH}/Retention/Enabled
-    Update Service Configuration  ${path}  false
-    Restart Services  core-data
+No Purge Log Found in ${service}
+    ${logs}  Get Log in ${service}
+    Should Not Contain  ${logs}  purge events by duration
+    Delete Device By Name ${deviceName}
 
-Found Purge Log in ${service}
+Get Log in ${service}
     ${current_time}  Get current epoch time
-    ${timestamp}  Evaluate  ${current_time}-3
+    ${timestamp}  Evaluate  ${current_time}-4
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service} ${timestamp}
              ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=5s
-    Should Contain  ${logs.stdout}  Purging the reading amount
+    Log  ${logs.stdout}
+    RETURN  ${logs.stdout}
+
+Create Events With AutoEvent Interval ${interval}
+    Create AutoEvent Device  ${interval}  false  ${PREFIX}_GenerateDeviceValue_INT8_RW
+    Sleep  1s
+    Set To Dictionary    ${Device}[0][device][autoEvents][0]  interval=1s
+    Update Devices ${Device}
+    Query all events
+    Get Log in core-data
