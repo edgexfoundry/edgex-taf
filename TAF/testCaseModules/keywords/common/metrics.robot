@@ -29,7 +29,8 @@ Metrics ${metrics_name} With ${field_name} Should Be Received
     ${count}  Get Line Count  ${content}
     ${last_msg}  Run Keyword If  ${count} > 1  Get Line  ${content}  -1
                  ...       ELSE  Set Variable  ${content}
-    ${payload}  Decode Base64 String  ${last_msg}
+    ${last_msg_json}  Evaluate  json.loads('''${last_msg}''')
+    ${payload}  Set Variable  ${last_msg_json}[payload]
     Log  ${payload}
     Should Be Equal As Strings  ${metrics_name}  ${payload}[name]
     Should Contain  str(${payload})  ${field_name}
@@ -51,10 +52,11 @@ Received Metrics ${metrics_name} For All Pipelines And ${field_name} Should Not 
     @{decode_int_pipe}  Create List
     @{decode_float_pipe}  Create List
     FOR  ${msg}  IN  @{messages}
-        ${decode_msg}  Decode Base64 String  ${msg}
-        Run Keyword If  "default-pipeline" in """${decode_msg}"""  Append To List  ${decode_default_pipe}  ${decode_msg}
-        ...     ELSE IF  "int8-16-pipeline" in """${decode_msg}"""  Append To List  ${decode_int_pipe}  ${decode_msg}
-        ...     ELSE IF  "float-pipeline" in """${decode_msg}"""  Append To List  ${decode_float_pipe}  ${decode_msg}
+        ${msg_json}  Evaluate  json.loads('''${msg}''')
+        ${msg_payload}  Set Variable  ${msg_json}[payload]
+        Run Keyword If  "default-pipeline" in """${msg_payload}"""  Append To List  ${decode_default_pipe}  ${msg_payload}
+        ...     ELSE IF  "int8-16-pipeline" in """${msg_payload}"""  Append To List  ${decode_int_pipe}  ${msg_payload}
+        ...     ELSE IF  "float-pipeline" in """${msg_payload}"""  Append To List  ${decode_float_pipe}  ${msg_payload}
     END
 
     # Validate value from the last pipeline message
@@ -88,7 +90,6 @@ No ${metrics_name} Found In File
     FOR  ${INDEX}  IN RANGE  ${count}
         ${json_msg}  Get Line  ${content}  ${INDEX}
         ${encode_payload}  Evaluate  json.loads('''${json_msg}''')
-        ${decode_payload}  Evaluate  base64.b64decode('${encode_payload}[payload]').decode('utf-8')  modules=base64
         ${payload}  Evaluate  json.loads('''${decode_payload}''')
         Should Not Be Equal As Strings  ${metrics_name}  ${payload}[name]
     END

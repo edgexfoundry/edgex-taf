@@ -834,3 +834,15 @@ Create Device Resource With Resource Name ${resource_name} To ${profile_name}
     Set To Dictionary  ${new_resourceProfile}[0]  profileName=${profile_name}
     Set To Dictionary  ${new_resourceProfile}[0][resource]  name=${resource_name}
     Create New resource ${new_resourceProfile}
+
+Create AutoEvent Device
+    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
+    ${index}  Get current milliseconds epoch time
+    ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
+    ${autoEvent}  Set autoEvents values  ${interval_value}  ${onChange_value}  ${sourceName}
+    ${autoEvents}=  Create List  ${autoEvent}
+    Set To Dictionary  ${device}  name=${device_name}
+    Set To Dictionary  ${device}  autoEvents=${autoEvents}
+    Generate Devices  ${device}
+    Create Device With ${Device}
+    sleep  500ms

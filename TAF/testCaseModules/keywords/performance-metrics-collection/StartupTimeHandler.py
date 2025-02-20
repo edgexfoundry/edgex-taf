@@ -10,8 +10,8 @@ import re
 
 client = docker.from_env()
 
-msgRegex = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d+Z app=\S* \S*=\S* msg=\"Service started in: \d*.\d*[mµ]?s"
-startupDatetimeRegex = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{0,6}"
+msgRegex = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d+(?:Z|[+-]\d{2}:\d{2}) app=\S* \S*=\S* msg=\"Service started in: \d*.\d*[mµ]?s"
+startupDatetimeRegex = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{0,9}"
 binaryStartupTimeRegex = r"\d*.\d*[mµ]?s"
 
 
@@ -85,11 +85,12 @@ def fetch_service_startup_time_by_container_name(d, start_time, result):
 
 
 def convert_startup_datetime_to_timestamp(startup_datetime_str):
+    startup_datetime_str = startup_datetime_str[:26]  # Python strptime function only supports 6 microseconds (.ffffff).
     datetime_pattern = "%Y-%m-%dT%H:%M:%S.%f"
     if "T" not in startup_datetime_str:
         datetime_pattern = "%Y-%m-%d %H:%M:%S.%f"
 
-    dt = datetime.strptime(startup_datetime_str, datetime_pattern).replace(tzinfo=pytz.UTC)
+    dt = datetime.strptime(startup_datetime_str, datetime_pattern)
     return dt.timestamp()
 
 
@@ -98,6 +99,7 @@ def parse_started_time_by_service(msg, d):
     response = {"startupDateTime": "", "binaryStartupTime": ""}
 
     # level=INFO ts=2019-06-18T07:17:18.5245679Z app=edgex-core-data source=main.go:70 msg="Service started in: 120.62ms"
+    # level=INFO ts=2025-02-18T15:30:37.376703321+08:00 app=core-keeper source=message.go:58 msg="Service started in: 2.087827259s"
     x = re.findall(d["msgRegex"], str(msg))
     if len(x) == 0:
         raise Exception("startup msg not found")
