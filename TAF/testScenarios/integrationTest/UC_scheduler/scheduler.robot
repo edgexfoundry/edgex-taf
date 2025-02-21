@@ -4,7 +4,8 @@ Resource        TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource        TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Resource        TAF/testCaseModules/keywords/support-scheduler/supportSchedulerAPI.robot
 Suite Setup     Run keywords   Setup Suite
-...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+                ...      AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
+                ...      AND  Delete all events by age
 Suite Teardown  Run Teardown Keywords
 
 *** Variables ***
