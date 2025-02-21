@@ -150,11 +150,3 @@ Delete Multiple Device Profiles Sample With Different Device Info
     Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
     ...                                       New-Profile-1  New-Profile-2  New-Profile-3
 
-Profiles Should Be Linked To Specified ${property}: ${value}
-    # property: model, manufacturer
-    ${profiles}=  Set Variable  ${content}[profiles]
-    ${property}=  Convert To Lower Case  ${property}
-    FOR  ${item}  IN  @{profiles}
-        Should Be Equal As Strings  ${item}[${property}]  ${value}
-    END
-

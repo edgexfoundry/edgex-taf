@@ -100,14 +100,6 @@ ProfileGET008 - Query device profiles by manufacturer and limit
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 *** Keywords ***
-Profiles Should Be Linked To Specified ${property}: ${value}
-    ${profiles}=  Set Variable  ${content}[profiles]
-    ${property}=  Convert To Lower Case  ${property}
-    FOR  ${item}  IN  @{profiles}
-        Run keyword if  "${property}" == "labels"  List Should Contain Value  ${item}[${property}]  ${value}
-        ...    ELSE IF  "${property}" == "manufacturer"  Should Be Equal As Strings  ${item}[${property}]  ${value}
-    END
-
 Create Multiple Device Profiles Sample With Different Manufacturers
     Generate Multiple Device Profiles Sample
     Set To Dictionary  ${deviceProfile}[0][profile]  manufacturer=Not_Honeywell
