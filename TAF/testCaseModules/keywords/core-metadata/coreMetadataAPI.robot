@@ -145,6 +145,21 @@ Query all device profiles having manufacturer ${manufacturer} and model ${model}
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
+Query all device profiles basic info
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata    ${deviceProfileUri}/basicinfo/all  headers=${headers}
+    ...       expected_status=any
+    Set Response to Test Variables  ${resp}
+
+Query all device profiles basic info with ${parameter}=${value}
+    Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
+    ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/basicinfo/all  params=${parameter}=${value}
+    ...       headers=${headers}  expected_status=any
+    Set Response to Test Variables  ${resp}
+    Run keyword if  ${response}!=200  fail
+
 Query device profile by name
     [Arguments]   ${device_profile_name}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
@@ -196,6 +211,13 @@ Delete deviceCommand by Name ${command_name} in ${profile}
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
     Set Response to Test Variables  ${resp}
 
+Profiles Should Be Linked To Specified ${property}: ${value}
+    ${profiles}=  Set Variable  ${content}[profiles]
+    ${property}=  Convert To Lower Case  ${property}
+    FOR  ${item}  IN  @{profiles}
+        Run keyword if  "${property}" == "labels"  List Should Contain Value  ${item}[${property}]  ${value}
+        ...       ELSE  Should Be Equal As Strings  ${item}[${property}]  ${value}
+    END
 
 # Device
 Create device with ${entity}
