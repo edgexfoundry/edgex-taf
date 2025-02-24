@@ -38,6 +38,15 @@ ReadingGET011 - Query readings by device name and resource name between start/en
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
+ReadingGET012 - Query all readings with offset=-1
+    Given Create Multiple Events
+    When Query All Readings With offset=-1
+    Then Should Return Status Code "200"
+    And totalCount Should be 0
+    And Should Be True  len(${content}[readings]) == 9
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete All Events By Age
 
 *** Keywords ***
 All ${number} Readings Should Contain deviceName ${device_name} And resourceName ${resource_name}
