@@ -2,9 +2,11 @@
 Library      uuid
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/core-metadata/coreMetadataAPI.robot
+Resource     TAF/testCaseModules/keywords/core-data/coreDataAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                        AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-Suite Teardown  Run Teardown Keywords
+Suite Teardown  Run Keywords  Delete all events by age
+                ...      AND  Run Teardown Keywords
 
 *** Variables ***
 ${SUITE}          Core Metadata Device POST Test Cases
@@ -71,6 +73,17 @@ DevicePOST005 - Create device with empty profileName
 DevicePOST006 - Create device with empty protocol
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[2][device]  protocols=&{EMPTY}
+    When Create Device With ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete Multiple Devices Sample And Profiles Sample
+
+DevicePOST007 - Create device with autoEvent retention
+    ${retention}  Create Dictionary  maxCap=${100}  minCap=${2}  duration=1h
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
+    And Set To Dictionary  ${Device}[3][device][autoEvents][0]  retention=${retention}
     When Create Device With ${Device}
     Then Should Return Status Code "207"
     And Item Index All Should Contain Status Code "201" And id

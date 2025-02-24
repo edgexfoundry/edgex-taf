@@ -699,13 +699,14 @@ Set device values
     RETURN  ${device}
 
 Set autoEvents values
-    [Arguments]  ${interval}  ${onChange}  ${sourceName}
+    [Arguments]  ${interval}  ${onChange}  ${sourceName}  ${retention}=${EMPTY}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/auto_events_data.json  encoding=UTF-8
     ${autoEvent}=  Evaluate  json.loads('''${data}''')  json
     Set To Dictionary  ${autoEvent}  interval=${interval}
     ${onChange}=  Convert To Boolean  ${onChange}
     Set To Dictionary  ${autoEvent}  onChange=${onChange}
     Set To Dictionary  ${autoEvent}  sourceName=${sourceName}
+    Run Keyword If  "${retention}" != "${EMPTY}"  Set To Dictionary  ${autoEvent}  retention=${retention}
     RETURN  ${autoEvent}
 
 Create Devices And Generate Multiple Devices Sample For Updating ${type}
@@ -857,7 +858,7 @@ Create Device Resource With Resource Name ${resource_name} To ${profile_name}
     Set To Dictionary  ${new_resourceProfile}[0][resource]  name=${resource_name}
     Create New resource ${new_resourceProfile}
 
-Create AutoEvent Device
+Generate Device With AutoEvent Data
     [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
     ${index}  Get current milliseconds epoch time
     ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
@@ -865,6 +866,11 @@ Create AutoEvent Device
     ${autoEvents}=  Create List  ${autoEvent}
     Set To Dictionary  ${device}  name=${device_name}
     Set To Dictionary  ${device}  autoEvents=${autoEvents}
+    RETURN  ${device}
+
+Create AutoEvent Device
+    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
+    ${device}  Generate Device With AutoEvent Data  ${interval_value}  ${onChange_value}  ${sourceName}
     Generate Devices  ${device}
     Create Device With ${Device}
     sleep  500ms

@@ -35,6 +35,16 @@ ErrDevicePOST011 - Create device with non-existent device profile name
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Run Keywords  Delete Multiple Devices By Names
-    ...                       Test-Device  Test-Device-Locked  Test-Device-AutoEvents\
+    ...                       Test-Device  Test-Device-Locked  Test-Device-AutoEvents
     ...                  AND  Delete multiple device profiles by names
     ...                       Test-Profile-1  Test-Profile-2  Test-Profile-3
+
+ErrDevicePOST012 - Create device with invalid retention duration
+    ${retention}  Create Dictionary  maxCap=${100}  minCap=${2}  duration=1
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
+    And Set To Dictionary  ${Device}[3][device][autoEvents][0]  retention=${retention}
+    When Create Device With ${Device}
+    Then Should Return Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete multiple device profiles by names  Test-Profile-1  Test-Profile-2  Test-Profile-3
