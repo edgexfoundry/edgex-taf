@@ -300,10 +300,14 @@ Decode Base64 String
     Log  ${payload}
     RETURN  ${payload}
 
-Dump Last 100 lines Log And Service Config  # For Debug use
+Get Service Config And Dump Last 100 lines Log  # For Debug use
     [Arguments]  ${service_name}  ${url}
     Set Test Variable  ${url}  ${url}
     Query Config
+    Dump Last 100 lines Log  ${service_name}
+
+Dump Last 100 lines Log
+    [Arguments]  ${service_name}
     ${logs}  Run Process  docker logs edgex-${service_name} -n 100  shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s
     Log  ${logs.stdout}
 

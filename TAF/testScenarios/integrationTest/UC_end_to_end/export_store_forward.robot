@@ -125,7 +125,7 @@ Modify PersistOnError to ${value} On Registry Service
 
 Found Retry Log From ${timestamp} After Restarting ${service_name}
     # Show last 100 lines for debug
-    Dump Last 100 lines Log And Service Config  ${service_name}  http://${BASE_URL}:${APP_HTTP_EXPORT_PORT}
+    Get Service Config And Dump Last 100 lines Log  ${service_name}  http://${BASE_URL}:${APP_HTTP_EXPORT_PORT}
 
     ${logs}  Run Process  ${WORK_DIR}/TAF/utils/scripts/${DEPLOY_TYPE}/query-docker-logs.sh ${service_name} ${timestamp}
     ...     shell=True  stderr=STDOUT  output_encoding=UTF-8  timeout=10s

@@ -75,7 +75,7 @@ ReadingGET007 - Query a count of all of readings
     Given Create Multiple Events
     When Query All Readings Count
     Then Should Return Status Code "200"
-    And Should Be Equal As Integers  ${content}[Count]  9
+    And Should Be Equal As Integers  ${content}[count]  9
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
@@ -84,7 +84,7 @@ ReadingGET008 - Query a count of all of readings with specified device by device
     Given Create Multiple Events
     When Query Readings Count By Device Name  Device-Test-002
     Then Should Return Status Code "200"
-    And Should Be Equal As Integers  ${content}[Count]  6
+    And Should Be Equal As Integers  ${content}[count]  6
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
