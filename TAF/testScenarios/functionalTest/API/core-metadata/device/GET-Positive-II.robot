@@ -83,7 +83,7 @@ DeviceGET012 - Query all devices with specified device service by service name a
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET013 - Create device with Chinese naming and query device by name
+DeviceGET013 - Query device with Chinese naming and query device by name
     Given Set Test Variable  ${test_device_name}  测试中文設備名称
     And Set Test Variable  ${test_profile_name}  测试中文設備資料名称
     And Generate a Device Sample With Associated device-virtual And Chinese Profile Name
