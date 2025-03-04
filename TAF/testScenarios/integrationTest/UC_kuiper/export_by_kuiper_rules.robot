@@ -118,7 +118,7 @@ Delete Stream
     run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
 
 Device data with keyword "${keyword}" has received by mqtt subscriber
-    Dump Last 100 lines Log And Service Config  app-rules-engine  http://localhost:59701
+    Get Service Config And Dump Last 100 lines Log  app-rules-engine  http://localhost:59701
     ${mqtt_broker_received}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${subscriber_file}  ${keyword}
     run keyword if  """${mqtt_broker_received}""" == '${EMPTY}'
     ...             fail  No export log found on mqtt subscriber

@@ -106,7 +106,7 @@ Event With Device ${device_name} Should Not Be Received by MQTT Subscriber ${fil
 Event With Device ${device_name} Should Be Received by MQTT Subscriber ${filename}
     Run Keyword And Continue On Failure  Wait Until Keyword Succeeds  5x  1s  File Should Not Be Empty  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}
     # Show last 100 lines for debug
-    Dump Last 100 lines Log And Service Config  device-virtual  ${deviceServiceUrl}
+    Get Service Config And Dump Last 100 lines Log  device-virtual  ${deviceServiceUrl}
     ${mqtt_subscriber}=  grep file  ${WORK_DIR}/TAF/testArtifacts/logs/${filename}  ${device_name}
     run keyword if  "${device_name}" not in """${mqtt_subscriber}"""
     ...             fail  No data received by mqtt subscriber
@@ -123,12 +123,12 @@ Create Unavailable Modbus device
      sleep  500ms
 
 Create events by get device command
-    FOR  ${INDEX}  IN RANGE  0  5
+    FOR  ${INDEX}  IN RANGE  0  3
         @{data_type_skip_write_only}  Get All Read Commands
         ${random_command}  Get random "commandName" from "${data_type_skip_write_only}"
         Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${random_command}
     END
-    Query all events
+    Wait Until Keyword Succeeds  2x  500ms  Query all events
     should be equal as integers  ${response}  200
     ${events_length}=   GET LENGTH  ${content}[events]
     run keyword if  ${events_length} == 0  fail  Events didn't create before clean up

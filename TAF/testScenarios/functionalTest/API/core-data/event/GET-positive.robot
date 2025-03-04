@@ -66,7 +66,7 @@ EventGET006 - Query a count of all of events
     Given Create Multiple Events
     When Query All Events Count
     Then Should Return Status Code "200"
-    And Should Be Equal As Integers  ${content}[Count]  6
+    And Should Be Equal As Integers  ${content}[count]  6
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
@@ -75,7 +75,7 @@ EventGET007 - Query a count of all of events with specified device by device nam
     Given Create Multiple Events
     When Query Events Count By Device Name  Device-Test-002
     Then Should Return Status Code "200"
-    And Should Be Equal As Integers  ${content}[Count]  3
+    And Should Be Equal As Integers  ${content}[count]  3
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age

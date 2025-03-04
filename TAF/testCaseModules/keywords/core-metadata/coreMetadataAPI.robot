@@ -699,13 +699,14 @@ Set device values
     RETURN  ${device}
 
 Set autoEvents values
-    [Arguments]  ${interval}  ${onChange}  ${sourceName}  ${retention}=${EMPTY}
+    [Arguments]  ${interval}  ${onChange}  ${sourceName}  ${onChangeThreshold}=${0}  ${retention}=${EMPTY}
     ${data}=  Get File  ${WORK_DIR}/TAF/testData/core-metadata/auto_events_data.json  encoding=UTF-8
     ${autoEvent}=  Evaluate  json.loads('''${data}''')  json
     Set To Dictionary  ${autoEvent}  interval=${interval}
     ${onChange}=  Convert To Boolean  ${onChange}
     Set To Dictionary  ${autoEvent}  onChange=${onChange}
     Set To Dictionary  ${autoEvent}  sourceName=${sourceName}
+    Run Keyword If  ${onChangeThreshold} != 0  Set To Dictionary  ${autoEvent}  onChangeThreshold=${onChangeThreshold}
     Run Keyword If  "${retention}" != "${EMPTY}"  Set To Dictionary  ${autoEvent}  retention=${retention}
     RETURN  ${autoEvent}
 
@@ -859,18 +860,18 @@ Create Device Resource With Resource Name ${resource_name} To ${profile_name}
     Create New resource ${new_resourceProfile}
 
 Generate Device With AutoEvent Data
-    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
+    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}  ${onChangeThreshold}=${0}
     ${index}  Get current milliseconds epoch time
     ${device}  Set device values  ${SERVICE_NAME}  ${PREFIX}-Sample-Profile
-    ${autoEvent}  Set autoEvents values  ${interval_value}  ${onChange_value}  ${sourceName}
-    ${autoEvents}=  Create List  ${autoEvent}
-    Set To Dictionary  ${device}  name=${device_name}
+    ${autoEvent}  Set autoEvents values  ${interval_value}  ${onChange_value}  ${sourceName}  ${onChangeThreshold}
+    ${autoEvents}  Create List  ${autoEvent}
+    Set To Dictionary  ${device}  name=${deviceName}
     Set To Dictionary  ${device}  autoEvents=${autoEvents}
     RETURN  ${device}
 
 Create AutoEvent Device
-    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}
-    ${device}  Generate Device With AutoEvent Data  ${interval_value}  ${onChange_value}  ${sourceName}
+    [Arguments]  ${interval_value}  ${onChange_value}  ${sourceName}  ${onChangeThreshold}=${0}
+    ${device}  Generate Device With AutoEvent Data  ${interval_value}  ${onChange_value}  ${sourceName}  ${onChangeThreshold}
     Generate Devices  ${device}
     Create Device With ${Device}
     sleep  500ms

@@ -65,4 +65,4 @@ Create Multiple Events For Deleting By Age
 
 Old Events Should Be Deleted
   Query All Events Count
-  Should Be Equal As Integers  ${content}[Count]  6
+  Should Be Equal As Integers  ${content}[count]  6

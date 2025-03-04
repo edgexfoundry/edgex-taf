@@ -46,6 +46,6 @@ ErrDevicePATCH013 - Update device with invalid retention interval
 Generate autoEvent With Retention Example
     ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-1.yaml" and convert to dictionary
     ${retention}  Create Dictionary  maxCap=${50}  minCap=${5}  duration=10
-    ${autoEvent}  Set autoEvents values  10s  true  ${profile}[deviceResources][0][name]  ${retention}
+    ${autoEvent}  Set autoEvents values  10s  true  ${profile}[deviceResources][0][name]  ${0}  ${retention}
     ${autoEvents}  Create List  ${autoEvent}
     Set Test Variable  ${autoEvents}  ${autoEvents}

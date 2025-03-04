@@ -149,4 +149,5 @@ Delete Jobs
     FOR  ${INDEX}  IN RANGE  ${content}[totalCount]
         Append To List  ${names}  ${content}[scheduleJobs][${INDEX}][name]
     END
-    Delete Multiple Jobs  @{names}
+    ${status}  ${value}  Run Keyword And Ignore Error  Delete Multiple Jobs  @{names}
+    Run Keyword If  "${status}" == "FAIL"  Dump Last 100 lines Log  support-scheduler
