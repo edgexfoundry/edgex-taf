@@ -128,7 +128,10 @@ Create events by get device command
         ${random_command}  Get random "commandName" from "${data_type_skip_write_only}"
         Invoke Get command with params ds-pushevent=true by device ${device_name} and command ${random_command}
     END
-    Wait Until Keyword Succeeds  2x  500ms  Query all events
-    should be equal as integers  ${response}  200
+    FOR  ${INDEX}  IN RANGE  3
+        Query all events
+        Exit For Loop If    ${content}[totalCount] != 0
+        Sleep  500ms
+    END
     ${events_length}=   GET LENGTH  ${content}[events]
     run keyword if  ${events_length} == 0  fail  Events didn't create before clean up

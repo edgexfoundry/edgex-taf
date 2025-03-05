@@ -42,6 +42,17 @@ ErrDevicePATCH013 - Update device with invalid retention interval
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
+ErrDevicePATCH014 - Update device with its own parent
+    Given Create A Device Sample With Associated device-virtual And Test-Profile-1
+    And Set To Dictionary  ${Device}[0][device]  parent=${Device}[0][device][name]
+    When Update Devices ${Device}
+    Then Should Return Status Code "207"
+    And Item Index 0 Should Contain Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete device profile by name  Test-Profile-1
+                ...      AND  Delete Device By Name ${Device}[0][device][name]
+
 *** Keywords ***
 Generate autoEvent With Retention Example
     ${profile}=  Load yaml file "core-metadata/deviceprofile/Test-Profile-1.yaml" and convert to dictionary
