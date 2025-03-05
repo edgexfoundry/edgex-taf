@@ -90,3 +90,16 @@ DevicePOST007 - Create device with autoEvent retention
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
+
+DevicePOST008 - Create device with parent field
+    Given Create Multiple Profiles And Generate Multiple Devices Sample
+    And Set To Dictionary  ${Device}[1][device]  parent=${Device}[0][device][name]
+    And Set To Dictionary  ${Device}[2][device]  parent=${Device}[1][device][name]
+    When Create Device With ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "201" And id
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete Multiple Devices By Names  ${Device}[2][device][name]  ${Device}[1][device][name]
+                ...           ${Device}[0][device][name]  ${Device}[3][device][name]
+                ...      AND  Delete multiple device profiles by names  Test-Profile-1  Test-Profile-2  Test-Profile-3
