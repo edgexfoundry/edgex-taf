@@ -10,7 +10,7 @@ ${SUITE}          Core Metadata Device GET Positive Test Cases
 ${LOG_FILE_PATH}  ${WORK_DIR}/TAF/testArtifacts/logs/core-metadata-device-get-positive-ll.log
 
 *** Test Cases ***
-DeviceGET007 - Query all devices with specified device profile by profile name
+DeviceGET011 - Query all devices with specified device profile by profile name
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
     When Query All Devices By profileName  Test-Profile-1
@@ -21,7 +21,7 @@ DeviceGET007 - Query all devices with specified device profile by profile name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET008 - Query all devices with specified device profile by profile name and offset
+DeviceGET012 - Query all devices with specified device profile by profile name and offset
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
     And Set Test Variable  ${offset}  1
@@ -33,7 +33,7 @@ DeviceGET008 - Query all devices with specified device profile by profile name a
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET009 - Query all devices with specified device profile by profile name and limit
+DeviceGET013 - Query all devices with specified device profile by profile name and limit
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
     And Set Test Variable  ${limit}  1
@@ -45,7 +45,7 @@ DeviceGET009 - Query all devices with specified device profile by profile name a
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET010 - Query all devices with specified device service by service name
+DeviceGET014 - Query all devices with specified device service by service name
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  serviceName=${device_service_list}[0]
     And Create Device With ${Device}
@@ -57,7 +57,7 @@ DeviceGET010 - Query all devices with specified device service by service name
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET011 - Query all devices with specified device service by service name and offset
+DeviceGET015 - Query all devices with specified device service by service name and offset
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Set To Dictionary  ${Device}[1][device]  serviceName=${device_service_list}[0]
     And Create Device With ${Device}
@@ -70,7 +70,7 @@ DeviceGET011 - Query all devices with specified device service by service name a
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET012 - Query all devices with specified device service by service name and limit
+DeviceGET016 - Query all devices with specified device service by service name and limit
     # number of devices < limit
     Given Create Multiple Profiles And Generate Multiple Devices Sample
     And Create Device With ${Device}
@@ -83,7 +83,7 @@ DeviceGET012 - Query all devices with specified device service by service name a
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
-DeviceGET013 - Query device with Chinese naming and query device by name
+DeviceGET017 - Query device with Chinese naming and query device by name
     Given Set Test Variable  ${test_device_name}  测试中文設備名称
     And Set Test Variable  ${test_profile_name}  测试中文設備資料名称
     And Generate a Device Sample With Associated device-virtual And Chinese Profile Name

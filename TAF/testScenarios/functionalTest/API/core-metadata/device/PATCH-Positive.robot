@@ -67,6 +67,19 @@ DevicePATCH005 - Update device with autoEvent retention
     And autoEvent Retention Should Be Added To Device
     [Teardown]  Delete Multiple Devices Sample And Profiles Sample
 
+DevicePATCH006 - Update device with parent field
+    Given Create Devices And Generate Multiple Devices Sample For Updating Data
+    And Set To Dictionary  ${Device}[1][device]  parent=${Device}[0][device][name]
+    And Set To Dictionary  ${Device}[2][device]  parent=${Device}[1][device][name]
+    When Update Devices ${Device}
+    Then Should Return Status Code "207"
+    And Item Index All Should Contain Status Code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Run Keywords  Delete Multiple Devices By Names  ${Device}[2][device][name]  ${Device}[1][device][name]
+                ...           ${Device}[0][device][name]  ${Device}[3][device][name]
+                ...      AND  Delete multiple device profiles by names  Test-Profile-1  Test-Profile-2  Test-Profile-3
+
 *** Keywords ***
 Device ${type} Should Be Updated
     ${list}=  Create List  Test-Device  Test-Device-Locked  Test-Device-Disabled  Test-Device-AutoEvents
