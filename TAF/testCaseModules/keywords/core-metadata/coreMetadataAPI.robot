@@ -242,10 +242,11 @@ Query all devices
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query all devices with ${parameter}=${value}
+Query all devices with parameters
+    [Arguments]  ${params}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -668,13 +669,17 @@ Create Multiple Profiles And Generate Multiple Devices Sample
     Generate Devices  ${device_1}  ${device_2}  ${device_3}  ${device_4}
 
 Create A Device Sample With Associated ${device_service} And ${device_profile_name}
+    Generate A Device Sample  ${device_service}  ${device_profile_name}
+    Create Device With ${Device}
+
+Generate A Device Sample
+    [Arguments]  ${device_service}  ${device_profile_name}
     Generate A Device Profile Sample  ${device_profile_name}
     Create Device Profile ${deviceProfile}
     Get "id" From Multi-status Item 0
     Set Test Variable  ${device_profile_id}  ${item_value}
     ${device}=  Set device values  ${device_service}  ${device_profile_name}
     Generate Devices  ${device}
-    Create Device With ${Device}
 
 Generate a Device Sample With Associated ${device_service} And Chinese Profile Name
     Generate A Device Profile Sample  Test-Profile-1
