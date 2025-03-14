@@ -19,17 +19,14 @@ export USE_DB=${TEST_DB}
 `Use the shell script to run tests will take a while. It contains deploy, run tests, and shutdown steps.`
 ```
 # Arguments for run-tests.sh
-${ARCH}: x86_64 | arm64
-${SECURITY_SERVICE_NEEDED}: false | true
-${REGISTRY_SERVICE}: Consul | Keeper
 ${TEST_STRATEGY}: functional-test | integration-test
-${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | mqtt (integration-test) | redis (integration-test)
+${SECURITY_SERVICE_NEEDED}: false | true
+${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | mqtt (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
-${TEST_DB}: postgres | redis
 cd ${WORK_DIR}/TAF/utils/scripts/docker
 
 
-sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${TEST_SERVICE} ${DEPLOY_SERVICES}
+sh run-tests.sh ${TEST_STRATEGY} ${SECURITY_SERVICE_NEEDED} ${TEST_SERVICE} ${DEPLOY_SERVICES}
 
 # If using x86_64, no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:
 ex. sh run-tests.sh x86_64 false functional-test api no-deployment
@@ -64,20 +61,19 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 3. Prepare test environment:
     ``` bash
     # Arguments for get-compose-file.sh
-    ${ARCH}: x86_64 | arm64
+    ${USE_SHA1}: odessa
     ${USE_SECURITY}: - (false) | -security- (true)
-    ${USE_SHA1}: main
     ${TEST_STRATEGY}: functional-test | integration-test
 
     # Fetch the latest docker-compose file
     cd ${HOME}/edgex-taf/TAF/utils/scripts/docker
-    sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
-    # ex. sh get-compose-file.sh x86_64 - main functional-test
+    sh get-compose-file.sh ${USE_SHA1} ${USE_SECURITY} ${TEST_STRATEGY}
+    # ex. sh get-compose-file.sh odessa - functional-test
     
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
     export SECURITY_SERVICE_NEEDED=false
-    export COMPOSE_IMAGE=docker:26.0.1
+    export COMPOSE_IMAGE=docker:28.0.1
     ```
 #### Run Tests
 `View the test report after finishing a python command, otherwise the report will be overridden after executing next command. Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html.`
@@ -104,7 +100,6 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ``` 
     - For APP Service:
     ``` bash
-    # Consul is required. Scripts will modify the APP Service configuration.
     # Used 2 profiles, funcational-tests and http-export.
    
     # Before launching APP Service, please export the following variables.
@@ -142,11 +137,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     python3 -m TUC --exclude Skipped --include mqtt-bus -u deploy.robot -p default
     python3 -m TUC --exclude Skipped --include MessageBus=MQTT -u integrationTest -p device-virtual --name MQTT-bus
     ```
-    Run test with Redis bus
-    ``` bash
-    python3 -m TUC --exclude Skipped --include redis-bus -u deploy.robot -p default
-    python3 -m TUC --exclude Skipped --include MessageBus=REDIS -u integrationTest -p device-virtual --name REDIS-bus
-    ```
+
 4. Shutdown edgex:
     ``` bash
     python3 -m TUC --exclude Skipped --include shutdown-edgex -u shutdown.robot -p default

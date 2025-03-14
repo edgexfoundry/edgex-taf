@@ -1,18 +1,14 @@
 #!/bin/sh
 # Arguments and the default values
-USE_ARCH=${1:-x86_64}
+TEST_STRATEGY=${1:-functional-test} # option: functional-test, integration-test
 SECURITY_SERVICE_NEEDED=${2:-false}
-TEST_STRATEGY=${3:-functional-test} # option: functional-test, integration-test
-TEST_SERVICE=${4:-api}
-DEPLOY_SERVICES=${5:-} # no-deployment or empty
-
-# # x86_64 or arm64
-[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
+TEST_SERVICE=${3:-api}
+DEPLOY_SERVICES=${4:-} # no-deployment or empty
 
 # Common Variables
-USE_SHA1=main  # edgex-compose branch or SHA1
-TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common${USE_ARM64}:latest
-COMPOSE_IMAGE=docker:26.0.1
+USE_SHA1=odessa  # edgex-compose branch or SHA1
+TAF_COMMON_IMAGE=iotechsys/dev-testing-edgex-taf-common:3.1.0
+COMPOSE_IMAGE=docker:28.0.1
 
 
 if [ "$SECURITY_SERVICE_NEEDED" = true ]; then
@@ -23,7 +19,7 @@ fi
 
 if [ "$DEPLOY_SERVICES" != "no-deployment" ]; then
   # Get compose file from edgex-compose
-  sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
+  sh get-compose-file.sh ${USE_SHA1} ${USE_SECURITY} ${TEST_STRATEGY}
 
   # Create backup report directory
   mkdir -p ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex

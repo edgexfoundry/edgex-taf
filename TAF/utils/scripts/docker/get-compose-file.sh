@@ -1,16 +1,12 @@
 #!/bin/bash
 
 # # set default values
-USE_ARCH=${1:--x86_64}
+USE_SHA1=${1:-odessa}
 USE_SECURITY=${2:--}
-USE_SHA1=${3:-main}
-TEST_STRATEGY=${4:-}
-DELAYED_START=${5:-false}
+TEST_STRATEGY=${3:-}
+DELAYED_START=${4:-false}
 
 . $(dirname "$0")/common-taf.env
-
-# # x86_64 or arm64
-[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
 
 # # security or no security
 [ "$USE_SECURITY" != '-security-' ] && USE_NO_SECURITY="-no-secty"
@@ -35,8 +31,8 @@ MESSAGEBUS_TYPE=mqtt
 mkdir -p tmp
 # generate single file docker-compose.yml for target configuration without
 # default device services, i.e. no device-virtual service
-./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf"
-cp docker-compose-taf${USE_NO_SECURITY}${USE_ARM64}.yml docker-compose.yml
+./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "-taf"
+cp docker-compose-taf${USE_NO_SECURITY}.yml docker-compose.yml
 
 COMPOSE_FILE="docker-compose"
 
@@ -135,7 +131,7 @@ for compose in ${COMPOSE_FILE}; do
     sed -n "/^\ \ device-modbus:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/device-modbus_1.yml
     sed -i 's/device-modbus/device-modbus_1/g' tmp/device-modbus_1.yml
     sed -i 's/modbus-simulator/modbus-simulator_1/g' tmp/device-modbus_1.yml
-    sed -i "s/device-modbus_1${USE_ARM64}:latest/device-modbus${USE_ARM64}:latest/g" tmp/device-modbus_1.yml
+    sed -i -E 's/device-modbus_1:([0-9]+\.[0-9]+\.[0-9]+)/device-modbus:\1/g' tmp/device-modbus_1.yml
     if [ "${USE_SECURITY}" = '-security-' ]; then
       sed -i 's/- \/device-modbus_1/- \/device-modbus/g' tmp/device-modbus_1.yml
     fi
@@ -163,7 +159,7 @@ for compose in ${COMPOSE_FILE}; do
     # Add second modbus simulator
     sed -n "/^\ \ modbus-simulator:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/modbus-sim_1.yml
     sed -i 's/modbus-simulator/modbus-simulator_1/g' tmp/modbus-sim_1.yml
-    sed -i "s/modbus-simulator_1${USE_ARM64}:latest/modbus-simulator${USE_ARM64}:latest/g" tmp/modbus-sim_1.yml
+    sed -i -E 's/modbus-simulator_1:([0-9]+\.[0-9]+\.[0-9]+)/modbus-simulator:\1/g' tmp/modbus-sim_1.yml
     sed -i 's/published: \"1502\"/published: "1512"/g' tmp/modbus-sim_1.yml
     sed -i "/services:/ r tmp/modbus-sim_1.yml" ${compose}.yml
 
@@ -187,10 +183,10 @@ for compose in ${COMPOSE_FILE}; do
 
   elif [ "${TEST_STRATEGY}" = "functional-test" ]; then
     # Enable name field escape
-      sed -n "/^\ \ core-common-config-bootstrapper:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-common-config-bootstrapper.yml
-      sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ ALL_SERVICES_SERVICE_ENABLENAMEFIELDESCAPE: true' tmp/core-common-config-bootstrapper.yml
-      sed -i "/^\ \ core-common-config-bootstrapper:/,/^  [a-z].*:$/{//!d}; /^\ \ core-common-config-bootstrapper:/d" ${compose}.yml
-      sed -i "/services:/ r tmp/core-common-config-bootstrapper.yml" ${compose}.yml
+    sed -n "/^\ \ core-common-config-bootstrapper:/,/^  [a-z].*:$/p" ${compose}.yml | sed '$d' > tmp/core-common-config-bootstrapper.yml
+    sed -i '/\ \ \ \ environment:/a \ \ \ \ \ \ ALL_SERVICES_SERVICE_ENABLENAMEFIELDESCAPE: true' tmp/core-common-config-bootstrapper.yml
+    sed -i "/^\ \ core-common-config-bootstrapper:/,/^  [a-z].*:$/{//!d}; /^\ \ core-common-config-bootstrapper:/d" ${compose}.yml
+    sed -i "/services:/ r tmp/core-common-config-bootstrapper.yml" ${compose}.yml
   fi
 
   # Update services which use DOCKER_HOST_IP
