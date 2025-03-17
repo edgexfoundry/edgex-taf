@@ -12,7 +12,7 @@ COMPOSE_IMAGE=docker:28.0.1
 
 
 # Pull EdgeX images
-sh get-compose-file-perfermance.sh ${USE_SHA1} ${USE_SECURITY}
+sh get-compose-file-performance.sh ${USE_SHA1} ${USE_SECURITY}
 
 # Pull images
 docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
