@@ -48,3 +48,13 @@ ErrDevicePOST012 - Create device with invalid retention duration
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete multiple device profiles by names  Test-Profile-1  Test-Profile-2  Test-Profile-3
+
+ErrDevicePOST013 - Create device with its own parent
+    Given Generate A Device Sample  device-virtual  Test-Profile-1
+    And Set To Dictionary  ${Device}[0][device]  parent=${Device}[0][device][name]
+    When Create Device With ${Device}
+    Then Should Return Status Code "207"
+    And Item Index 0 Should Contain Status Code "400"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    [Teardown]  Delete device profile by name  Test-Profile-1
