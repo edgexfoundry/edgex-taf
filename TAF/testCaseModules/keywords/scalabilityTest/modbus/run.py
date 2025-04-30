@@ -46,8 +46,8 @@ class ResourceUtilization:
         self.accumulated_event_amount2 = accumulated_event_amount2
 
 
-def on_connect(client, userdata, flags, rc):
-    logger.info("▶ Connected to MQTT broker with result code " + str(rc), also_console=True)
+def on_connect(client, userdata, flags, reason_code, properties):
+    logger.info("▶ Connected to MQTT broker with reason code: " + str(reason_code), also_console=True)
     client.subscribe("edgex-events")
 
 
@@ -105,7 +105,7 @@ def when_run_scalability_testing():
     device_increment = configuration.DEVICE_INCREMENT
     times = int(configuration.SIMULATOR_NUMBER / device_increment)  # The loop times
 
-    mqtt_client = mqtt.Client()
+    mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
     try:
         initial_mqtt_client(mqtt_client)
