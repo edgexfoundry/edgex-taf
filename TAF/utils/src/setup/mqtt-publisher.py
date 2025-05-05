@@ -33,7 +33,7 @@ def get_secret():
     password = secret_data['data']['password']
     return user, password
 
-client = mqtt.Client()
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 if secure == 'true' and port == '1883':
     mqtt_user = get_secret()

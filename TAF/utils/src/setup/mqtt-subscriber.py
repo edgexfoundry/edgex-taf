@@ -40,8 +40,8 @@ def get_secret():
     password = secret_data['data']['password']
     return user, password
 
-def on_connect(client, userdata, flags, rc):
-    print("Connected to MQTT with result code " + str(rc))
+def on_connect(client, userdata, flags, reason_code, properties):
+    print("Connected to MQTT with reason code: " + str(reason_code))
     client.subscribe(topic)
 
 
@@ -60,7 +60,7 @@ def on_message(client, userdata, msg):
         elif current_msg_count >= int(expected_msg_count) :
             client.disconnect()
 
-client = mqtt.Client()
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 if secure == 'true' and port == '1883':
     mqtt_user = get_secret()
