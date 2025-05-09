@@ -1,0 +1,1459 @@
+name: device-sim-3
+apiVersion: v2
+deviceResources:
+- name: b_1
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Bool
+    readWrite: R
+  attributes:
+    primaryTable: DISCRETES_INPUT
+    startingAddress: 0
+- name: "16_1"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 0
+- name: "16_2"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 1
+- name: "16_3"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 2
+- name: "16_4"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 3
+- name: "16_5"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 4
+- name: "16_6"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 5
+- name: "16_7"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 6
+- name: "16_8"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 7
+- name: "16_9"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 8
+- name: "16_10"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 9
+- name: "16_11"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 10
+- name: "16_12"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 11
+- name: "16_13"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 12
+- name: "16_14"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 13
+- name: "16_15"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 14
+- name: "16_16"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 15
+- name: "16_17"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 16
+- name: "16_18"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 17
+- name: "16_19"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 18
+- name: "16_20"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 19
+- name: "16_21"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 20
+- name: "16_22"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 21
+- name: "16_23"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 22
+- name: "16_24"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 23
+- name: "16_25"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 24
+- name: "16_26"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 25
+- name: "16_27"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 26
+- name: "16_28"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 27
+- name: "16_29"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 28
+- name: "16_30"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 29
+- name: "16_31"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 30
+- name: "16_32"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 31
+- name: "16_33"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 32
+- name: "16_34"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 33
+- name: "16_35"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 34
+- name: "16_36"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 35
+- name: "16_37"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 36
+- name: "16_38"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 37
+- name: "16_39"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 38
+- name: "16_40"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 39
+- name: "16_41"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 40
+- name: "16_42"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 41
+- name: "16_43"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 42
+- name: "16_44"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 43
+- name: "16_45"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 44
+- name: "16_46"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 45
+- name: "16_47"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 46
+- name: "16_48"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 47
+- name: "16_49"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 48
+- name: "16_50"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 49
+- name: "16_51"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 50
+- name: "16_52"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 51
+- name: "16_53"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 52
+- name: "16_54"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 53
+- name: "16_55"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 54
+- name: "16_56"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 55
+- name: "16_57"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 56
+- name: "16_58"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 57
+- name: "16_59"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 58
+- name: "16_60"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 59
+- name: "16_61"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 60
+- name: "16_62"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 61
+- name: "16_63"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 62
+- name: "16_64"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 63
+- name: "16_65"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 64
+- name: "16_66"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 65
+- name: "16_67"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 66
+- name: "16_68"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 67
+- name: "16_69"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 68
+- name: "16_70"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 69
+- name: "16_71"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 70
+- name: "16_72"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 71
+- name: "16_73"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 72
+- name: "16_74"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 73
+- name: "16_75"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 74
+- name: "16_76"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 75
+- name: "16_77"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 76
+- name: "16_78"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 77
+- name: "16_79"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 78
+- name: "16_80"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 79
+- name: "16_81"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 80
+- name: "16_82"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 81
+- name: "16_83"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 82
+- name: "16_84"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 83
+- name: "16_85"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 84
+- name: "16_86"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 85
+- name: "16_87"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 86
+- name: "16_88"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 87
+- name: "16_89"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 88
+- name: "16_90"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 89
+- name: "16_91"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 90
+- name: "16_92"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 91
+- name: "16_93"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 92
+- name: "16_94"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 93
+- name: "16_95"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 94
+- name: "16_96"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 95
+- name: "16_97"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 96
+- name: "16_98"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 97
+- name: "16_99"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 98
+- name: "16_100"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int16
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 99
+- name: "32_1"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 100
+- name: "32_2"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 102
+- name: "32_3"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 104
+- name: "32_4"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 106
+- name: "32_5"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 108
+- name: "32_6"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 110
+- name: "32_7"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 112
+- name: "32_8"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 114
+- name: "32_9"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 116
+- name: "32_10"
+  isHidden: false
+  tags:
+    subDevice: module001
+    sunSpecBlock: "00805"
+    sunSpecTag: CellVMax
+  properties:
+    valueType: Int32
+    readWrite: R
+  attributes:
+    primaryTable: INPUT_REGISTERS
+    startingAddress: 118
+deviceCommands:
+- name: bc_1
+  isHidden: false
+  readWrite: R
+  resourceOperations:
+  - deviceResource: b_1
+- name: 16c_1
+  isHidden: false
+  readWrite: R
+  resourceOperations:
+  - deviceResource: "16_1"
+  - deviceResource: "16_2"
+  - deviceResource: "16_3"
+  - deviceResource: "16_4"
+  - deviceResource: "16_5"
+  - deviceResource: "16_6"
+  - deviceResource: "16_7"
+  - deviceResource: "16_8"
+  - deviceResource: "16_9"
+  - deviceResource: "16_10"
+  - deviceResource: "16_11"
+  - deviceResource: "16_12"
+  - deviceResource: "16_13"
+  - deviceResource: "16_14"
+  - deviceResource: "16_15"
+  - deviceResource: "16_16"
+  - deviceResource: "16_17"
+  - deviceResource: "16_18"
+  - deviceResource: "16_19"
+  - deviceResource: "16_20"
+  - deviceResource: "16_21"
+  - deviceResource: "16_22"
+  - deviceResource: "16_23"
+  - deviceResource: "16_24"
+  - deviceResource: "16_25"
+  - deviceResource: "16_26"
+  - deviceResource: "16_27"
+  - deviceResource: "16_28"
+  - deviceResource: "16_29"
+  - deviceResource: "16_30"
+  - deviceResource: "16_31"
+  - deviceResource: "16_32"
+  - deviceResource: "16_33"
+  - deviceResource: "16_34"
+  - deviceResource: "16_35"
+  - deviceResource: "16_36"
+  - deviceResource: "16_37"
+  - deviceResource: "16_38"
+  - deviceResource: "16_39"
+  - deviceResource: "16_40"
+  - deviceResource: "16_41"
+  - deviceResource: "16_42"
+  - deviceResource: "16_43"
+  - deviceResource: "16_44"
+  - deviceResource: "16_45"
+  - deviceResource: "16_46"
+  - deviceResource: "16_47"
+  - deviceResource: "16_48"
+  - deviceResource: "16_49"
+  - deviceResource: "16_50"
+  - deviceResource: "16_51"
+  - deviceResource: "16_52"
+  - deviceResource: "16_53"
+  - deviceResource: "16_54"
+  - deviceResource: "16_55"
+  - deviceResource: "16_56"
+  - deviceResource: "16_57"
+  - deviceResource: "16_58"
+  - deviceResource: "16_59"
+  - deviceResource: "16_60"
+  - deviceResource: "16_61"
+  - deviceResource: "16_62"
+  - deviceResource: "16_63"
+  - deviceResource: "16_64"
+  - deviceResource: "16_65"
+  - deviceResource: "16_66"
+  - deviceResource: "16_67"
+  - deviceResource: "16_68"
+  - deviceResource: "16_69"
+  - deviceResource: "16_70"
+  - deviceResource: "16_71"
+  - deviceResource: "16_72"
+  - deviceResource: "16_73"
+  - deviceResource: "16_74"
+  - deviceResource: "16_75"
+  - deviceResource: "16_76"
+  - deviceResource: "16_77"
+  - deviceResource: "16_78"
+  - deviceResource: "16_79"
+  - deviceResource: "16_80"
+  - deviceResource: "16_81"
+  - deviceResource: "16_82"
+  - deviceResource: "16_83"
+  - deviceResource: "16_84"
+  - deviceResource: "16_85"
+  - deviceResource: "16_86"
+  - deviceResource: "16_87"
+  - deviceResource: "16_88"
+  - deviceResource: "16_89"
+  - deviceResource: "16_90"
+  - deviceResource: "16_91"
+  - deviceResource: "16_92"
+  - deviceResource: "16_93"
+  - deviceResource: "16_94"
+  - deviceResource: "16_95"
+  - deviceResource: "16_96"
+  - deviceResource: "16_97"
+  - deviceResource: "16_98"
+  - deviceResource: "16_99"
+  - deviceResource: "16_100"
+- name: 32c_1
+  isHidden: false
+  readWrite: R
+  resourceOperations:
+  - deviceResource: "32_1"
+  - deviceResource: "32_2"
+  - deviceResource: "32_3"
+  - deviceResource: "32_4"
+  - deviceResource: "32_5"
+  - deviceResource: "32_6"
+  - deviceResource: "32_7"
+  - deviceResource: "32_8"
+  - deviceResource: "32_9"
+  - deviceResource: "32_10"
