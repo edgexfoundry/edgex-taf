@@ -56,6 +56,6 @@ sh run-bct-test.sh ${CASE} ${MESSAGE_BUS}
 ```
 
 ### View detail execution reports
-Find report file, backward-test-${MESSAGE_BUS}.html, from ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
+Find report file, backward-test-${MESSAGE_BUS}.html, from ${WORK_DIR}/TAF/testArtifacts/reports/edgex/
 See the following image as example.
 ![image](./images/backward-compatibility-test-report-sample.png)

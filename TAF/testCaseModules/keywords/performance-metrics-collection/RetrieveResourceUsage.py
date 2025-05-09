@@ -101,7 +101,7 @@ def fetch_by_service(service):
 
 
 def compare_cpu_usage(service_resource_list):
-    threshold_value = SettingsInfo().profile_constant.CPU_USAGE_THRESHOLD
+    threshold_value = SettingsInfo().config_constant.CPU_USAGE_THRESHOLD
     for i in services:
         logger.info("{} cpu: {}".format(i, service_resource_list[i]["cpuUsage"]))
         if float(service_resource_list[i]["cpuUsage"]) > threshold_value:
@@ -111,7 +111,7 @@ def compare_cpu_usage(service_resource_list):
 
 
 def compare_mem_usage(service_resource_list):
-    threshold_value = SettingsInfo().profile_constant.MEM_USAGE_THRESHOLD
+    threshold_value = SettingsInfo().config_constant.MEM_USAGE_THRESHOLD
     for i in services:
         logger.info("{} memory: {}".format(i, service_resource_list[i]["memoryUsage"]))
         if float(service_resource_list[i]["memoryUsage"]) > threshold_value:
@@ -279,9 +279,9 @@ def show_the_cpu_aggregation_table_in_html(results):
                 Average
             </th>
         </tr>
-    """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIMES,
-               SettingsInfo().profile_constant.GET_CPU_MEM_INTERVAL,
-               SettingsInfo().profile_constant.CPU_USAGE_THRESHOLD)
+    """.format(SettingsInfo().config_constant.GET_CPU_MEM_LOOP_TIMES,
+               SettingsInfo().config_constant.GET_CPU_MEM_INTERVAL,
+               SettingsInfo().config_constant.CPU_USAGE_THRESHOLD)
 
     for res in results:
         html = html + """ 
@@ -327,9 +327,9 @@ def show_the_mem_aggregation_table_in_html(results):
                     Average
                 </th>
             </tr>
-        """.format(SettingsInfo().profile_constant.GET_CPU_MEM_LOOP_TIMES,
-                   SettingsInfo().profile_constant.GET_CPU_MEM_INTERVAL,
-                   SettingsInfo().profile_constant.MEM_USAGE_THRESHOLD)
+        """.format(SettingsInfo().config_constant.GET_CPU_MEM_LOOP_TIMES,
+                   SettingsInfo().config_constant.GET_CPU_MEM_INTERVAL,
+                   SettingsInfo().config_constant.MEM_USAGE_THRESHOLD)
 
     for res in results:
         html = html + """ 

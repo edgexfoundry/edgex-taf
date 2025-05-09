@@ -76,7 +76,7 @@ def get_services_startup_time(start_time, containers):
 
 def compare_startup_time_with_threshold(list):
     for x in list:
-        compare_value = int(SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD)
+        compare_value = int(SettingsInfo().config_constant.STARTUP_TIME_THRESHOLD)
         if compare_value < x:
-            raise Exception("Startup time is longer than {} seconds".format(SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD))
+            raise Exception("Startup time is longer than {} seconds".format(SettingsInfo().config_constant.STARTUP_TIME_THRESHOLD))
     return True

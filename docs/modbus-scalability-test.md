@@ -112,7 +112,7 @@ pip3 install ./edgex-taf-common
 The following command should be executed under the root of edgex-taf.
 ```
 cd edgex-taf
-python3 -m TUC -u scalabilityTest/modbus -p modbus_scalability_test
+python3 -m TUC -t scalabilityTest/modbus -cd modbus_scalability_test
 ```
 After finishing the test, report will generate at:
 `/path/to/edgex-taf/TAF/testArtifacts/reports/edgex/modbus-scalability-test.html`
@@ -127,7 +127,7 @@ docker run --rm -d --name TAF --network host -v ${PWD}:${PWD} -w ${PWD} \
         -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --name TAF ${EDGEX_TAF_IMAGE} \
-        --exclude Skipped -u scalabilityTest/modbus -p modbus_scalability_test
+        --exclude Skipped -t scalabilityTest/modbus -cd modbus_scalability_test
 ```
 Run the testing in detached mode and then you can trace the logs via `docker logs TAF`. 
 
@@ -149,12 +149,12 @@ docker run --rm -d --name TAF --network host -v ${PWD}:${PWD} -w ${PWD} \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v /proc:/host/proc \
         --name TAF ${EDGEX_TAF_IMAGE} \
-        --exclude Skipped -u scalabilityTest/modbus -p modbus_scalability_test
+        --exclude Skipped -t scalabilityTest/modbus -cd modbus_scalability_test
 ```
 
 ## Shutdown EdgeX
 ```
-python3 -m TUC --exclude Skipped --include shutdown-edgex -u shutdown.robot -p modbus_scalability_test
+python3 -m TUC --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd modbus_scalability_test
 ```
 or 
 ```
@@ -163,5 +163,5 @@ docker run --rm --network host -v ${PWD}:${PWD} -w ${PWD} \
         -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --name TAF ${EDGEX_TAF_IMAGE} \
-        --exclude Skipped --include shutdown-edgex -u shutdown.robot -p modbus_scalability_test
+        --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd modbus_scalability_test
 ```
