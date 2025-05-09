@@ -6,7 +6,7 @@ CONFIG_DIR=/custom-config
 
 if [ "$TEST_STRATEGY" = "PerformanceMetrics" ]; then
   docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
-          --env WORK_DIR=${WORK_DIR} --env PROFILE=${PROFILE} --security-opt label:disable \
+          --env WORK_DIR=${WORK_DIR} --env PROFILE=${TAF_CONFIG} --security-opt label:disable \
           --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env ${COMPOSE_IMAGE} docker compose \
           -f "${WORK_DIR}/TAF/utils/scripts/docker/docker-compose${APPSERVICE}.yml" up -d
 else

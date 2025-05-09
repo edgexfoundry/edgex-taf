@@ -9,7 +9,6 @@ Suite Teardown   Suite Teardown
 *** Variables ***
 ${SUITE}              EdgeX shutdown
 ${WORK_DIR}           %{WORK_DIR}
-${PROFILE}            %{PROFILE}
 ${LOG_FILE}           ${WORK_DIR}/TAF/testArtifacts/logs/edgex_shutdown.log
 
 *** Keywords ***

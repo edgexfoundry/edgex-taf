@@ -191,13 +191,13 @@ Edgex-taf defines the configuration folder separated by different profiles; the 
 For example, to run the DS testing for **device-random**:
     
 ``` bash
-    python3 -m TUC -p device-random -u functionalTest/device-service/common
+    python3 -m TUC -cd device-random -t functionalTest/device-service/common
 ```
     
 Or to run the DS testing for **device-modbus**:
     
 ``` bash
-    python3 -m TUC -p device-modbus -u functionalTest/device-service/common
+    python3 -m TUC -cd device-modbus -t functionalTest/device-service/common
 ```
 
 ### How to use the configuration in the testing script
