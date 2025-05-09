@@ -61,7 +61,7 @@ def remove_services(*args):
     run_command(cmd)
 
 
-def deploy_device_service(device_service, profile=SettingsInfo().profile):
+def deploy_device_service(device_service, profile=SettingsInfo().tafConfig):
     SettingsInfo().TestLog.info('Deploy device service {} with profile {}'.format(device_service, profile))
     cmd = ["sh", "{}/TAF/utils/scripts/{}/deploy-device-service.sh".format(SettingsInfo().workDir,
                                                                            SettingsInfo().constant.DEPLOY_TYPE),

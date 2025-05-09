@@ -85,7 +85,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 2. Deploy edgex: Skipped, if the edgex services are deployed in place
     ``` bash
     # This step may take a while if the edgex images don't exist on the machine
-    python3 -m TUC --exclude Skipped --include deploy-base-service -u deploy.robot -p default
+    python3 -m TUC --exclude Skipped --include deploy-base-service -t deploy.robot -cd default
     ```
 3. Run Test
     ###### Run API Functional testing:
@@ -100,7 +100,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     export REGISTRY_SERVICE=${REGISTRY_SERVICE}
 
     # Run Test Command
-    python3 -m TUC --exclude Skipped -u functionalTest/API/${ServiceDir} -p default
+    python3 -m TUC --exclude Skipped -t functionalTest/API/${ServiceDir} -cd default
     ``` 
     - For APP Service:
     ``` bash
@@ -115,7 +115,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
    
     # Run Test Command
     export SECURITY_SERVICE_NEEDED=false  # Otherwise, will get test ErrSecretsPOST004 failed.
-    python3 -m TUC --exclude Skipped -u functionalTest/API/app-service -p default
+    python3 -m TUC --exclude Skipped -t functionalTest/API/app-service -cd default
     ```
     - Device Service:
     ``` bash
@@ -123,33 +123,33 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     export EDGEX_SECURITY_SECRET_STORE=false
     export REGISTRY_SERVICE=${REGISTRY_SERVICE}
    
-    # Modify the ProfilesDir value on configuration.toml under ${HOME}/edgex-taf/TAF/config/${profile}
-    ProfilesDir = ${HOME}/edgex-taf/TAF/config/${profile}
+    # Modify the ProfilesDir value on configuration.toml under ${HOME}/edgex-taf/TAF/config/${tafConfig}
+    ProfilesDir = ${HOME}/edgex-taf/TAF/config/${tafConfig}
    
     # Launch device service with the configDir parameter 
-    --configDir=${HOME}/edgex-taf/TAF/config/${profile}
+    --configDir=${HOME}/edgex-taf/TAF/config/${tafConfig}
    
     # Run Test Command
-    python3 -m TUC --exclude Skipped -u functionalTest/device-service -p ${profile}
+    python3 -m TUC --exclude Skipped -t functionalTest/device-service -cd ${tafConfig}
     
-    # ${profile}: Use the directory name under TAF/config which depends on what service to test. Examples, device-virtual or device-modbus
+    # ${tafConfig}: Use the directory name under TAF/config which depends on what service to test. Examples, device-virtual or device-modbus
     ```
 
     ###### Run Integration testing:
     `Only support deploying edgex services through docker-compose file.`
     Run test with MQTT bus
     ```
-    python3 -m TUC --exclude Skipped --include mqtt-bus -u deploy.robot -p default
-    python3 -m TUC --exclude Skipped --include MessageBus=MQTT -u integrationTest -p device-virtual --name MQTT-bus
+    python3 -m TUC --exclude Skipped --include mqtt-bus -t deploy.robot -cd default
+    python3 -m TUC --exclude Skipped --include MessageBus=MQTT -t integrationTest -cd device-virtual --name MQTT-bus
     ```
     Run test with Redis bus
     ``` bash
-    python3 -m TUC --exclude Skipped --include redis-bus -u deploy.robot -p default
-    python3 -m TUC --exclude Skipped --include MessageBus=REDIS -u integrationTest -p device-virtual --name REDIS-bus
+    python3 -m TUC --exclude Skipped --include redis-bus -t deploy.robot -cd default
+    python3 -m TUC --exclude Skipped --include MessageBus=REDIS -t integrationTest -cd device-virtual --name REDIS-bus
     ```
 4. Shutdown edgex:
     ``` bash
-    python3 -m TUC --exclude Skipped --include shutdown-edgex -u shutdown.robot -p default
+    python3 -m TUC --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd default
     ```
 
 ## Test Report Example

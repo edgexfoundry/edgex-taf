@@ -168,12 +168,12 @@ def check_service_startup_by_log(service):
 
 
 def check_service_is_stopped_or_not():
-    for i in range(SettingsInfo().profile_constant.RETRY_TIMES):
+    for i in range(SettingsInfo().config_constant.RETRY_TIMES):
         logs = subprocess.check_output("docker ps -f name=edgex-", shell=True)
         keyword = "Up ".encode('utf-8')
         if keyword in logs:
             SettingsInfo().TestLog.info("Waiting for all services stop")
-            time.sleep(SettingsInfo().profile_constant.WAIT_TIME)
+            time.sleep(SettingsInfo().config_constant.WAIT_TIME)
             continue
         else:
             SettingsInfo().TestLog.info("All services are stopped")

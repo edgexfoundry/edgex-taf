@@ -18,7 +18,7 @@ class EventExportedTime(object):
     def retrieve_events_from_subscriber(self):
         SettingsInfo().TestLog.info("Run Subscriber And Get Events")
         # run EXPORTED_LOOP_TIMES + 2 times and remove max and min values
-        times = SettingsInfo().profile_constant.EXPORTED_LOOP_TIMES + 2
+        times = SettingsInfo().config_constant.EXPORTED_LOOP_TIMES + 2
         device_int = []
         device_bool = []
         device_uint = []
@@ -26,7 +26,7 @@ class EventExportedTime(object):
         full_subscriber_logs = subprocess.check_output(
             "python {}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin {} false -1 {}".format(
                 SettingsInfo().workDir, SettingsInfo().constant.BROKER_PORT,
-                SettingsInfo().profile_constant.SUBSCIBE_DURATION), shell=True)
+                SettingsInfo().config_constant.SUBSCIBE_DURATION), shell=True)
         subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with result code 0", "")
         messages = subscriber_logs.split('Got message!!')
         for message in messages:
@@ -104,13 +104,13 @@ def get_origin_time(origin_time):
 def compare_export_time_with_threshold():
     for device in result["devices"]:
         for event in result["devices"][device]:
-            compare_value = int(SettingsInfo().profile_constant.EXPORT_TIME_THRESHOLD)
+            compare_value = int(SettingsInfo().config_constant.EXPORT_TIME_THRESHOLD)
             if event["exported"] == "":
                 continue
             else:
                 if compare_value < event["exported"]:
                     raise Exception("{} event exported time is longer than {} ms".format(device,
-                                    SettingsInfo().profile_constant.EXPORT_TIME_THRESHOLD))
+                                    SettingsInfo().config_constant.EXPORT_TIME_THRESHOLD))
     return True
 
 
@@ -171,8 +171,8 @@ def show_the_aggregation_table_in_html(devices_aggregate_list):
                 Average time
             </th>
         </tr>
-    """.format(SettingsInfo().profile_constant.EXPORT_TIME_THRESHOLD,
-               SettingsInfo().profile_constant.EXPORTED_LOOP_TIMES)
+    """.format(SettingsInfo().config_constant.EXPORT_TIME_THRESHOLD,
+               SettingsInfo().config_constant.EXPORTED_LOOP_TIMES)
 
     for device in devices:
         html = html + """ 

@@ -65,7 +65,7 @@ else
         USE_SECURITY=-
 fi
 
-mkdir -p ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex
+mkdir -p ${WORK_DIR}/TAF/testArtifacts/reports/edgex
 if [ "$TEST_STRATEGY" = "integration-test" ] && [ "$BUS" = "mqtt" ]; then
     RUN_TAG=mqtt-bus
 else
@@ -80,8 +80,7 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
     --security-opt label:disable \
     -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-    --exclude Skipped --include ${RUN_TAG} -u deploy.robot -p default
-cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/deploy-base-${BUS}.html
+    --exclude Skipped --include ${RUN_TAG} -t deploy.robot -cd default -d edgex -o deploy-base-${BUS}
 
 docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} --security-opt label:disable \
@@ -89,8 +88,7 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -v /tmp/edgex/secrets:/tmp/edgex/secrets:z -v /var/run/docker.sock:/var/run/docker.sock \
     --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env ${TAF_COMMON_IMAGE} \
     --exclude Skipped --exclude backward-skip --include MessageBus=${BUS} \
-    -u integrationTest -p device-virtual
-cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/jakarta-${BUS}.html
+    -t integrationTest -cd device-virtual -d edgex -o jakarta-${BUS} --no-cleanup
 
 docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e CONFIG_DIR=/custom-config --security-opt label:disable -v /var/run/docker.sock:/var/run/docker.sock \
@@ -104,8 +102,7 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
     --security-opt label:disable \
     -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-    --exclude Skipped --include ${RUN_TAG} -u deploy.robot -p default
-cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/bct-deploy-base-${BUS}.html
+    --exclude Skipped --include ${RUN_TAG} -t deploy.robot -cd default -d edgex -o bct-deploy-base-${BUS} --no-cleanup
 
 docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} --security-opt label:disable \
@@ -113,10 +110,9 @@ docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     -v /tmp/edgex/secrets:/tmp/edgex/secrets:z -v /var/run/docker.sock:/var/run/docker.sock \
     --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env ${TAF_COMMON_IMAGE} \
     --exclude Skipped --exclude backward-skip --include MessageBus=${BUS} \
-    -u integrationTest -p device-virtual
-cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/backward-test-${BUS}.html
+    -t integrationTest -cd device-virtual -d edgex -o backward-test-${BUS} --no-cleanup
 
 docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
     --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
     -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-    --exclude Skipped --include shutdown-edgex -u shutdown.robot -p device-virtual
+    --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd device-virtual
