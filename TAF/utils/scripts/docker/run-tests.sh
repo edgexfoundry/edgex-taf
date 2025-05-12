@@ -32,7 +32,7 @@ if [ "$DEPLOY_SERVICES" != "no-deployment" ]; then
   docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
           -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
           --security-opt label:disable -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-          --exclude Skipped --include deploy-base-service -u deploy.robot -p default
+          --exclude Skipped --include deploy-base-service -t deploy.robot -cd default -d edgex
   cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/deploy-base.html
 fi
 
@@ -45,7 +45,7 @@ case ${TEST_STRATEGY} in
               --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
               -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
               -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-              --exclude Skipped -u functionalTest/device-service -p device-virtual
+              --exclude Skipped -t functionalTest/device-service -cd device-virtual -d edgex
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/virtual.html
       ;;
       device-modbus)
@@ -53,7 +53,7 @@ case ${TEST_STRATEGY} in
               --security-opt label:disable -e COMPOSE_IMAGE=${COMPOSE_IMAGE} -e ARCH=${ARCH} \
               -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
               -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-              --exclude Skipped -u functionalTest/device-service -p device-modbus
+              --exclude Skipped -t functionalTest/device-service -cd device-modbus -d edgex
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/modbus.html
       ;;
       api)
@@ -62,7 +62,7 @@ case ${TEST_STRATEGY} in
                 -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
                 --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
                 -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-                --exclude Skipped -u functionalTest/API -p default
+                --exclude Skipped -t functionalTest/API -cd default -d edgex
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html
       ;;
       *)
@@ -71,7 +71,7 @@ case ${TEST_STRATEGY} in
                 -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
                 --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
                 -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-                --exclude Skipped -u functionalTest/API/${TEST_SERVICE} -p default
+                --exclude Skipped -t functionalTest/API/${TEST_SERVICE} -cd default  -d edgex
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/${TEST_SERVICE}-test.html
       ;;
     esac
@@ -86,7 +86,7 @@ case ${TEST_STRATEGY} in
             --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
             -v /tmp/edgex/secrets:/tmp/edgex/secrets:z \
             -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-            --exclude Skipped --include MessageBus=${TEST_SERVICE} -u integrationTest -p device-virtual
+            --exclude Skipped --include MessageBus=${TEST_SERVICE} -t integrationTest -cd device-virtual -d edgex
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html
   ;;
   *)
@@ -99,6 +99,6 @@ if [ "$DEPLOY_SERVICES" != "no-deployment" ]; then
   docker run --rm --network host -v ${WORK_DIR}:${WORK_DIR}:z -w ${WORK_DIR} \
           -e COMPOSE_IMAGE=${COMPOSE_IMAGE} --security-opt label:disable \
           -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-          --exclude Skipped --include shutdown-edgex -u shutdown.robot -p default
+          --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd default -d edgex
   cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/shutdown.html
 fi

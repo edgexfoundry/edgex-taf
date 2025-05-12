@@ -26,5 +26,5 @@ docker run --rm --network host --privileged -v ${WORK_DIR}:${WORK_DIR}:z -w ${WO
        -v /var/run/docker.sock:/var/run/docker.sock -e SECURITY_SERVICE_NEEDED=${SECURITY_SERVICE_NEEDED} \
        -v /etc/localtime:/etc/localtime --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
        -e COMPOSE_IMAGE=${COMPOSE_IMAGE} ${TAF_COMMON_IMAGE} \
-       --exclude Skipped -u performanceTest/performance-metrics-collection --profile performance-metrics
+       --exclude Skipped -t performanceTest/performance-metrics-collection -cd performance-metrics -d edgex
 

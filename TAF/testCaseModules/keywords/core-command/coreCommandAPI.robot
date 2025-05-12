@@ -57,7 +57,7 @@ Set specified device ${device} write command ${command} with ${data}
     Set Response to Test Variables  ${resp}
 
 Delete device virtual pre-define devices
-    Remove Directory  ${WORK_DIR}/TAF/config/${PROFILE}/res  recursive=True
+    Remove Directory  ${WORK_DIR}/TAF/config/${TAF_CONFIG}/res  recursive=True
     Delete Multiple Devices By Names  Random-Boolean-Device  Random-Integer-Device  Random-UnsignedInteger-Device
     ...                               Random-Float-Device  Random-Binary-Device
     Delete Multiple Device Profiles By Names  Random-Boolean-Device  Random-Integer-Device  Random-UnsignedInteger-Device

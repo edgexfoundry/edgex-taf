@@ -48,7 +48,7 @@ services = {
 
 def fetch_service_startup_time_by_container_name(d, start_time, result):
     res = {"startupDateTime": "", "binaryStartupTime": ""}
-    retry_times = int(SettingsInfo().profile_constant.RETRY_TIMES)
+    retry_times = int(SettingsInfo().config_constant.RETRY_TIMES)
     container_name = d["containerName"]
 
     result[container_name] = {}
@@ -79,7 +79,7 @@ def fetch_service_startup_time_by_container_name(d, start_time, result):
                 break
             # wait for retry
             logger.warn("Retry to fetch startup time from " + container_name)
-            time.sleep(int(SettingsInfo().profile_constant.WAIT_TIME))
+            time.sleep(int(SettingsInfo().config_constant.WAIT_TIME))
 
     result[container_name]["binaryStartupTime"] = res["binaryStartupTime"]
 
@@ -187,8 +187,8 @@ def show_avg_max_min_in_html(title, aggregation_list):
                     Container average time
                 </th>
             </tr>
-        """.format(title, SettingsInfo().profile_constant.STARTUP_TIME_THRESHOLD,
-                   SettingsInfo().profile_constant.STARTUP_TIME_LOOP_TIMES)
+        """.format(title, SettingsInfo().config_constant.STARTUP_TIME_THRESHOLD,
+                   SettingsInfo().config_constant.STARTUP_TIME_LOOP_TIMES)
 
     keys = []
     for item in aggregation_list:

@@ -126,8 +126,8 @@ def show_aggregation_table_in_html():
                 Average
             </th>
         </tr>
-    """.format(SettingsInfo().profile_constant.PING_RES_THRESHOLD,
-               SettingsInfo().profile_constant.PING_RES_LOOP_TIMES)
+    """.format(SettingsInfo().config_constant.PING_RES_THRESHOLD,
+               SettingsInfo().config_constant.PING_RES_LOOP_TIMES)
 
     for res in results:
         html = html + """ 

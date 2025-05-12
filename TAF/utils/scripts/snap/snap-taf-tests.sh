@@ -95,7 +95,7 @@ snap_taf_deploy_edgex()
 {
    cd ${WORK_DIR}
     # 1. Deploy EdgeX
-    python3 -m TUC --exclude Skipped --include deploy-base-service -u deploy.robot -p default
+    python3 -m TUC --exclude Skipped --include deploy-base-service -t deploy.robot -cd default
  
     mkdir -p "$WORK_DIR/TAF/testArtifacts/reports/cp-edgex/"
 }
@@ -112,11 +112,11 @@ snap_taf_run_functional_tests() # arg:  tests to run
     rm -f $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html
     
     if [ "$1" = "all" ]; then  
-        python3 -m TUC --exclude Skipped -u functionalTest/API/ -p default
+        python3 -m TUC --exclude Skipped -t functionalTest/API/ -cd default -d edgex
         cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html
         >&2 echo "INFO:snap: Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html"
     elif [ ! -z "$1" ]; then
-        python3 -m TUC --exclude Skipped -u functionalTest/API/${1} -p default
+        python3 -m TUC --exclude Skipped -t functionalTest/API/${1} -cd default -d edgex
         cp $WORK_DIR/TAF/testArtifacts/reports/edgex/log.html $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html
         >&2 echo "INFO:snap: API Test report copied to $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/api-test.html"
     fi
@@ -132,7 +132,7 @@ snap_taf_run_functional_device_tests()
     # 3. Run device functional tests
     for profile in $@; do
         >&2 echo "INFO:snap: testing $profile"
-        python3 -m TUC --exclude Skipped -u functionalTest/device-service -p ${profile}
+        python3 -m TUC --exclude Skipped -t functionalTest/device-service -cd ${profile} -d edgex
         rm -f $WORK_DIR/TAF/testArtifacts/reports/cp-edgex/${profile}-test.html
         cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/${profile}-test.html
         >&2 echo "INFO:snap: API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/${profile}-test.html "
@@ -147,7 +147,7 @@ snap_taf_run_integration_tests()
 
    
     cd ${WORK_DIR}
-    python3 -m TUC --exclude Skipped --include $INCLUDE_TESTS -u integrationTest -p device-virtual
+    python3 -m TUC --exclude Skipped --include $INCLUDE_TESTS -t integrationTest -cd device-virtual -d edgex
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/$LOG_TARGET
 
     >&2 echo "INFO:snap: API Device Test report copied to ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/"
@@ -158,7 +158,7 @@ snap_taf_run_integration_tests()
 snap_taf_shutdown()
 {
     cd ${WORK_DIR}
-    python3 -m TUC --exclude Skipped --include shutdown-edgex -u shutdown.robot -p default
+    python3 -m TUC --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd default
     >&2 echo "INFO:snap: Reports are in ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex"
 
 }
