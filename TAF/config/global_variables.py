@@ -3,7 +3,7 @@ import os
 LOG_LEVEL = "INFO"
 
 # Release Version
-REL_MAJOR_VERSION = "4.0"
+REL_MAJOR_VERSION = "4.1"
 
 # API Version
 API_VERSION = "v3"

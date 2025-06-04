@@ -86,7 +86,7 @@ case ${TEST_STRATEGY} in
             --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
             -v /tmp/edgex/secrets:/tmp/edgex/secrets:z \
             -v /var/run/docker.sock:/var/run/docker.sock ${TAF_COMMON_IMAGE} \
-            --exclude Skipped --include MessageBus=${TEST_SERVICE} -t integrationTest -cd device-virtual -d edgex
+            --exclude Skipped -t integrationTest -cd device-virtual -d edgex
     cp ${WORK_DIR}/TAF/testArtifacts/reports/edgex/log.html ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/integration-test.html
   ;;
   *)

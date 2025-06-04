@@ -27,7 +27,7 @@ class EventExportedTime(object):
             "python {}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin {} false -1 {}".format(
                 SettingsInfo().workDir, SettingsInfo().constant.BROKER_PORT,
                 SettingsInfo().config_constant.SUBSCIBE_DURATION), shell=True)
-        subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with result code 0", "")
+        subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with reason code: Success", "")
         messages = subscriber_logs.split('Got message!!')
         for message in messages:
             if "deviceName" in message:
