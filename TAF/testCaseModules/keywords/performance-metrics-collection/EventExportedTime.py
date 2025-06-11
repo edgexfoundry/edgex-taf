@@ -25,7 +25,7 @@ class EventExportedTime(object):
 
         full_subscriber_logs = subprocess.check_output(
             "python {}/TAF/utils/src/setup/mqtt-subscriber.py edgex-events origin {} false -1 {}".format(
-                SettingsInfo().workDir, SettingsInfo().constant.BROKER_PORT,
+                SettingsInfo().workDir, SettingsInfo().constant.EX_BROKER_PORT,
                 SettingsInfo().config_constant.SUBSCIBE_DURATION), shell=True)
         subscriber_logs = full_subscriber_logs.decode("utf-8").replace("Connected to MQTT with reason code: Success", "")
         messages = subscriber_logs.split('Got message!!')
