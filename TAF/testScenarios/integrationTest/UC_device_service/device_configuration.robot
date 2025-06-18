@@ -60,6 +60,36 @@ Config004 - Verfiy reading contains units when ReadingUnits is false
     [Teardown]  Run Keywords  Set Writable.Reading.ReadingUnits to true For ${SERVICE_NAME} On Registry Service
                 ...      AND  Delete Device By Name ${device_name}
 
+Config005 - Verify OperationalState when AllowedFails is default with failed device requests
+# Default AllowedFails is 0(set to zero to disable automatic disablement of devices)
+    [Tags]  skipped
+    Given Create Device For device-modbus With Invalid Port
+    When Set specified device write command
+    Then Device OperationalState Should Be Up
+    [Teardown]  Delete Device By Name
+
+Config006 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout is default with failed device requests
+# Default DeviceDownTimeout is 0(set to zero to disable automatic re-enablement of devices)
+    [Tags]  skipped
+    Given Create Device For device-modbus With Invalid Port
+    And Set Config AllowedFails to 1 For device-modbus
+    When Set specified device write command
+    Then Device OperationalState Should Be Down
+    And Device OperationalState Should Be Down After Retrying To Connect To Device
+    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus
+                ...      AND  Delete Device By Name
+
+Config007 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout=1 with failed device requests
+    [Tags]  skipped
+    Given Create Device For device-modbus With Invalid Port
+    And Set Config AllowedFails to 1 For device-modbus
+    And Set Config DeviceDownTimeout to 1 For device-modbus
+    When Set specified device write command
+    Then Device OperationalState Should Be Down
+    And Device OperationalState Should Be Up After Retrying To Connect To Device
+    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus
+                ...      AND  Set Config DeviceDownTimeout to 0 For device-modbus
+                ...      AND  Delete Device By Name
 
 *** Keywords ***
 Set Device ${config} to ${value} For ${service_name} On Registry Service
