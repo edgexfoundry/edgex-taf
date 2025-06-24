@@ -2,6 +2,7 @@
 Documentation  Configrations
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
+Resource  TAF/testCaseModules/keywords/core-keeper/coreKeeperAPI.robot
 Suite Setup  Run Keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keywords  Delete all events by age
@@ -62,34 +63,37 @@ Config004 - Verfiy reading contains units when ReadingUnits is false
 
 Config005 - Verify OperationalState when AllowedFails is default with failed device requests
 # Default AllowedFails is 0(set to zero to disable automatic disablement of devices)
-    [Tags]  skipped
-    Given Create Device For device-modbus With Invalid Port
-    When Set specified device write command
-    Then Device OperationalState Should Be Up
-    [Teardown]  Delete Device By Name
+    Set Test Variable  ${device_name}  Modbus-Test-Device
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
+    Given Create Unavailable Modbus device
+    When Set specified device ${device_name} write command Modbus_DeviceValue_INT16_RW with ${set_data}
+    Then Device OperationalState Should Be UP
+    [Teardown]  Delete Device By Name ${device_name}
 
 Config006 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout is default with failed device requests
 # Default DeviceDownTimeout is 0(set to zero to disable automatic re-enablement of devices)
-    [Tags]  skipped
-    Given Create Device For device-modbus With Invalid Port
-    And Set Config AllowedFails to 1 For device-modbus
-    When Set specified device write command
-    Then Device OperationalState Should Be Down
-    And Device OperationalState Should Be Down After Retrying To Connect To Device
-    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus
-                ...      AND  Delete Device By Name
+    Set Test Variable  ${device_name}  Modbus-Test-Device
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
+    Given Create Unavailable Modbus device
+    And Set Config AllowedFails to 1 For device-modbus Device
+    When Set specified device ${device_name} write command Modbus_DeviceValue_INT16_RW with ${set_data}
+    Then Device OperationalState Should Be DOWN
+    And Device OperationalState Should Be DOWN After Retrying To Connect To Device
+    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus Device
+                ...      AND  Delete Device By Name ${device_name}
 
 Config007 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout=1 with failed device requests
-    [Tags]  skipped
-    Given Create Device For device-modbus With Invalid Port
-    And Set Config AllowedFails to 1 For device-modbus
-    And Set Config DeviceDownTimeout to 1 For device-modbus
-    When Set specified device write command
-    Then Device OperationalState Should Be Down
-    And Device OperationalState Should Be Up After Retrying To Connect To Device
-    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus
-                ...      AND  Set Config DeviceDownTimeout to 0 For device-modbus
-                ...      AND  Delete Device By Name
+    Set Test Variable  ${device_name}  Modbus-Test-Device
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
+    Given Create Unavailable Modbus device
+    And Set Config AllowedFails to 1 For device-modbus Device
+    And Set Config DeviceDownTimeout to 1 For device-modbus Device
+    When Set specified device ${device_name} write command Modbus_DeviceValue_INT16_RW with ${set_data}
+    Then Device OperationalState Should Be DOWN
+    And Device OperationalState Should Be UP After Retrying To Connect To Device
+    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus Device
+                ...      AND  Set Config DeviceDownTimeout to 0 For device-modbus Device
+                ...      AND  Delete Device By Name ${device_name}
 
 *** Keywords ***
 Set Device ${config} to ${value} For ${service_name} On Registry Service
@@ -106,3 +110,27 @@ Retrive device data by device ${device_name} and command ${command}
     Get device data by device ${device_name} and command ${command} with ds-pushevent=true
     Set Test Variable  ${timestamp}  ${timestamp}
     sleep  500ms
+
+Device OperationalState Should Be ${value}
+    Query device by name  ${device_name}
+    Should Be Equal  ${content}[device][operatingState]  ${value}
+
+Set Config ${config} to ${value} For device-modbus Device
+    ${entity}=  Create Dictionary  value=${value}
+    Create Session  Core Keeper  url=${coreKeeperUrl}   disable_warnings=true
+    ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
+    ${resp}  PUT On Session  Core Keeper  ${coreKeeperKVsUri}/edgex/v4/device-modbus/Device/${config}   json=${entity}  headers=${headers}
+    ...       expected_status=any
+    run keyword if  ${resp.status_code}!=200  log to console  ${resp.content}
+    Set Response to Test Variables  ${resp}
+    Restart services   device-modbus
+    Sleep  500ms
+
+Device OperationalState Should Be ${value} After Retrying To Connect To Device
+    Query device by name  ${device_name}
+    ${device}=  Set Variable  ${content}
+    Set To Dictionary  ${device}[device][protocols][modbus-tcp]  Port=1502
+    ${entity}=  Create List  ${device}
+    Update devices ${entity}
+    Sleep  2s
+    Device OperationalState Should Be ${value}
