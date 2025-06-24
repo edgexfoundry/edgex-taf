@@ -62,40 +62,43 @@ Config004 - Verfiy reading contains units when ReadingUnits is false
 
 Config005 - Verify OperationalState when AllowedFails is default with failed device requests
 # Default AllowedFails is 0(set to zero to disable automatic disablement of devices)
-    [Tags]  skipped
-    Given Create Device For device-modbus With Invalid Port
-    When Set specified device write command
-    Then Device OperationalState Should Be Up
-    [Teardown]  Delete Device By Name
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
+    Given Set Test Variable  ${device_name}  Modbus-Test-Device
+    And Create Unavailable Modbus device
+    When Set specified device ${device_name} write command Modbus_DeviceValue_INT16_RW with ${set_data}
+    Then Device OperationalState Should Be UP
+    [Teardown]  Delete Device By Name ${device_name}
 
 Config006 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout is default with failed device requests
 # Default DeviceDownTimeout is 0(set to zero to disable automatic re-enablement of devices)
-    [Tags]  skipped
-    Given Create Device For device-modbus With Invalid Port
-    And Set Config AllowedFails to 1 For device-modbus
-    When Set specified device write command
-    Then Device OperationalState Should Be Down
-    And Device OperationalState Should Be Down After Retrying To Connect To Device
-    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus
-                ...      AND  Delete Device By Name
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
+    Given Set Test Variable  ${device_name}  Modbus-Test-Device
+    And Create Unavailable Modbus Device
+    And Set Device AllowedFails to 1 For device-modbus On Registry Service
+    When Set specified device ${device_name} write command Modbus_DeviceValue_INT16_RW with ${set_data}
+    Then Device OperationalState Should Be DOWN
+    And Device OperationalState Should Be DOWN After Retrying To Connect To Device
+    [Teardown]  Run Keywords  Set Device AllowedFails to 0 For device-modbus On Registry Service
+                ...      AND  Delete Device By Name ${device_name}
 
 Config007 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout=1 with failed device requests
-    [Tags]  skipped
-    Given Create Device For device-modbus With Invalid Port
-    And Set Config AllowedFails to 1 For device-modbus
-    And Set Config DeviceDownTimeout to 1 For device-modbus
-    When Set specified device write command
-    Then Device OperationalState Should Be Down
-    And Device OperationalState Should Be Up After Retrying To Connect To Device
-    [Teardown]  Run Keywords  Set Config AllowedFails to 0 For device-modbus
-                ...      AND  Set Config DeviceDownTimeout to 0 For device-modbus
-                ...      AND  Delete Device By Name
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
+    Given Set Test Variable  ${device_name}  Modbus-Test-Device
+    And Create Unavailable Modbus Device
+    And Set Device AllowedFails to 1 For device-modbus On Registry Service
+    And Set Device DeviceDownTimeout to 1 For device-modbus On Registry Service
+    When Set specified device ${device_name} write command Modbus_DeviceValue_INT16_RW with ${set_data}
+    Then Device OperationalState Should Be DOWN
+    And Device OperationalState Should Be UP After Retrying To Connect To Device
+    [Teardown]  Run Keywords  Set Device AllowedFails to 0 For device-modbus On Registry Service
+                ...      AND  Set Device DeviceDownTimeout to 0 For device-modbus On Registry Service
+                ...      AND  Delete Device By Name ${device_name}
 
 *** Keywords ***
 Set Device ${config} to ${value} For ${service_name} On Registry Service
     ${path}=  Set Variable  /${service_name}/Device/${config}
     Update Service Configuration  ${path}  ${value}
-    Restart Services  device-virtual
+    Restart Services  ${service_name}
 
 Set Writable.Reading.ReadingUnits to ${value} For ${service_name} On Registry Service
     ${path}=  Set Variable  /${service_name}/Writable/Reading/ReadingUnits
@@ -106,3 +109,15 @@ Retrive device data by device ${device_name} and command ${command}
     Get device data by device ${device_name} and command ${command} with ds-pushevent=true
     Set Test Variable  ${timestamp}  ${timestamp}
     sleep  500ms
+
+Device OperationalState Should Be ${value}
+    Query device by name  ${device_name}
+    Should Be Equal  ${content}[device][operatingState]  ${value}
+
+Device OperationalState Should Be ${value} After Retrying To Connect To Device
+    ${update_device}  Create Dictionary  name=${Device}[0][device][name]  protocols=${Device}[0][device][protocols]
+    Set To Dictionary  ${update_device}[protocols][modbus-tcp]  Port=1502
+    Generate Devices  ${update_device}
+    Update devices ${Device}
+    Sleep  2s
+    Device OperationalState Should Be ${value}
