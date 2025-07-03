@@ -19,7 +19,31 @@ done
 
 # # docker-compose-mqtt.yml file is used on Case 5
 # # Then sync TAF performance specific docker-compose file from edgex-compose repo and replace the placeholders
-#./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "-taf" "-perf"
-cp docker-compose-taf-perf${USE_NO_SECURITY}.yml docker-compose-mqtt.yml
-sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${MQTT_BROKER_HOSTNAME}:1883/g' docker-compose-mqtt.yml
-sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' docker-compose-mqtt.yml
+#./sync-compose-file.sh "${USE_SHA1}" "${USE_NO_SECURITY}" "${USE_ARM64}" "-taf" "-perf"
+mqtt_compose_name='docker-compose-mqtt'
+cp docker-compose-taf-perf${USE_NO_SECURITY}${USE_ARM64}.yml ${mqtt_compose_name}.yml
+sed -i 's/\MQTT_BROKER_ADDRESS_PLACE_HOLDER/tcp:\/\/${EXTERNAL_BROKER_HOSTNAME}:1883/g' ${mqtt_compose_name}.yml
+sed -i 's/\LOGLEVEL: INFO/LOGLEVEL: DEBUG/g' ${mqtt_compose_name}.yml
+
+mkdir -p tmp
+# External MQTT
+sed -n "/^\ \ mqtt-taf-broker:/,/^  [a-z].*:$/p" ${mqtt_compose_name}.yml | sed '$d' > tmp/external-mqtt.yml
+sed -i "s/mosquitto-no-auth.conf/etc\/mosquitto\/mosquitto.conf/g" tmp/external-mqtt.yml
+sed -i '$a\ \ \ \ volumes:' tmp/external-mqtt.yml
+sed -i '/\ \ \ \ volumes:/a \ \ \ \ \ \ - \/${WORK_DIR}\/TAF\/utils\/scripts\/docker\/mosquitto:\/etc\/mosquitto:z' tmp/external-mqtt.yml
+sed -i "/^\ \ mqtt-taf-broker:/,/^  [a-z].*:$/{//!d}; /^\ \ mqtt-taf-broker:/d" ${mqtt_compose_name}.yml
+sed -i "/services:/ r tmp/external-mqtt.yml" ${mqtt_compose_name}.yml
+
+# Set External MQTT Auth at mqtt-export of app-service
+sed -i '/TRIGGER_EXTERNALMQTT_URL/a \ \ \ \ \ \ TRIGGER_EXTERNALMQTT_AUTHMODE: usernamepassword' ${mqtt_compose_name}.yml
+if [ "${USE_SECURITY}" = '-security-' ]; then
+  sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_AUTHMODE: usernamepassword' ${mqtt_compose_name}.yml
+  sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ SECRETSTORE_SECRETSFILE: \/tmp\/secrets.json' ${mqtt_compose_name}.yml
+  sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ SECRETSTORE_DISABLESCRUBSECRETSFILE: true' ${mqtt_compose_name}.yml
+  sed -i '/\ \ \ \ volumes:/a \ \ \ \ \ \ - \/${WORK_DIR}\/TAF\/testData\/all-services\/secrets.json:\/tmp\/secrets.json' ${mqtt_compose_name}.yml
+else
+  sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_AUTHMODE: usernamepassword' ${mqtt_compose_name}.yml
+  sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_USERNAME: ${EX_BROKER_USER}' ${mqtt_compose_name}.yml
+  sed -i '/WRITABLE_PIPELINE_FUNCTIONS_MQTTEXPORT_PARAMETERS_BROKERADDRESS/a \ \ \ \ \ \ WRITABLE_INSECURESECRETS_MQTT_SECRETDATA_PASSWORD: ${EX_BROKER_PASSWD}' ${mqtt_compose_name}.yml
+fi
+rm -rf tmp
