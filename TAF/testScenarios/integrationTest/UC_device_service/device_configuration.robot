@@ -11,32 +11,51 @@ Suite Teardown  Run Keywords  Delete all events by age
 ${SUITE}              Configrations
 
 *** Test Cases ***
-Config001 - Verify the return value when Data Transform is true and shift field is set
-    ${set_data}  Create Dictionary  ${PREFIX}_DeviceValue_UINT32_RW=4294901760
-    Given Create Device For ${SERVICE_NAME} With Name Transform-Device-1
+Config001 - Verify the return value after writing with shift field set when Data Transform is true
+# Use RW(with shift) to write and R(no shift) to read. Value is transformed during RW write only.
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_UINT32_RW=4294901760
+    Given Set Test Variable  ${PREFIX}  Modbus
+    And Set Test Variable  ${device_name}  modbus_device
+    And Create Device For device-modbus With Name Transform-Device-1
     And Set specified device ${device_name} write command ${PREFIX}_GenerateDeviceValue_UINT32_RW with ${set_data}
-    When Retrive device data by device ${device_name} and command ${PREFIX}_DeviceValue_UINT32_RW
+    When Retrive device data by device ${device_name} and command ${PREFIX}_DeviceValue_UINT32_R
     Then Should return status code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be Equal As Integers  65535  ${content}[event][readings][0][value]
     [Teardown]  Delete device by name ${device_name}
 
-Config002 - Verify the return value when Data Transform is false and shift field is set
-    ${set_data}  Create Dictionary  ${PREFIX}_DeviceValue_UINT32_RW=4294901760
-    Given Set Device DataTransform to false For ${SERVICE_NAME} On Registry Service
-    And Create Device For ${SERVICE_NAME} With Name Transform-Device-2
-    And Set specified device ${device_name} write command ${PREFIX}_GenerateDeviceValue_UINT32_RW with ${set_data}
+Config002 - Verify the return value after reading with shift field set when Data Transform is true
+# Use W (no shift) to write and RW (with shift) to read. Value is transformed during RW read only.
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_UINT32_W=65535
+    Given Set Test Variable  ${PREFIX}  Modbus
+    And Set Test Variable  ${device_name}  modbus_device
+    And Create Device For device-modbus With Name Transform-Device-1
+    And Set specified device ${device_name} write command ${PREFIX}_GenerateDeviceValue_UINT32_W with ${set_data}
+    When Retrive device data by device ${device_name} and command ${PREFIX}_DeviceValue_UINT32_RW
+    Then Should return status code "200"
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Should Be Equal As Integers  4294901760  ${content}[event][readings][0][value]
+    [Teardown]  Delete device by name ${device_name}
+
+Config003 - Verify the return value after reading with shift field set when Data Transform is false
+# Use W (no shift) to write and RW (with shift) to read. No value is transformed
+    ${set_data}  Create Dictionary  Modbus_DeviceValue_UINT32_W=4294901760
+    Given Set Device DataTransform to false For device-modbus On Registry Service
+    And Set Test Variable  ${PREFIX}  Modbus
+    And Set Test Variable  ${device_name}  modbus_device
+    And Create Device For device-modbus With Name Transform-Device-2
+    And Set specified device ${device_name} write command ${PREFIX}_GenerateDeviceValue_UINT32_W with ${set_data}
     When Retrive device data by device ${device_name} and command ${PREFIX}_DeviceValue_UINT32_RW
     Then Should return status code "200"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Should Be Equal As Integers  4294901760  ${content}[event][readings][0][value]
     [Teardown]  Run Keywords  Delete device by name ${device_name}
-                ...      AND  Set Device DataTransform to true For ${SERVICE_NAME} On Registry Service
+                ...      AND  Set Device DataTransform to true For device-modbus On Registry Service
 
-
-Config003 - Verfiy reading contains units when ReadingUnits is true
+Config004 - Verfiy reading contains units when ReadingUnits is true
     [Tags]  backward-skip
     Given Create Device For ${SERVICE_NAME} With Name ReadingUnits-True
     And Retrive Device Data By Device ${device_name} And Command ${PREFIX}_DeviceValue_INT8_R
@@ -47,7 +66,7 @@ Config003 - Verfiy reading contains units when ReadingUnits is true
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete Device By Name ${device_name}
 
-Config004 - Verfiy reading contains units when ReadingUnits is false
+Config005 - Verfiy reading contains units when ReadingUnits is false
     [Tags]  backward-skip
     Given Set Writable.Reading.ReadingUnits to false For ${SERVICE_NAME} On Registry Service
     And Create Device For ${SERVICE_NAME} With Name ReadingUnits-False
@@ -60,7 +79,7 @@ Config004 - Verfiy reading contains units when ReadingUnits is false
     [Teardown]  Run Keywords  Set Writable.Reading.ReadingUnits to true For ${SERVICE_NAME} On Registry Service
                 ...      AND  Delete Device By Name ${device_name}
 
-Config005 - Verify OperationalState when AllowedFails is default with failed device requests
+Config006 - Verify OperationalState when AllowedFails is default with failed device requests
 # Default AllowedFails is 0(set to zero to disable automatic disablement of devices)
     ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
     Given Set Test Variable  ${device_name}  Modbus-Test-Device
@@ -69,7 +88,7 @@ Config005 - Verify OperationalState when AllowedFails is default with failed dev
     Then Device OperationalState Should Be UP
     [Teardown]  Delete Device By Name ${device_name}
 
-Config006 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout is default with failed device requests
+Config007 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout is default with failed device requests
 # Default DeviceDownTimeout is 0(set to zero to disable automatic re-enablement of devices)
     ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
     Given Set Test Variable  ${device_name}  Modbus-Test-Device
@@ -81,7 +100,7 @@ Config006 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout
     [Teardown]  Run Keywords  Set Device AllowedFails to 0 For device-modbus On Registry Service
                 ...      AND  Delete Device By Name ${device_name}
 
-Config007 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout=1 with failed device requests
+Config008 - Verify OperationalState when AllowedFails is 1 and DeviceDownTimeout=1 with failed device requests
     ${set_data}  Create Dictionary  Modbus_DeviceValue_INT16_RW=60
     Given Set Test Variable  ${device_name}  Modbus-Test-Device
     And Create Unavailable Modbus Device
