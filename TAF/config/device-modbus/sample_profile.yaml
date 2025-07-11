@@ -241,11 +241,12 @@ deviceResources:
     minimum: 0
     maximum: 4294967295
     defaultValue: "device uINT32 value"
+    shift: -16
 -
   name: "Modbus_DeviceValue_UINT32_R"
   description: "Generate device uINT32 value"
   attributes:
-    { primaryTable: "INPUT_REGISTERS", startingAddress: 47 }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 45 }
   properties:
     valueType: "UINT32"
     readWrite: "R"
@@ -256,7 +257,7 @@ deviceResources:
   name: "Modbus_DeviceValue_UINT32_W"
   description: "Generate device uINT32 value"
   attributes:
-    { primaryTable: "HOLDING_REGISTERS", startingAddress: 49 }
+    { primaryTable: "HOLDING_REGISTERS", startingAddress: 45 }
   properties:
     valueType: "UINT32"
     readWrite: "W"
