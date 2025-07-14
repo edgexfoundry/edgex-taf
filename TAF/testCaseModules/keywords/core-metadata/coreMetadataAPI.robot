@@ -92,10 +92,10 @@ Query all device profiles
     ${resp_length}=  get length  ${resp.content}
     Run keyword if  ${resp_length} == 3   fail  "No device profile found"
 
-Query all device profiles with ${parameter}=${value}
+Query all device profiles with ${params}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -118,13 +118,13 @@ Query all device profiles by model
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
-Query all device profiles by ${device_info} ${info_value} with ${parameter}=${value}
+Query all device profiles by ${device_info} ${info_value} with ${params}
     # device_info: manufacturer or model ; info_value: the value of manfacturer or model
     ${device_info}=  Convert To Lower Case  ${device_info}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/${device_info}/${info_value}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -137,11 +137,11 @@ Query all device profiles by manufacturer and model
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
-Query all device profiles having manufacturer ${manufacturer} and model ${model} with ${parameter}=${value}
+Query all device profiles having manufacturer ${manufacturer} and model ${model} with ${params}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/manufacturer/${manufacturer}/model/${model}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -152,10 +152,10 @@ Query all device profiles basic info
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query all device profiles basic info with ${parameter}=${value}
+Query all device profiles basic info with ${params}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/basicinfo/all  params=${parameter}=${value}
+    ${resp}=  GET On Session  Core Metadata  ${deviceProfileUri}/basicinfo/all  params=${params}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -277,12 +277,12 @@ Query all devices by profileName
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
-Query all devices by ${associated}Name ${associated_name} with ${parameter}=${value}
+Query all devices by ${associated}Name ${associated_name} with ${params}
     # associated: profile or service ; associated_name: profileName or serviceName
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Metadata  ${deviceUri}/${associated}/name/${associated_name}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -333,10 +333,10 @@ Query all device services
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query all device services with ${parameter}=${value}
+Query all device services with ${params}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata  ${deviceServiceUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${deviceServiceUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -403,12 +403,12 @@ Query Provision Watchers By Name
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail  "The provision watcher ${provision_watcher_name} is not found"
 
-Query All Provision Watchers by ${associated}Name ${associated_name} with ${parameter}=${value}
+Query All Provision Watchers by ${associated}Name ${associated_name} with ${params}
     # associated: profile or service ; associated_name: profileName or serviceName
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/${associated}/name/${associated_name}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -419,10 +419,10 @@ Query All Provision Watchers
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query All Provision Watchers with ${parameter}=${value}
+Query All Provision Watchers with ${params}
     Create Session  Core Metadata  url=${coreMetadataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Metadata  ${provisionWatcherUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -791,7 +791,7 @@ Create A Provision Watcher Sample With Associated Test-Device-Service And ${devi
     Generate Provision Watchers  ${provisionwatcher}
     Create provision watcher ${provisionwatcher}
 
-Set ProfileChange.${config}=${value} For Core-Metadata On Registry Service
+Set ProfileChange.${config} to ${value} For Core-Metadata On Registry Service
    ${path}=  Set Variable  /core-metadata/Writable/ProfileChange/${config}
    Update Service Configuration  ${path}  ${value}
 

@@ -17,10 +17,10 @@ Query all deviceCoreCommands
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query all deviceCoreCommands with ${parameter}=${value}
+Query all deviceCoreCommands with ${params}
     Create Session  Core Command  url=${coreCommandUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Command  ${deviceUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Command  ${deviceUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail

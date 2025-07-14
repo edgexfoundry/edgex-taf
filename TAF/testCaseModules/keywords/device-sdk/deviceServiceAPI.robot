@@ -23,11 +23,11 @@ Invoke Get command by device ${device_name} and command ${command}
     Run keyword if  ${response}!=200  log to console  ${content}
     ...       ELSE  Set Test variable   ${get_reading_value}  ${content}[event][readings][0][value]
 
-Invoke Get command with params ${parameter}=${value} by device ${device_name} and command ${command}
+Invoke Get command with params ${params} by device ${device_name} and command ${command}
     Create Session  Device Service  url=${deviceServiceUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Device Service    ${dsDeviceUri}/name/${device_name}/${command}
-    ...    params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...    params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  log to console  ${content}
     ...       ELSE  Set Test variable   ${get_reading_value}  ${content}[event][readings][0][value]

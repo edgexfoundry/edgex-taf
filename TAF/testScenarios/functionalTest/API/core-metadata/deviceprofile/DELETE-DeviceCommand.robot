@@ -66,7 +66,7 @@ ErrProfileCommandDELETE003 - Delete deviceCommand which profile used by device
 
 ErrProfileCommandDELETE004 - Delete deviceCommand when StrictDeviceProfileChanges config is enabled
     # StrictDeviceProfileChanges config is true
-    Given Set ProfileChange.StrictDeviceProfileChanges=true For Core-Metadata On Registry Service
+    Given Set ProfileChange.StrictDeviceProfileChanges to true For Core-Metadata On Registry Service
     And Set Test Variable  ${profile_name}  Test-Profile-3
     And Generate A Device Profile Sample  ${profile_name}
     And Create device profile ${deviceProfile}
@@ -75,7 +75,7 @@ ErrProfileCommandDELETE004 - Delete deviceCommand when StrictDeviceProfileChange
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     And Device Command ${command_name} In ${profile_name} Should Not Be Deleted
-    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Registry Service
+    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges to false For Core-Metadata On Registry Service
      ...                  AND  Delete Device Profile By Name  ${profile_name}
 
 *** Keywords ***

@@ -72,10 +72,10 @@ ErrSchedulerJobGET001 - Query job by name with non-existent job
 
 
 *** Keywords ***
-Query All Jobs With ${parameter}=${value}
+Query All Jobs With ${params}
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Scheduler  ${jobUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}  GET On Session  Support Scheduler  ${jobUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response} != 200  log to console  ${content}

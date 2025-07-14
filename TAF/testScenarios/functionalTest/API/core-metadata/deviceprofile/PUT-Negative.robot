@@ -98,7 +98,7 @@ ErrProfilePUT007 - Update device profile with deivceCommands deviceResource vali
     [Teardown]  Delete Multiple Device Profiles By Names  Test-Profile-1  Test-Profile-2  Test-Profile-3
 
 ErrProfilePUT008 - Update device profile when StrictDeviceProfileChanges is true
-    Given Set ProfileChange.StrictDeviceProfileChanges=true For Core-Metadata On Registry Service
+    Given Set ProfileChange.StrictDeviceProfileChanges to true For Core-Metadata On Registry Service
     And Generate A Device Profile Sample  Test-Profile-1
     And Create Device Profile ${deviceProfile}
     And Set To Dictionary  ${deviceProfile}[0][profile]  manufacturer=Mfr_ABC
@@ -106,7 +106,7 @@ ErrProfilePUT008 - Update device profile when StrictDeviceProfileChanges is true
     Then Should Return Status Code "423"
     And Should Return Content-Type "application/json"
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
-    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges=false For Core-Metadata On Registry Service
+    [Teardown]  Run Keywords  Set ProfileChange.StrictDeviceProfileChanges to false For Core-Metadata On Registry Service
     ...                  AND  Delete Device Profile By Name  Test-Profile-1
 
 ErrProfilePUT009 - Update device profile with invalid units value

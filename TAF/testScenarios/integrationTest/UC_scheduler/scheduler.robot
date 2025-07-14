@@ -21,7 +21,8 @@ Scheduler001 - Create schedule job with INTERVAL definition and REST action to c
     And Create Events By Get Device Command
     When Sleep  4s  # Waiting For Running Schedule Job
     And Query Device Events After Executing Deletion, And No Event Found
-    [Teardown]  Run Keywords  Delete Device By Name ${device_name}
+    [Teardown]  Run Keywords  Run Keyword If Test Failed  Dump Logs For Debug
+                ...      AND  Delete Device By Name ${device_name}
                 ...      AND  Delete Multiple Jobs  @{job_names}
 
 Scheduler002 - Create schedule job with INTERVAL definition and DEVICECONTROL action to set device command
@@ -34,7 +35,8 @@ Scheduler002 - Create schedule job with INTERVAL definition and DEVICECONTROL ac
     And Create Jobs  ${jobs}
     When Sleep  4s  # Waiting For Running Schedule Job
     Then Device Command ${command} Value Should Be The Same With Set Value ${set_value}
-    [Teardown]  Run Keywords  Delete Device By Name ${device_name}
+    [Teardown]  Run Keywords  Run Keyword If Test Failed  Dump Logs For Debug
+                ...      AND  Delete Device By Name ${device_name}
                 ...      AND  Delete Multiple Jobs  @{job_names}
 
 Scheduler003 - Create schedule job with CRON definition to send message to app-service
@@ -49,7 +51,8 @@ Scheduler003 - Create schedule job with CRON definition to send message to app-s
     And Create Jobs  ${jobs}
     When Sleep  3s
     And Message Is Received By ${topic} Topic
-    [Teardown]  Run Keywords  Delete Device By Name ${device_name}
+    [Teardown]  Run Keywords  Run Keyword If Test Failed  Dump Logs For Debug
+                ...      AND  Delete Device By Name ${device_name}
                 ...      AND  Delete Multiple Jobs  @{job_names}
 
 *** Keywords ***
@@ -73,3 +76,8 @@ Generate Job With Event Payload
 Start ${service} Service
     ${result}  Run Process  docker ps -a | grep -Ev ${service} | grep Exited  shell=True
     Run Keyword If  ${result.rc} == 0  Restart Services  ${service}
+
+Dump Logs For Debug
+    Dump Last 100 lines Log  core-data
+    Dump Last 100 lines Log  device-virtual
+    Dump Last 100 lines Log  support-scheduler

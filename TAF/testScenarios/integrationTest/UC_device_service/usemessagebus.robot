@@ -71,7 +71,7 @@ DeviceService005-Customize BaseTopicPrefix works correctly
     ${params}  Create Dictionary  ds-pushevent=true  ds-returnevent=true
     Given Run MQTT Subscriber Progress And Output  custom/events/device/#
     And Create Device For device-virtual With Name ${device_name}
-    And Set BaseTopicPrefix=custom For core-common-config-bootstrapper On Registry Service
+    And Set BaseTopicPrefix to custom For core-common-config-bootstrapper On Registry Service
     When Get device data by device ${device_name} and command ${PREFIX}_GenerateDeviceValue_INT8_RW with ${params}
     Then Should Return Status Code "200" And event
     And Event With Device ${device_name} Should Be Received by MQTT Subscriber ${subscriber_file}
@@ -79,10 +79,10 @@ DeviceService005-Customize BaseTopicPrefix works correctly
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Delete all events by age
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set BaseTopicPrefix=edgex For core-common-config-bootstrapper On Registry Service
+                ...      AND  Set BaseTopicPrefix to edgex For core-common-config-bootstrapper On Registry Service
 
 *** Keywords ***
-Set ${config}=${value} For core-common-config-bootstrapper On Registry Service
+Set ${config} to ${value} For core-common-config-bootstrapper On Registry Service
     ${path}=  Set Variable  /core-common-config-bootstrapper/all-services/MessageBus/${config}
     Update Service Configuration  ${path}  ${value}
     FOR  ${service}  IN  device-virtual  core-data

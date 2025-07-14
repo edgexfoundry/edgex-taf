@@ -4,12 +4,12 @@ Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Resource     TAF/testCaseModules/keywords/common/metrics.robot
 Suite Setup  Run keywords  Setup Suite
 ...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
-...                   AND  Set Telemetry Interval=${interval}s For ${APP_SERVICE_NAME} On Registry Service
+...                   AND  Set Telemetry Interval to ${interval}s For ${APP_SERVICE_NAME} On Registry Service
 ...                   AND  Update Service Configuration  /${APP_SERVICE_NAME}/Writable/LogLevel  DEBUG
 ...                   AND  Restart Services  ${APP_SERVICE_NAME}
 Suite Teardown  Run keywords  Terminate All Processes
 ...                      AND  Delete all events by age
-...                      AND  Set Telemetry Interval=30s For ${APP_SERVICE_NAME} On Registry Service
+...                      AND  Set Telemetry Interval to 30s For ${APP_SERVICE_NAME} On Registry Service
 ...                      AND  Restart Services  ${APP_SERVICE_NAME}
 ...                      AND  Run Teardown Keywords
 
@@ -43,7 +43,7 @@ APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to
     Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/HttpExportSize  payload  2
     And Set Test Variable  ${device_name}  http-export-size
     And Set ${APP_SERVICE_NAME} Functions HTTPExport
-    And Set Telemetry Metrics/HttpExportSize=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/HttpExportSize to true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
@@ -52,7 +52,7 @@ APPServicesMetricsMQTT002-Enable HttpExportSize And Verify Metrics is Publish to
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_http}  kill=True
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/HttpExportSize=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/HttpExportSize to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Set ${APP_SERVICE_NAME} Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
@@ -60,7 +60,7 @@ APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to
     Given Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MqttExportSize  payload  2
     And Set Test Variable  ${device_name}  mqtt-export-size
     And Set ${APP_SERVICE_NAME} Functions MQTTExport
-    And Set Telemetry Metrics/MqttExportSize=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/MqttExportSize to true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
     And Create Device For device-virtual With Name ${device_name}
     When Get device data by device ${device_name} and command ${INT8_CMD} with ds-pushevent=true
@@ -68,14 +68,14 @@ APPServicesMetricsMQTT003-Enable MqttExportSize And Verify Metrics is Publish to
     Then Metrics MqttExportSize With histogram-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/MqttExportSize=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/MqttExportSize to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Set ${APP_SERVICE_NAME} Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish to MessageBus
     Given Set Test Variable  ${device_name}  message-received
     And Set ${APP_SERVICE_NAME} Functions SetResponseData
-    And Set Telemetry Metrics/MessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/MessagesReceived to true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
     And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/MessagesReceived  payload  2
     And Create Device For device-virtual With Name ${device_name}
@@ -84,7 +84,7 @@ APPServicesMetricsMQTT004-Enable MessagesReceived And Verify Metrics is Publish 
     Then Metrics MessagesReceived With counter-count Should Be Received
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/MessagesReceived=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/MessagesReceived to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is Publish to MessageBus
@@ -92,14 +92,14 @@ APPServicesMetricsMQTT005-Enable InvalidMessagesReceived And Verify Metrics is P
     Given Set Test Variable  ${device_name}  invalid-message-received
     And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Create Device For device-virtual With Name ${device_name}
-    And Set Telemetry Metrics/InvalidMessagesReceived=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/InvalidMessagesReceived to true For ${APP_SERVICE_NAME} On Registry Service
     And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/InvalidMessagesReceived  payload  2
     When Run process  python ${WORK_DIR}/TAF/utils/src/setup/mqtt-publisher.py edgex/events/${device_name} "${publish_msg}" ${BROKER_PORT} ${SECURITY_SERVICE_NEEDED}
          ...          shell=True  timeout=10s
     And Sleep  ${interval_ex}
     Then Metrics InvalidMessagesReceived With counter-count Should Be Received
     [Teardown]  Run keywords  Terminate Process  ${handle_mqtt}  kill=True   # Stop MQTT Subscribe Process
-                ...      AND  Set Telemetry Metrics/InvalidMessagesReceived=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/InvalidMessagesReceived to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is Publish to MessageBus
@@ -107,7 +107,7 @@ APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is
     And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Set Telemetry Metrics/PipelineMessagesProcessed=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/PipelineMessagesProcessed to true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
     And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessagesProcessed  payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
@@ -115,7 +115,7 @@ APPServicesMetricsMQTT006-Enable PipelineMessagesProcessed And Verify Metrics is
     Then Received Metrics PipelineMessagesProcessed For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/PipelineMessagesProcessed to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metrics is Publish to MessageBus
@@ -123,7 +123,7 @@ APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metric
     And Set ${APP_SERVICE_NAME} Functions SetResponseData
     And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Set Telemetry Metrics/PipelineMessageProcessingTime=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/PipelineMessageProcessingTime to true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
     And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineMessageProcessingTime  payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
@@ -131,7 +131,7 @@ APPServicesMetricsMQTT007-Enable PipelineMessageProcessingTime And Verify Metric
     Then Received Metrics PipelineMessageProcessingTime For All Pipelines And timer-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/PipelineMessageProcessingTime=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/PipelineMessageProcessingTime to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Restart Services  ${APP_SERVICE_NAME}
 
 APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is Publish to MessageBus
@@ -141,7 +141,7 @@ APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is 
     And Set PerTopicPipelines int8-16 ExecutionOrder HTTPExport
     And Set Topics For ${APP_SERVICE_NAME} PerTopicPipelines On Registry Service
     And Create Device For device-virtual With Name ${device_name}
-    And Set Telemetry Metrics/PipelineProcessingErrors=true For ${APP_SERVICE_NAME} On Registry Service
+    And Set Telemetry Metrics/PipelineProcessingErrors to true For ${APP_SERVICE_NAME} On Registry Service
     And Restart Services  ${APP_SERVICE_NAME}
     And Run MQTT Subscriber Progress And Output  edgex/telemetry/${APP_SERVICE_NAME}/PipelineProcessingErrors  payload  6
     When Get Multiple Device Data With Commands ${COMMANDS}
@@ -149,7 +149,7 @@ APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is 
     Then Received Metrics PipelineProcessingErrors For All Pipelines And counter-count Should Not Be 0
     [Teardown]  Run keywords  Delete device by name ${device_name}
                 ...      AND  Terminate Process  ${handle_mqtt}  kill=True
-                ...      AND  Set Telemetry Metrics/PipelineProcessingErrors=false For ${APP_SERVICE_NAME} On Registry Service
+                ...      AND  Set Telemetry Metrics/PipelineProcessingErrors to false For ${APP_SERVICE_NAME} On Registry Service
                 ...      AND  Set ${APP_SERVICE_NAME} Functions FilterByProfileName, FilterByDeviceName, FilterByResourceName, TransformXml, SetResponseData
                 ...      AND  Set PerTopicPipelines float ExecutionOrder TransformJson, SetResponseData
                 ...      AND  Set PerTopicPipelines int8-16 ExecutionOrder TransformXml, Compress, SetResponseData
@@ -159,7 +159,7 @@ APPServicesMetricsMQTT008-Enable PipelineProcessingErrors And Verify Metrics is 
 Set All Telemetry Metrics To False
     ${range}  Get Length  ${APP_METRICS}
     FOR  ${INDEX}  IN RANGE  ${range}
-        Set Telemetry Metrics/${APP_METRICS}[${INDEX}]=false For ${APP_SERVICE_NAME} On Registry Service
+        Set Telemetry Metrics/${APP_METRICS}[${INDEX}] to false For ${APP_SERVICE_NAME} On Registry Service
     END
 
 Get Multiple Device Data With Commands ${commands}
