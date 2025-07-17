@@ -10,7 +10,7 @@ Resource     TAF/testCaseModules/keywords/app-service/AppServiceAPI.robot
 ${APP_SERVICE_NAME}  app-sample
 
 *** Keywords ***
-Set Telemetry ${config}=${value} For ${service_name} On Registry Service
+Set Telemetry ${config} to ${value} For ${service_name} On Registry Service
     ${telemetry_path}  Set Variable  /${service_name}/Writable/Telemetry
     ${path}  Set Variable   ${telemetry_path}/${config}
     Update Service Configuration  ${path}  ${value}

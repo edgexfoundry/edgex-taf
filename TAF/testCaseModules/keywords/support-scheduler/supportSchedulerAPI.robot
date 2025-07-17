@@ -181,10 +181,10 @@ Query All Schedule Action Record
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}
 
-Query All Schedule Action Record With ${parameter}=${value}
+Query All Schedule Action Record With ${params}
     Create Session  Support Scheduler  url=${supportSchedulerUrl}  disable_warnings=true
     ${headers}  Create Dictionary  Content-Type=application/json  Authorization=Bearer ${jwt_token}
-    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/all  params=${parameter}=${value}
+    ${resp}  GET On Session  Support Scheduler  ${scheduleActionRecordUri}/all  params=${params}
     ...      headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 200  log to console  ${content}

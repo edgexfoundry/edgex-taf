@@ -14,10 +14,10 @@ Query All Transmissions
     ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/all  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query All Transmissions With ${parameter}=${value}
+Query All Transmissions With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/all  params=${parameter}=${value}
+    ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/all  params=${params}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
@@ -29,11 +29,11 @@ Query Transmissions By Specified Subscription
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query Transmissions By Specified Subscription ${subscription_name} With ${parameter}=${value}
+Query Transmissions By Specified Subscription ${subscription_name} With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/subscription/name/${subscription_name}
-    ...         params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...         params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
 Query Transmissions By Specified Status
@@ -44,10 +44,10 @@ Query Transmissions By Specified Status
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query Transmissions By Specified Status ${status} With ${parameter}=${value}
+Query Transmissions By Specified Status ${status} With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/status/${status}  params=${parameter}=${value}
+    ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/status/${status}  params=${params}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
@@ -59,11 +59,11 @@ Query Transmissions By Start/End Time
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query Transmissions Between Time ${start} And ${end} With ${parameter}=${value}
+Query Transmissions Between Time ${start} And ${end} With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Support Notifications  ${transmissionUri}/start/${start}/end/${end}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
 Query Transmissions By Id

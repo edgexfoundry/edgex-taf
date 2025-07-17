@@ -21,10 +21,10 @@ Query all readings
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query all readings with ${parameter}=${value}
+Query all readings with ${params}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Data  ${coreDataReadingUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -73,12 +73,12 @@ Query readings by resource and start/end time
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query readings by resource ${resource} and start ${start_time}/end ${end_time} with ${parameter}=${value}
+Query readings by resource ${resource} and start ${start_time}/end ${end_time} with ${params}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Data
     ...       ${coreDataReadingUri}/resourceName/${resource}/start/${start_time}/end/${end_time}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
 Query readings by device and resource between start/end time
@@ -90,12 +90,12 @@ Query readings by device and resource between start/end time
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
-Query readings by device ${device} and resource ${resource} between ${start_time}/${end_time} with ${parameter}=${value}
+Query readings by device ${device} and resource ${resource} between ${start_time}/${end_time} with ${params}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Core Data
     ...       ${coreDataReadingUri}/device/name/${device}/resourceName/${resource}/start/${start_time}/end/${end_time}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
 
 Query all readings count
@@ -135,10 +135,10 @@ Query all events
     ${resp}=  GET On Session  Core Data    ${coreDataEventUri}/all   headers=${headers}  expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query all events with ${parameter}=${value}
+Query all events with ${params}
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data  ${coreDataEventUri}/all  params=${parameter}=${value}  headers=${headers}
+    ${resp}=  GET On Session  Core Data  ${coreDataEventUri}/all  params=${params}  headers=${headers}
     ...       expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail

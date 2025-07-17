@@ -86,10 +86,10 @@ Query All Subscriptions
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query All Subscriptions With ${parameter}=${value}
+Query All Subscriptions With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/all  params=${parameter}=${value}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/all  params=${params}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -109,11 +109,11 @@ Query All Subscriptions By Specified Category
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query All Subscriptions By Specified Category ${category} With ${parameter}=${value}
+Query All Subscriptions By Specified Category ${category} With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/category/${category}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
@@ -125,10 +125,10 @@ Query All Subscriptions By Specified Label
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query All Subscriptions By Specified Label ${label} With ${parameter}=${value}
+Query All Subscriptions By Specified Label ${label} With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/label/${label}  params=${parameter}=${value}
+    ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/label/${label}  params=${params}
     ...       headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
@@ -141,11 +141,11 @@ Query All Subscriptions By Specified Receiver
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
 
-Query All Subscriptions By Specified Receiver ${receiver} With ${parameter}=${value}
+Query All Subscriptions By Specified Receiver ${receiver} With ${params}
     Create Session  Support Notifications  url=${supportNotificationsUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
     ${resp}=  GET On Session  Support Notifications  ${subscriptionUri}/receiver/${receiver}
-    ...       params=${parameter}=${value}  headers=${headers}  expected_status=any
+    ...       params=${params}  headers=${headers}  expected_status=any
     Set Response to Test Variables  ${resp}
     Run keyword if  ${response}!=200  fail
 
