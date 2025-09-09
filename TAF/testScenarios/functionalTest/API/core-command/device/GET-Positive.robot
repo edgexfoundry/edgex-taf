@@ -105,7 +105,7 @@ Event Has Been Pushed To Core Data
     ${id}=  Set Variable  ${content}[event][id]
     Create Session  Core Data  url=${coreDataUrl}  disable_warnings=true
     ${headers}=  Create Dictionary  Authorization=Bearer ${jwt_token}
-    ${resp}=  GET On Session  Core Data  ${coreDataEventUri}/id/${id}  headers=${headers}
+    ${resp}=  GET On Session  Core Data  ${eventUri}/id/${id}  headers=${headers}
     ...       expected_status=200
     Set Response to Test Variables  ${resp}
     Should Be True  "${content}[event][deviceName]" == "${device_name}"
