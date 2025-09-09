@@ -241,7 +241,6 @@ deviceResources:
     minimum: 0
     maximum: 4294967295
     defaultValue: "device uINT32 value"
-    shift: -16
 -
   name: "Modbus_DeviceValue_UINT32_R"
   description: "Generate device uINT32 value"
@@ -253,6 +252,7 @@ deviceResources:
     minimum: 0
     maximum: 4294967295
     defaultValue: "device uINT32 value"
+    shift: -16
 -
   name: "Modbus_DeviceValue_UINT32_W"
   description: "Generate device uINT32 value"
@@ -264,6 +264,7 @@ deviceResources:
     minimum: 0
     maximum: 4294967295
     defaultValue: "device uINT32 value"
+    shift: -16
 -  ### UINT64 ###
   name: "Modbus_DeviceValue_UINT64_RW"
   description: "Generate device UINT64 value"

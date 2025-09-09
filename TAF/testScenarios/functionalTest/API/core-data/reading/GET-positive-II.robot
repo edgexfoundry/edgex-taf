@@ -48,6 +48,16 @@ ReadingGET012 - Query all readings with offset=-1
     And Response Time Should Be Less Than "${default_response_time_threshold}"ms
     [Teardown]  Delete All Events By Age
 
+ReadingGET013 - Query all readings with numeric=true
+    Given Create Multiple Events With numeric and non-numeric
+    When Query All Readings With numeric=true
+    Then Should Return Status Code "200"
+    And totalCount Should be 11
+    And Should Return Content-Type "application/json"
+    And Response Time Should Be Less Than "${default_response_time_threshold}"ms
+    And Numeric ValueType Should Have Numeric Value
+    [Teardown]  Delete All Events By Age
+
 *** Keywords ***
 All ${number} Readings Should Contain deviceName ${device_name} And resourceName ${resource_name}
     ${count}=  Get Length  ${content}[readings]
@@ -62,4 +72,21 @@ Total ${number} Readings Should Be Created Between ${start} And ${end}
     Should Be Equal As Integers  ${count}  ${number}
     FOR  ${index}  IN RANGE  0  ${number}
         Should Be True  ${end} >= ${content}[readings][${index}][origin] >=${start}
+    END
+
+Create Multiple Events With numeric and non-numeric
+    Create Multiple Events
+    Generate event sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  String Reading
+    Create Event With Service-Test-001 and Profile-Test-001 and Device-Test-001 and Command-Test-001
+    Generate event sample  Event  Device-Test-001  Profile-Test-001  Command-Test-001  Bool Reading
+    Create Event With Service-Test-001 and Profile-Test-001 and Device-Test-001 and Command-Test-001
+
+Numeric ValueType Should Have Numeric Value
+    FOR    ${reading}    IN    @{content}[readings]
+        ${actual_type}=    Evaluate    type($reading['value']).__name__
+        IF    '${reading}[valueType]' == 'Bool' or '${reading}[valueType]' == 'String'
+            Should Be True    '${actual_type}'  'str'
+        ELSE
+            Should Be True    '${actual_type}'  'int'
+        END
     END

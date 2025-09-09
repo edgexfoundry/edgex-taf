@@ -23,5 +23,21 @@
     "mediaType": "image",
     "valueType": "Binary",
     "binaryValue": "83010203"
+  },
+  "String Reading": {
+    "deviceName": "Device-001",
+    "resourceName": "String-Reading",
+    "profileName": "Profile-001",
+    "origin": 0,
+    "valueType": "String",
+    "value": "reading-value"
+  },
+  "Bool Reading": {
+    "deviceName": "Device-001",
+    "resourceName": "Bool-Reading",
+    "profileName": "Profile-001",
+    "origin": 0,
+    "valueType": "Bool",
+    "value": false
   }
 }
