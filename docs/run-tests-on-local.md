@@ -29,9 +29,9 @@ cd ${WORK_DIR}/TAF/utils/scripts/docker
 sh run-tests.sh ${TEST_STRATEGY} ${SECURITY_SERVICE_NEEDED} ${TEST_SERVICE} ${DEPLOY_SERVICES}
 
 # If using x86_64, no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:
-ex. sh run-tests.sh x86_64 false functional-test api no-deployment
+ex. sh run-tests.sh functional-test false api no-deployment
 # If using x86_64, no need for secuity, adopt for integration-test, choose "mqtt" for test_service and edgex service are not deployed in place, it should be:
-ex. sh run-tests.sh x86_64 false integration-test mqtt 
+ex. sh run-tests.sh integration-test false mqtt 
 ```
 
 #### View the test report
