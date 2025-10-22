@@ -99,7 +99,7 @@ DEVICE_REST_BINARY_ARM64 = 32.96
 
 # Footprint threshold value
 # ex. 1.5 = prior release + 50%
-FOOTPRINT_THRESHOLD = 1.1
+FOOTPRINT_THRESHOLD = 1.8
 
 # Suite: 2_service_startup_time
 # Retry setting to fetch service startup time

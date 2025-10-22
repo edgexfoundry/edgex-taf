@@ -19,7 +19,7 @@ client = docker.from_env()
 
 global services
 services = {
-    "edgex-core-keeper": {"binary": ""},
+    "edgex-core-keeper": {"binary": "/core-keeper"},
     "edgex-core-data": {"binary": "/core-data"},
     "edgex-core-metadata": {"binary": "/core-metadata"},
     "edgex-core-command": {"binary": "/core-command"},
