@@ -1,0 +1,63 @@
+name: "Test-Profile-tags"
+manufacturer: "Company"
+model: "Device-01"
+labels:
+- "device-virtual"
+description: "Example of tags"
+
+deviceResources:
+-  ### FLOAT32 ###
+  name: "Virtual_DeviceValue_FLOAT32_RW"
+  description: "Generate device FLOAT32 value"
+  properties:
+    valueType: "Float32"
+    readWrite: "RW"
+    defaultValue: "0"
+
+-  ### FLOAT64 with tags###
+  name: "Virtual_DeviceValue_FLOAT64_RW"
+  description: "Generate device FLOAT64 value"
+  properties:
+    valueType: "Float64"
+    readWrite: "RW"
+    defaultValue: "0"
+  tags:
+    severityLevel: 1
+
+-  ### INT8 with tags###
+  name: "Virtual_DeviceValue_INT8_RW"
+  description: "Generate device INT8 value"
+  properties:
+    valueType: "Int8"
+    readWrite: "RW"
+    minimum: -128
+    maximum: 127
+    defaultValue: "0"
+  tags:
+    severityLevel: 1
+
+deviceCommands:
+-  ### FLOAT32 with tags###
+  name: "Virtual_GenerateDeviceValue_FLOAT32_RW"
+  isHidden: false
+  readWrite: "RW"
+  resourceOperations:
+    - deviceResource: "Virtual_DeviceValue_FLOAT32_RW"
+  tags:
+    severityLevel: 1
+
+-  ### FLOAT64 with tags###
+  name: "Virtual_GenerateDeviceValue_FLOAT64_RW"
+  isHidden: false
+  readWrite: "RW"
+  resourceOperations:
+    - deviceResource: "Virtual_DeviceValue_FLOAT64_RW"
+  tags:
+    severityLevel: 1
+
+-  ### INT8 ###
+  name: "Virtual_GenerateDeviceValue_INT8_RW"
+  isHidden: false
+  readWrite: "RW"
+  resourceOperations:
+    - deviceResource: "Virtual_DeviceValue_INT8_RW"

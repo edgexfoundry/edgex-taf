@@ -3,7 +3,7 @@ Documentation  Configurations
 Resource     TAF/testCaseModules/keywords/common/commonKeywords.robot
 Resource     TAF/testCaseModules/keywords/device-sdk/deviceServiceAPI.robot
 Suite Setup  Run Keywords  Setup Suite
-...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Proxy Token
+...                   AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown  Run Keywords  Delete all events by age
                 ...      AND  Run Teardown Keywords
 
