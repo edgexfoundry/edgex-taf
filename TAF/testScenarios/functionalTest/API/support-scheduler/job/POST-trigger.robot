@@ -49,3 +49,15 @@ Create A Job Which startTimestamp Is Not Arrived Yet
     Set To Dictionary  ${jobs}[0][scheduleJob][definition]  startTimestamp=${startTime}
     Set To Dictionary  ${jobs}[0][scheduleJob][definition]  endTimestamp=${endTime}
     Create Jobs  ${jobs}
+
+Create A Job
+    # Setting the interval to 300s ensures the job can only be triggered manually before the test is completed.
+    ${job}  General A Job Sample  INTERVAL  300s  REST  http://edgex-core-metadata:59881/api/v3/ping  GET
+    ${currentTime}  Get Current Milliseconds Epoch Time
+    ${startTime}  Evaluate  ${currentTime}-1000
+    Set Test Variable  ${job_name}  trigger-manual
+    Generate Multiple Job  ${job}
+    Set To Dictionary  ${jobs}[0][scheduleJob]  name=${job_name}
+    Set To Dictionary  ${jobs}[0][scheduleJob][definition]  startTimestamp=${startTime}
+    Remove From Dictionary    ${jobs}[0][scheduleJob][definition]    endTimestamp
+    Create Jobs  ${jobs}

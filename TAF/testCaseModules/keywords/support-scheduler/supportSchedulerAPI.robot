@@ -151,18 +151,6 @@ Trigger Job By Name
     Set Response to Test Variables  ${resp}
     Run Keyword If  ${response} != 202  log to console  ${content}
 
-Create A Job
-    ${job}  General A Job Sample  INTERVAL  30s  REST  http://edgex-core-metadata:59881/api/v3/ping  GET
-    ${currentTime}  Get Current Milliseconds Epoch Time
-    ${startTime}  Evaluate  ${currentTime}-1000
-    ${endTime}  Evaluate  ${currentTime}+6000
-    Set Test Variable  ${job_name}  trigger-manual
-    Generate Multiple Job  ${job}
-    Set To Dictionary  ${jobs}[0][scheduleJob]  name=${job_name}
-    Set To Dictionary  ${jobs}[0][scheduleJob][definition]  startTimestamp=${startTime}
-    Set To Dictionary  ${jobs}[0][scheduleJob][definition]  endTimestamp=${endTime}
-    Create Jobs  ${jobs}
-
 ## Query Schedule Action Record
 Query Schedule Action Record By Job Name
     [Arguments]  ${name}
