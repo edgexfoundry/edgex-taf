@@ -1,6 +1,6 @@
 #!/bin/sh
 USE_SECURITY=${1:--}
-USE_SHA1=${USE_SHA1:-main}
+USE_SHA1=${USE_SHA1:-palau}
 GITHUB_URL="https://raw.githubusercontent.com/edgexfoundry"
 
 . $(dirname "$0")/common-taf.env
