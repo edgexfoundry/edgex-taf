@@ -8,12 +8,12 @@ USE_SHA1=${3:-main}
 [ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
 [ "$USE_SECURITY" = "-security-" ] && SECURITY_SERVICE_NEEDED="true"
 
-TAF_COMMON_IMAGE=nexus3.edgexfoundry.org:10003/edgex-taf-common${USE_ARM64}:latest
-COMPOSE_IMAGE=docker:26.0.1
+TAF_COMMON_IMAGE=iotechsys/dev-testing-edgex-taf-common:4.0.1
+COMPOSE_IMAGE=docker:29.5.2
 
 
 # Pull EdgeX images
-sh get-compose-file-perfermance.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1}
+sh get-compose-file-performance.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1}
 
 # Pull images
 docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \

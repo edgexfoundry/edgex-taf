@@ -11,8 +11,6 @@ git clone https://github.com/edgexfoundry/edgex-taf.git
 ``` 
 # Required variables
 export WORK_DIR=${HOME}/edgex-taf
-export REGISTRY_SERVICE=${REGISTRY_SERVICE}
-export USE_DB=${TEST_DB}
 ```
 
 #### Run test by shell script with arguments
@@ -21,11 +19,9 @@ export USE_DB=${TEST_DB}
 # Arguments for run-tests.sh
 ${ARCH}: x86_64 | arm64
 ${SECURITY_SERVICE_NEEDED}: false | true
-${REGISTRY_SERVICE}: Consul | Keeper
 ${TEST_STRATEGY}: functional-test | integration-test
-${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | mqtt (integration-test) | redis (integration-test)
+${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | delayedStart (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
-${TEST_DB}: postgres | redis
 cd ${WORK_DIR}/TAF/utils/scripts/docker
 
 
@@ -77,7 +73,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
     export SECURITY_SERVICE_NEEDED=false
-    export COMPOSE_IMAGE=docker:26.0.1
+    export COMPOSE_IMAGE=docker:29.5.2
     ```
 #### Run Tests
 `View the test report after finishing a python command, otherwise the report will be overridden after executing next command. Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/api-test.html.`
@@ -97,7 +93,6 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     
     # Before launching Service, please export the following variables.
     export EDGEX_SECURITY_SECRET_STORE=false
-    export REGISTRY_SERVICE=${REGISTRY_SERVICE}
 
     # Run Test Command
     python3 -m TUC --exclude Skipped -t functionalTest/API/${ServiceDir} -cd default
@@ -109,7 +104,6 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
    
     # Before launching APP Service, please export the following variables.
     export EDGEX_SECURITY_SECRET_STORE=false
-    export REGISTRY_SERVICE=${REGISTRY_SERVICE}
     export SERVICE_PORT=59705 (For functional-tests)
     export SERVICE_PORT=59704 (For http-export)
    
@@ -121,7 +115,6 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ``` bash
     # Before launching Device Service, please export the following variables.
     export EDGEX_SECURITY_SECRET_STORE=false
-    export REGISTRY_SERVICE=${REGISTRY_SERVICE}
    
     # Modify the ProfilesDir value on configuration.toml under ${HOME}/edgex-taf/TAF/config/${tafConfig}
     ProfilesDir = ${HOME}/edgex-taf/TAF/config/${tafConfig}
@@ -142,11 +135,7 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     python3 -m TUC --exclude Skipped --include mqtt-bus -t deploy.robot -cd default
     python3 -m TUC --exclude Skipped --include MessageBus=MQTT -t integrationTest -cd device-virtual --name MQTT-bus
     ```
-    Run test with Redis bus
-    ``` bash
-    python3 -m TUC --exclude Skipped --include redis-bus -t deploy.robot -cd default
-    python3 -m TUC --exclude Skipped --include MessageBus=REDIS -t integrationTest -cd device-virtual --name REDIS-bus
-    ```
+
 4. Shutdown edgex:
     ``` bash
     python3 -m TUC --exclude Skipped --include shutdown-edgex -t shutdown.robot -cd default
