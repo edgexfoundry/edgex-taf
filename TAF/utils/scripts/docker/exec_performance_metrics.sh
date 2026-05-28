@@ -2,10 +2,9 @@
 # set default values
 USE_ARCH=${1:-x86_64}
 USE_SECURITY=${2:--}
-USE_SHA1=${3:-main}
+USE_SHA1=${3:-palau}
 
-# # x86_64 or arm64
-[ "$USE_ARCH" = "arm64" ] && USE_ARM64="-arm64"
+# # security or not
 [ "$USE_SECURITY" = "-security-" ] && SECURITY_SERVICE_NEEDED="true"
 
 TAF_COMMON_IMAGE=iotechsys/dev-testing-edgex-taf-common:4.0.1
@@ -13,7 +12,7 @@ COMPOSE_IMAGE=docker:29.5.2
 
 
 # Pull EdgeX images
-sh get-compose-file-performance.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1}
+sh get-compose-file-performance.sh ${USE_SHA1} ${USE_SECURITY}
 
 # Pull images
 docker run --rm -v ${WORK_DIR}:${WORK_DIR}:rw,z -w ${WORK_DIR} -v /var/run/docker.sock:/var/run/docker.sock \
@@ -27,4 +26,3 @@ docker run --rm --network host --privileged -v ${WORK_DIR}:${WORK_DIR}:z -w ${WO
        -v /etc/localtime:/etc/localtime --env-file ${WORK_DIR}/TAF/utils/scripts/docker/common-taf.env \
        -e COMPOSE_IMAGE=${COMPOSE_IMAGE} ${TAF_COMMON_IMAGE} \
        --exclude Skipped -t performanceTest/performance-metrics-collection -cd performance-metrics -d edgex
-

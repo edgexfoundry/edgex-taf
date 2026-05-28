@@ -17,20 +17,19 @@ export WORK_DIR=${HOME}/edgex-taf
 `Use the shell script to run tests will take a while. It contains deploy, run tests, and shutdown steps.`
 ```
 # Arguments for run-tests.sh
-${ARCH}: x86_64 | arm64
-${SECURITY_SERVICE_NEEDED}: false | true
-${TEST_STRATEGY}: functional-test | integration-test
+${TEST_STRATEGY}: functional-test (default) | integration-test
+${SECURITY_SERVICE_NEEDED}: false (default) | true
 ${TEST_SERVICE}: all (default) | device-virtual | device-modbus | ${directory} under TAF/testScenarios/functionalTest/API | delayedStart (integration-test)
 ${DEPLOY_SERVICES}: no-deployment(If edgex services are deployed in place, use 'no-deployment' Otherwise, leave it empty.)
 cd ${WORK_DIR}/TAF/utils/scripts/docker
 
 
-sh run-tests.sh ${ARCH} ${SECURITY_SERVICE_NEEDED} ${TEST_STRATEGY} ${TEST_SERVICE} ${DEPLOY_SERVICES}
+sh run-tests.sh ${TEST_STRATEGY} ${SECURITY_SERVICE_NEEDED} ${TEST_SERVICE} ${DEPLOY_SERVICES}
 
-# If using x86_64, no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:
-ex. sh run-tests.sh x86_64 false functional-test api no-deployment
-# If using x86_64, no need for secuity, adopt for integration-test, choose "mqtt" for test_service and edgex service are not deployed in place, it should be:
-ex. sh run-tests.sh x86_64 false integration-test mqtt 
+# If no need for secuity, adopt for functional-test, choose "api" for test_service and edgex service are deployed in place, it should be:
+ex. sh run-tests.sh functional-test false api no-deployment
+# If no need for secuity, adopt for integration-test, and edgex service are not deployed in place, it should be:
+ex. sh run-tests.sh integration-test false
 ```
 
 #### View the test report
@@ -60,15 +59,14 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
 3. Prepare test environment:
     ``` bash
     # Arguments for get-compose-file.sh
-    ${ARCH}: x86_64 | arm64
+    ${USE_SHA1}: palau
     ${USE_SECURITY}: - (false) | -security- (true)
-    ${USE_SHA1}: main
     ${TEST_STRATEGY}: functional-test | integration-test
 
     # Fetch the latest docker-compose file
     cd ${HOME}/edgex-taf/TAF/utils/scripts/docker
-    sh get-compose-file.sh ${USE_ARCH} ${USE_SECURITY} ${USE_SHA1} ${TEST_STRATEGY}
-    # ex. sh get-compose-file.sh x86_64 - main functional-test
+    sh get-compose-file.sh ${USE_SHA1} ${USE_SECURITY} ${TEST_STRATEGY}
+    # ex. sh get-compose-file.sh palau - functional-test
     
     # Export the following environment variables.
     export WORK_DIR=${HOME}/edgex-taf
@@ -99,7 +97,6 @@ Open the report file by browser: ${WORK_DIR}/TAF/testArtifacts/reports/cp-edgex/
     ``` 
     - For APP Service:
     ``` bash
-    # Consul is required. Scripts will modify the APP Service configuration.
     # Used 2 profiles, funcational-tests and http-export.
    
     # Before launching APP Service, please export the following variables.
