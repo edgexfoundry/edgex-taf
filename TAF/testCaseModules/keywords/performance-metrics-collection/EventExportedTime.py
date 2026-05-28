@@ -62,7 +62,7 @@ class EventExportedTime(object):
                 event["exported"] = event["received"] - event["origin"]
                 events.append(event)
                 events_exported_time_list[device].append(event["exported"])
-            # eliminate the max and main values from events_exported_time_list, events and result
+            # eliminate the max and min values from events_exported_time_list, events and result
             max_index = events_exported_time_list[device].index(max(events_exported_time_list[device]))
             min_index = events_exported_time_list[device].index(min(events_exported_time_list[device]))
             max_item = result["devices"][device][max_index]

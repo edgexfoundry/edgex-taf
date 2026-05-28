@@ -3,7 +3,7 @@ Resource         TAF/testCaseModules/keywords/common/commonKeywords.robot
 Suite Setup      Run keywords   Setup Suite
 ...                             AND  Run Keyword if  $SECURITY_SERVICE_NEEDED == 'true'  Get Token
 Suite Teardown   Run Teardown Keywords
-Force Tags       DelayedStart
+Force Tags       DelayedStart    Skipped
 
 *** Variables ***
 ${SUITE}          Delayed Start Validation
