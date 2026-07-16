@@ -21,7 +21,7 @@ ErrEventPOST001 - Create events fails (Bad Events)
     END
 
 ErrEventPOST002 - Create events fails (Bad Simple Readings)
-    ${bad_property}=  Create List  no_deviceName  no_resourceName  no_profileName  no_origin  no_valueType  bad_valueType  no_value
+    ${bad_property}=  Create List  no_deviceName  no_resourceName  no_origin  no_valueType  bad_valueType  no_value
     FOR  ${property}  IN  @{bad_property}
          Given Generate Bad Simple Reading With ${property}
          And Create Event With Service-Test-002 And Profile-Test-002 And Device-Test-002 And Command-Test-002
